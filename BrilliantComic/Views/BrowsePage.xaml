@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="BrilliantComic.Views.BrowsePage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    Title=""
+    Shell.NavBarIsVisible="False"
+    Shell.TabBarIsVisible="False">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <Style TargetType="Label">
+                <Setter Property="FontSize" Value="12" />
+                <Setter Property="TextColor" Value="#E0FFFFFF" />
+            </Style>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <Grid>
+        <CollectionView ItemsSource="{Binding Images}" Scrolled="CollectionView_Scrolled">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Grid>
+                        <Image x:Name="img" Source="{Binding}" />
+                        <Label
+                            Margin="100"
+                            HeightRequest="400"
+                            HorizontalOptions="Center"
+                            IsVisible="{Binding IsLoading, Source={x:Reference img}}"
+                            Text="加载中..."
+                            TextColor="Black"
+                            VerticalOptions="Center" />
+                    </Grid>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+            <CollectionView.Footer>
+                <HorizontalStackLayout Padding="0,1" />
+            </CollectionView.Footer>
+        </CollectionView>
+        <HorizontalStackLayout
+            Padding="5,2,10,2"
+            BackgroundColor="#95212121"
+            HorizontalOptions="End"
+            VerticalOptions="End">
+            <Label Margin="0,0,5,0">
+                <Label.Text>
+                    <MultiBinding StringFormat="{}{0} 共 {1} 页">
+                        <Binding Path="Chapter.Name" />
+                        <Binding Path="Chapter.PageCount" />
+                    </MultiBinding>
+                </Label.Text>
+            </Label>
+            <Label Text="{Binding CurrentTime}" />
+        </HorizontalStackLayout>
+    </Grid>
+</ContentPage>

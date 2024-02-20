@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="BrilliantComic.Views.SearchPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:vm="clr-namespace:BrilliantComic.ViewModels"
+    Title="搜索"
+    Shell.ForegroundColor="Black"
+    Shell.TabBarIsVisible="False">
+    <Shell.TitleView>
+        <Entry
+            x:Name="input"
+            Placeholder="点击输入关键词"
+            ReturnCommand="{Binding SearchCommand}"
+            ReturnCommandParameter="{Binding Text, Source={RelativeSource Mode=Self}}"
+            ReturnType="Search"
+            VerticalOptions="Center" />
+    </Shell.TitleView>
+    <Grid>
+        <CollectionView ItemsLayout="VerticalGrid, 3" ItemsSource="{Binding Comics}">
+            <CollectionView.EmptyView>
+                <ActivityIndicator
+                    Margin="0,0,0,100"
+                    HeightRequest="55"
+                    IsRunning="True"
+                    IsVisible="{Binding IsGettingResult}"
+                    WidthRequest="55" />
+            </CollectionView.EmptyView>
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Frame
+                        Margin="0,0,0,20"
+                        Padding="1"
+                        BackgroundColor="White"
+                        BorderColor="Black"
+                        CornerRadius="8"
+                        HasShadow="True"
+                        WidthRequest="120">
+                        <Frame.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding OpenComicCommand, Source={RelativeSource AncestorType={x:Type vm:SearchViewModel}}}" CommandParameter="{Binding}" />
+                        </Frame.GestureRecognizers>
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="160" />
+                                <RowDefinition Height="20" />
+                                <RowDefinition Height="16" />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <Image
+                                Aspect="AspectFill"
+                                HeightRequest="160"
+                                Source="{Binding Cover}"
+                                WidthRequest="120" />
+                            <Label
+                                Grid.Row="1"
+                                FontAttributes="Bold"
+                                HorizontalOptions="Start"
+                                LineBreakMode="TailTruncation"
+                                Text="{Binding Name}"
+                                WidthRequest="118" />
+                            <Label
+                                Grid.Row="2"
+                                FontAttributes="Italic"
+                                HorizontalOptions="Start"
+                                LineBreakMode="CharacterWrap"
+                                Text="{Binding Author}"
+                                WidthRequest="118" />
+                        </Grid>
+                    </Frame>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </Grid>
+</ContentPage>

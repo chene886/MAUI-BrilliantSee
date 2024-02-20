@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="BrilliantComic.Views.DetailPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:vm="clr-namespace:BrilliantComic.ViewModels"
+    Shell.ForegroundColor="Black"
+    Shell.TabBarIsVisible="False">
+    <Shell.BackButtonBehavior>
+        <BackButtonBehavior Command="{Binding TestCommand}" />
+    </Shell.BackButtonBehavior>
+    <ContentPage.Resources>
+        <Style x:Key="labelStyle" TargetType="Label">
+            <Style.Triggers>
+                <DataTrigger
+                    Binding="{Binding IsSpecial}"
+                    TargetType="Label"
+                    Value="True">
+                    <Setter Property="TextColor" Value="Orchid" />
+                    <Setter Property="Text" Value="最后浏览章节" />
+                    <Setter Property="FontAttributes" Value="Bold" />
+                </DataTrigger>
+            </Style.Triggers>
+            <Setter Property="HorizontalOptions" Value="Center" />
+            <Setter Property="VerticalOptions" Value="Center" />
+            <Setter Property="FontSize" Value="12" />
+            <Setter Property="LineBreakMode" Value="TailTruncation" />
+        </Style>
+    </ContentPage.Resources>
+    <ContentPage.ToolbarItems>
+        <ToolbarItem
+            Command="{Binding SwitchIsFavoriteCommand}"
+            IconImageSource="{Binding FavoriteImage}"
+            Text="收藏" />
+        <ToolbarItem
+            Command="{Binding JumpToBrowserCommand}"
+            IconImageSource="browser.png"
+            Text="浏览器打开" />
+        <ToolbarItem
+            Command="{Binding ReverseListCommand}"
+            IconImageSource="reverse.png"
+            IsEnabled="{Binding IsReverseListEnabled}"
+            Text="反转列表" />
+    </ContentPage.ToolbarItems>
+    <Grid Padding="10,0">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Label
+            Grid.ColumnSpan="2"
+            Margin="0,0,0,10"
+            FontSize="12"
+            LineBreakMode="TailTruncation"
+            Text="{Binding Comic.Url}" />
+        <Frame
+            Grid.Row="1"
+            Margin="0,0,10,5"
+            Padding="0"
+            CornerRadius="5">
+            <Image
+                Aspect="AspectFill"
+                HeightRequest="180"
+                Source="{Binding Comic.Cover}"
+                WidthRequest="120" />
+        </Frame>
+        <VerticalStackLayout Grid.Row="1" Grid.Column="1">
+            <Label
+                FontSize="Large"
+                MaxLines="2"
+                Text="{Binding Comic.Name}" />
+            <Label
+                Margin="0,0,0,5"
+                FontSize="Small"
+                MaxLines="2"
+                Text="{Binding Comic.Author}" />
+            <Label
+                FontSize="13"
+                MaxLines="5"
+                Text="{Binding Comic.Description}"
+                VerticalOptions="End" />
+        </VerticalStackLayout>
+        <Grid Grid.Row="2" Grid.ColumnSpan="2">
+            <CollectionView
+                Margin="0,15,0,0"
+                ItemsSource="{Binding Comic.Chapters}"
+                SelectionMode="Single">
+                <CollectionView.ItemsLayout>
+                    <GridItemsLayout
+                        HorizontalItemSpacing="15"
+                        Orientation="Vertical"
+                        Span="3"
+                        VerticalItemSpacing="12" />
+                </CollectionView.ItemsLayout>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Border
+                            Padding="10,0"
+                            BackgroundColor="Transparent"
+                            HeightRequest="32"
+                            Stroke="{StaticResource Gray500Brush}">
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="45" />
+                            </Border.StrokeShape>
+                            <Border.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding OpenChapterCommand, Source={RelativeSource AncestorType={x:Type vm:DetailViewModel}}}" CommandParameter="{Binding}" />
+                            </Border.GestureRecognizers>
+                            <Border.Triggers>
+                                <DataTrigger
+                                    Binding="{Binding IsSpecial}"
+                                    TargetType="Border"
+                                    Value="True">
+                                    <Setter Property="BackgroundColor" Value="White" />
+                                    <Setter Property="Stroke" Value="Orchid" />
+                                </DataTrigger>
+                            </Border.Triggers>
+                            <Label
+                                x:Name="label"
+                                Style="{StaticResource labelStyle}"
+                                Text="{Binding Name, Mode=OneWay}"
+                                TextColor="{StaticResource Gray500}" />
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+            <ActivityIndicator
+                Margin="0,0,0,100"
+                HeightRequest="55"
+                HorizontalOptions="Center"
+                IsRunning="True"
+                IsVisible="{Binding IsGettingResult}"
+                VerticalOptions="Center"
+                WidthRequest="55" />
+        </Grid>
+    </Grid>
+</ContentPage>
