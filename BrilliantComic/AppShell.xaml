@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Shell
+    x:Class="BrilliantComic.AppShell"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:local="clr-namespace:BrilliantComic"
+    xmlns:views="clr-namespace:BrilliantComic.Views"
+    Title="BrilliantComic"
+    Shell.FlyoutBehavior="Disabled">
+
+    <TabBar>
+        <Tab Title="收藏" Icon="favorite.png">
+            <ShellContent ContentTemplate="{DataTemplate views:FavoritePage}" Route="FavoritePage" />
+        </Tab>
+        <Tab Title="历史" Icon="history.png">
+            <ShellContent ContentTemplate="{DataTemplate views:HistoryPage}" Route="HistoryPage" />
+        </Tab>
+    </TabBar>
+</Shell>
