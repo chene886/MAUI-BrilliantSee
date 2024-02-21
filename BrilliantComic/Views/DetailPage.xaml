@@ -6,6 +6,9 @@
     xmlns:vm="clr-namespace:BrilliantComic.ViewModels"
     Shell.ForegroundColor="Black"
     Shell.TabBarIsVisible="False">
+    <Shell.BackButtonBehavior>
+        <BackButtonBehavior Command="{Binding TestCommand}" />
+    </Shell.BackButtonBehavior>
     <ContentPage.Resources>
         <Style x:Key="labelStyle" TargetType="Label">
             <Style.Triggers>
