@@ -157,11 +157,5 @@ namespace BrilliantComic.ViewModels
         {
             await Shell.Current.GoToAsync("BrowsePage", new Dictionary<string, object> { { "Chapter", chapter } });
         }
-
-        [RelayCommand]
-        private async Task TestAsync()
-        {
-            await Shell.Current.GoToAsync("FavoritePage");
-        }
     }
 }
