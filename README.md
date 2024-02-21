@@ -6,14 +6,30 @@
 - 主打安卓平台，可能存在异常，请谅解...
 
 ## 项目部分界面截图
+### 收藏页
+- 展示收藏漫画、
+- 导航到搜索页、历史记录页、漫画详情页
 <img src="img/favoritePage.jpg" width="360px" />
 <br />
+### 历史记录页
+- 展示历史观看记录
+- 清空记录
+- 导航到漫画详情页、收藏页
 <img src="img/historyPage.jpg" width="360px" />
 <br />
+### 搜索页
+- 搜索漫画
+- 导航到漫画详情页
 <img src="img/searchPage.jpg" width="360px" />
 <br />
+### 漫画详情页
+- 收藏功能
+- 漫画倒序
+- 浏览器打开
+- 导航到漫画浏览页
 <img src="img/detailPage.jpg" width="360px" />
 <br />
+### 漫画浏览页
 <img src="img/browsePage.jpg" width="360px" />
 <br />
 
