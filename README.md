@@ -48,3 +48,4 @@
 项目仅用于学习交流，禁止其它任何用途。
 
 项目使用部分图标来源：[Icons8](https://icons8.com)
+项目基础：[卧龙Brilliant_see](https://gitee.com/long2023/brilliant_see?_from=gitee_search)
