@@ -28,11 +28,6 @@ namespace BrilliantComic.Models.Comics
         public string Author { get; set; } = string.Empty;
 
         /// <summary>
-        /// 漫画简介
-        /// </summary>
-        public string Description { get; set; } = string.Empty;
-
-        /// <summary>
         /// 漫画链接
         /// </summary>
         public string Url { get; set; } = string.Empty;
@@ -48,14 +43,9 @@ namespace BrilliantComic.Models.Comics
         public string Source { get; set; } = string.Empty;
 
         /// <summary>
-        /// 漫画章节
+        /// 漫画源名
         /// </summary>
-        public string Chapters { get; set; } = string.Empty;
-
-        /// <summary>
-        /// 漫画章节是否倒序
-        /// </summary>
-        public bool IsReverseList { get; set; }
+        public string SourceName { get; set; } = string.Empty;
 
         /// <summary>
         /// 章节分类

@@ -59,28 +59,45 @@
             Grid.Row="1"
             Margin="0,0,10,5"
             Padding="0"
-            CornerRadius="5">
-            <Image
-                Aspect="AspectFill"
-                HeightRequest="180"
-                Source="{Binding Comic.Cover}"
-                WidthRequest="120" />
+            CornerRadius="5"
+            HeightRequest="180">
+            <Grid>
+                <Image
+                    Aspect="AspectFill"
+                    HeightRequest="180"
+                    Source="{Binding Comic.Cover}"
+                    WidthRequest="120" />
+                <Label
+                    BackgroundColor="#95212121"
+                    FontSize="12"
+                    HorizontalOptions="End"
+                    Text="{Binding Comic.Status}"
+                    TextColor="White"
+                    VerticalOptions="End" />
+            </Grid>
         </Frame>
-        <VerticalStackLayout Grid.Row="1" Grid.Column="1">
+        <VerticalStackLayout
+            Grid.Row="1"
+            Grid.Column="1"
+            Spacing="6">
             <Label
                 FontSize="Large"
-                MaxLines="2"
+                LineBreakMode="TailTruncation"
+                MaxLines="1"
                 Text="{Binding Comic.Name}" />
             <Label
-                Margin="0,0,0,5"
-                FontSize="Small"
-                MaxLines="2"
+                Margin="0,0,0,2"
+                FontSize="Body"
+                MaxLines="1"
                 Text="{Binding Comic.Author}" />
             <Label
                 FontSize="13"
+                Text="{Binding Comic.LastestUpdateTime}"
+                TextColor="Red" />
+            <Label
+                FontSize="13"
                 MaxLines="5"
-                Text="{Binding Comic.Description}"
-                VerticalOptions="End" />
+                Text="{Binding Comic.Description}" />
         </VerticalStackLayout>
         <Grid Grid.Row="2" Grid.ColumnSpan="2">
             <CollectionView

@@ -57,6 +57,21 @@ namespace BrilliantComic.Models.Comics
         public required ISource Source { get; set; }
 
         /// <summary>
+        /// 漫画源名
+        /// </summary>
+        public string SourceName { get; set; } = string.Empty;
+
+        /// <summary>
+        /// 最新更新时间
+        /// </summary>
+        public string LastestUpdateTime { get; set; } = string.Empty;
+
+        /// <summary>
+        /// 漫画状态
+        /// </summary>
+        public string Status { get; set; } = string.Empty;
+
+        /// <summary>
         /// 漫画章节
         /// </summary>
         [ObservableProperty]

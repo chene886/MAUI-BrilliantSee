@@ -53,7 +53,7 @@ namespace BrilliantComic.Models.Sources
 
                 foreach (Match match in matches)
                 {
-                    var comic = new BaoziComic("https://cn.baozimh.com" + match.Groups[1].Value, match.Groups[2].Value, match.Groups[3].Value, match.Groups[4].Value + " ") { Source = this };
+                    var comic = new BaoziComic("https://cn.baozimh.com" + match.Groups[1].Value, match.Groups[2].Value, match.Groups[3].Value, match.Groups[4].Value + " ") { Source = this, SourceName = "包子漫画" };
 
                     comics.Add(comic);
                 }
@@ -78,7 +78,8 @@ namespace BrilliantComic.Models.Sources
                 Id = dbComic.Id,
                 Category = dbComic.Category,
                 LastReadedChapterIndex = dbComic.LastReadedChapterIndex,
-                Source = this
+                Source = this,
+                SourceName = dbComic.SourceName
             };
 
             return comic;
@@ -98,6 +99,7 @@ namespace BrilliantComic.Models.Sources
                 Author = comic.Author,
                 Cover = comic.Cover,
                 Source = _sourceService.GetSourceName(this)!,
+                SourceName = comic.SourceName,
                 Url = comic.Url,
                 Category = comic.Category,
                 LastReadedChapterIndex = comic.LastReadedChapterIndex

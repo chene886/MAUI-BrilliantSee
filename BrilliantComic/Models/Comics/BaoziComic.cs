@@ -6,6 +6,7 @@ using SQLite;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Reflection.Metadata;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -32,19 +33,16 @@ namespace BrilliantComic.Models.Comics
         ///
         public override async Task LoadMoreDataAsync()
         {
-            await LoadDescAsync();
-        }
-
-        /// <summary>
-        /// 获取漫画简介
-        /// </summary>
-        /// <returns></returns>
-        public async Task LoadDescAsync()
-        {
             html = await Source.HttpClient.GetStringAsync(Url);
+            //截取两个字符串之间的内容
+            var start = html.IndexOf("<body");
+            var end = html.IndexOf("猜你喜欢");
+            var moreDataHtml = html.Substring(start, end - start);
             if (!string.IsNullOrEmpty(html))
             {
-                Description = "        " + Regex.Match(html, "comics-detail__desc overflow-hidden[\\s\\S]*?>[\\s\\r\\n]*([\\s\\S]*?)</p>").Groups[1].Value;
+                Status = Regex.Match(moreDataHtml, "tag-list[\\s\\S]*?<span[\\s\\S]*?>(.*?)</span>").Groups[1].Value;
+                LastestUpdateTime = Regex.Match(moreDataHtml, "<em[\\s\\S]*?>[\\s\\r\\n]*([\\s\\S]*?)[\\s\\r\\n]*</em>").Groups[1].Value;
+                Description = "        " + Regex.Match(moreDataHtml, "comics-detail__desc overflow-hidden[\\s\\S]*?>[\\s\\r\\n]*([\\s\\S]*?)</p>").Groups[1].Value;
             }
         }
 
