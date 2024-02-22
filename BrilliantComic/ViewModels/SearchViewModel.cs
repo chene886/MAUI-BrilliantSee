@@ -58,7 +58,6 @@ namespace BrilliantComic.ViewModels
         private async Task OpenComicAsync(Comic comic)
         {
             comic.Chapters = new List<Chapter>();
-            comic.Description = string.Empty;
             await Shell.Current.GoToAsync("DetailPage", new Dictionary<string, object> { { "Comic", comic } });
         }
     }

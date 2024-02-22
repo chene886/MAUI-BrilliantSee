@@ -92,12 +92,14 @@
                 Text="{Binding Comic.Author}" />
             <Label
                 FontSize="13"
-                Text="{Binding Comic.LastestUpdateTime}"
-                TextColor="Red" />
+                MaxLines="5"
+                HeightRequest="92"
+                Text="{Binding Comic.Description}" />
             <Label
                 FontSize="13"
-                MaxLines="5"
-                Text="{Binding Comic.Description}" />
+                HorizontalOptions="End"
+                Text="{Binding Comic.LastestUpdateTime}"
+                TextColor="Red" />
         </VerticalStackLayout>
         <Grid Grid.Row="2" Grid.ColumnSpan="2">
             <CollectionView

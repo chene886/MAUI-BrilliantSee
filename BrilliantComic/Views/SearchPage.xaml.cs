@@ -1,4 +1,5 @@
 using BrilliantComic.ViewModels;
+using CommunityToolkit.Maui.Core.Platform;
 
 namespace BrilliantComic.Views;
 
@@ -26,5 +27,13 @@ public partial class SearchPage : ContentPage
         await Task.Delay(500);
         this.input.Focus();
         this.Loaded -= SearchPage_Loaded;
+    }
+
+    private void HideKeyboard(object sender, TappedEventArgs e)
+    {
+        if(this.input.IsSoftKeyboardShowing())
+        {
+            this.input.HideKeyboardAsync(CancellationToken.None);
+        }
     }
 }

@@ -10,6 +10,8 @@
     <Shell.TitleView>
         <Entry
             x:Name="input"
+            ClearButtonVisibility="WhileEditing"
+            IsTextPredictionEnabled="True"
             Placeholder="点击输入关键词"
             ReturnCommand="{Binding SearchCommand}"
             ReturnCommandParameter="{Binding Text, Source={RelativeSource Mode=Self}}"
@@ -37,7 +39,10 @@
                         HasShadow="True"
                         WidthRequest="120">
                         <Frame.GestureRecognizers>
-                            <TapGestureRecognizer Command="{Binding OpenComicCommand, Source={RelativeSource AncestorType={x:Type vm:SearchViewModel}}}" CommandParameter="{Binding}" />
+                            <TapGestureRecognizer
+                                Command="{Binding OpenComicCommand, Source={RelativeSource AncestorType={x:Type vm:SearchViewModel}}}"
+                                CommandParameter="{Binding}"
+                                Tapped="HideKeyboard" />
                         </Frame.GestureRecognizers>
                         <Grid>
                             <Grid.RowDefinitions>
