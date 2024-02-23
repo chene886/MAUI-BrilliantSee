@@ -42,8 +42,9 @@
             VerticalOptions="End">
             <Label Margin="0,0,5,0">
                 <Label.Text>
-                    <MultiBinding StringFormat="{}{0} 共 {1} 页">
+                    <MultiBinding StringFormat="{}{0} {1}/{2}">
                         <Binding Path="Chapter.Name" />
+                        <Binding Path="CurrentPageNum" />
                         <Binding Path="Chapter.PageCount" />
                     </MultiBinding>
                 </Label.Text>

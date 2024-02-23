@@ -86,17 +86,27 @@ public partial class BrowsePage : ContentPage
         }
         if (e.CenterItemIndex != crrentCenterItemIndex)
         {
+            if (e.CenterItemIndex < crrentCenterItemIndex)
+            {
+                _vm.CurrentPageNum--;
+            }
+            else
+            {
+                _vm.CurrentPageNum++;
+            }
             if (e.CenterItemIndex == utillCrrentChapterImageCount - _vm.Chapter!.PageCount + _vm.LoadedChapter[0].PageCount - 1 && crrentCenterItemIndex > e.CenterItemIndex)
             {
                 utillCrrentChapterImageCount -= _vm.Chapter.PageCount;
                 _vm.CurrentChapterIndex--;
+                _vm.CurrentPageNum = _vm.Chapter.PageCount;
                 _ = _vm.StoreLastReadedChapterIndex();
             }
             else if (e.CenterItemIndex == utillCrrentChapterImageCount + _vm.LoadedChapter[0].PageCount && crrentCenterItemIndex < e.CenterItemIndex)
             {
                 _vm.CurrentChapterIndex++;
-                _ = _vm.StoreLastReadedChapterIndex();
+                _vm.CurrentPageNum = 1;
                 utillCrrentChapterImageCount += _vm.Chapter.PageCount;
+                _ = _vm.StoreLastReadedChapterIndex();
             }
             crrentCenterItemIndex = e.CenterItemIndex;
         }

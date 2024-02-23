@@ -47,6 +47,12 @@ namespace BrilliantComic.ViewModels
         /// </summary>
         private int _currentChapterIndex = 0;
 
+        /// <summary>
+        /// 当前页码
+        /// </summary>
+        [ObservableProperty]
+        private int _currentPageNum = 1;
+
         private readonly DBService _db;
 
         public int CurrentChapterIndex
