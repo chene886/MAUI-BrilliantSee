@@ -41,12 +41,12 @@
                                 Source="{Binding Cover}"
                                 WidthRequest="120" />
                             <Label
-                                BackgroundColor="#95212121"
-                                FontSize="Micro"
-                                HorizontalOptions="End"
+                                FontSize="Large"
+                                FontAttributes="Italic"
+                                HorizontalOptions="Center"
                                 Text="{Binding SourceName}"
-                                TextColor="White"
-                                VerticalOptions="Start" />
+                                TextColor="#95FFFFFF"
+                                VerticalOptions="End" />
                             <Label
                                 Grid.Row="1"
                                 FontAttributes="Bold"

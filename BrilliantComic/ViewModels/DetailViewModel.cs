@@ -152,7 +152,16 @@ namespace BrilliantComic.ViewModels
         [RelayCommand]
         private async Task OpenChapterAsync(Chapter chapter)
         {
+            if(chapter.Name=="暂无章节")
+            {
+                var toast = Toast.Make("章节无法显示");
+                _ = toast.Show();
+            }
+            else
+            {
             await Shell.Current.GoToAsync("BrowsePage", new Dictionary<string, object> { { "Chapter", chapter } });
+
+            }
         }
     }
 }

@@ -146,8 +146,8 @@ namespace BrilliantComic.ViewModels
         /// <returns></returns>
         public async Task<bool> UpdateChapterAsync(string flag)
         {
-            Chapter newChapter = Chapter!.Comic.GetNearChapter(Chapter, flag);
-            if (newChapter.Url == "")
+            Chapter? newChapter = Chapter!.Comic.GetNearChapter(Chapter, flag);
+            if (newChapter == null)
             {
                 return false;
             }

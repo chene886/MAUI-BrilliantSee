@@ -41,7 +41,8 @@ namespace BrilliantComic.Models.Comics
             if (!string.IsNullOrEmpty(html))
             {
                 Status = Regex.Match(moreDataHtml, "tag-list[\\s\\S]*?<span[\\s\\S]*?>(.*?)</span>").Groups[1].Value;
-                LastestUpdateTime = Regex.Match(moreDataHtml, "<em[\\s\\S]*?>[\\s\\r\\n]*([\\s\\S]*?)[\\s\\r\\n]*</em>").Groups[1].Value;
+                var lastestUpdateTime = Regex.Match(moreDataHtml, "<em[\\s\\S]*?>[\\s\\r\\n]*([\\s\\S]*?)[\\s\\r\\n]*</em>").Groups[1].Value;
+                LastestUpdateTime = lastestUpdateTime == "" ? "(暂无更新时间)" : lastestUpdateTime;
                 Description = "        " + Regex.Match(moreDataHtml, "comics-detail__desc overflow-hidden[\\s\\S]*?>[\\s\\r\\n]*([\\s\\S]*?)</p>").Groups[1].Value;
             }
         }
@@ -60,7 +61,7 @@ namespace BrilliantComic.Models.Comics
                 flag = !flag;
                 if (html.IndexOf(index) < 0)
                 {
-                    chapters.Add(new BaoziChapter(this, "暂无章节", "", -1, false));
+                    Chapters = Chapters.Append(new BaoziChapter(this, "暂无章节", "", -1, false));
                     return;
                 }
             }
@@ -93,7 +94,7 @@ namespace BrilliantComic.Models.Comics
         /// <param name="chapter">当前章节</param>
         /// <param name="flag">需要上一章或下一章</param>
         /// <returns></returns>
-        public override Chapter GetNearChapter(Chapter chapter, string flag)
+        public override Chapter? GetNearChapter(Chapter chapter, string flag)
         {
             int index = -1;
             int change = 1;
@@ -107,7 +108,7 @@ namespace BrilliantComic.Models.Comics
             {
                 index = tempChapters.IndexOf(chapter) + change;
             }
-            if (index < 0 || index >= Chapters.Count()) return new BaoziChapter(this, "暂无章节", "", -1, false);
+            if (index < 0 || index >= Chapters.Count()) return null;
             return Chapters.ElementAtOrDefault(index)!;
         }
     }

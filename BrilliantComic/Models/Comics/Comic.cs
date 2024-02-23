@@ -106,6 +106,6 @@ namespace BrilliantComic.Models.Comics
         /// <param name="chapter">当前章节</param>
         /// <param name="flag">获取上一章节或下一章节的标志</param>
         /// <returns></returns>
-        public abstract Chapter GetNearChapter(Chapter chapter, string flag);
+        public abstract Chapter? GetNearChapter(Chapter chapter, string flag);
     }
 }
