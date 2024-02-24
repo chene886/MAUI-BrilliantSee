@@ -152,15 +152,32 @@ namespace BrilliantComic.ViewModels
         [RelayCommand]
         private async Task OpenChapterAsync(Chapter chapter)
         {
-            if(chapter.Name=="暂无章节")
+            if (chapter.Name != "暂无章节")
+            {
+                await Shell.Current.GoToAsync("BrowsePage", new Dictionary<string, object> { { "Chapter", chapter } });
+            }
+            else
             {
                 var toast = Toast.Make("章节无法显示");
                 _ = toast.Show();
             }
+        }
+
+        /// <summary>
+        /// 跳转到最后浏览章节
+        /// </summary>
+        [RelayCommand]
+        private async Task OpenHistoryAsync()
+        {
+            if (Comic!.LastReadedChapterIndex != -1)
+            {
+                var historyChapter = Comic.Chapters.ToList().Find(c => c.Index == Comic.LastReadedChapterIndex);
+                await OpenChapterAsync(historyChapter!);
+            }
             else
             {
-            await Shell.Current.GoToAsync("BrowsePage", new Dictionary<string, object> { { "Chapter", chapter } });
-
+                var toast = Toast.Make("暂无历史记录");
+                _ = toast.Show();
             }
         }
     }

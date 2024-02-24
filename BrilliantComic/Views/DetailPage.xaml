@@ -92,8 +92,8 @@
                 Text="{Binding Comic.Author}" />
             <Label
                 FontSize="13"
-                MaxLines="5"
                 HeightRequest="92"
+                MaxLines="5"
                 Text="{Binding Comic.Description}" />
             <Label
                 FontSize="13"
@@ -102,10 +102,29 @@
                 TextColor="Red" />
         </VerticalStackLayout>
         <Grid Grid.Row="2" Grid.ColumnSpan="2">
+            <Frame
+                Margin="220,320,0,0"
+                Padding="0"
+                BackgroundColor="Orchid"
+                BorderColor="Orchid"
+                CornerRadius="100"
+                HasShadow="True"
+                HeightRequest="64"
+                WidthRequest="64"
+                ZIndex="1">
+                <Frame.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding OpenHistoryCommand}" />
+                </Frame.GestureRecognizers>
+                <Image
+                    HeightRequest="48"
+                    Source="rollback.png"
+                    WidthRequest="48" />
+            </Frame>
             <CollectionView
                 Margin="0,15,0,0"
                 ItemsSource="{Binding Comic.Chapters}"
-                SelectionMode="Single">
+                SelectionMode="Single"
+                ZIndex="0">
                 <CollectionView.ItemsLayout>
                     <GridItemsLayout
                         HorizontalItemSpacing="15"
