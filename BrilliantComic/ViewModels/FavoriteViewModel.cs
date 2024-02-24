@@ -1,4 +1,5 @@
 ﻿using BrilliantComic.Models.Comics;
+using BrilliantComic.Models.Enums;
 using BrilliantComic.Services;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -21,6 +22,8 @@ namespace BrilliantComic.ViewModels
         [ObservableProperty]
         private bool _isGettingResult;
 
+        private bool IsRefresh { get; set; } = false;
+
         /// <summary>
         /// 储存收藏漫画集合
         /// </summary>
@@ -34,13 +37,16 @@ namespace BrilliantComic.ViewModels
         {
             Comics.Clear();
             IsGettingResult = true;
-            var comics = await _db.GetComicsAsync(Models.Enums.DBComicCategory.Favorite);
+            var comics = await _db.GetComicsAsync(DBComicCategory.Favorite);
             comics.Reverse();
             foreach (var item in comics)
             {
                 Comics.Add(item);
             }
-            IsGettingResult = false;
+            if (!IsRefresh)
+            {
+                IsGettingResult = false;
+            }
         }
 
         public FavoriteViewModel(DBService db)
@@ -58,5 +64,32 @@ namespace BrilliantComic.ViewModels
         {
             await Shell.Current.GoToAsync("DetailPage", new Dictionary<string, object> { { "Comic", comic } });
         }
+
+        /// <summary>
+        /// 检查收藏漫画是否有更新
+        /// </summary>
+        /// <returns></returns>
+        [RelayCommand]
+        private async Task CheckForUpdatedAsync() =>
+            await Task.Run(async () =>
+                {
+                    _ = MainThread.InvokeOnMainThreadAsync(() => { IsGettingResult = true; IsRefresh = true; });
+                    var comics = await _db.GetComicsAsync(DBComicCategory.Favorite);
+                    foreach (var item in comics)
+                    {
+                        if (!item.IsUpdate)
+                        {
+                            var lastestUpdateTime = item.LastestUpdateTime;
+                            await item.LoadMoreDataAsync();
+                            if (lastestUpdateTime != item.LastestUpdateTime)
+                            {
+                                item.IsUpdate = true;
+                                await _db.SaveComicAsync(item, DBComicCategory.Favorite);
+                                MainThread.BeginInvokeOnMainThread(() => _ = OnLoadFavoriteComicAsync());
+                            }
+                        }
+                    }
+                    _ = MainThread.InvokeOnMainThreadAsync(() => { IsRefresh = false; IsGettingResult = false; });
+                });
     }
 }

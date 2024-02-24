@@ -67,6 +67,11 @@ namespace BrilliantComic.Models.Comics
         public string LastestUpdateTime { get; set; } = string.Empty;
 
         /// <summary>
+        /// 是否有更新
+        /// </summary>
+        public bool IsUpdate { get; set; } = false;
+
+        /// <summary>
         /// 漫画状态
         /// </summary>
         public string Status { get; set; } = string.Empty;

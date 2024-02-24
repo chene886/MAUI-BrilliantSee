@@ -40,6 +40,16 @@
                                 HeightRequest="160"
                                 Source="{Binding Cover}"
                                 WidthRequest="120" />
+                            <Frame
+                                BackgroundColor="#FF0011"
+                                BorderColor="#FF0011"
+                                CornerRadius="100"
+                                HasShadow="True"
+                                HeightRequest="16"
+                                IsVisible="true"
+                                TranslationX="49"
+                                TranslationY="-70"
+                                WidthRequest="16" />
                             <Label
                                 FontAttributes="Italic"
                                 FontSize="Large"
@@ -66,6 +76,23 @@
                 </DataTemplate>
             </CollectionView.ItemTemplate>
         </CollectionView>
+        <Frame
+            Margin="220,560,0,0"
+            Padding="0"
+            BackgroundColor="Orchid"
+            BorderColor="Orchid"
+            CornerRadius="100"
+            HasShadow="True"
+            HeightRequest="64"
+            WidthRequest="64">
+            <Frame.GestureRecognizers>
+                <TapGestureRecognizer Command="{Binding CheckForUpdatedCommand}" />
+            </Frame.GestureRecognizers>
+            <Image
+                HeightRequest="48"
+                Source="refresh.png"
+                WidthRequest="48" />
+        </Frame>
         <ActivityIndicator
             Margin="0,0,0,100"
             HeightRequest="55"

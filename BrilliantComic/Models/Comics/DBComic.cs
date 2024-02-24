@@ -37,6 +37,17 @@ namespace BrilliantComic.Models.Comics
         /// </summary>
         public int LastReadedChapterIndex { get; set; } = -1;
 
+
+        /// <summary>
+        /// 是否有更新
+        /// </summary>
+        public bool IsUpdate { get; set; } = false;
+
+        /// <summary>
+        /// 最新更新时间
+        /// </summary>
+        public string LastestUpdateTime { get; set; } = string.Empty;
+
         /// <summary>
         /// 漫画源
         /// </summary>

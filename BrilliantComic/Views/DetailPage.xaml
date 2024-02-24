@@ -102,29 +102,10 @@
                 TextColor="Red" />
         </VerticalStackLayout>
         <Grid Grid.Row="2" Grid.ColumnSpan="2">
-            <Frame
-                Margin="220,320,0,0"
-                Padding="0"
-                BackgroundColor="Orchid"
-                BorderColor="Orchid"
-                CornerRadius="100"
-                HasShadow="True"
-                HeightRequest="64"
-                WidthRequest="64"
-                ZIndex="1">
-                <Frame.GestureRecognizers>
-                    <TapGestureRecognizer Command="{Binding OpenHistoryCommand}" />
-                </Frame.GestureRecognizers>
-                <Image
-                    HeightRequest="48"
-                    Source="rollback.png"
-                    WidthRequest="48" />
-            </Frame>
             <CollectionView
                 Margin="0,15,0,0"
                 ItemsSource="{Binding Comic.Chapters}"
-                SelectionMode="Single"
-                ZIndex="0">
+                SelectionMode="Single">
                 <CollectionView.ItemsLayout>
                     <GridItemsLayout
                         HorizontalItemSpacing="15"
@@ -163,6 +144,23 @@
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>
+            <Frame
+                Margin="220,320,0,0"
+                Padding="0"
+                BackgroundColor="Orchid"
+                BorderColor="Orchid"
+                CornerRadius="100"
+                HasShadow="True"
+                HeightRequest="64"
+                WidthRequest="64">
+                <Frame.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding OpenHistoryCommand}" />
+                </Frame.GestureRecognizers>
+                <Image
+                    HeightRequest="48"
+                    Source="rollback.png"
+                    WidthRequest="48" />
+            </Frame>
             <ActivityIndicator
                 Margin="0,0,0,100"
                 HeightRequest="55"

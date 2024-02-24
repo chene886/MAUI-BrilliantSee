@@ -68,6 +68,11 @@ namespace BrilliantComic.ViewModels
             }
             else FavoriteImage = ImageSource.FromFile("notfavorite.png");
             await Comic!.LoadMoreDataAsync();
+            if (isExist && Comic!.IsUpdate)
+            {
+                Comic!.IsUpdate = false;
+                _ = _db.UpdateComicAsync(Comic!);
+            }
             OnPropertyChanged(nameof(Comic));
 
             Comic!.IsReverseList = false;

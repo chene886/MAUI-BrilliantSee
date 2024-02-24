@@ -78,6 +78,8 @@ namespace BrilliantComic.Models.Sources
                 Id = dbComic.Id,
                 Category = dbComic.Category,
                 LastReadedChapterIndex = dbComic.LastReadedChapterIndex,
+                IsUpdate = dbComic.IsUpdate,
+                LastestUpdateTime = dbComic.LastestUpdateTime,
                 Source = this,
                 SourceName = dbComic.SourceName
             };
@@ -102,7 +104,9 @@ namespace BrilliantComic.Models.Sources
                 SourceName = comic.SourceName,
                 Url = comic.Url,
                 Category = comic.Category,
-                LastReadedChapterIndex = comic.LastReadedChapterIndex
+                LastReadedChapterIndex = comic.LastReadedChapterIndex,
+                IsUpdate = comic.IsUpdate,
+                LastestUpdateTime = comic.LastestUpdateTime
             };
         }
     }
