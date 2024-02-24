@@ -46,7 +46,7 @@
                                 CornerRadius="100"
                                 HasShadow="True"
                                 HeightRequest="16"
-                                IsVisible="true"
+                                IsVisible="{Binding IsUpdate}"
                                 TranslationX="49"
                                 TranslationY="-70"
                                 WidthRequest="16" />
