@@ -6,7 +6,10 @@
     xmlns:local="clr-namespace:BrilliantComic"
     xmlns:views="clr-namespace:BrilliantComic.Views"
     Title="BrilliantComic"
-    Shell.FlyoutBehavior="Disabled">
+    BackgroundColor="#FAFAFA"
+    ForegroundColor="Black"
+    Shell.FlyoutBehavior="Disabled"
+    Shell.TabBarBackgroundColor="#FAFAFA">
 
     <TabBar>
         <Tab Title="收藏" Icon="favorite.png">

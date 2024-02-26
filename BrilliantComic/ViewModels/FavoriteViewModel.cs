@@ -79,9 +79,9 @@ namespace BrilliantComic.ViewModels
                     {
                         if (!item.IsUpdate)
                         {
-                            var lastestUpdateTime = item.LastestUpdateTime;
-                            await item.LoadMoreDataAsync();
-                            if (lastestUpdateTime != item.LastestUpdateTime)
+                            await item.GetHtmlAsync();
+                            var lastestChapterName = item.GetLastestChapterName();
+                            if (lastestChapterName is not null && lastestChapterName != item.LastestChapterName)
                             {
                                 item.IsUpdate = true;
                                 await _db.SaveComicAsync(item, DBComicCategory.Favorite);

@@ -16,6 +16,8 @@ namespace BrilliantComic.Models.Sources
 
         private readonly SourceService _sourceService;
 
+        public Color Color { get; set; } = Color.FromArgb("#000000");
+
         public BaoziSource(SourceService sourceService)
         {
             _sourceService = sourceService;
@@ -53,7 +55,7 @@ namespace BrilliantComic.Models.Sources
 
                 foreach (Match match in matches)
                 {
-                    var comic = new BaoziComic("https://cn.baozimh.com" + match.Groups[1].Value, match.Groups[2].Value, match.Groups[3].Value, match.Groups[4].Value + " ") { Source = this, SourceName = "包子漫画" };
+                    var comic = new BaoziComic("https://cn.baozimh.com" + match.Groups[1].Value, match.Groups[2].Value, match.Groups[3].Value, match.Groups[4].Value + " ") { Source = this };
 
                     comics.Add(comic);
                 }
@@ -79,9 +81,8 @@ namespace BrilliantComic.Models.Sources
                 Category = dbComic.Category,
                 LastReadedChapterIndex = dbComic.LastReadedChapterIndex,
                 IsUpdate = dbComic.IsUpdate,
-                LastestUpdateTime = dbComic.LastestUpdateTime,
-                Source = this,
-                SourceName = dbComic.SourceName
+                LastestChapterName = dbComic.LastestChapterName,
+                Source = this
             };
 
             return comic;
@@ -101,12 +102,11 @@ namespace BrilliantComic.Models.Sources
                 Author = comic.Author,
                 Cover = comic.Cover,
                 Source = _sourceService.GetSourceName(this)!,
-                SourceName = comic.SourceName,
                 Url = comic.Url,
                 Category = comic.Category,
                 LastReadedChapterIndex = comic.LastReadedChapterIndex,
                 IsUpdate = comic.IsUpdate,
-                LastestUpdateTime = comic.LastestUpdateTime
+                LastestChapterName = comic.LastestChapterName,
             };
         }
     }

@@ -57,9 +57,9 @@ namespace BrilliantComic.Models.Comics
         public required ISource Source { get; set; }
 
         /// <summary>
-        /// 漫画源名
+        /// 最新章节名
         /// </summary>
-        public string SourceName { get; set; } = string.Empty;
+        public string LastestChapterName { get; set; } = string.Empty;
 
         /// <summary>
         /// 最新更新时间
@@ -85,7 +85,7 @@ namespace BrilliantComic.Models.Comics
         /// <summary>
         /// 漫画章节是否倒序
         /// </summary>
-        public bool IsReverseList { get; set; } = false;
+        public bool IsReverseList { get; set; } = true;
 
         /// <summary>
         /// 漫画分类
@@ -93,17 +93,29 @@ namespace BrilliantComic.Models.Comics
         public DBComicCategory Category { get; set; } = DBComicCategory.Default;
 
         /// <summary>
+        /// 获取网站html
+        /// </summary>
+        /// <returns></returns>
+        public abstract Task GetHtmlAsync();
+
+        /// <summary>
+        /// 获取最新章节名
+        /// </summary>
+        /// <returns></returns>
+        public abstract string? GetLastestChapterName();
+
+        /// <summary>
         /// 获取更多漫画数据
         /// </summary>
         /// <returns></returns>
-        public abstract Task LoadMoreDataAsync();
+        public abstract void LoadMoreData();
 
         /// <summary>
         /// 加载章节消息
         /// </summary>
         /// <param name="flag"></param>
         /// <returns></returns>
-        public abstract Task LoadChaptersAsync(bool flag);
+        public abstract Task LoadChaptersAsync();
 
         /// <summary>
         /// 从当前章节获取上一章节或下一章节

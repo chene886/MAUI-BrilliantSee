@@ -26,14 +26,18 @@ namespace BrilliantComic.Models.Comics
             Author = author;
         }
 
+        public override async Task GetHtmlAsync()
+        {
+            html = await Source.HttpClient.GetStringAsync(Url);
+        }
+
         /// <summary>
         /// 获取更多漫画信息
         /// </summary>
         /// <returns></returns>
         ///
-        public override async Task LoadMoreDataAsync()
+        public override void LoadMoreData()
         {
-            html = await Source.HttpClient.GetStringAsync(Url);
             //截取两个字符串之间的内容
             var start = html.IndexOf("<body");
             var end = html.IndexOf("猜你喜欢");
@@ -51,9 +55,10 @@ namespace BrilliantComic.Models.Comics
         /// 获取漫画章节信息
         /// </summary>
         /// <returns></returns>
-        public override async Task LoadChaptersAsync(bool flag)
+        public override async Task LoadChaptersAsync()
         {
             var index = "章节目录";
+            var flag = true;
             var chapters = new List<BaoziChapter>();
             if (html.IndexOf(index) < 0)
             {
@@ -68,10 +73,14 @@ namespace BrilliantComic.Models.Comics
 
             var chaptershtml = html.Substring(html.IndexOf(index));
             var matches = Regex.Matches(chaptershtml, "comics-chapters[\\s\\S]*?<span.*?>([\\s\\S]*?)</span>").ToList();
-            var start = 0;
+            var start = matches.Count() - 1;
             if (flag)
             {
                 matches.Reverse();
+            }
+            if (matches.FirstOrDefault() is not null)
+            {
+                LastestChapterName = matches.FirstOrDefault()!.Groups[1].Value;
             }
             foreach (Match match in matches)
             {
@@ -80,7 +89,7 @@ namespace BrilliantComic.Models.Comics
                 var name = match.Groups[1].Value;
                 if (start == LastReadedChapterIndex) isSpecial = true;
                 chapters.Add(new BaoziChapter(this, name, url, start, isSpecial));
-                start++;
+                start--;
             }
             await MainThread.InvokeOnMainThreadAsync(() =>
             {
@@ -110,6 +119,29 @@ namespace BrilliantComic.Models.Comics
             }
             if (index < 0 || index >= Chapters.Count()) return null;
             return Chapters.ElementAtOrDefault(index)!;
+        }
+
+        public override string? GetLastestChapterName()
+        {
+            var index = "章节目录";
+            var flag = true;
+            if (html.IndexOf(index) < 0)
+            {
+                index = "class=\"section-title\"";
+                flag = !flag;
+                if (html.IndexOf(index) < 0)
+                {
+                    return null;
+                }
+            }
+            var chaptershtml = html.Substring(html.IndexOf(index));
+            var matches = Regex.Matches(chaptershtml, "comics-chapters[\\s\\S]*?<span.*?>([\\s\\S]*?)</span>").ToList();
+            if (flag) matches.Reverse();
+            if (matches.FirstOrDefault() is not null)
+            {         
+                return matches.FirstOrDefault()!.Groups[1].Value;
+            }
+            else { return null; }
         }
     }
 }

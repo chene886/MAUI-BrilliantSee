@@ -67,7 +67,8 @@ namespace BrilliantComic.ViewModels
                 Comic!.Category = DBComicCategory.Favorite;
             }
             else FavoriteImage = ImageSource.FromFile("notfavorite.png");
-            await Comic!.LoadMoreDataAsync();
+            await Comic!.GetHtmlAsync();
+            Comic!.LoadMoreData();
             if (isExist && Comic!.IsUpdate)
             {
                 Comic!.IsUpdate = false;
@@ -75,9 +76,8 @@ namespace BrilliantComic.ViewModels
             }
             OnPropertyChanged(nameof(Comic));
 
-            Comic!.IsReverseList = false;
             IsReverseListEnabled = false;
-            await Task.Run(() => Comic!.LoadChaptersAsync(Comic!.IsReverseList));
+            await Task.Run(() => Comic!.LoadChaptersAsync());
             IsReverseListEnabled = true;
 
             IsGettingResult = false;
@@ -141,7 +141,7 @@ namespace BrilliantComic.ViewModels
             Comic!.IsReverseList = !Comic.IsReverseList;
             await Task.Run(() =>
             {
-                var tempChapters = Comic.Chapters.ToList();
+                var tempChapters = Comic!.Chapters.ToList();
                 tempChapters.Reverse();
                 Comic.Chapters = tempChapters;
             });

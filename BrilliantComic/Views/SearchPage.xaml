@@ -31,10 +31,10 @@
             <CollectionView.ItemTemplate>
                 <DataTemplate>
                     <Frame
-                        Margin="0,0,0,20"
+                        Margin="0,10"
                         Padding="1"
                         BackgroundColor="White"
-                        BorderColor="Black"
+                        BorderColor="{Binding Path=Source.Color}"
                         CornerRadius="8"
                         HasShadow="True"
                         WidthRequest="120">
@@ -58,13 +58,6 @@
                                 HeightRequest="160"
                                 Source="{Binding Cover}"
                                 WidthRequest="120" />
-                            <Label
-                                FontAttributes="Italic"
-                                FontSize="Large"
-                                HorizontalOptions="Center"
-                                Text="{Binding SourceName}"
-                                TextColor="#95FFFFFF"
-                                VerticalOptions="End" />
                             <Label
                                 Grid.Row="1"
                                 FontAttributes="Bold"

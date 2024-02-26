@@ -13,12 +13,12 @@ public partial class BrowsePage : ContentPage
     /// <summary>
     /// 当前最后一个可见item在CollectionView中的索引
     /// </summary>
-    private int crrentLastVisibleItemIndex = 0;
+    private int crrentLastVisibleItemIndex = 2;
 
     /// <summary>
     /// 当前位于可见界面中间的item在CollectionView中的索引
     /// </summary>
-    private int crrentCenterItemIndex = 0;
+    private int crrentCenterItemIndex = 1;
 
     /// <summary>
     /// 第二个已加载章节到当前章节图片数量总和
@@ -35,7 +35,7 @@ public partial class BrowsePage : ContentPage
     }
 
     /// <summary>
-    /// 根据滚动位置加载上一章或下一章及切换章节
+    /// 根据滚动位置修正当前参数
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>
@@ -46,7 +46,7 @@ public partial class BrowsePage : ContentPage
             crrentFirstVisibleItemIndex = e.FirstVisibleItemIndex;
             if (e.FirstVisibleItemIndex == 0)
             {
-                var toast = Toast.Make("正在加载上一章");
+                var toast = Toast.Make("正在加载上一章...");
                 _ = toast.Show();
                 var result = await _vm.UpdateChapterAsync("Last");
                 if (result)
@@ -67,9 +67,9 @@ public partial class BrowsePage : ContentPage
         if (e.LastVisibleItemIndex != crrentLastVisibleItemIndex)
         {
             crrentLastVisibleItemIndex = e.LastVisibleItemIndex;
-            if (e.LastVisibleItemIndex == _vm.Images.ToList().Count - 1)
+            if (_vm.Images.ToList().Count != 0 && e.LastVisibleItemIndex == _vm.Images.ToList().Count + 1)
             {
-                var toast = Toast.Make("正在加载下一章");
+                var toast = Toast.Make("正在加载下一章...");
                 _ = toast.Show();
                 var result = await _vm.UpdateChapterAsync("Next");
                 if (result)
@@ -89,24 +89,24 @@ public partial class BrowsePage : ContentPage
             if (e.CenterItemIndex < crrentCenterItemIndex)
             {
                 _vm.CurrentPageNum--;
+                if (e.CenterItemIndex != 0 && e.CenterItemIndex == utillCrrentChapterImageCount - _vm.Chapter!.PageCount + _vm.LoadedChapter[0].PageCount)
+                {
+                    utillCrrentChapterImageCount -= _vm.Chapter.PageCount;
+                    _vm.CurrentChapterIndex--;
+                    _vm.CurrentPageNum = _vm.Chapter.PageCount;
+                    _ = _vm.StoreLastReadedChapterIndex();
+                }
             }
             else
             {
                 _vm.CurrentPageNum++;
-            }
-            if (e.CenterItemIndex == utillCrrentChapterImageCount - _vm.Chapter!.PageCount + _vm.LoadedChapter[0].PageCount - 1 && crrentCenterItemIndex > e.CenterItemIndex)
-            {
-                utillCrrentChapterImageCount -= _vm.Chapter.PageCount;
-                _vm.CurrentChapterIndex--;
-                _vm.CurrentPageNum = _vm.Chapter.PageCount;
-                _ = _vm.StoreLastReadedChapterIndex();
-            }
-            else if (e.CenterItemIndex == utillCrrentChapterImageCount + _vm.LoadedChapter[0].PageCount && crrentCenterItemIndex < e.CenterItemIndex)
-            {
-                _vm.CurrentChapterIndex++;
-                _vm.CurrentPageNum = 1;
-                utillCrrentChapterImageCount += _vm.Chapter.PageCount;
-                _ = _vm.StoreLastReadedChapterIndex();
+                if (e.CenterItemIndex == utillCrrentChapterImageCount + _vm.LoadedChapter[0].PageCount + 1)
+                {
+                    _vm.CurrentChapterIndex++;
+                    _vm.CurrentPageNum = 1;
+                    utillCrrentChapterImageCount += _vm.Chapter!.PageCount;
+                    _ = _vm.StoreLastReadedChapterIndex();
+                }
             }
             crrentCenterItemIndex = e.CenterItemIndex;
         }

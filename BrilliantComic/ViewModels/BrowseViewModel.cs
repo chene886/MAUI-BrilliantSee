@@ -99,6 +99,7 @@ namespace BrilliantComic.ViewModels
                 Chapter.IsSpecial = true;
             }
             await LoadChapterPicAsync(Chapter, "Init");
+            Task.Delay(1000).Wait();
             OnPropertyChanged(nameof(Chapter));
         }
 
