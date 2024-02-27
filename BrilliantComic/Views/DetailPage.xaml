@@ -4,6 +4,7 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:vm="clr-namespace:BrilliantComic.ViewModels"
+    Title="{Binding Comic.Name}"
     Shell.ForegroundColor="Black"
     Shell.TabBarIsVisible="False">
     <ContentPage.Resources>
@@ -13,7 +14,7 @@
                     Binding="{Binding IsSpecial}"
                     TargetType="Label"
                     Value="True">
-                    <Setter Property="TextColor" Value="Orchid" />
+                    <Setter Property="TextColor" Value="White" />
                     <Setter Property="Text" Value="最后浏览章节" />
                     <Setter Property="FontAttributes" Value="Bold" />
                 </DataTrigger>
@@ -35,14 +36,14 @@
             Text="浏览器打开" />
         <ToolbarItem
             Command="{Binding ReverseListCommand}"
-            IconImageSource="reverse.png"
+            IconImageSource="{Binding OrderImage}"
             IsEnabled="{Binding IsReverseListEnabled}"
             Text="反转列表" />
     </ContentPage.ToolbarItems>
     <Grid>
         <CollectionView ItemsSource="{Binding Comic.Chapters}" SelectionMode="Single">
             <CollectionView.Header>
-                <Grid Padding="10,10,10,0" BackgroundColor="#FAFAFA">
+                <Grid Padding="10">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
@@ -54,6 +55,7 @@
                     <Label
                         Grid.ColumnSpan="2"
                         Margin="0,0,0,10"
+                        FontFamily="Bold"
                         FontSize="12"
                         LineBreakMode="TailTruncation"
                         Text="{Binding Comic.Url}" />
@@ -62,11 +64,11 @@
                         Margin="0,0,10,5"
                         Padding="0"
                         CornerRadius="5"
-                        HeightRequest="180">
+                        HeightRequest="170">
                         <Grid>
                             <Image
                                 Aspect="AspectFill"
-                                HeightRequest="180"
+                                HeightRequest="170"
                                 Source="{Binding Comic.Cover}"
                                 WidthRequest="120" />
                             <Label
@@ -74,7 +76,7 @@
                                 FontSize="12"
                                 HorizontalOptions="End"
                                 Text="{Binding Comic.Status}"
-                                TextColor="White"
+                                TextColor="#FAFAFA"
                                 VerticalOptions="End" />
                         </Grid>
                     </Frame>
@@ -83,25 +85,28 @@
                         Grid.Column="1"
                         Spacing="6">
                         <Label
-                            FontSize="Large"
+                            FontFamily="Bold"
+                            FontSize="18"
                             LineBreakMode="TailTruncation"
                             MaxLines="1"
                             Text="{Binding Comic.Name}" />
                         <Label
                             Margin="0,0,0,2"
+                            FontFamily="Bold"
                             FontSize="Body"
                             MaxLines="1"
                             Text="{Binding Comic.Author}" />
                         <Label
+                            FontFamily="Bold"
                             FontSize="13"
-                            HeightRequest="92"
+                            HeightRequest="88"
                             MaxLines="5"
                             Text="{Binding Comic.Description}" />
                         <Label
+                            FontFamily="Bold"
                             FontSize="13"
                             HorizontalOptions="End"
-                            Text="{Binding Comic.LastestUpdateTime}"
-                            TextColor="Red" />
+                            Text="{Binding Comic.LastestUpdateTime}" />
                     </VerticalStackLayout>
                 </Grid>
             </CollectionView.Header>
@@ -113,7 +118,7 @@
                     <Border
                         Margin="10,6"
                         Padding="10,0"
-                        BackgroundColor="Transparent"
+                        BackgroundColor="White"
                         HeightRequest="32"
                         Stroke="{StaticResource Gray500Brush}">
                         <Border.StrokeShape>
@@ -127,8 +132,8 @@
                                 Binding="{Binding IsSpecial}"
                                 TargetType="Border"
                                 Value="True">
-                                <Setter Property="BackgroundColor" Value="White" />
-                                <Setter Property="Stroke" Value="Orchid" />
+                                <Setter Property="BackgroundColor" Value="{StaticResource Primary}" />
+                                <Setter Property="Stroke" Value="{StaticResource Primary}" />
                             </DataTrigger>
                         </Border.Triggers>
                         <Label
@@ -141,10 +146,10 @@
             </CollectionView.ItemTemplate>
         </CollectionView>
         <Frame
-            Margin="220,520,0,0"
+            Margin="280,576,0,0"
             Padding="0"
-            BackgroundColor="Orchid"
-            BorderColor="Orchid"
+            BackgroundColor="{StaticResource Primary}"
+            BorderColor="{StaticResource Primary}"
             CornerRadius="100"
             HasShadow="True"
             HeightRequest="64"

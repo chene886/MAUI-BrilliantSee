@@ -138,7 +138,7 @@ namespace BrilliantComic.Models.Comics
             var matches = Regex.Matches(chaptershtml, "comics-chapters[\\s\\S]*?<span.*?>([\\s\\S]*?)</span>").ToList();
             if (flag) matches.Reverse();
             if (matches.FirstOrDefault() is not null)
-            {         
+            {
                 return matches.FirstOrDefault()!.Groups[1].Value;
             }
             else { return null; }

@@ -28,6 +28,12 @@ namespace BrilliantComic.ViewModels
         private ImageSource? _favoriteImage;
 
         /// <summary>
+        /// 排序图标
+        /// </summary>
+        [ObservableProperty]
+        private ImageSource? _orderImage = ImageSource.FromFile("reverse.png");
+
+        /// <summary>
         /// 是否允许反转章节列表
         /// </summary>
         [ObservableProperty]
@@ -63,10 +69,10 @@ namespace BrilliantComic.ViewModels
             var isExist = await _db.IsComicExistAsync(Comic!, DBComicCategory.Favorite);
             if (isExist)
             {
-                FavoriteImage = ImageSource.FromFile("isfavorite.png");
+                FavoriteImage = ImageSource.FromFile("is_favorite.png");
                 Comic!.Category = DBComicCategory.Favorite;
             }
-            else FavoriteImage = ImageSource.FromFile("notfavorite.png");
+            else FavoriteImage = ImageSource.FromFile("not_favorite.png");
             await Comic!.GetHtmlAsync();
             Comic!.LoadMoreData();
             if (isExist && Comic!.IsUpdate)
@@ -106,13 +112,13 @@ namespace BrilliantComic.ViewModels
             }
             if (Comic.Category == DBComicCategory.Favorite)
             {
-                FavoriteImage = ImageSource.FromFile("notfavorite.png");
+                FavoriteImage = ImageSource.FromFile("not_favorite.png");
                 await _db.DeleteComicAsync(Comic, Comic.Category);
                 Comic.Category = DBComicCategory.History;
             }
             else
             {
-                FavoriteImage = ImageSource.FromFile("isfavorite.png");
+                FavoriteImage = ImageSource.FromFile("is_favorite.png");
                 Comic.Category = DBComicCategory.Favorite;
                 await _db.SaveComicAsync(Comic, Comic.Category);
             }
@@ -139,6 +145,14 @@ namespace BrilliantComic.ViewModels
             IsGettingResult = true;
             IsReverseListEnabled = false;
             Comic!.IsReverseList = !Comic.IsReverseList;
+            if (!Comic!.IsReverseList)
+            {
+                OrderImage = ImageSource.FromFile("positive.png");
+            }
+            else
+            {
+                OrderImage = ImageSource.FromFile("reverse.png");
+            }
             await Task.Run(() =>
             {
                 var tempChapters = Comic!.Chapters.ToList();

@@ -41,8 +41,8 @@
                                 Source="{Binding Cover}"
                                 WidthRequest="120" />
                             <Frame
-                                BackgroundColor="#FF0011"
-                                BorderColor="#88FF0011"
+                                BackgroundColor="{StaticResource Primary}"
+                                BorderColor="#88512BD4"
                                 CornerRadius="100"
                                 HasShadow="True"
                                 IsVisible="{Binding IsUpdate}"
@@ -70,10 +70,10 @@
             </CollectionView.ItemTemplate>
         </CollectionView>
         <Frame
-            Margin="220,576,0,0"
+            Margin="280,576,0,0"
             Padding="0"
-            BackgroundColor="Orchid"
-            BorderColor="Orchid"
+            BackgroundColor="{StaticResource Primary}"
+            BorderColor="{StaticResource Primary}"
             CornerRadius="100"
             HasShadow="True"
             HeightRequest="64"

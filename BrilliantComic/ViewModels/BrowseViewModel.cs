@@ -88,18 +88,19 @@ namespace BrilliantComic.ViewModels
             {
                 return;
             }
-            if (Chapter.Index != Chapter.Comic.LastReadedChapterIndex)
+            var LastIndex = Chapter.Comic.LastReadedChapterIndex;
+            if (Chapter.Index != LastIndex)
             {
-                if (Chapter.Comic.LastReadedChapterIndex != -1)
+                if (LastIndex != -1)
                 {
-                    var LastReadedChapter = Chapter.Comic.Chapters.ToList()[Chapter.Comic.LastReadedChapterIndex];
-                    LastReadedChapter.IsSpecial = false;
+                    var position = LastIndex;
+                    if (Chapter.Comic.IsReverseList) position = Chapter.Comic.Chapters.Count() - LastIndex - 1;
+                    Chapter.Comic.Chapters.ToList()[position].IsSpecial = false;
                 }
                 _ = StoreLastReadedChapterIndex();
                 Chapter.IsSpecial = true;
             }
             await LoadChapterPicAsync(Chapter, "Init");
-            Task.Delay(1000).Wait();
             OnPropertyChanged(nameof(Chapter));
         }
 
