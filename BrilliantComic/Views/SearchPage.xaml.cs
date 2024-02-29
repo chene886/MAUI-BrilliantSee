@@ -31,9 +31,10 @@ public partial class SearchPage : ContentPage
 
     private void HideKeyboard(object sender, TappedEventArgs e)
     {
-        if(this.input.IsSoftKeyboardShowing())
+        if (this.input.IsSoftKeyboardShowing())
         {
             this.input.HideKeyboardAsync(CancellationToken.None);
         }
     }
+
 }

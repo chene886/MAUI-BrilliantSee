@@ -1,5 +1,6 @@
 ﻿using BrilliantComic.Models.Comics;
 using BrilliantComic.Models.Sources;
+using CommunityToolkit.Maui.Alerts;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -31,6 +32,11 @@ namespace BrilliantComic.Services
             _sourceNames.Add(baozi, "BaoZi");
         }
 
+        public List<ISource> GetSources()
+        {
+            return _sources.Values.ToList();
+        }
+
         /// <summary>
         /// 搜索漫画
         /// </summary>
@@ -39,9 +45,21 @@ namespace BrilliantComic.Services
         /// <returns></returns>
         public async Task SearchAsync(string keyword, ObservableCollection<Comic> comics)
         {
+            if(string.IsNullOrWhiteSpace(keyword))
+            {
+                _ = Toast.Make("请输入搜索关键词").Show();
+                return;
+            }
+            var sources = _sources.Values.Where(s => s.IsSelected == true);
+            if(sources.Count() == 0)
+            {
+                _ = Toast.Make("请选择至少一个图源").Show();
+                return;
+            }
+            comics.Clear();
             //并发使用所有图源去搜索
             var tasks = new List<Task>();
-            foreach (var source in _sources.Values)
+            foreach (var source in sources)
             {
                 tasks.Add(Task.Run(async () =>
                 {

@@ -65,7 +65,6 @@ namespace BrilliantComic.ViewModels
             Comic = query["Comic"] as Comic;
 
             IsGettingResult = true;
-
             var isExist = await _db.IsComicExistAsync(Comic!, DBComicCategory.Favorite);
             if (isExist)
             {
@@ -75,19 +74,17 @@ namespace BrilliantComic.ViewModels
             else FavoriteImage = ImageSource.FromFile("not_favorite.png");
             await Comic!.GetHtmlAsync();
             Comic!.LoadMoreData();
+            OnPropertyChanged(nameof(Comic));
+            IsReverseListEnabled = false;
+            await Task.Run(() => Comic!.LoadChaptersAsync());
+            IsReverseListEnabled = true;
+            IsGettingResult = false;
+
             if (isExist && Comic!.IsUpdate)
             {
                 Comic!.IsUpdate = false;
                 _ = _db.UpdateComicAsync(Comic!);
             }
-            OnPropertyChanged(nameof(Comic));
-
-            IsReverseListEnabled = false;
-            await Task.Run(() => Comic!.LoadChaptersAsync());
-            IsReverseListEnabled = true;
-
-            IsGettingResult = false;
-
             _ = AddHistoryComicAsync();
         }
 

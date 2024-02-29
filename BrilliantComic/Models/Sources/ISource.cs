@@ -1,4 +1,5 @@
 ﻿using BrilliantComic.Models.Comics;
+using CommunityToolkit.Mvvm.ComponentModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +11,10 @@ namespace BrilliantComic.Models.Sources
     public interface ISource
     {
         HttpClient HttpClient { get; }
+
+        string Name { get; set; }
+
+        abstract bool IsSelected { get; set; }
 
         /// <summary>
         /// 搜索漫画

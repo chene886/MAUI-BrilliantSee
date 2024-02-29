@@ -63,6 +63,7 @@ namespace BrilliantComic.Models.Chapters
             {
                 list.Add(item.Groups[1].Value);
             }
+            if (list.Count == 1) list.Add(list[0]);
             PageCount = list.Count;
             return list;
         }

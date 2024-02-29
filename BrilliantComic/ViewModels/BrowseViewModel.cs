@@ -26,10 +26,20 @@ namespace BrilliantComic.ViewModels
         private Chapter? _chapter;
 
         /// <summary>
+        /// 当前章节在已加载章节集合中的索引
+        /// </summary>
+        public int _currentChapterIndex = 0;
+
+        /// <summary>
+        /// 截止当前章节图片数量
+        /// </summary>
+        public int utillCrrentChapterImageCount = 0;
+
+        /// <summary>
         /// 已加载章节集合
         /// </summary>
         [ObservableProperty]
-        private List<Chapter> _loadedChapter = new List<Chapter>();
+        public List<Chapter> _loadedChapter = new List<Chapter>();
 
         /// <summary>
         /// 已加载章节图片集合
@@ -38,20 +48,16 @@ namespace BrilliantComic.ViewModels
         public ObservableCollection<string> _Images = new ObservableCollection<string>();
 
         /// <summary>
+        /// 当前页码
+        /// </summary>
+        [ObservableProperty]
+        public int _currentPageNum = 1;
+
+        /// <summary>
         /// 当前时间
         /// </summary>
         public string CurrentTime => DateTime.Now.ToString("HH:mm");
 
-        /// <summary>
-        /// 当前章节在已加载章节中的索引
-        /// </summary>
-        private int _currentChapterIndex = 0;
-
-        /// <summary>
-        /// 当前页码
-        /// </summary>
-        [ObservableProperty]
-        private int _currentPageNum = 1;
 
         private readonly DBService _db;
 
@@ -64,9 +70,19 @@ namespace BrilliantComic.ViewModels
                 {
                     _currentChapterIndex = value;
                     OnPropertyChanged(nameof(CurrentChapterIndex));
-                    Chapter!.IsSpecial = false;
-                    Chapter = LoadedChapter[value];
-                    Chapter.IsSpecial = true;
+                    var newChapter = LoadedChapter[value];
+                    if(Chapter != newChapter)
+                    {
+                        if(Chapter!.Index > newChapter.Index)utillCrrentChapterImageCount -= Chapter.PageCount;
+                        else utillCrrentChapterImageCount += newChapter.PageCount;
+                        Chapter!.IsSpecial = false;
+                        Chapter = LoadedChapter[value];
+                        Chapter.IsSpecial = true;
+                    }
+                    else
+                    {
+                        utillCrrentChapterImageCount += LoadedChapter[0].PageCount;
+                    }
                 }
             }
         }
@@ -122,6 +138,8 @@ namespace BrilliantComic.ViewModels
                 }
                 Images = images;
                 LoadedChapter.Add(chapter);
+                utillCrrentChapterImageCount = chapter.PageCount;
+                await UpdateChapterAsync("Last");
             }
             else if (flag == "Last")
             {
@@ -149,12 +167,16 @@ namespace BrilliantComic.ViewModels
         public async Task<bool> UpdateChapterAsync(string flag)
         {
             Chapter? newChapter = Chapter!.Comic.GetNearChapter(Chapter, flag);
-            if (newChapter == null)
+            if (newChapter is not null)
             {
-                return false;
+                await LoadChapterPicAsync(newChapter, flag);
+                if(flag == "Last")
+                {
+                    CurrentChapterIndex++;
+                }
+                return true;
             }
-            await LoadChapterPicAsync(newChapter, flag);
-            return true;
+            return false;
         }
 
         /// <summary>

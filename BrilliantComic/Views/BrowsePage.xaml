@@ -20,9 +20,6 @@
     </ContentPage.Resources>
     <Grid>
         <CollectionView ItemsSource="{Binding Images}" Scrolled="CollectionView_Scrolled">
-            <CollectionView.Header>
-                <HorizontalStackLayout Padding="0,1,0,0" />
-            </CollectionView.Header>
             <CollectionView.ItemTemplate>
                 <DataTemplate>
                     <Grid>

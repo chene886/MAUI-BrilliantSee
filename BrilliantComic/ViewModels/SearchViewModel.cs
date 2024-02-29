@@ -28,9 +28,16 @@ namespace BrilliantComic.ViewModels
         [ObservableProperty]
         private bool _isGettingResult;
 
+        [ObservableProperty]
+        private bool _isSourceListVisible = false;
+
+        [ObservableProperty]
+        private List<ISource> _sources = new();
+
         public SearchViewModel(SourceService sourceService)
         {
             _sourceService = sourceService;
+            Sources = _sourceService.GetSources();
         }
 
         /// <summary>
@@ -42,10 +49,8 @@ namespace BrilliantComic.ViewModels
         private async Task SearchAsync(string keyword)
         {
             IsGettingResult = true;
-
-            Comics.Clear();
+            IsSourceListVisible = false;
             await _sourceService.SearchAsync(keyword, Comics);
-
             IsGettingResult = false;
         }
 
@@ -57,8 +62,21 @@ namespace BrilliantComic.ViewModels
         [RelayCommand]
         private async Task OpenComicAsync(Comic comic)
         {
+            IsSourceListVisible = false;
             comic.Chapters = new List<Chapter>();
             await Shell.Current.GoToAsync("DetailPage", new Dictionary<string, object> { { "Comic", comic } });
+        }
+
+        [RelayCommand]
+        private void ChangeIsSelected(ISource source)
+        {
+            source.IsSelected = !source.IsSelected;
+        }
+
+        [RelayCommand]
+        private void ChangeSourceListVisible()
+        {
+            IsSourceListVisible = !IsSourceListVisible;
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using BrilliantComic.Models.Comics;
 using BrilliantComic.Services;
+using CommunityToolkit.Mvvm.ComponentModel;
 using Microsoft.Maui.Controls;
 using System;
 using System.Collections.Generic;
@@ -10,13 +11,15 @@ using System.Threading.Tasks;
 
 namespace BrilliantComic.Models.Sources
 {
-    public class BaoziSource : ISource
+    public partial class BaoziSource : ObservableObject, ISource
     {
         public HttpClient HttpClient { get; set; } = new HttpClient();
+        public string Name { get; set; } = "包子漫画";
+
+        [ObservableProperty]
+        public bool _isSelected = true;
 
         private readonly SourceService _sourceService;
-
-        public Color Color { get; set; } = Color.FromArgb("#000000");
 
         public BaoziSource(SourceService sourceService)
         {
@@ -55,7 +58,7 @@ namespace BrilliantComic.Models.Sources
 
                 foreach (Match match in matches)
                 {
-                    var comic = new BaoziComic("https://cn.baozimh.com" + match.Groups[1].Value, match.Groups[2].Value, match.Groups[3].Value, match.Groups[4].Value + " ") { Source = this };
+                    var comic = new BaoziComic("https://cn.baozimh.com" + match.Groups[1].Value, match.Groups[2].Value, match.Groups[3].Value, match.Groups[4].Value + " ") { Source = this, SourceName = "包子漫画" };
 
                     comics.Add(comic);
                 }

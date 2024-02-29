@@ -57,6 +57,11 @@ namespace BrilliantComic.Models.Comics
         public required ISource Source { get; set; }
 
         /// <summary>
+        /// 漫画源名
+        /// </summary>
+        public string SourceName { get; set; } = string.Empty;
+
+        /// <summary>
         /// 最新章节名
         /// </summary>
         public string LastestChapterName { get; set; } = string.Empty;
@@ -111,9 +116,8 @@ namespace BrilliantComic.Models.Comics
         public abstract void LoadMoreData();
 
         /// <summary>
-        /// 加载章节消息
+        /// 加载章节信息
         /// </summary>
-        /// <param name="flag"></param>
         /// <returns></returns>
         public abstract Task LoadChaptersAsync();
 

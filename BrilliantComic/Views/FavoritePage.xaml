@@ -19,7 +19,6 @@
                         Margin="0,10"
                         Padding="1"
                         BackgroundColor="White"
-                        BorderColor="{Binding Path=Source.Color}"
                         CornerRadius="8"
                         HasShadow="True"
                         WidthRequest="120">
