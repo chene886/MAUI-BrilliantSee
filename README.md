@@ -18,7 +18,7 @@
 ### 漫画详情页
 - 收藏、浏览器打开、漫画倒序
 - 一键跳转最后浏览章节
-<img src="img/detailPage.jpg_1" width="360px" />
+<img src="img/detailPage_1.jpg" width="360px" />
 
 ### 收藏页
 - 一键检查更新
@@ -26,10 +26,10 @@
 
 ### 历史记录页
 - 清空历史记录
-<img src="img/historyPage.jpg_1" width="360px" />
+<img src="img/historyPage_1.jpg" width="360px" />
 
 ### 漫画浏览页
-<img src="img/browsePage.jpg_1" width="360px" />
+<img src="img/browsePage_1.jpg" width="360px" />
 
 ## 适配漫画网站
 添加适配网站仅需在 **BrilliantComic.Models** 项目中添加：
