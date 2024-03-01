@@ -34,9 +34,12 @@
 ## 适配漫画网站
 添加适配网站仅需在 **BrilliantComic.Models** 项目中添加：
 - 实现 **ISource** 接口功能的图源类、
-- 继承**Comic** 抽象类实现抽象方法的漫画类、
-- 继承**Chapter** 抽象类的章节类、
+- 继承**Comic** 类、实现抽象方法的漫画类、
+- 继承**Chapter** 类、实现抽象方法的章节类。
+
+在 **BrilliantComic.Services** 项目中：
 - 在**SourceService**中注册图源和图源名。
+
 再根据设配网站的需求略作调整即可
 
 ## 声明
