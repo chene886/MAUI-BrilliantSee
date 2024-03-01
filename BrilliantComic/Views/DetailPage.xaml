@@ -41,7 +41,7 @@
             Text="反转列表" />
     </ContentPage.ToolbarItems>
     <Grid>
-        <CollectionView ItemsSource="{Binding Comic.Chapters}" SelectionMode="Single">
+        <CollectionView ItemsLayout="VerticalGrid, 3" ItemsSource="{Binding Comic.Chapters}">
             <CollectionView.Header>
                 <Grid Padding="10">
                     <Grid.RowDefinitions>
@@ -110,38 +110,33 @@
                     </VerticalStackLayout>
                 </Grid>
             </CollectionView.Header>
-            <CollectionView.ItemsLayout>
-                <GridItemsLayout Orientation="Vertical" Span="3" />
-            </CollectionView.ItemsLayout>
             <CollectionView.ItemTemplate>
                 <DataTemplate>
-                    <Border
+                    <Frame
                         Margin="10,6"
                         Padding="10,0"
                         BackgroundColor="White"
-                        HeightRequest="32"
-                        Stroke="{StaticResource Gray500Brush}">
-                        <Border.StrokeShape>
-                            <RoundRectangle CornerRadius="45" />
-                        </Border.StrokeShape>
-                        <Border.GestureRecognizers>
+                        BorderColor="{StaticResource Gray500Brush}"
+                        CornerRadius="45"
+                        HeightRequest="32">
+                        <Frame.GestureRecognizers>
                             <TapGestureRecognizer Command="{Binding OpenChapterCommand, Source={RelativeSource AncestorType={x:Type vm:DetailViewModel}}}" CommandParameter="{Binding}" />
-                        </Border.GestureRecognizers>
-                        <Border.Triggers>
+                        </Frame.GestureRecognizers>
+                        <Frame.Triggers>
                             <DataTrigger
                                 Binding="{Binding IsSpecial}"
-                                TargetType="Border"
+                                TargetType="Frame"
                                 Value="True">
                                 <Setter Property="BackgroundColor" Value="{StaticResource Primary}" />
-                                <Setter Property="Stroke" Value="{StaticResource Primary}" />
+                                <Setter Property="BorderColor" Value="{StaticResource Primary}" />
                             </DataTrigger>
-                        </Border.Triggers>
+                        </Frame.Triggers>
                         <Label
                             x:Name="label"
                             Style="{StaticResource labelStyle}"
                             Text="{Binding Name, Mode=OneWay}"
                             TextColor="{StaticResource Gray500}" />
-                    </Border>
+                    </Frame>
                 </DataTemplate>
             </CollectionView.ItemTemplate>
         </CollectionView>
@@ -152,15 +147,15 @@
             BorderColor="{StaticResource Primary}"
             CornerRadius="100"
             HasShadow="True"
-            HeightRequest="64"
-            WidthRequest="64">
+            HeightRequest="56"
+            WidthRequest="56">
             <Frame.GestureRecognizers>
                 <TapGestureRecognizer Command="{Binding OpenHistoryCommand}" />
             </Frame.GestureRecognizers>
             <Image
-                HeightRequest="48"
+                HeightRequest="40"
                 Source="rollback.png"
-                WidthRequest="48" />
+                WidthRequest="40" />
         </Frame>
         <ActivityIndicator
             Margin="0,0,0,100"

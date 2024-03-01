@@ -101,7 +101,7 @@ namespace BrilliantComic.Models.Comics
         /// 获取网站html
         /// </summary>
         /// <returns></returns>
-        public abstract Task GetHtmlAsync();
+        public abstract Task<bool> GetHtmlAsync();
 
         /// <summary>
         /// 获取最新章节名

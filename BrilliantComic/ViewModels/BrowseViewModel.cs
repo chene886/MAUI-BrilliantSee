@@ -1,6 +1,7 @@
 ﻿using BrilliantComic.Models.Chapters;
 using BrilliantComic.Models.Enums;
 using BrilliantComic.Services;
+using CommunityToolkit.Maui.Alerts;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System;
@@ -14,11 +15,6 @@ namespace BrilliantComic.ViewModels
 {
     public partial class BrowseViewModel : ObservableObject, IQueryAttributable
     {
-        /// <summary>
-        /// 定时器
-        /// </summary>
-        private readonly Timer _timer;
-
         /// <summary>
         /// 当前章节
         /// </summary>
@@ -48,16 +44,40 @@ namespace BrilliantComic.ViewModels
         public ObservableCollection<string> _Images = new ObservableCollection<string>();
 
         /// <summary>
+        /// 是否正在加载
+        /// </summary>
+        private bool isLoading = false;
+
+        /// <summary>
+        /// 当前界面第一个item的索引
+        /// </summary>
+        private int crrentViewFirstItemIndex = 0;
+
+        /// <summary>
+        /// 当前界面最后一个item的索引
+        /// </summary>
+        private int crrentViewLastItemIndex = 1;
+
+        /// <summary>
+        /// 位于当前界面正中的item的索引
+        /// </summary>
+        private int crrentViewCentricItemIndex = 0;
+
+        /// <summary>
         /// 当前页码
         /// </summary>
         [ObservableProperty]
         public int _currentPageNum = 1;
 
         /// <summary>
+        /// 定时器
+        /// </summary>
+        private readonly Timer _timer;
+
+        /// <summary>
         /// 当前时间
         /// </summary>
         public string CurrentTime => DateTime.Now.ToString("HH:mm");
-
 
         private readonly DBService _db;
 
@@ -71,9 +91,9 @@ namespace BrilliantComic.ViewModels
                     _currentChapterIndex = value;
                     OnPropertyChanged(nameof(CurrentChapterIndex));
                     var newChapter = LoadedChapter[value];
-                    if(Chapter != newChapter)
+                    if (Chapter != newChapter)
                     {
-                        if(Chapter!.Index > newChapter.Index)utillCrrentChapterImageCount -= Chapter.PageCount;
+                        if (Chapter!.Index > newChapter.Index) utillCrrentChapterImageCount -= Chapter.PageCount;
                         else utillCrrentChapterImageCount += newChapter.PageCount;
                         Chapter!.IsSpecial = false;
                         Chapter = LoadedChapter[value];
@@ -128,34 +148,42 @@ namespace BrilliantComic.ViewModels
         /// <returns></returns>
         private async Task LoadChapterPicAsync(Chapter chapter, string flag)
         {
-            var picEnumerator = await chapter.GetPicEnumeratorAsync();
-            if (flag == "Init")
+            try
             {
-                var images = new ObservableCollection<string>();
-                foreach (var pic in picEnumerator)
+                var picEnumerator = await chapter.GetPicEnumeratorAsync();
+                if (flag == "Init")
                 {
-                    images.Add(pic);
+                    var images = new ObservableCollection<string>();
+                    foreach (var pic in picEnumerator)
+                    {
+                        images.Add(pic);
+                    }
+                    Images = images;
+                    LoadedChapter.Add(chapter);
+                    utillCrrentChapterImageCount = chapter.PageCount;
+                    await UpdateChapterAsync("Last");
                 }
-                Images = images;
-                LoadedChapter.Add(chapter);
-                utillCrrentChapterImageCount = chapter.PageCount;
-                await UpdateChapterAsync("Last");
+                else if (flag == "Last")
+                {
+                    foreach (var pic in picEnumerator.Reverse())
+                    {
+                        Images.Insert(0, pic);
+                    }
+                    LoadedChapter.Insert(0, chapter);
+                }
+                else
+                {
+                    foreach (var pic in picEnumerator)
+                    {
+                        Images.Add(pic);
+                    }
+                    LoadedChapter.Add(chapter);
+                }
             }
-            else if (flag == "Last")
+            catch (Exception e)
             {
-                foreach (var pic in picEnumerator.Reverse())
-                {
-                    Images.Insert(0, pic);
-                }
-                LoadedChapter.Insert(0, chapter);
-            }
-            else
-            {
-                foreach (var pic in picEnumerator)
-                {
-                    Images.Add(pic);
-                }
-                LoadedChapter.Add(chapter);
+                if (e.Message == "接口异常,请等待维护") _ = Toast.Make(e.Message).Show();
+                else _ = Toast.Make("章节获取失败，请检查\n网络连接是否正常").Show();
             }
         }
 
@@ -170,7 +198,7 @@ namespace BrilliantComic.ViewModels
             if (newChapter is not null)
             {
                 await LoadChapterPicAsync(newChapter, flag);
-                if(flag == "Last")
+                if (flag == "Last")
                 {
                     CurrentChapterIndex++;
                 }
@@ -195,6 +223,79 @@ namespace BrilliantComic.ViewModels
                 await _db.UpdateComicAsync(Chapter.Comic);
             }
             Chapter.Comic.Category = category;
+        }
+
+        /// <summary>
+        /// 根据视图变化更新当前章节和页码
+        /// </summary>
+        /// <param name="fIndex">视图变化后第一个item索引</param>
+        /// <param name="cIndex">视图变化后位于正中的item索引</param>
+        /// <param name="lIndex">视图变化后最后一个item索引</param>
+        /// <returns></returns>
+        public async Task ViewChanged(int fIndex, int cIndex, int lIndex)
+        {
+            if (cIndex != crrentViewCentricItemIndex)
+            {
+                if (cIndex - crrentViewCentricItemIndex == -1)
+                {
+                    CurrentPageNum--;
+                    if (cIndex != 0 && cIndex == utillCrrentChapterImageCount - Chapter!.PageCount - 1)
+                    {
+                        CurrentChapterIndex--;
+                        CurrentPageNum = Chapter.PageCount;
+                        _ = StoreLastReadedChapterIndex();
+                    }
+                }
+                else if (cIndex - crrentViewCentricItemIndex == 1)
+                {
+                    CurrentPageNum++;
+                    if (cIndex == utillCrrentChapterImageCount)
+                    {
+                        CurrentChapterIndex++;
+                        CurrentPageNum = 1;
+                        _ = StoreLastReadedChapterIndex();
+                    }
+                }
+                crrentViewCentricItemIndex = cIndex;
+            }
+            if (fIndex != crrentViewFirstItemIndex)
+            {
+                crrentViewFirstItemIndex = fIndex;
+                if (fIndex == 0 && !isLoading)
+                {
+                    isLoading = true;
+                    _ = Toast.Make("正在加载上一章...").Show();
+                    var result = await UpdateChapterAsync("Last");
+                    if (result)
+                    {
+                        _ = Toast.Make("加载成功").Show();
+                    }
+                    else
+                    {
+                        _ = Toast.Make("已是第一话").Show();
+                    }
+                    isLoading = false;
+                }
+            }
+            if (lIndex != crrentViewLastItemIndex)
+            {
+                crrentViewLastItemIndex = lIndex;
+                if (Images.ToList().Count != 0 && lIndex == Images.LongCount() && !isLoading)
+                {
+                    isLoading = true;
+                    _ = Toast.Make("正在加载下一章...").Show();
+                    var result = await UpdateChapterAsync("Next");
+                    if (result)
+                    {
+                        _ = Toast.Make("加载成功").Show();
+                    }
+                    else
+                    {
+                        _ = Toast.Make("已是最新一话").Show();
+                    }
+                    isLoading = false;
+                }
+            }
         }
     }
 }

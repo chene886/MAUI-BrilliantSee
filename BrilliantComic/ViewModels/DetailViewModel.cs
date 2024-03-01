@@ -72,20 +72,24 @@ namespace BrilliantComic.ViewModels
                 Comic!.Category = DBComicCategory.Favorite;
             }
             else FavoriteImage = ImageSource.FromFile("not_favorite.png");
-            await Comic!.GetHtmlAsync();
-            Comic!.LoadMoreData();
-            OnPropertyChanged(nameof(Comic));
-            IsReverseListEnabled = false;
-            await Task.Run(() => Comic!.LoadChaptersAsync());
-            IsReverseListEnabled = true;
-            IsGettingResult = false;
-
-            if (isExist && Comic!.IsUpdate)
+            var isSuccess = await Comic!.GetHtmlAsync();
+            if (isSuccess)
             {
-                Comic!.IsUpdate = false;
-                _ = _db.UpdateComicAsync(Comic!);
+                Comic!.LoadMoreData();
+                OnPropertyChanged(nameof(Comic));
+                IsReverseListEnabled = false;
+                await Task.Run(() => Comic!.LoadChaptersAsync());
+                IsReverseListEnabled = true;
+                IsGettingResult = false;
+
+                if (isExist && Comic!.IsUpdate)
+                {
+                    Comic!.IsUpdate = false;
+                    _ = _db.UpdateComicAsync(Comic!);
+                }
+                _ = AddHistoryComicAsync();
             }
-            _ = AddHistoryComicAsync();
+            else _ = Toast.Make("漫画获取失败，请检查\n网络连接是否正常").Show();
         }
 
         /// <summary>
@@ -185,7 +189,7 @@ namespace BrilliantComic.ViewModels
         [RelayCommand]
         private async Task OpenHistoryAsync()
         {
-            if (Comic!.LastReadedChapterIndex != -1)
+            if (Comic!.LastReadedChapterIndex != -1 && Comic.Chapters.Any())
             {
                 var historyChapter = Comic.Chapters.ToList().Find(c => c.Index == Comic.LastReadedChapterIndex);
                 await OpenChapterAsync(historyChapter!);

@@ -7,7 +7,7 @@
     Title="历史">
     <ContentPage.ToolbarItems>
         <ToolbarItem
-            Command="{Binding CleanComicsCommand}"
+            Clicked="ClearAllComic"
             IconImageSource="clean.png"
             Text="清空历史记录" />
     </ContentPage.ToolbarItems>
@@ -17,7 +17,7 @@
                 <DataTemplate>
                     <Frame
                         Margin="0,10"
-                        Padding="1"
+                        Padding="0"
                         BackgroundColor="White"
                         CornerRadius="8"
                         HasShadow="True"
@@ -25,15 +25,12 @@
                         <Frame.GestureRecognizers>
                             <TapGestureRecognizer Command="{Binding OpenComicCommand, Source={RelativeSource AncestorType={x:Type vm:HistoryViewModel}}}" CommandParameter="{Binding}" />
                         </Frame.GestureRecognizers>
-                        <Grid>
+                        <Grid RowSpacing="1">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="160" />
-                                <RowDefinition Height="20" />
+                                <RowDefinition Height="18" />
                                 <RowDefinition Height="16" />
                             </Grid.RowDefinitions>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition />
-                            </Grid.ColumnDefinitions>
                             <Image
                                 Aspect="AspectFill"
                                 HeightRequest="160"
@@ -41,18 +38,17 @@
                                 WidthRequest="120" />
                             <Label
                                 Grid.Row="1"
+                                Padding="2,0"
                                 FontAttributes="Bold"
                                 HorizontalOptions="Start"
                                 LineBreakMode="TailTruncation"
-                                Text="{Binding Name}"
-                                WidthRequest="118" />
+                                Text="{Binding Name}" />
                             <Label
                                 Grid.Row="2"
-                                FontAttributes="Italic"
+                                Padding="2,0"
+                                FontSize="13"
                                 HorizontalOptions="Start"
-                                LineBreakMode="CharacterWrap"
-                                Text="{Binding Author}"
-                                WidthRequest="118" />
+                                Text="{Binding SourceName}" />
                         </Grid>
                     </Frame>
                 </DataTemplate>

@@ -26,9 +26,17 @@ namespace BrilliantComic.Models.Comics
             Author = author;
         }
 
-        public override async Task GetHtmlAsync()
+        public override async Task<bool> GetHtmlAsync()
         {
-            html = await Source.HttpClient.GetStringAsync(Url);
+            try
+            {
+                html = await Source.HttpClient.GetStringAsync(Url);
+            }
+            catch
+            {
+                return false;
+            }
+            return true;
         }
 
         /// <summary>

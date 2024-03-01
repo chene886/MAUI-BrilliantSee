@@ -1,11 +1,13 @@
 ﻿using BrilliantComic.Models.Comics;
 using BrilliantComic.Models.Enums;
 using BrilliantComic.Services;
+using CommunityToolkit.Maui.Alerts;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -53,14 +55,19 @@ namespace BrilliantComic.ViewModels
         /// 清空历史漫画
         /// </summary>
         /// <returns></returns>
-        [RelayCommand]
-        private async Task CleanComicsAsync()
+        public async Task ClearHistoryComicsAsync()
         {
+            if(Comics.Count == 0)
+            {
+                _ = Toast.Make("暂无历史记录").Show();
+                return;
+            }
             foreach (var item in Comics)
             {
                 await _db.DeleteComicAsync(item, item.Category);
             }
             Comics.Clear();
+            _ = Toast.Make("历史记录已清空").Show();
         }
 
         /// <summary>

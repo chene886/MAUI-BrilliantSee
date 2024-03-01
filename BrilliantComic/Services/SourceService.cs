@@ -45,32 +45,25 @@ namespace BrilliantComic.Services
         /// <returns></returns>
         public async Task SearchAsync(string keyword, ObservableCollection<Comic> comics)
         {
-            if(string.IsNullOrWhiteSpace(keyword))
-            {
-                _ = Toast.Make("请输入搜索关键词").Show();
-                return;
-            }
+
             var sources = _sources.Values.Where(s => s.IsSelected == true);
-            if(sources.Count() == 0)
-            {
-                _ = Toast.Make("请选择至少一个图源").Show();
-                return;
-            }
-            comics.Clear();
             //并发使用所有图源去搜索
             var tasks = new List<Task>();
             foreach (var source in sources)
             {
                 tasks.Add(Task.Run(async () =>
                 {
-                    var result = await source.SearchAsync(keyword);
-                    foreach (var item in result)
+                    var result = await source.SearchAsync(keyword)!;
+                    if (result.Any())
                     {
-                        //委托到UI线程将漫画添加到集合
-                        await MainThread.InvokeOnMainThreadAsync(() =>
+                        foreach (var item in result)
                         {
-                            comics.Add(item);
-                        });
+                            //委托到UI线程将漫画添加到集合
+                            await MainThread.InvokeOnMainThreadAsync(() =>
+                            {
+                                comics.Add(item);
+                            });
+                        }
                     }
                 }));
             }

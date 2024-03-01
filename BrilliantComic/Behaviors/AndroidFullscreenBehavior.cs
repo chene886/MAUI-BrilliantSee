@@ -1,11 +1,4 @@
-﻿using Android.OS;
-using Android.Views;
-using Microsoft.Maui.Controls.PlatformConfiguration;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Android.Views;
 using Color = Android.Graphics.Color;
 
 namespace BrilliantComic.Behaviors
@@ -15,11 +8,11 @@ namespace BrilliantComic.Behaviors
         protected override void OnAttachedTo(Page page)
         {
             base.OnAttachedTo(page);
-            SetStatusBarVisibility(false);
-            page.Disappearing += (s, e) => SetStatusBarVisibility(true);
+            SetFullscreen(false);
+            page.Disappearing += (s, e) => SetFullscreen(true);
         }
 
-        private static void SetStatusBarVisibility(bool isVisible)
+        private static void SetFullscreen(bool isVisible)
         {
 #if ANDROID
             var activity = Platform.CurrentActivity ?? throw new InvalidOperationException("Android Activity can't be null.");
@@ -29,10 +22,9 @@ namespace BrilliantComic.Behaviors
             {
 #if ANDROID
                 window!.DecorView.SystemUiFlags = SystemUiFlags.LightStatusBar;
-                window.SetStatusBarColor(Color.ParseColor("#F1F1F1"));
+                window.SetStatusBarColor(Color.ParseColor("#FAFAFA"));
                 window!.DecorView.SystemUiFlags |= SystemUiFlags.LightNavigationBar;
                 window.SetNavigationBarColor(Color.ParseColor("#FAFAFA"));
-
 #endif
             }
             else

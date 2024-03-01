@@ -24,7 +24,6 @@ public partial class FavoritePage : ContentPage
     protected override async void OnAppearing()
     {
         base.OnAppearing();
-
         await _vm.OnLoadFavoriteComicAsync();
     }
 }

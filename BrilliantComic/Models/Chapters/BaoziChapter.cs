@@ -53,19 +53,26 @@ namespace BrilliantComic.Models.Chapters
         /// <exception cref="Exception"></exception>
         public override async Task<IEnumerable<string>> GetPicEnumeratorAsync()
         {
-            var msg = (await Comic.Source.HttpClient.GetAsync(Url));
-            if (msg.RequestMessage is null || msg.RequestMessage.RequestUri is null)
-                throw new Exception("包子漫画接口异常");
-            var html = (await msg.Content.ReadAsStringAsync()).Replace("\n", string.Empty);
-            var match = Regex.Matches(html, "<noscript [\\s\\S]*?src=\\\"([\\s\\S]*?)\\\"[\\s\\S]*?</noscript>");
-            var list = new List<string>();
-            foreach (Match item in match)
+            try
             {
-                list.Add(item.Groups[1].Value);
+                var msg = (await Comic.Source.HttpClient.GetAsync(Url));
+                if (msg.RequestMessage is null || msg.RequestMessage.RequestUri is null)
+                    throw new Exception("接口异常,请等待维护");
+                var html = (await msg.Content.ReadAsStringAsync()).Replace("\n", string.Empty);
+                var match = Regex.Matches(html, "<noscript [\\s\\S]*?src=\\\"([\\s\\S]*?)\\\"[\\s\\S]*?</noscript>");
+                var list = new List<string>();
+                foreach (Match item in match)
+                {
+                    list.Add(item.Groups[1].Value);
+                }
+                if (list.Count == 1) list.Add(list[0]);
+                PageCount = list.Count;
+                return list;
             }
-            if (list.Count == 1) list.Add(list[0]);
-            PageCount = list.Count;
-            return list;
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
         }
     }
 }

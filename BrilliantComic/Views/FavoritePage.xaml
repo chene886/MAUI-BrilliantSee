@@ -17,7 +17,7 @@
                 <DataTemplate>
                     <Frame
                         Margin="0,10"
-                        Padding="1"
+                        Padding="0"
                         BackgroundColor="White"
                         CornerRadius="8"
                         HasShadow="True"
@@ -25,15 +25,12 @@
                         <Frame.GestureRecognizers>
                             <TapGestureRecognizer Command="{Binding OpenComicCommand, Source={RelativeSource AncestorType={x:Type vm:FavoriteViewModel}}}" CommandParameter="{Binding}" />
                         </Frame.GestureRecognizers>
-                        <Grid>
+                        <Grid RowSpacing="1">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="160" />
-                                <RowDefinition Height="20" />
+                                <RowDefinition Height="18" />
                                 <RowDefinition Height="16" />
                             </Grid.RowDefinitions>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition />
-                            </Grid.ColumnDefinitions>
                             <Image
                                 Aspect="AspectFill"
                                 HeightRequest="160"
@@ -51,18 +48,17 @@
                                 TranslationY="-70" />
                             <Label
                                 Grid.Row="1"
+                                Padding="2,0"
                                 FontAttributes="Bold"
                                 HorizontalOptions="Start"
                                 LineBreakMode="TailTruncation"
-                                Text="{Binding Name}"
-                                WidthRequest="118" />
+                                Text="{Binding Name}" />
                             <Label
                                 Grid.Row="2"
-                                FontAttributes="Italic"
+                                Padding="2,0"
+                                FontSize="13"
                                 HorizontalOptions="Start"
-                                LineBreakMode="CharacterWrap"
-                                Text="{Binding Author}"
-                                WidthRequest="118" />
+                                Text="{Binding SourceName}" />
                         </Grid>
                     </Frame>
                 </DataTemplate>
@@ -75,15 +71,15 @@
             BorderColor="{StaticResource Primary}"
             CornerRadius="100"
             HasShadow="True"
-            HeightRequest="64"
-            WidthRequest="64">
+            HeightRequest="56"
+            WidthRequest="56">
             <Frame.GestureRecognizers>
                 <TapGestureRecognizer Command="{Binding CheckForUpdatedCommand}" />
             </Frame.GestureRecognizers>
             <Image
-                HeightRequest="48"
+                HeightRequest="40"
                 Source="refresh.png"
-                WidthRequest="48" />
+                WidthRequest="40" />
         </Frame>
         <ActivityIndicator
             Margin="0,0,0,100"

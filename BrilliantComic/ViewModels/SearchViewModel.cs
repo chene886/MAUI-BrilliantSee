@@ -2,6 +2,7 @@
 using BrilliantComic.Models.Comics;
 using BrilliantComic.Models.Sources;
 using BrilliantComic.Services;
+using CommunityToolkit.Maui.Alerts;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System;
@@ -48,10 +49,26 @@ namespace BrilliantComic.ViewModels
         [RelayCommand]
         private async Task SearchAsync(string keyword)
         {
-            IsGettingResult = true;
-            IsSourceListVisible = false;
-            await _sourceService.SearchAsync(keyword, Comics);
-            IsGettingResult = false;
+            if (string.IsNullOrWhiteSpace(keyword))
+            {
+                _ = Toast.Make("请输入正确的关键词").Show();
+                return;
+            }
+            var hasSourceSelected = Sources.Where(s => s.IsSelected == true).Count() > 0;
+            if (hasSourceSelected)
+            {
+                IsGettingResult = true;
+                IsSourceListVisible = false;
+                Comics.Clear();
+                await _sourceService.SearchAsync(keyword, Comics);
+                if (Comics.Count == 0) { _ = Toast.Make("搜索结果为空，请检查\n网络连接是否正常").Show(); }
+                IsGettingResult = false;
+            }
+            else
+            {
+                _ = Toast.Make("请选择至少一个图源").Show();
+                return;
+            }
         }
 
         /// <summary>

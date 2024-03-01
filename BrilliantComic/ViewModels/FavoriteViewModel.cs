@@ -1,6 +1,7 @@
 ﻿using BrilliantComic.Models.Comics;
 using BrilliantComic.Models.Enums;
 using BrilliantComic.Services;
+using CommunityToolkit.Maui.Alerts;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System;
@@ -73,23 +74,43 @@ namespace BrilliantComic.ViewModels
         private async Task CheckForUpdatedAsync() =>
             await Task.Run(async () =>
                 {
+                    var hasComicUpdate = false;
+                    var message = "暂无收藏漫画";
                     _ = MainThread.InvokeOnMainThreadAsync(() => { IsGettingResult = true; IsRefresh = true; });
                     var comics = await _db.GetComicsAsync(DBComicCategory.Favorite);
-                    foreach (var item in comics)
+                    if (comics.Count() != 0)
                     {
-                        if (!item.IsUpdate)
+                        foreach (var item in comics)
                         {
-                            await item.GetHtmlAsync();
-                            var lastestChapterName = item.GetLastestChapterName();
-                            if (lastestChapterName is not null && lastestChapterName != item.LastestChapterName)
+                            if (!item.IsUpdate)
                             {
-                                item.IsUpdate = true;
-                                await _db.SaveComicAsync(item, DBComicCategory.Favorite);
-                                MainThread.BeginInvokeOnMainThread(() => _ = OnLoadFavoriteComicAsync());
+                                var isSuccess = await item.GetHtmlAsync();
+                                if (isSuccess)
+                                {
+                                    var lastestChapterName = item.GetLastestChapterName();
+                                    if (lastestChapterName is not null && lastestChapterName != item.LastestChapterName)
+                                    {
+                                        item.IsUpdate = true;
+                                        hasComicUpdate = true;
+                                        await _db.SaveComicAsync(item, DBComicCategory.Favorite);
+                                        _ = MainThread.InvokeOnMainThreadAsync(() => _ = OnLoadFavoriteComicAsync());
+                                    }
+                                }
+                                else
+                                {
+                                    message = "检查更新失败，请检查\n网络连接是否正常";
+                                    break;
+                                }
                             }
                         }
+                        if (!hasComicUpdate && message == "暂无收藏漫画") message = "暂无漫画更新";
                     }
-                    _ = MainThread.InvokeOnMainThreadAsync(() => { IsRefresh = false; IsGettingResult = false; });
+                    _ = MainThread.InvokeOnMainThreadAsync(() =>
+                    {
+                        IsRefresh = false;
+                        IsGettingResult = false;
+                        _ = Toast.Make(message).Show();
+                    });
                 });
     }
 }

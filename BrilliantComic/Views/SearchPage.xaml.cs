@@ -12,7 +12,6 @@ public partial class SearchPage : ContentPage
         _vm = vm;
         this.BindingContext = _vm;
         InitializeComponent();
-
         this.Loaded += SearchPage_Loaded;
     }
 
@@ -23,18 +22,15 @@ public partial class SearchPage : ContentPage
     /// <param name="e"></param>
     private async void SearchPage_Loaded(object? sender, EventArgs e)
     {
+        await Task.Delay(100);
         this.input.Focus();
-        await Task.Delay(500);
-        this.input.Focus();
-        this.Loaded -= SearchPage_Loaded;
     }
 
     private void HideKeyboard(object sender, TappedEventArgs e)
     {
-        if (this.input.IsSoftKeyboardShowing())
+        if (input.IsSoftKeyboardShowing())
         {
-            this.input.HideKeyboardAsync(CancellationToken.None);
+            _ = input.HideKeyboardAsync(CancellationToken.None);
         }
     }
-
 }

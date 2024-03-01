@@ -84,11 +84,18 @@
                                 <ColumnDefinition Width="Auto" />
                                 <ColumnDefinition Width="*" />
                             </Grid.ColumnDefinitions>
-                            <Frame Padding="0" CornerRadius="5">
-                                <Image
-                                    Aspect="AspectFill"
-                                    Source="{Binding Cover}"
-                                    WidthRequest="80" />
+                            <Frame
+                                Grid.Column="0"
+                                Padding="0"
+                                CornerRadius="10"
+                                WidthRequest="80">
+                                <Frame.GestureRecognizers>
+                                    <TapGestureRecognizer
+                                        Command="{Binding OpenComicCommand, Source={RelativeSource AncestorType={x:Type vm:SearchViewModel}}}"
+                                        CommandParameter="{Binding}"
+                                        Tapped="HideKeyboard" />
+                                </Frame.GestureRecognizers>
+                                <Image Aspect="AspectFill" Source="{Binding Cover}" />
                             </Frame>
                             <Grid
                                 Grid.Column="1"
@@ -106,14 +113,12 @@
                                         HorizontalOptions="Start"
                                         LineBreakMode="TailTruncation"
                                         MaximumWidthRequest="180"
-                                        Text="{Binding Name}"
-                                        VerticalOptions="Center" />
+                                        Text="{Binding Name}" />
                                     <Label
                                         FontSize="13"
                                         HorizontalOptions="End"
                                         Text="{Binding SourceName}"
-                                        TextColor="{StaticResource Gray300}"
-                                        VerticalOptions="Center" />
+                                        TextColor="{StaticResource Gray300}" />
                                 </Grid>
                                 <Label
                                     Grid.Row="1"
