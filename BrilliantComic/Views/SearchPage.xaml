@@ -56,7 +56,11 @@
                 </CollectionView.ItemTemplate>
             </CollectionView>
         </Frame>
-        <CollectionView Margin="0,5,0,0" ItemsSource="{Binding Comics}">
+        <CollectionView
+            x:Name="comicList"
+            Margin="0,5,0,0"
+            ItemsSource="{Binding Comics}"
+            Scrolled="CollectionView_Scrolled">
             <CollectionView.EmptyView>
                 <ActivityIndicator
                     Margin="0,0,0,100"
@@ -145,5 +149,24 @@
                 </DataTemplate>
             </CollectionView.ItemTemplate>
         </CollectionView>
+        <Frame
+            x:Name="floatButton"
+            Margin="290,584,0,0"
+            Padding="0"
+            BackgroundColor="{StaticResource Primary}"
+            BorderColor="{StaticResource Primary}"
+            CornerRadius="100"
+            HasShadow="True"
+            HeightRequest="40"
+            IsVisible="false"
+            WidthRequest="40">
+            <Frame.GestureRecognizers>
+                <TapGestureRecognizer Tapped="BacktoTop" />
+            </Frame.GestureRecognizers>
+            <Image
+                HeightRequest="24"
+                Source="back2top.png"
+                WidthRequest="24" />
+        </Frame>
     </Grid>
 </ContentPage>

@@ -116,7 +116,7 @@
                         Margin="10,6"
                         Padding="10,0"
                         BackgroundColor="White"
-                        BorderColor="{StaticResource Gray500Brush}"
+                        BorderColor="{StaticResource Gray500}"
                         CornerRadius="45"
                         HeightRequest="32">
                         <Frame.GestureRecognizers>

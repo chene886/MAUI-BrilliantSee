@@ -33,4 +33,21 @@ public partial class SearchPage : ContentPage
             _ = input.HideKeyboardAsync(CancellationToken.None);
         }
     }
+
+    private void CollectionView_Scrolled(object sender, ItemsViewScrolledEventArgs e)
+    {
+        if (e.FirstVisibleItemIndex == 0)
+        {
+            this.floatButton.IsVisible = false;
+        }
+        else
+        {
+            this.floatButton.IsVisible = true;
+        }
+    }
+
+    private void BacktoTop(object sender, TappedEventArgs e)
+    {
+        this.comicList.ScrollTo(0, position:ScrollToPosition.Start);
+    }
 }

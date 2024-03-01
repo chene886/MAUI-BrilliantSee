@@ -15,5 +15,4 @@ public partial class DetailPage : ContentPage
         this.BindingContext = _vm;
         InitializeComponent();
     }
-
 }
