@@ -196,7 +196,7 @@ namespace BrilliantComic.ViewModels
             }
             else
             {
-                var toast = Toast.Make("暂无历史记录");
+                var toast = Toast.Make("暂无章节浏览记录");
                 _ = toast.Show();
             }
         }

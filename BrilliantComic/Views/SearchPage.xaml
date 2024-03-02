@@ -92,6 +92,7 @@
                                 Grid.Column="0"
                                 Padding="0"
                                 CornerRadius="10"
+                                HeightRequest="112"
                                 WidthRequest="80">
                                 <Frame.GestureRecognizers>
                                     <TapGestureRecognizer

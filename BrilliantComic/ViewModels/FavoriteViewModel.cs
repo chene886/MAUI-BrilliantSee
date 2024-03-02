@@ -104,6 +104,7 @@ namespace BrilliantComic.ViewModels
                             }
                         }
                         if (!hasComicUpdate && message == "暂无收藏漫画") message = "暂无漫画更新";
+                        else if (hasComicUpdate && message == "暂无收藏漫画") message = "检查更新完成";
                     }
                     _ = MainThread.InvokeOnMainThreadAsync(() =>
                     {
