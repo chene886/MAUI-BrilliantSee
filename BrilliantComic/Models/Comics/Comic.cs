@@ -104,16 +104,16 @@ namespace BrilliantComic.Models.Comics
         public abstract Task<bool> GetHtmlAsync();
 
         /// <summary>
-        /// 获取最新章节名
-        /// </summary>
-        /// <returns></returns>
-        public abstract string? GetLastestChapterName();
-
-        /// <summary>
         /// 获取更多漫画数据
         /// </summary>
         /// <returns></returns>
         public abstract void LoadMoreData();
+
+        /// <summary>
+        /// 获取最新章节名
+        /// </summary>
+        /// <returns></returns>
+        public abstract string? GetLastestChapterName();
 
         /// <summary>
         /// 加载章节信息

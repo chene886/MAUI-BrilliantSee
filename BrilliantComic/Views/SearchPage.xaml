@@ -40,6 +40,7 @@
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
                         <HorizontalStackLayout
+                            Margin="0,4"
                             Padding="4"
                             BackgroundColor="Transparent"
                             HeightRequest="32">
@@ -141,7 +142,7 @@
                                     Grid.Row="3"
                                     FontSize="13"
                                     HorizontalOptions="End"
-                                    Text="{Binding LastInfo}"
+                                    Text="{Binding LastestUpdateTime}"
                                     TextColor="{StaticResource Gray300}"
                                     VerticalOptions="End" />
                             </Grid>

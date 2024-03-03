@@ -26,6 +26,10 @@ namespace BrilliantComic.Models.Comics
             Author = author;
         }
 
+        /// <summary>
+        /// 获取漫画网页源代码
+        /// </summary>
+        /// <returns></returns>
         public override async Task<bool> GetHtmlAsync()
         {
             try
@@ -74,7 +78,7 @@ namespace BrilliantComic.Models.Comics
                 flag = !flag;
                 if (html.IndexOf(index) < 0)
                 {
-                    Chapters = Chapters.Append(new BaoziChapter(this, "暂无章节", "", -1, false));
+                    Chapters = Chapters.Append(new BaoziChapter("暂无章节", "", -1, false) { Comic = this });
                     return;
                 }
             }
@@ -96,7 +100,7 @@ namespace BrilliantComic.Models.Comics
                 var url = "https://cn.czmanga.com/comic/chapter/" + Url.Split("/").Last() + "/0_" + start.ToString() + ".html";
                 var name = match.Groups[1].Value;
                 if (start == LastReadedChapterIndex) isSpecial = true;
-                chapters.Add(new BaoziChapter(this, name, url, start, isSpecial));
+                chapters.Add(new BaoziChapter(name, url, start, isSpecial) { Comic = this });
                 start--;
             }
             await MainThread.InvokeOnMainThreadAsync(() =>

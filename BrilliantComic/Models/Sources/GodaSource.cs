@@ -1,7 +1,6 @@
 ﻿using BrilliantComic.Models.Comics;
 using BrilliantComic.Services;
 using CommunityToolkit.Mvvm.ComponentModel;
-using Microsoft.Maui.Controls;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,17 +10,17 @@ using System.Threading.Tasks;
 
 namespace BrilliantComic.Models.Sources
 {
-    public partial class BaoziSource : ObservableObject, ISource
+    public partial class GodaSource : ObservableObject, ISource
     {
         public HttpClient HttpClient { get; set; } = new HttpClient();
-        public string Name { get; set; } = "包子漫画";
+        public string Name { get; set; } = "G站漫画";
 
         [ObservableProperty]
         public bool _isSelected = true;
 
         private readonly SourceService _sourceService;
 
-        public BaoziSource(SourceService sourceService)
+        public GodaSource(SourceService sourceService)
         {
             _sourceService = sourceService;
         }
@@ -38,10 +37,9 @@ namespace BrilliantComic.Models.Sources
                 HttpClient.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0 (iPhone; CPU iPhone OS 16_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.6 Mobile/15E148 Safari/604.1 Edg/122.0.0.0");
             }
             HttpClient.DefaultRequestHeaders.Remove("Referer");
-            HttpClient.DefaultRequestHeaders.Add("Referer", "https://cn.baozimh.com/");
+            HttpClient.DefaultRequestHeaders.Add("Referer", "https://godamanga.com/");
 
-            var url = $"https://cn.baozimh.com/search?q={keyword}";
-
+            var url = $"https://godamanga.com/s/{keyword}?pagw=1";
             try
             {
                 var response = await HttpClient.GetAsync(url);
@@ -51,14 +49,19 @@ namespace BrilliantComic.Models.Sources
                     return Array.Empty<Comic>();
                 }
                 var html = await response.Content.ReadAsStringAsync();
-                string pattern = "comics-card.*?href=\\\"(.*?)\\\".*?title=\\\"(.*?)\\\"[\\s\\S]*?src=\"(.*?)\"[\\s\\S]*?small.*?>[\\s\\r\\n]*([\\s\\S]*?)</small>";
+                string pattern = "pb-2\"[\\s\\S]*?href=\"(.*?)\"[\\s\\S]*?url=(.*?)&[\\s\\S]*?h3[\\s\\S]*?>(.*?)<";
                 var matches = Regex.Matches(html, pattern);
 
                 var comics = new List<Comic>();
 
                 foreach (Match match in matches)
                 {
-                    var comic = new BaoziComic("https://cn.baozimh.com" + match.Groups[1].Value, match.Groups[2].Value, match.Groups[3].Value, match.Groups[4].Value + " ") { Source = this, SourceName = "包子漫画", LastestUpdateTime = "(暂无最后更新信息)" };
+                    var comic = new GodaComic("https://godamanga.com" + match.Groups[1].Value, match.Groups[3].Value, match.Groups[2].Value.Replace("%3A", ":").Replace("%2F", "/"), "暂无作者信息")
+                    {
+                        Source = this,
+                        SourceName = "G站漫画",
+                        LastestUpdateTime = "(暂无最后更新信息)"
+                    };
                     comics.Add(comic);
                 }
 
@@ -77,7 +80,7 @@ namespace BrilliantComic.Models.Sources
         /// <returns></returns>
         public Comic CreateComicFromDBComic(DBComic dbComic)
         {
-            Comic comic = new BaoziComic(dbComic.Url, dbComic.Name, dbComic.Cover, dbComic.Author)
+            Comic comic = new GodaComic(dbComic.Url, dbComic.Name, dbComic.Cover, dbComic.Author)
             {
                 Id = dbComic.Id,
                 Category = dbComic.Category,

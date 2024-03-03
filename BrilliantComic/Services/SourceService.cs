@@ -28,8 +28,14 @@ namespace BrilliantComic.Services
         public SourceService()
         {
             var baozi = new BaoziSource(this);
+            var gufeng = new GufengSource(this);
+            var goda = new GodaSource(this);
             _sources.Add("BaoZi", baozi);
             _sourceNames.Add(baozi, "BaoZi");
+            _sources.Add("GuFeng", gufeng);
+            _sourceNames.Add(gufeng, "GuFeng");
+            _sources.Add("Goda", goda);
+            _sourceNames.Add(goda, "Goda");
         }
 
         public List<ISource> GetSources()
@@ -45,7 +51,6 @@ namespace BrilliantComic.Services
         /// <returns></returns>
         public async Task SearchAsync(string keyword, ObservableCollection<Comic> comics)
         {
-
             var sources = _sources.Values.Where(s => s.IsSelected == true);
             //并发使用所有图源去搜索
             var tasks = new List<Task>();
