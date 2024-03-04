@@ -61,7 +61,7 @@ namespace BrilliantComic.ViewModels
                 IsSourceListVisible = false;
                 Comics.Clear();
                 await _sourceService.SearchAsync(keyword, Comics);
-                if (Comics.Count == 0) { _ = Toast.Make("搜索结果为空，请检查\n网络连接是否正常").Show(); }
+                if (Comics.Count == 0) { _ = Toast.Make("搜索结果为空，换一个\n图源试试吧").Show(); }
                 IsGettingResult = false;
             }
             else

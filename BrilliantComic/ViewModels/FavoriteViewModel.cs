@@ -98,8 +98,12 @@ namespace BrilliantComic.ViewModels
                                 }
                                 else
                                 {
-                                    message = "检查更新失败，请检查\n网络连接是否正常";
-                                    break;
+                                    var message1 = $"{item.Name}检查更新失败\n不如点开看看吧";
+                                    _ = MainThread.InvokeOnMainThreadAsync(() =>
+                                    {
+                                        _ = Toast.Make(message1).Show();
+                                    });
+                                    continue;
                                 }
                             }
                         }

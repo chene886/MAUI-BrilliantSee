@@ -40,8 +40,7 @@ namespace BrilliantComic.ViewModels
         /// <summary>
         /// 已加载章节图片集合
         /// </summary>
-        [ObservableProperty]
-        public ObservableCollection<string> _Images = new ObservableCollection<string>();
+        public ObservableCollection<ImageSource> Images { get; set; } = new ObservableCollection<ImageSource>();
 
         /// <summary>
         /// 是否正在加载
@@ -153,12 +152,14 @@ namespace BrilliantComic.ViewModels
                 var picEnumerator = await chapter.GetPicEnumeratorAsync();
                 if (flag == "Init")
                 {
-                    var images = new ObservableCollection<string>();
+                    var images = new ObservableCollection<ImageSource>();
                     foreach (var pic in picEnumerator)
                     {
-                        images.Add(pic);
+                        var image = ImageSource.FromUri(new Uri(pic));
+                        images.Add(image);
                     }
                     Images = images;
+                    OnPropertyChanged(nameof(Images));
                     LoadedChapter.Add(chapter);
                     utillCrrentChapterImageCount = chapter.PageCount;
                     await UpdateChapterAsync("Last");
@@ -167,7 +168,8 @@ namespace BrilliantComic.ViewModels
                 {
                     foreach (var pic in picEnumerator.Reverse())
                     {
-                        Images.Insert(0, pic);
+                        var image = ImageSource.FromUri(new Uri(pic));
+                        Images.Insert(0, image);
                     }
                     LoadedChapter.Insert(0, chapter);
                 }
@@ -175,7 +177,8 @@ namespace BrilliantComic.ViewModels
                 {
                     foreach (var pic in picEnumerator)
                     {
-                        Images.Add(pic);
+                        var image = ImageSource.FromUri(new Uri(pic));
+                        Images.Add(image);
                     }
                     LoadedChapter.Add(chapter);
                 }
@@ -183,7 +186,8 @@ namespace BrilliantComic.ViewModels
             catch (Exception e)
             {
                 if (e.Message == "接口异常,请等待维护") _ = Toast.Make(e.Message).Show();
-                else _ = Toast.Make("章节获取失败，请检查\n网络连接是否正常").Show();
+                else _ = Toast.Make("好像出了点小问题，\n用浏览器打开试试吧").Show();
+                throw new Exception("获取失败");
             }
         }
 
@@ -197,12 +201,16 @@ namespace BrilliantComic.ViewModels
             Chapter? newChapter = Chapter!.Comic.GetNearChapter(Chapter, flag);
             if (newChapter is not null)
             {
-                await LoadChapterPicAsync(newChapter, flag);
-                if (flag == "Last")
+                try
                 {
-                    CurrentChapterIndex++;
+                    await LoadChapterPicAsync(newChapter, flag);
+                    if (flag == "Last")
+                    {
+                        CurrentChapterIndex++;
+                    }
+                    return true;
                 }
-                return true;
+                catch { }
             }
             return false;
         }

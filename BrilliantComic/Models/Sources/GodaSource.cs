@@ -4,6 +4,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -12,7 +13,10 @@ namespace BrilliantComic.Models.Sources
 {
     public partial class GodaSource : ObservableObject, ISource
     {
-        public HttpClient HttpClient { get; set; } = new HttpClient();
+        public HttpClient HttpClient { get; set; } = new HttpClient(new HttpClientHandler()
+        {
+            AutomaticDecompression = DecompressionMethods.GZip
+        });
         public string Name { get; set; } = "G站漫画";
 
         [ObservableProperty]

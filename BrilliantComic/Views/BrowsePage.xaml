@@ -20,6 +20,13 @@
     </ContentPage.Resources>
     <Grid>
         <CollectionView ItemsSource="{Binding Images}" Scrolled="CollectionView_Scrolled">
+            <CollectionView.EmptyView>
+                <ActivityIndicator
+                    Margin="0,0,0,100"
+                    HeightRequest="55"
+                    IsRunning="True"
+                    WidthRequest="55" />
+            </CollectionView.EmptyView>
             <CollectionView.ItemTemplate>
                 <DataTemplate>
                     <Grid>

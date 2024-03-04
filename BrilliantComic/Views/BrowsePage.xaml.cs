@@ -23,4 +23,5 @@ public partial class BrowsePage : ContentPage
     {
         await _vm.ViewChanged(e.FirstVisibleItemIndex,e.CenterItemIndex,e.LastVisibleItemIndex);
     }
+
 }

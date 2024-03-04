@@ -10,11 +10,11 @@ namespace BrilliantComic.Models.Sources
 {
     public interface ISource
     {
-        HttpClient HttpClient { get; }
+        public HttpClient HttpClient { get; }
 
-        string Name { get; set; }
+        public abstract string Name { get; set; }
 
-        abstract bool IsSelected { get; set; }
+        public abstract bool IsSelected { get; set; }
 
         /// <summary>
         /// 搜索漫画

@@ -101,7 +101,19 @@
                                         CommandParameter="{Binding}"
                                         Tapped="HideKeyboard" />
                                 </Frame.GestureRecognizers>
-                                <Image Aspect="AspectFill" Source="{Binding Cover}" />
+                                <Grid>
+                                    <Image
+                                        x:Name="img"
+                                        Aspect="AspectFill"
+                                        Source="{Binding Cover}" />
+                                    <Label
+                                        FontSize="Micro"
+                                        HorizontalOptions="Center"
+                                        IsVisible="{Binding IsLoading, Source={x:Reference img}}"
+                                        Text="加载中..."
+                                        TextColor="Black"
+                                        VerticalOptions="Center" />
+                                </Grid>
                             </Frame>
                             <Grid
                                 Grid.Column="1"

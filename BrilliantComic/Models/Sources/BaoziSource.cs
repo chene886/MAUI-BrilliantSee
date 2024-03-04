@@ -5,6 +5,7 @@ using Microsoft.Maui.Controls;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -13,7 +14,10 @@ namespace BrilliantComic.Models.Sources
 {
     public partial class BaoziSource : ObservableObject, ISource
     {
-        public HttpClient HttpClient { get; set; } = new HttpClient();
+        public HttpClient HttpClient { get; set; } = new HttpClient(new HttpClientHandler()
+        {
+            AutomaticDecompression = DecompressionMethods.GZip
+        });
         public string Name { get; set; } = "包子漫画";
 
         [ObservableProperty]

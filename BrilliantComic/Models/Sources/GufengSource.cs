@@ -13,7 +13,10 @@ namespace BrilliantComic.Models.Sources
 {
     public partial class GufengSource : ObservableObject, ISource
     {
-        public HttpClient HttpClient { get; set; } = new HttpClient();
+        public HttpClient HttpClient { get; set; } = new HttpClient(new HttpClientHandler()
+        {
+            AutomaticDecompression = DecompressionMethods.GZip
+        });
 
         public string Name { get; set; } = "古风漫画";
 
@@ -45,7 +48,6 @@ namespace BrilliantComic.Models.Sources
             try
             {
                 var response = await HttpClient.GetAsync(url);
-
                 if (!response.IsSuccessStatusCode)
                 {
                     return Array.Empty<Comic>();
@@ -58,7 +60,7 @@ namespace BrilliantComic.Models.Sources
 
                 foreach (Match match in matches)
                 {
-                    var comic = new GufengComic(match.Groups[1].Value, match.Groups[2].Value, match.Groups[3].Value, match.Groups[4].Value) { Source = this, SourceName = "古风漫画", LastestUpdateTime = match.Groups[5].Value };
+                    var comic = new GufengComic(match.Groups[1].Value, match.Groups[2].Value, match.Groups[3].Value, match.Groups[4].Value) { Source = this, SourceName = "古风漫画", LastestUpdateTime = "(更新时间：" + match.Groups[5].Value + ")" };
 
                     comics.Add(comic);
                 }
