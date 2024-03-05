@@ -40,24 +40,22 @@ namespace BrilliantComic.Models.Comics
 
         public override void LoadMoreData()
         {
-
-                var start = html.IndexOf("Cover");
-                var end = html.IndexOf("章节列表");
-                var moreDataHtml = html.Substring(start, end - start);
-                if (!string.IsNullOrEmpty(html))
-                {
-                    var result = Regex.Match(moreDataHtml, "</dd[\\s\\S]*?</dd[\\s\\S]*?</dd[\\s\\S]*?<dd[\\s\\S]*?>(.*?)<[\\s\\S]*?简介：(.*?)<");
-                    Status = "连载中";
-                    Description = result.Groups[2].Value.Replace("\\n", "");
-                    LastestUpdateTime = "(更新时间：" + result.Groups[1].Value + ")";
-                }
-            
+            var start = html.IndexOf("Cover");
+            var end = html.IndexOf("章节列表");
+            var moreDataHtml = html.Substring(start, end - start);
+            if (!string.IsNullOrEmpty(html))
+            {
+                var result = Regex.Match(moreDataHtml, "</dd[\\s\\S]*?</dd[\\s\\S]*?</dd[\\s\\S]*?<dd[\\s\\S]*?>(.*?)<[\\s\\S]*?简介：(.*?)<");
+                Status = "连载中";
+                Description = result.Groups[2].Value.Replace("\\n", "");
+                LastestUpdateTime = "(更新时间：" + result.Groups[1].Value + ")";
+            }
         }
 
         public override string? GetLastestChapterName()
         {
             var start = html.IndexOf("Cover");
-            var end = html.IndexOf("作者");
+            var end = html.IndexOf("开始阅读");
             var moreDataHtml = html.Substring(start, end - start);
             if (!string.IsNullOrEmpty(html))
             {
