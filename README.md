@@ -2,7 +2,7 @@
 ## 项目介绍
 .NET平台下MAUI跨平台框架漫画阅读器，旨在为已适配的漫画网站提供更好的阅读体验。
 
-- 项目当前属于开发阶段，目前仅适配一个图源网站、部分功能待完善...
+- 项目当前属于开发阶段，目前适配了三个图源网站、部分功能待完善...
 - 主打安卓平台，可能存在异常，请谅解...
 
 ## 后续发展方向：
@@ -13,7 +13,7 @@
 ## 项目部分界面截图
 ### 搜索页
 - 搜索漫画、选择图源
-<img src="img/searchPage_1.jpg" width="360px" />
+<img src="img/searchPage01.jpg" width="360px" /> <img src="img/searchPage02.jpg" width="360px" />
 
 ### 漫画详情页
 - 收藏、浏览器打开、漫画倒序
@@ -46,6 +46,6 @@
 
 项目仅用于学习交流，禁止其它任何用途。
 
-项目使用部分图标来源：[Icons8](https://icons8.com)
+项目使用部分图标来源：[Icons8](https://icons8.com)\[Iconfont](https://www.iconfont.cn)
 
 项目基础：[卧龙Brilliant_see](https://gitee.com/long2023/brilliant_see?_from=gitee_search)
