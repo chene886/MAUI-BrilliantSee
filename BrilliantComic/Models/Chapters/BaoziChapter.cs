@@ -1,5 +1,4 @@
-﻿using Android.Text.Style;
-using BrilliantComic.Models.Comics;
+﻿using BrilliantComic.Models.Comics;
 using CommunityToolkit.Mvvm.ComponentModel;
 using System;
 using System.Collections.Generic;

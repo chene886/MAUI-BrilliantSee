@@ -1,5 +1,4 @@
-﻿using Android.Views;
-using Color = Android.Graphics.Color;
+﻿using System.Runtime.Versioning;
 
 namespace BrilliantComic.Behaviors
 {
@@ -21,16 +20,16 @@ namespace BrilliantComic.Behaviors
             if (isVisible)
             {
 #if ANDROID
-                window!.DecorView.SystemUiFlags = SystemUiFlags.LightStatusBar;
-                window.SetStatusBarColor(Color.ParseColor("#FAFAFA"));
-                window!.DecorView.SystemUiFlags |= SystemUiFlags.LightNavigationBar;
-                window.SetNavigationBarColor(Color.ParseColor("#FAFAFA"));
+                window!.DecorView.SystemUiFlags = Android.Views.SystemUiFlags.LightStatusBar;
+                window.SetStatusBarColor(Android.Graphics.Color.ParseColor("#FAFAFA"));
+                window!.DecorView.SystemUiFlags |= Android.Views.SystemUiFlags.LightNavigationBar;
+                window.SetNavigationBarColor(Android.Graphics.Color.ParseColor("#FAFAFA"));
 #endif
             }
             else
             {
 #if ANDROID
-                window!.DecorView.SystemUiFlags = (SystemUiFlags.Fullscreen | SystemUiFlags.HideNavigation | SystemUiFlags.ImmersiveSticky);
+                window!.DecorView.SystemUiFlags = (Android.Views.SystemUiFlags.Fullscreen | Android.Views.SystemUiFlags.HideNavigation | Android.Views.SystemUiFlags.ImmersiveSticky);
 
 #endif
             }

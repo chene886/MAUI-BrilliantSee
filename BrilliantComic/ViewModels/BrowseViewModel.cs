@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -46,7 +47,10 @@ namespace BrilliantComic.ViewModels
         /// <summary>
         /// 是否正在加载
         /// </summary>
-        private bool isLoading = false;
+        public bool IsLoading { get; set; } = false;
+
+        [ObservableProperty]
+        public bool _isShowRefresh = false;
 
         /// <summary>
         /// 当前界面第一个item的索引
@@ -161,7 +165,6 @@ namespace BrilliantComic.ViewModels
                     Images = images;
                     LoadedChapter.Add(chapter);
                     utillCrrentChapterImageCount = chapter.PageCount;
-                    await UpdateChapterAsync("Last");
                 }
                 else if (flag == "Last")
                 {
@@ -266,28 +269,13 @@ namespace BrilliantComic.ViewModels
             if (fIndex != crrentViewFirstItemIndex)
             {
                 crrentViewFirstItemIndex = fIndex;
-                if (fIndex == 0 && !isLoading)
-                {
-                    isLoading = true;
-                    _ = Toast.Make("正在加载上一章...").Show();
-                    var result = await UpdateChapterAsync("Last");
-                    if (result)
-                    {
-                        _ = Toast.Make("加载成功").Show();
-                    }
-                    else
-                    {
-                        _ = Toast.Make("已是第一话").Show();
-                    }
-                    isLoading = false;
-                }
             }
             if (lIndex != crrentViewLastItemIndex)
             {
                 crrentViewLastItemIndex = lIndex;
-                if (Images.ToList().Count != 0 && lIndex == Images.LongCount() && !isLoading)
+                if (Images.ToList().Count != 0 && lIndex == Images.LongCount() && !IsLoading)
                 {
-                    isLoading = true;
+                    IsLoading = true;
                     _ = Toast.Make("正在加载下一章...").Show();
                     var result = await UpdateChapterAsync("Next");
                     if (result)
@@ -298,9 +286,26 @@ namespace BrilliantComic.ViewModels
                     {
                         _ = Toast.Make("已是最新一话").Show();
                     }
-                    isLoading = false;
+                    IsLoading = false;
                 }
             }
+        }
+
+        [RelayCommand]
+        public async Task LoadLastChapterAsync()
+        {
+            _ = Toast.Make("正在加载上一章...").Show();
+            var result = await UpdateChapterAsync("Last");
+            if (result)
+            {
+                _ = Toast.Make("加载成功").Show();
+            }
+            else
+            {
+                _ = Toast.Make("已是第一话").Show();
+            }
+
+            IsShowRefresh = false;
         }
     }
 }

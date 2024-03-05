@@ -19,33 +19,35 @@
         </ResourceDictionary>
     </ContentPage.Resources>
     <Grid>
-        <CollectionView ItemsSource="{Binding Images}" Scrolled="CollectionView_Scrolled">
-            <CollectionView.EmptyView>
-                <ActivityIndicator
-                    Margin="0,0,0,100"
-                    HeightRequest="55"
-                    IsRunning="True"
-                    WidthRequest="55" />
-            </CollectionView.EmptyView>
-            <CollectionView.ItemTemplate>
-                <DataTemplate>
-                    <Grid>
-                        <Image x:Name="img" Source="{Binding}" />
-                        <Label
-                            Margin="100"
-                            HeightRequest="400"
-                            HorizontalOptions="Center"
-                            IsVisible="{Binding IsLoading, Source={x:Reference img}}"
-                            Text="加载中..."
-                            TextColor="Black"
-                            VerticalOptions="Center" />
-                    </Grid>
-                </DataTemplate>
-            </CollectionView.ItemTemplate>
-            <CollectionView.Footer>
-                <HorizontalStackLayout Padding="0,0,0,1" />
-            </CollectionView.Footer>
-        </CollectionView>
+        <RefreshView Command="{Binding LoadLastChapterCommand}" IsRefreshing="{Binding IsShowRefresh}">
+            <CollectionView ItemsSource="{Binding Images}" Scrolled="CollectionView_Scrolled">
+                <CollectionView.EmptyView>
+                    <ActivityIndicator
+                        Margin="0,0,0,100"
+                        HeightRequest="55"
+                        IsRunning="True"
+                        WidthRequest="55" />
+                </CollectionView.EmptyView>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid>
+                            <Image x:Name="img" Source="{Binding}" />
+                            <Label
+                                Margin="100"
+                                HeightRequest="400"
+                                HorizontalOptions="Center"
+                                IsVisible="{Binding IsLoading, Source={x:Reference img}}"
+                                Text="加载中..."
+                                TextColor="Black"
+                                VerticalOptions="Center" />
+                        </Grid>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+                <CollectionView.Footer>
+                    <HorizontalStackLayout Padding="0,0,0,1" />
+                </CollectionView.Footer>
+            </CollectionView>
+        </RefreshView>
         <HorizontalStackLayout
             Padding="5,2,10,2"
             BackgroundColor="#95212121"
