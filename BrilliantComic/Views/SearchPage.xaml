@@ -109,7 +109,7 @@
                                         HorizontalOptions="Center"
                                         IsVisible="{Binding IsLoading, Source={x:Reference img}}"
                                         Text="加载中..."
-                                        TextColor="Black"
+                                        TextColor="{StaticResource Gray300}"
                                         VerticalOptions="Center" />
                                 </Grid>
                             </Frame>
@@ -169,9 +169,8 @@
             BorderColor="{StaticResource Primary}"
             Clicked="BacktoTop"
             CornerRadius="100"
-            FontSize="Micro"
             HeightRequest="32"
-            ImageSource="back2top.png"
+            ImageSource="back2top.svg"
             IsVisible="false"
             WidthRequest="32"
             ZIndex="1" />
