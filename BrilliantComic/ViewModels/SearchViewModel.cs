@@ -34,7 +34,7 @@ namespace BrilliantComic.ViewModels
 
         [ObservableProperty]
         private List<ISource> _sources = new();
-
+       
         public SearchViewModel(SourceService sourceService)
         {
             _sourceService = sourceService;

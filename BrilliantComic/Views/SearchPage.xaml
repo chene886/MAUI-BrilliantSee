@@ -26,16 +26,14 @@
     <Grid>
         <Frame
             x:Name="sourceList"
-            Margin="0,0,2,0"
             Padding="6"
             BackgroundColor="White"
-            CornerRadius="10"
             HasShadow="True"
             HorizontalOptions="End"
             IsVisible="{Binding IsSourceListVisible}"
             VerticalOptions="Start"
             WidthRequest="112"
-            ZIndex="1">
+            ZIndex="3">
             <CollectionView ItemsSource="{Binding Sources}">
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
@@ -163,24 +161,27 @@
                 </DataTemplate>
             </CollectionView.ItemTemplate>
         </CollectionView>
-        <Frame
+        <Button
             x:Name="floatButton"
             Margin="290,584,0,0"
             Padding="0"
             BackgroundColor="{StaticResource Primary}"
             BorderColor="{StaticResource Primary}"
+            Clicked="BacktoTop"
             CornerRadius="100"
-            HasShadow="True"
-            HeightRequest="40"
+            FontSize="Micro"
+            HeightRequest="32"
+            ImageSource="back2top.png"
             IsVisible="false"
-            WidthRequest="40">
-            <Frame.GestureRecognizers>
-                <TapGestureRecognizer Tapped="BacktoTop" />
-            </Frame.GestureRecognizers>
-            <Image
-                HeightRequest="24"
-                Source="back2top.png"
-                WidthRequest="24" />
-        </Frame>
+            WidthRequest="32"
+            ZIndex="1" />
+        <BoxView
+            BackgroundColor="#64000000"
+            IsVisible="{Binding IsSourceListVisible}"
+            ZIndex="2">
+            <BoxView.GestureRecognizers>
+                <TapGestureRecognizer Command="{Binding ChangeSourceListVisibleCommand}" Tapped="HideKeyboard" />
+            </BoxView.GestureRecognizers>
+        </BoxView>
     </Grid>
 </ContentPage>

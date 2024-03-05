@@ -46,8 +46,8 @@ public partial class SearchPage : ContentPage
         }
     }
 
-    private void BacktoTop(object sender, TappedEventArgs e)
+    private void BacktoTop(object sender, EventArgs e)
     {
-        this.comicList.ScrollTo(0, position:ScrollToPosition.Start);
+        this.comicList.ScrollTo(0, position: ScrollToPosition.Start);
     }
 }

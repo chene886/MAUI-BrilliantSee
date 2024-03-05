@@ -40,7 +40,8 @@ namespace BrilliantComic.ViewModels
         /// <summary>
         /// 已加载章节图片集合
         /// </summary>
-        public ObservableCollection<ImageSource> Images { get; set; } = new ObservableCollection<ImageSource>();
+        [ObservableProperty]
+        public ObservableCollection<string> _images = new ObservableCollection<string>();
 
         /// <summary>
         /// 是否正在加载
@@ -152,14 +153,12 @@ namespace BrilliantComic.ViewModels
                 var picEnumerator = await chapter.GetPicEnumeratorAsync();
                 if (flag == "Init")
                 {
-                    var images = new ObservableCollection<ImageSource>();
+                    var images = new ObservableCollection<string>();
                     foreach (var pic in picEnumerator)
                     {
-                        var image = ImageSource.FromUri(new Uri(pic));
-                        images.Add(image);
+                        images.Add(pic);
                     }
                     Images = images;
-                    OnPropertyChanged(nameof(Images));
                     LoadedChapter.Add(chapter);
                     utillCrrentChapterImageCount = chapter.PageCount;
                     await UpdateChapterAsync("Last");
@@ -168,8 +167,7 @@ namespace BrilliantComic.ViewModels
                 {
                     foreach (var pic in picEnumerator.Reverse())
                     {
-                        var image = ImageSource.FromUri(new Uri(pic));
-                        Images.Insert(0, image);
+                        Images.Insert(0, pic);
                     }
                     LoadedChapter.Insert(0, chapter);
                 }
@@ -177,8 +175,7 @@ namespace BrilliantComic.ViewModels
                 {
                     foreach (var pic in picEnumerator)
                     {
-                        var image = ImageSource.FromUri(new Uri(pic));
-                        Images.Add(image);
+                        Images.Add(pic);
                     }
                     LoadedChapter.Add(chapter);
                 }
