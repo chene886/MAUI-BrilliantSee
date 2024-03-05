@@ -13,7 +13,8 @@
 ## 项目部分界面截图
 ### 搜索页
 - 搜索漫画、选择图源
-<img src="img/searchPage01.jpg" width="360px" /> <img src="img/searchPage02.jpg" width="360px" />
+<img src="img/searchPage01.jpg" width="360px" />
+<img src="img/searchPage02.jpg" width="360px" />
 
 ### 漫画详情页
 - 收藏、浏览器打开、漫画倒序
@@ -46,6 +47,6 @@
 
 项目仅用于学习交流，禁止其它任何用途。
 
-项目使用部分图标来源：[Icons8](https://icons8.com)\[Iconfont](https://www.iconfont.cn)
+项目使用部分图标来源：[Icons8](https://icons8.com) 、[Iconfont](https://www.iconfont.cn)
 
 项目基础：[卧龙Brilliant_see](https://gitee.com/long2023/brilliant_see?_from=gitee_search)
