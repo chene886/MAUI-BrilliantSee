@@ -50,4 +50,49 @@ public partial class SearchPage : ContentPage
     {
         this.comicList.ScrollTo(0, position: ScrollToPosition.Start);
     }
+
+    private async void ButtonTapped(object sender, Type type)
+    {
+        var obj = sender! as View;
+        if (typeof(CheckBox) == type)
+        {
+            var obj1 = sender! as CheckBox;
+            obj = obj1!.Parent as HorizontalStackLayout;
+        }
+        else if (typeof(HorizontalStackLayout) == type)
+        {
+            obj = sender! as HorizontalStackLayout;
+        }
+        else if (typeof(Button) == type)
+        {
+            obj = sender! as Button;
+        }
+        obj!.Shadow = new Shadow()
+        {
+            Offset = new Point(0, 10),
+            Opacity = (float)0.5,
+            Radius = 16,
+        };
+        await obj!.ScaleTo(1.15, 125, Easing.Default);
+        obj!.Shadow = new Shadow()
+        {
+            Radius = 0,
+        };
+        await obj!.ScaleTo(1, 125, Easing.Default);
+    }
+
+    private void CheckBox_CheckedChanged(object sender, CheckedChangedEventArgs e)
+    {
+        ButtonTapped(sender, sender.GetType());
+    }
+
+    private void TapGestureRecognizer_Tapped(object sender, TappedEventArgs e)
+    {
+        ButtonTapped(sender, sender.GetType());
+    }
+
+    private void floatButton_Pressed(object sender, EventArgs e)
+    {
+        ButtonTapped(sender, sender.GetType());
+    }
 }

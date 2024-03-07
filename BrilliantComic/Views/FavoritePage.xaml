@@ -72,7 +72,7 @@
             HeightRequest="56"
             WidthRequest="56">
             <Frame.GestureRecognizers>
-                <TapGestureRecognizer Command="{Binding CheckForUpdatedCommand}" />
+                <TapGestureRecognizer Command="{Binding CheckForUpdatedCommand}" Tapped="TapGestureRecognizer_Tapped" />
             </Frame.GestureRecognizers>
             <Image
                 HeightRequest="40"

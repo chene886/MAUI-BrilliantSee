@@ -98,7 +98,7 @@ namespace BrilliantComic.ViewModels
                                 }
                                 else
                                 {
-                                    var message1 = $"{item.Name}检查更新失败\n不如点开看看吧";
+                                    var message1 = $"{item.Name}检查更新失败,不如点开看看吧";
                                     _ = MainThread.InvokeOnMainThreadAsync(() =>
                                     {
                                         _ = Toast.Make(message1).Show();

@@ -89,7 +89,7 @@ namespace BrilliantComic.ViewModels
                 }
                 _ = AddHistoryComicAsync();
             }
-            else _ = Toast.Make("好像出了点小问题，\n用浏览器打开试试吧").Show();
+            else _ = Toast.Make("好像出了点小问题，用浏览器打开试试吧").Show();
         }
 
         /// <summary>

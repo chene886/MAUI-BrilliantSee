@@ -30,12 +30,15 @@ namespace BrilliantComic.Services
             var baozi = new BaoziSource(this);
             var gufeng = new GufengSource(this);
             var goda = new GodaSource(this);
+            var hasu = new HasuSource(this);
             _sources.Add("BaoZi", baozi);
             _sourceNames.Add(baozi, "BaoZi");
             _sources.Add("GuFeng", gufeng);
             _sourceNames.Add(gufeng, "GuFeng");
             _sources.Add("Goda", goda);
             _sourceNames.Add(goda, "Goda");
+            _sources.Add("Hasu", hasu);
+            _sourceNames.Add(hasu, "Hasu");
         }
 
         public List<ISource> GetSources()

@@ -34,7 +34,8 @@ namespace BrilliantComic.Models.Comics
         /// <summary>
         /// 漫画作者
         /// </summary>
-        public string Author { get; set; } = string.Empty;
+        [ObservableProperty]
+        public string _author = string.Empty;
 
         /// <summary>
         /// 漫画简介
@@ -69,7 +70,8 @@ namespace BrilliantComic.Models.Comics
         /// <summary>
         /// 最新更新时间
         /// </summary>
-        public string LastestUpdateTime { get; set; } = string.Empty;
+        [ObservableProperty]
+        public string _lastestUpdateTime = string.Empty;
 
         /// <summary>
         /// 是否有更新

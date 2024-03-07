@@ -29,27 +29,34 @@
             Padding="6"
             BackgroundColor="White"
             HasShadow="True"
+            HeightRequest="180"
             HorizontalOptions="End"
             IsVisible="{Binding IsSourceListVisible}"
             VerticalOptions="Start"
-            WidthRequest="112"
+            WidthRequest="140"
             ZIndex="3">
             <CollectionView ItemsSource="{Binding Sources}">
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
                         <HorizontalStackLayout
-                            Margin="0,4"
-                            Padding="4"
-                            BackgroundColor="Transparent"
-                            HeightRequest="32">
+                            Margin="0,2"
+                            Padding="8,0"
+                            BackgroundColor="{StaticResource Backcolor}"
+                            HeightRequest="40">
                             <HorizontalStackLayout.GestureRecognizers>
-                                <TapGestureRecognizer Command="{Binding ChangeIsSelectedCommand, Source={RelativeSource AncestorType={x:Type vm:SearchViewModel}}}" CommandParameter="{Binding}" />
+                                <TapGestureRecognizer
+                                    Command="{Binding ChangeIsSelectedCommand, Source={RelativeSource AncestorType={x:Type vm:SearchViewModel}}}"
+                                    CommandParameter="{Binding}"
+                                    Tapped="TapGestureRecognizer_Tapped" />
                             </HorizontalStackLayout.GestureRecognizers>
                             <Label
                                 Text="{Binding Name}"
                                 VerticalOptions="Center"
-                                WidthRequest="56" />
-                            <CheckBox IsChecked="{Binding IsSelected, Mode=TwoWay}" VerticalOptions="Center" />
+                                WidthRequest="80" />
+                            <CheckBox
+                                CheckedChanged="CheckBox_CheckedChanged"
+                                IsChecked="{Binding IsSelected, Mode=TwoWay}"
+                                VerticalOptions="Center" />
                         </HorizontalStackLayout>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
@@ -60,14 +67,6 @@
             Margin="0,5,0,0"
             ItemsSource="{Binding Comics}"
             Scrolled="CollectionView_Scrolled">
-            <CollectionView.EmptyView>
-                <ActivityIndicator
-                    Margin="0,0,0,100"
-                    HeightRequest="55"
-                    IsRunning="True"
-                    IsVisible="{Binding IsGettingResult}"
-                    WidthRequest="55" />
-            </CollectionView.EmptyView>
             <CollectionView.ItemTemplate>
                 <DataTemplate>
                     <Frame
@@ -161,6 +160,12 @@
                 </DataTemplate>
             </CollectionView.ItemTemplate>
         </CollectionView>
+        <ActivityIndicator
+            Margin="0,0,0,100"
+            HeightRequest="55"
+            IsRunning="True"
+            IsVisible="{Binding IsGettingResult}"
+            WidthRequest="55" />
         <Button
             x:Name="floatButton"
             Margin="290,584,0,0"
@@ -172,6 +177,7 @@
             HeightRequest="32"
             ImageSource="back2top.svg"
             IsVisible="false"
+            Pressed="floatButton_Pressed"
             WidthRequest="32"
             ZIndex="1" />
         <BoxView
@@ -179,7 +185,7 @@
             IsVisible="{Binding IsSourceListVisible}"
             ZIndex="2">
             <BoxView.GestureRecognizers>
-                <TapGestureRecognizer Command="{Binding ChangeSourceListVisibleCommand}" Tapped="HideKeyboard" />
+                <TapGestureRecognizer Command="{Binding ChangeSourceListVisibleCommand}" />
             </BoxView.GestureRecognizers>
         </BoxView>
     </Grid>

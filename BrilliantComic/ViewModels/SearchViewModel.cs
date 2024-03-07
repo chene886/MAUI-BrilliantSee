@@ -34,7 +34,7 @@ namespace BrilliantComic.ViewModels
 
         [ObservableProperty]
         private List<ISource> _sources = new();
-       
+
         public SearchViewModel(SourceService sourceService)
         {
             _sourceService = sourceService;
@@ -61,7 +61,7 @@ namespace BrilliantComic.ViewModels
                 IsSourceListVisible = false;
                 Comics.Clear();
                 await _sourceService.SearchAsync(keyword, Comics);
-                if (Comics.Count == 0) { _ = Toast.Make("搜索结果为空，换一个\n图源试试吧").Show(); }
+                if (Comics.Count == 0) { _ = Toast.Make("搜索结果为空，换一个图源试试吧").Show(); }
                 IsGettingResult = false;
             }
             else
