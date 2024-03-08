@@ -160,15 +160,24 @@ namespace BrilliantComic.ViewModels
                 {
                     picEnumerator = picEnumerator.Reverse();
                 }
-                foreach (var pic in picEnumerator)
+                var sourceName = chapter.Comic.SourceName;
+                var results = Array.Empty<ImageSource>();
+                if (sourceName != "mangahasu")
                 {
-                    tasks.Add(Task.Run(async () =>
-                    {
-                        byte[] bytes = await chapter.Comic.Source.HttpClient.GetByteArrayAsync(pic);
-                        return ImageSource.FromStream(() => new MemoryStream(bytes));
-                    }));
+                    results = picEnumerator.Select(pic => ImageSource.FromUri(new Uri(pic))).ToArray();
                 }
-                var results = await Task.WhenAll(tasks);
+                else
+                {
+                    foreach (var pic in picEnumerator)
+                    {
+                        tasks.Add(Task.Run(async () =>
+                        {
+                            byte[] bytes = await chapter.Comic.Source.HttpClient.GetByteArrayAsync(pic);
+                            return ImageSource.FromStream(() => new MemoryStream(bytes));
+                        }));
+                    }
+                    results = await Task.WhenAll(tasks);
+                }
                 foreach (var image in results)
                 {
                     if (flag == "Last") Images.Insert(0, image);
