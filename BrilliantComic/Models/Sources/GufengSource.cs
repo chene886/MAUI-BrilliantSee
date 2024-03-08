@@ -16,7 +16,14 @@ namespace BrilliantComic.Models.Sources
         public HttpClient HttpClient { get; set; } = new HttpClient(new HttpClientHandler()
         {
             AutomaticDecompression = DecompressionMethods.GZip
-        });
+        })
+        {
+            DefaultRequestHeaders =
+            {
+                { "User-Agent", "Mozilla/5.0 (iPhone; CPU iPhone OS 16_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.6 Mobile/15E148 Safari/604.1 Edg/122.0.0.0"},
+                { "Referer", "https://m.gufengmh9.com/"}
+            }
+        };
 
         public string Name { get; set; } = "古风漫画";
 
@@ -37,13 +44,6 @@ namespace BrilliantComic.Models.Sources
         /// <returns></returns>
         public async Task<IEnumerable<Comic>> SearchAsync(string keyword)
         {
-            if (!HttpClient.DefaultRequestHeaders.Contains("User-Agent"))
-            {
-                HttpClient.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0 (iPhone; CPU iPhone OS 16_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.6 Mobile/15E148 Safari/604.1 Edg/122.0.0.0");
-            }
-            HttpClient.DefaultRequestHeaders.Remove("Referer");
-            HttpClient.DefaultRequestHeaders.Add("Referer", "https://m.gufengmh9.com/");
-
             var url = $"https://m.gufengmh9.com/search/?keywords={keyword}&page=1";
             try
             {

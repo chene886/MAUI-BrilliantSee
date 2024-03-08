@@ -31,11 +31,9 @@ namespace BrilliantComic.Models.Chapters
                 html = html.Substring(start, end - start);
                 var match = Regex.Matches(html, "pagenum[\\s\\S]*?data-src=\"(.*?)\"");
                 var list = new List<string>();
-                var time = ((DateTimeOffset)DateTime.Now).ToUnixTimeMilliseconds();
                 foreach (Match item in match)
                 {
-                    list.Add(item.Groups[1].Value + "?&no=" + time);
-                    time -= 123456;
+                    list.Add(item.Groups[1].Value);
                 }
                 if (list.Count == 1) list.Add(list[0]);
                 PageCount = list.Count;

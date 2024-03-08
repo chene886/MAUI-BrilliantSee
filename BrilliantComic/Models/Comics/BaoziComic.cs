@@ -53,6 +53,11 @@ namespace BrilliantComic.Models.Comics
             //截取两个字符串之间的内容
             var start = html.IndexOf("<body");
             var end = html.IndexOf("猜你喜欢");
+            if (start < 0 || end < 0)
+            {
+                Chapters = Chapters.Append(new BaoziChapter("暂无章节", "", -1, false) { Comic = this });
+                return;
+            }
             var moreDataHtml = html.Substring(start, end - start);
             if (!string.IsNullOrEmpty(html))
             {

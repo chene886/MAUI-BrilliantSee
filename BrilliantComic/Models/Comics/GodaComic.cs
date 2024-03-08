@@ -44,7 +44,12 @@ namespace BrilliantComic.Models.Comics
         {
             //截取两个字符串之间的内容
             var start = html.IndexOf("bannersUite");
-            var end = html.IndexOf("data-index=\"1\"");
+            var end = html.IndexOf("ed:block\">");
+            if (start < 0 || end < 0)
+            {
+                Chapters = Chapters.Append(new GodaChapter("暂无章节", "", -1, false) { Comic = this });
+                return;
+            }
             var moreDataHtml = html.Substring(start, end - start);
             if (!string.IsNullOrEmpty(html))
             {

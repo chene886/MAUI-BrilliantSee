@@ -42,6 +42,11 @@ namespace BrilliantComic.Models.Comics
         {
             var start = html.IndexOf("Cover");
             var end = html.IndexOf("comic-chapters");
+            if (start < 0 || end < 0)
+            {
+                Chapters = Chapters.Append(new GufengChapter("暂无章节", "", -1, false) { Comic = this });
+                return;
+            }
             var moreDataHtml = html.Substring(start, end - start);
             if (!string.IsNullOrEmpty(html))
             {
@@ -56,6 +61,10 @@ namespace BrilliantComic.Models.Comics
         {
             var start = html.IndexOf("Cover");
             var end = html.IndexOf("开始阅读");
+            if (start < 0 || end < 0)
+            {
+                return "";
+            }
             var moreDataHtml = html.Substring(start, end - start);
             if (!string.IsNullOrEmpty(html))
             {

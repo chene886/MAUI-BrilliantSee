@@ -16,8 +16,16 @@ namespace BrilliantComic.Models.Sources
         public HttpClient HttpClient { get; set; } = new HttpClient(new HttpClientHandler()
         {
             AutomaticDecompression = DecompressionMethods.GZip
-        });
-        public string Name { get; set; } = "Goda(中)";
+        })
+        {
+            DefaultRequestHeaders =
+            {
+                { "User-Agent", "Mozilla/5.0 (iPhone; CPU iPhone OS 16_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.6 Mobile/15E148 Safari/604.1 Edg/122.0.0.0"},
+                { "Referer", "https://godamanga.com/"}
+            }
+        };
+
+        public string Name { get; set; } = "godamanga";
 
         [ObservableProperty]
         public bool _isSelected = true;
@@ -36,13 +44,6 @@ namespace BrilliantComic.Models.Sources
         /// <returns></returns>
         public async Task<IEnumerable<Comic>> SearchAsync(string keyword)
         {
-            if (!HttpClient.DefaultRequestHeaders.Contains("User-Agent"))
-            {
-                HttpClient.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0 (iPhone; CPU iPhone OS 16_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.6 Mobile/15E148 Safari/604.1 Edg/122.0.0.0");
-            }
-            HttpClient.DefaultRequestHeaders.Remove("Referer");
-            HttpClient.DefaultRequestHeaders.Add("Referer", "https://godamanga.com/");
-
             var url = $"https://godamanga.com/s/{keyword}?pagw=1";
             try
             {
@@ -63,7 +64,7 @@ namespace BrilliantComic.Models.Sources
                     var comic = new GodaComic("https://godamanga.com" + match.Groups[1].Value, match.Groups[3].Value, match.Groups[2].Value.Replace("%3A", ":").Replace("%2F", "/"), "暂无作者信息")
                     {
                         Source = this,
-                        SourceName = "Goda(中)",
+                        SourceName = "godamanga",
                         LastestUpdateTime = "(暂无最后更新信息)"
                     };
                     comics.Add(comic);

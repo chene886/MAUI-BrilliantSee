@@ -24,13 +24,17 @@ namespace BrilliantComic.Models.Chapters
                 var html = await msg.Content.ReadAsStringAsync();
                 var start = html.IndexOf("chapterImages");
                 var end = html.IndexOf("chapterPrice");
-                html = html.Substring(start,end-start);
+                if (start < 0 || end < 0)
+                {
+                    throw new Exception("接口异常,请等待维护");
+                }
+                html = html.Substring(start, end - start);
                 var match = Regex.Matches(html, "[\\[,]\"(.*?)\"");
-                var pathHead = "https://res.xiaoqinre.com/"+Regex.Match(html, "chapterPath = \"(.*?)\"").Groups[1].Value;
+                var pathHead = "https://res.xiaoqinre.com/" + Regex.Match(html, "chapterPath = \"(.*?)\"").Groups[1].Value;
                 var list = new List<string>();
                 foreach (Match item in match)
                 {
-                    list.Add(pathHead+item.Groups[1].Value);
+                    list.Add(pathHead + item.Groups[1].Value);
                 }
                 if (list.Count == 1) list.Add(list[0]);
                 PageCount = list.Count;

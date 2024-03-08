@@ -75,7 +75,7 @@ namespace BrilliantComic.Models.Comics
             var chapters = new List<HasuChapter>();
             if (Istart < 0 || end < 0)
             {
-                Chapters = Chapters.Append(new GufengChapter("暂无章节", "", -1, false) { Comic = this });
+                Chapters = Chapters.Append(new HasuChapter("暂无章节", "", -1, false) { Comic = this });
                 return;
             }
             var chaptershtml = html.Substring(Istart, end - Istart);
@@ -84,7 +84,6 @@ namespace BrilliantComic.Models.Comics
             if (matches.FirstOrDefault() is not null)
             {
                 LastestChapterName = matches.FirstOrDefault()!.Groups[2].Value;
-                LastestUpdateTime = Regex.Match(chaptershtml, "").Groups[1].Value;
             }
             foreach (Match match in matches)
             {
@@ -106,14 +105,20 @@ namespace BrilliantComic.Models.Comics
         {
             var start = html.IndexOf("Author");
             var end = html.IndexOf("list-chapter");
+            if (start < 0 || end < 0)
+            {
+                Chapters = Chapters.Append(new HasuChapter("暂无章节", "", -1, false) { Comic = this });
+                return;
+            }
             var moreDataHtml = html.Substring(start, end - start);
             if (!string.IsNullOrEmpty(html))
             {
                 var result = Regex.Match(moreDataHtml, "Author[\\s\\S]*?<a[\\s\\S]*?>(.*?)<[\\s\\S]*?Artist[\\s\\S]*?<a[\\s\\S]*?>(.*?)<[\\s\\S]*?Status[\\s\\S]*?<a[\\s\\S]*?>(.*?)<");
                 Author = result.Groups[1].Value + "(作者)," + result.Groups[2].Value + "(画手)";
                 Status = result.Groups[3].Value;
-                var result2 = Regex.Match(moreDataHtml, "Summary[\\s\\S]*?<div>([\\s\\S]*?)</div>");
-                Description = result2.Groups[1].Value.Replace("<p>", "").Replace("\\n", "");
+                Description = Regex.Match(moreDataHtml, "Summary[\\s\\S]*?<div>([\\s\\S]*?)</div>").Groups[1].Value.Replace("<p>", "").Replace("\\n", "");
+                moreDataHtml = html.Substring(html.IndexOf("list-chapter"));
+                LastestUpdateTime = "(" + Regex.Match(moreDataHtml, "td.*?date-updated\">(.*?)<").Groups[1].Value + ")";
             }
         }
     }

@@ -42,7 +42,7 @@ namespace BrilliantComic.ViewModels
         /// 已加载章节图片集合
         /// </summary>
         [ObservableProperty]
-        public ObservableCollection<string> _images = new ObservableCollection<string>();
+        public ObservableCollection<ImageSource> _images = new ObservableCollection<ImageSource>();
 
         /// <summary>
         /// 是否正在加载
@@ -154,34 +154,29 @@ namespace BrilliantComic.ViewModels
         {
             try
             {
+                var tasks = new List<Task<ImageSource>>();
                 var picEnumerator = await chapter.GetPicEnumeratorAsync();
-                if (flag == "Init")
+                if (flag == "Last")
                 {
-                    var images = new ObservableCollection<string>();
-                    foreach (var pic in picEnumerator)
-                    {
-                        images.Add(pic);
-                    }
-                    Images = images;
-                    LoadedChapter.Add(chapter);
-                    utillCrrentChapterImageCount = chapter.PageCount;
+                    picEnumerator = picEnumerator.Reverse();
                 }
-                else if (flag == "Last")
+                foreach (var pic in picEnumerator)
                 {
-                    foreach (var pic in picEnumerator.Reverse())
+                    tasks.Add(Task.Run(async () =>
                     {
-                        Images.Insert(0, pic);
-                    }
-                    LoadedChapter.Insert(0, chapter);
+                        byte[] bytes = await chapter.Comic.Source.HttpClient.GetByteArrayAsync(pic);
+                        return ImageSource.FromStream(() => new MemoryStream(bytes));
+                    }));
                 }
-                else
+                var results = await Task.WhenAll(tasks);
+                foreach (var image in results)
                 {
-                    foreach (var pic in picEnumerator)
-                    {
-                        Images.Add(pic);
-                    }
-                    LoadedChapter.Add(chapter);
+                    if (flag == "Last") Images.Insert(0, image);
+                    else Images.Add(image);
                 }
+                if (flag == "Last") LoadedChapter.Insert(0, chapter);
+                else LoadedChapter.Add(chapter);
+                if (flag == "Init") utillCrrentChapterImageCount = Chapter!.PageCount;
             }
             catch (Exception e)
             {
