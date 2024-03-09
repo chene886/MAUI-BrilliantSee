@@ -22,12 +22,12 @@ public partial class DetailPage : ContentPage
         var shadow = obj!.Shadow;
         obj!.Shadow = new Shadow()
         {
-            Offset = new Point(0, 10),
-            Opacity = (float)0.5,
-            Radius = 16,
+            Offset = new Point(0, 8),
+            Opacity = (float)0.3,
+            Radius = 14,
         };
-        await obj!.ScaleTo(1.15, 125);
-        await obj!.ScaleTo(1, 125);
+        await obj!.ScaleTo(1.15, 250);
+        await obj!.ScaleTo(1, 250);
         obj!.Shadow = shadow;
     }
 }

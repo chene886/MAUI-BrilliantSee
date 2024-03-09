@@ -26,10 +26,10 @@
     <Grid>
         <Frame
             x:Name="sourceList"
-            Padding="6"
+            Padding="6,2"
             BackgroundColor="White"
             HasShadow="True"
-            HeightRequest="180"
+            HeightRequest="184"
             HorizontalOptions="End"
             IsVisible="{Binding IsSourceListVisible}"
             VerticalOptions="Start"

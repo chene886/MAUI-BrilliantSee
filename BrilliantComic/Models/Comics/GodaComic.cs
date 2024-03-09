@@ -45,21 +45,26 @@ namespace BrilliantComic.Models.Comics
             //截取两个字符串之间的内容
             var start = html.IndexOf("bannersUite");
             var end = html.IndexOf("ed:block\">");
+            if(end < 0) end = html.IndexOf("chapterlist");
             if (start < 0 || end < 0)
             {
-                Chapters = Chapters.Append(new GodaChapter("暂无章节", "", -1, false) { Comic = this });
+                Status = "连载中";
+                Description = "暂无简介";
+                LastestUpdateTime = "暂无更新时间";
+                Author = "暂无作者";
                 return;
             }
             var moreDataHtml = html.Substring(start, end - start);
             if (!string.IsNullOrEmpty(html))
             {
-                var result = Regex.Match(moreDataHtml, "<span class=\"text-xs[\\s\\S]*?>[\\s](.*?)[\\s]<[\\s\\S]*?<p[\\s\\S]*?>([\\s\\S]*?)<[\\s\\S]*?italic[\\s\\S]*?>(.*?)[\\s]<");
+                var result = Regex.Match(moreDataHtml, "<span class=\"text-xs[\\s\\S]*?>[\\s](.*?)[\\s]<[\\s\\S]*?<p[\\s\\S]*?>([\\s\\S]*?)<");
                 Status = result.Groups[1].Value;
-                Description = result.Groups[2].Value.Replace("\\n", "");
-                LastestUpdateTime = "(更新时间：" + result.Groups[3].Value + ")";
-                var result1 = Regex.Matches(moreDataHtml, "author[\\s\\S]*?<span>[\\s](.*?)<").ToList();
+                Description = result.Groups[2].Value.Replace("\\n", "").Replace("amp;", "");
+                var result1 = Regex.Match(moreDataHtml, "italic[\\s\\S]*?>(.*?)[\\s]<");
+                LastestUpdateTime = "(更新时间：" + result1.Groups[1].Value + ")";
+                var result2 = Regex.Matches(moreDataHtml, "author[\\s\\S]*?<span>[\\s](.*?)<").ToList();
                 Author = "";
-                foreach (Match item in result1)
+                foreach (Match item in result2)
                 {
                     Author += item.Groups[1].Value;
                 }
@@ -92,15 +97,21 @@ namespace BrilliantComic.Models.Comics
                 if (matches.FirstOrDefault() is not null)
                 {
                     LastestChapterName = matches.FirstOrDefault()!.Groups[2].Value;
+                    foreach (Match match in matches)
+                    {
+                        var isSpecial = false;
+                        var url = match.Groups[1].Value;
+                        var name = match.Groups[2].Value;
+                        if (start == LastReadedChapterIndex) isSpecial = true;
+                        chapters.Add(new GodaChapter(name, url, start, isSpecial) { Comic = this });
+                        start--;
+                    }
                 }
-                foreach (Match match in matches)
+                else
                 {
-                    var isSpecial = false;
-                    var url = match.Groups[1].Value;
-                    var name = match.Groups[2].Value;
-                    if (start == LastReadedChapterIndex) isSpecial = true;
-                    chapters.Add(new GodaChapter(name, url, start, isSpecial) { Comic = this });
-                    start--;
+                    LastestChapterName = "";
+                    Chapters = Chapters.Append(new GodaChapter("暂无章节", "", -1, false) { Comic = this });
+                    return;
                 }
             }
             catch

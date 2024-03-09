@@ -66,11 +66,19 @@ namespace BrilliantComic.Services
                     {
                         foreach (var item in result)
                         {
-                            //委托到UI线程将漫画添加到集合
+                            if(item != result.FirstOrDefault())
+                            {
+                                await MainThread.InvokeOnMainThreadAsync(() =>
+                                {
+                                    comics.Add(item);
+                                });
+                                continue;
+                            }
                             await MainThread.InvokeOnMainThreadAsync(() =>
                             {
-                                comics.Add(item);
+                                comics.Insert(0, item);
                             });
+
                         }
                     }
                 }));

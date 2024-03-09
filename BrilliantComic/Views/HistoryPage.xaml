@@ -28,7 +28,7 @@
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="160" />
                                 <RowDefinition Height="18" />
-                                <RowDefinition Height="16" />
+                                <RowDefinition Height="18" />
                             </Grid.RowDefinitions>
                             <Image
                                 Aspect="AspectFill"

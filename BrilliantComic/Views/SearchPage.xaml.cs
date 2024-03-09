@@ -69,16 +69,16 @@ public partial class SearchPage : ContentPage
         }
         obj!.Shadow = new Shadow()
         {
-            Offset = new Point(0, 10),
-            Opacity = (float)0.5,
-            Radius = 16,
+            Offset = new Point(0, 8),
+            Opacity = (float)0.3,
+            Radius = 14,
         };
-        await obj!.ScaleTo(1.15, 125, Easing.Default);
+        await obj!.ScaleTo(1.15, 200);
         obj!.Shadow = new Shadow()
         {
             Radius = 0,
         };
-        await obj!.ScaleTo(1, 125, Easing.Default);
+        await obj!.ScaleTo(1, 200);
     }
 
     private void CheckBox_CheckedChanged(object sender, CheckedChangedEventArgs e)
