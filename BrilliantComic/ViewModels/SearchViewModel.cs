@@ -1,4 +1,5 @@
-﻿using BrilliantComic.Models.Chapters;
+﻿using BrilliantComic.Models;
+using BrilliantComic.Models.Chapters;
 using BrilliantComic.Models.Comics;
 using BrilliantComic.Models.Sources;
 using BrilliantComic.Services;
@@ -18,6 +19,8 @@ namespace BrilliantComic.ViewModels
     {
         private readonly SourceService _sourceService;
 
+        private readonly DBService _db;
+
         /// <summary>
         /// 储存搜索漫画的结果集合
         /// </summary>
@@ -35,10 +38,23 @@ namespace BrilliantComic.ViewModels
         [ObservableProperty]
         private List<ISource> _sources = new();
 
-        public SearchViewModel(SourceService sourceService)
+        private List<SettingItem> SettingItems { get; set; } = new();
+
+        public SearchViewModel(SourceService sourceService, DBService db)
         {
             _sourceService = sourceService;
+            _db = db;
             Sources = _sourceService.GetSources();
+            _ = initSettingsAsync();
+        }
+
+        public async Task initSettingsAsync()
+        {
+            SettingItems = await _db.GetSettingItemsAsync("Source");
+            foreach (var source in Sources)
+            {
+                source.IsSelected = SettingItems.Where(s => s.Name == source.Name).FirstOrDefault()!.Value == "IsSelected" ? true : false;
+            }
         }
 
         /// <summary>
@@ -88,6 +104,9 @@ namespace BrilliantComic.ViewModels
         private void ChangeIsSelected(ISource source)
         {
             source.IsSelected = !source.IsSelected;
+            var item = SettingItems.Where(s => s.Name == source.Name).FirstOrDefault();
+            item!.Value = source.IsSelected ? "IsSelected" : "NotSelected";
+            _ = _db.UpdateSettingItemAsync(item);
         }
 
         [RelayCommand]

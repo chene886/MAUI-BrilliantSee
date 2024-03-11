@@ -1,4 +1,5 @@
-﻿using BrilliantComic.Models.Comics;
+﻿using BrilliantComic.Models;
+using BrilliantComic.Models.Comics;
 using BrilliantComic.Models.Enums;
 using SQLite;
 using System;
@@ -47,6 +48,15 @@ namespace BrilliantComic.Services
         private async Task InitAsync()
         {
             await _db.CreateTableAsync<DBComic>();
+            await _db.CreateTableAsync<SettingItem>();
+            var defaultSettingItems = new List<SettingItem>
+            {
+                new SettingItem { Name = "包子漫画", Value = "IsSelected", Category = "Source" },
+                new SettingItem { Name = "古风漫画", Value = "IsSelected", Category = "Source" },
+                new SettingItem { Name = "godamanga", Value = "IsSelected", Category = "Source" },
+                new SettingItem { Name = "mangahasu", Value = "IsSelected", Category = "Source" },
+            };
+            await _db.InsertAllAsync(defaultSettingItems);
         }
 
         /// <summary>
@@ -121,6 +131,16 @@ namespace BrilliantComic.Services
         public async Task<int> DeleteComicAsync(Comic comic, DBComicCategory category)
         {
             return await _db.Table<DBComic>().DeleteAsync(i => i.Url == comic.Url && i.Category == category);
+        }
+
+        public async Task<List<SettingItem>> GetSettingItemsAsync(string category)
+        {
+            return await _db.Table<SettingItem>().Where(i => i.Category == category).ToListAsync();
+        }
+
+        public async Task<int> UpdateSettingItemAsync(SettingItem setting)
+        {
+            return await _db.UpdateAsync(setting);
         }
     }
 }
