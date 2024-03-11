@@ -66,6 +66,13 @@ namespace BrilliantComic.ViewModels
             await Shell.Current.GoToAsync("DetailPage", new Dictionary<string, object> { { "Comic", comic } });
         }
 
+        [RelayCommand]
+        private async Task CancelFavoriteAsync(Comic comic)
+        {
+            await _db.DeleteComicAsync(comic, comic.Category);
+            Comics.Remove(comic);
+        }
+
         /// <summary>
         /// 检查收藏漫画是否有更新
         /// </summary>

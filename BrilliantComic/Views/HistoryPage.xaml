@@ -15,40 +15,51 @@
         <CollectionView ItemsLayout="VerticalGrid, 3" ItemsSource="{Binding Comics}">
             <CollectionView.ItemTemplate>
                 <DataTemplate>
-                    <Frame
-                        Margin="5,10"
-                        Padding="0"
-                        BackgroundColor="White"
-                        CornerRadius="8"
-                        HasShadow="True">
-                        <Frame.GestureRecognizers>
-                            <TapGestureRecognizer Command="{Binding OpenComicCommand, Source={RelativeSource AncestorType={x:Type vm:HistoryViewModel}}}" CommandParameter="{Binding}" />
-                        </Frame.GestureRecognizers>
-                        <Grid RowSpacing="1">
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="160" />
-                                <RowDefinition Height="18" />
-                                <RowDefinition Height="18" />
-                            </Grid.RowDefinitions>
-                            <Image
-                                Aspect="AspectFill"
-                                HeightRequest="160"
-                                Source="{Binding Cover}" />
-                            <Label
-                                Grid.Row="1"
-                                Padding="2,0"
-                                FontAttributes="Bold"
-                                HorizontalOptions="Start"
-                                LineBreakMode="TailTruncation"
-                                Text="{Binding Name}" />
-                            <Label
-                                Grid.Row="2"
-                                Padding="2,0"
-                                FontSize="13"
-                                HorizontalOptions="Start"
-                                Text="{Binding SourceName}" />
-                        </Grid>
-                    </Frame>
+                    <SwipeView>
+                        <SwipeView.RightItems>
+                            <SwipeItemView>
+                                <ImageButton
+                                    BackgroundColor="Transparent"
+                                    Command="{Binding ClearCommand, Source={RelativeSource AncestorType={x:Type vm:HistoryViewModel}}}"
+                                    CommandParameter="{Binding}"
+                                    Source="clean.png" />
+                            </SwipeItemView>
+                        </SwipeView.RightItems>
+                        <Frame
+                            Margin="5,10"
+                            Padding="0"
+                            BackgroundColor="White"
+                            CornerRadius="8"
+                            HasShadow="True">
+                            <Frame.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding OpenComicCommand, Source={RelativeSource AncestorType={x:Type vm:HistoryViewModel}}}" CommandParameter="{Binding}" />
+                            </Frame.GestureRecognizers>
+                            <Grid RowSpacing="1">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="160" />
+                                    <RowDefinition Height="18" />
+                                    <RowDefinition Height="18" />
+                                </Grid.RowDefinitions>
+                                <Image
+                                    Aspect="AspectFill"
+                                    HeightRequest="160"
+                                    Source="{Binding Cover}" />
+                                <Label
+                                    Grid.Row="1"
+                                    Padding="2,0"
+                                    FontAttributes="Bold"
+                                    HorizontalOptions="Start"
+                                    LineBreakMode="TailTruncation"
+                                    Text="{Binding Name}" />
+                                <Label
+                                    Grid.Row="2"
+                                    Padding="2,0"
+                                    FontSize="13"
+                                    HorizontalOptions="Start"
+                                    Text="{Binding SourceName}" />
+                            </Grid>
+                        </Frame>
+                    </SwipeView>
                 </DataTemplate>
             </CollectionView.ItemTemplate>
         </CollectionView>

@@ -22,7 +22,8 @@ public partial class SearchPage : ContentPage
     /// <param name="e"></param>
     private async void SearchPage_Loaded(object? sender, EventArgs e)
     {
-        await Task.Delay(100);
+        this.input.Focus();
+        await Task.Delay(250);
         this.input.Focus();
     }
 

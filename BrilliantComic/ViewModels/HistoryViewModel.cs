@@ -80,5 +80,12 @@ namespace BrilliantComic.ViewModels
         {
             await Shell.Current.GoToAsync("DetailPage", new Dictionary<string, object> { { "Comic", comic } });
         }
+
+        [RelayCommand]
+        private async Task ClearAsync(Comic comic)
+        {
+            await _db.DeleteComicAsync(comic,comic.Category);
+            Comics.Remove(comic);
+        }
     }
 }

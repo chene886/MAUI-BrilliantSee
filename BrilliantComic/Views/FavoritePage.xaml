@@ -15,50 +15,63 @@
         <CollectionView ItemsLayout="VerticalGrid, 3" ItemsSource="{Binding Comics}">
             <CollectionView.ItemTemplate>
                 <DataTemplate>
-                    <Frame
-                        Margin="5,10"
-                        Padding="0"
-                        BackgroundColor="White"
-                        CornerRadius="8"
-                        HasShadow="True">
-                        <Frame.GestureRecognizers>
-                            <TapGestureRecognizer Command="{Binding OpenComicCommand, Source={RelativeSource AncestorType={x:Type vm:FavoriteViewModel}}}" CommandParameter="{Binding}" />
-                        </Frame.GestureRecognizers>
-                        <Grid RowSpacing="1">
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="160" />
-                                <RowDefinition Height="18" />
-                                <RowDefinition Height="18" />
-                            </Grid.RowDefinitions>
-                            <Image
-                                Aspect="AspectFill"
-                                HeightRequest="160"
-                                Source="{Binding Cover}" />
-                            <Frame
-                                BackgroundColor="{StaticResource Primary}"
-                                BorderColor="#88512BD4"
-                                CornerRadius="100"
-                                HasShadow="True"
-                                IsVisible="{Binding IsUpdate}"
-                                MaximumHeightRequest="16"
-                                MaximumWidthRequest="16"
-                                TranslationX="48"
-                                TranslationY="-70" />
-                            <Label
-                                Grid.Row="1"
-                                Padding="2,0"
-                                FontAttributes="Bold"
-                                HorizontalOptions="Start"
-                                LineBreakMode="TailTruncation"
-                                Text="{Binding Name}" />
-                            <Label
-                                Grid.Row="2"
-                                Padding="2,0"
-                                FontSize="13"
-                                HorizontalOptions="Start"
-                                Text="{Binding SourceName}" />
-                        </Grid>
-                    </Frame>
+                    <SwipeView>
+                        <SwipeView.RightItems>
+                            <SwipeItemView>
+                                <ImageButton
+                                    Margin="4,0,0,0"
+                                    BackgroundColor="Transparent"
+                                    Command="{Binding CancelFavoriteCommand, Source={RelativeSource AncestorType={x:Type vm:FavoriteViewModel}}}"
+                                    CommandParameter="{Binding}"
+                                    Source="broken_heart.png"
+                                    WidthRequest="36" />
+                            </SwipeItemView>
+                        </SwipeView.RightItems>
+                        <Frame
+                            Margin="5,10"
+                            Padding="0"
+                            BackgroundColor="White"
+                            CornerRadius="8"
+                            HasShadow="True">
+                            <Frame.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding OpenComicCommand, Source={RelativeSource AncestorType={x:Type vm:FavoriteViewModel}}}" CommandParameter="{Binding}" />
+                            </Frame.GestureRecognizers>
+                            <Grid RowSpacing="1">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="160" />
+                                    <RowDefinition Height="18" />
+                                    <RowDefinition Height="18" />
+                                </Grid.RowDefinitions>
+                                <Image
+                                    Aspect="AspectFill"
+                                    HeightRequest="160"
+                                    Source="{Binding Cover}" />
+                                <Frame
+                                    BackgroundColor="{StaticResource Primary}"
+                                    BorderColor="#88512BD4"
+                                    CornerRadius="100"
+                                    HasShadow="True"
+                                    IsVisible="{Binding IsUpdate}"
+                                    MaximumHeightRequest="16"
+                                    MaximumWidthRequest="16"
+                                    TranslationX="48"
+                                    TranslationY="-70" />
+                                <Label
+                                    Grid.Row="1"
+                                    Padding="2,0"
+                                    FontAttributes="Bold"
+                                    HorizontalOptions="Start"
+                                    LineBreakMode="TailTruncation"
+                                    Text="{Binding Name}" />
+                                <Label
+                                    Grid.Row="2"
+                                    Padding="2,0"
+                                    FontSize="13"
+                                    HorizontalOptions="Start"
+                                    Text="{Binding SourceName}" />
+                            </Grid>
+                        </Frame>
+                    </SwipeView>
                 </DataTemplate>
             </CollectionView.ItemTemplate>
         </CollectionView>

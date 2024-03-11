@@ -96,7 +96,6 @@
                             Margin="0,0,0,2"
                             FontFamily="Bold"
                             FontSize="Body"
-                            LineBreakMode="TailTruncation"
                             MaxLines="1"
                             Text="{Binding Comic.Author}" />
                         <Label

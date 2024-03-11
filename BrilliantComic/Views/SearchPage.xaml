@@ -126,7 +126,7 @@
                                     <Label
                                         FontSize="18"
                                         HorizontalOptions="Start"
-                                        LineBreakMode="TailTruncation"
+                                        LineBreakMode="NoWrap"
                                         MaximumWidthRequest="180"
                                         Text="{Binding Name}" />
                                     <Label
