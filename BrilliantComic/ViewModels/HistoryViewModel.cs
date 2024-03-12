@@ -57,7 +57,7 @@ namespace BrilliantComic.ViewModels
         /// <returns></returns>
         public async Task ClearHistoryComicsAsync()
         {
-            if(Comics.Count == 0)
+            if (Comics.Count == 0)
             {
                 _ = Toast.Make("暂无历史记录").Show();
                 return;
@@ -84,7 +84,7 @@ namespace BrilliantComic.ViewModels
         [RelayCommand]
         private async Task ClearAsync(Comic comic)
         {
-            await _db.DeleteComicAsync(comic,comic.Category);
+            await _db.DeleteComicAsync(comic, comic.Category);
             Comics.Remove(comic);
         }
     }

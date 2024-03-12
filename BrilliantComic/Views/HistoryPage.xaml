@@ -7,9 +7,9 @@
     Title="历史">
     <ContentPage.ToolbarItems>
         <ToolbarItem
-            Clicked="ClearAllComic"
-            IconImageSource="clean.png"
-            Text="清空历史记录" />
+            Clicked="JumpToSettingPage"
+            IconImageSource="setting.svg"
+            Text="设置" />
     </ContentPage.ToolbarItems>
     <Grid>
         <CollectionView ItemsLayout="VerticalGrid, 3" ItemsSource="{Binding Comics}">
@@ -63,6 +63,23 @@
                 </DataTemplate>
             </CollectionView.ItemTemplate>
         </CollectionView>
+        <Frame
+            Margin="280,576,0,0"
+            Padding="0,0,2,4"
+            BackgroundColor="{StaticResource Primary}"
+            BorderColor="{StaticResource Primary}"
+            CornerRadius="100"
+            HasShadow="True"
+            HeightRequest="56"
+            WidthRequest="56">
+            <Frame.GestureRecognizers>
+                <TapGestureRecognizer Tapped="CleanTapped" />
+            </Frame.GestureRecognizers>
+            <Image
+                HeightRequest="40"
+                Source="clean_all.png"
+                WidthRequest="40" />
+        </Frame>
         <ActivityIndicator
             Margin="0,0,0,100"
             HeightRequest="55"

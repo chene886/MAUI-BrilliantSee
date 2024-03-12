@@ -29,10 +29,12 @@ public partial class SearchPage : ContentPage
 
     private void HideKeyboard(object sender, TappedEventArgs e)
     {
+#if ANDROID
         if (input.IsSoftKeyboardShowing())
         {
             _ = input.HideKeyboardAsync(CancellationToken.None);
         }
+#endif
     }
 
     private void CollectionView_Scrolled(object sender, ItemsViewScrolledEventArgs e)

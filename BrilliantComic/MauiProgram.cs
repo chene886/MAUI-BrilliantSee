@@ -38,6 +38,7 @@ namespace BrilliantComic
             //视图
             services.AddSingleton<FavoritePage>();
             services.AddSingleton<HistoryPage>();
+            services.AddSingleton<SettingPage>();
             services.AddTransient<SearchPage>();
             services.AddTransient<DetailPage>();
             services.AddTransient<BrowsePage>();
@@ -45,6 +46,7 @@ namespace BrilliantComic
             //视图模型
             services.AddSingleton<FavoriteViewModel>();
             services.AddSingleton<HistoryViewModel>();
+            services.AddSingleton<SettingViewModel>();
             services.AddTransient<SearchViewModel>();
             services.AddTransient<DetailViewModel>();
             services.AddTransient<BrowseViewModel>();
