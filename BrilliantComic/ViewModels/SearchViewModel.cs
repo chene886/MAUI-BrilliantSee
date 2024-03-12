@@ -45,15 +45,15 @@ namespace BrilliantComic.ViewModels
             _sourceService = sourceService;
             _db = db;
             Sources = _sourceService.GetSources();
-            _ = initSettingsAsync();
+            _ = InitSettingsAsync();
         }
 
-        public async Task initSettingsAsync()
+        public async Task InitSettingsAsync()
         {
             SettingItems = await _db.GetSettingItemsAsync("Source");
             foreach (var source in Sources)
             {
-                source.IsSelected = SettingItems.Where(s => s.Name == source.Name).FirstOrDefault()!.Value == "IsSelected" ? true : false;
+                source.IsSelected = SettingItems.First(s => s.Name == source.Name).Value == "IsSelected";
             }
         }
 
@@ -101,12 +101,12 @@ namespace BrilliantComic.ViewModels
         }
 
         [RelayCommand]
-        private void ChangeIsSelected(ISource source)
+        private async Task ChangeIsSelectedAsync(ISource source)
         {
             source.IsSelected = !source.IsSelected;
-            var item = SettingItems.Where(s => s.Name == source.Name).FirstOrDefault();
+            var item = SettingItems.First(s => s.Name == source.Name);
             item!.Value = source.IsSelected ? "IsSelected" : "NotSelected";
-            _ = _db.UpdateSettingItemAsync(item);
+            await _db.UpdateSettingItemAsync(item);
         }
 
         [RelayCommand]

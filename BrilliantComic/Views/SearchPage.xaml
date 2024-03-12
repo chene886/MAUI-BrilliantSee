@@ -38,26 +38,43 @@
             <CollectionView ItemsSource="{Binding Sources}">
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
-                        <HorizontalStackLayout
+                        <Grid
                             Margin="0,2"
                             Padding="8,0"
                             BackgroundColor="{StaticResource Backcolor}"
                             HeightRequest="40">
-                            <HorizontalStackLayout.GestureRecognizers>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <Grid.GestureRecognizers>
                                 <TapGestureRecognizer
                                     Command="{Binding ChangeIsSelectedCommand, Source={RelativeSource AncestorType={x:Type vm:SearchViewModel}}}"
                                     CommandParameter="{Binding}"
                                     Tapped="TapGestureRecognizer_Tapped" />
-                            </HorizontalStackLayout.GestureRecognizers>
+                            </Grid.GestureRecognizers>
                             <Label
                                 Text="{Binding Name}"
                                 VerticalOptions="Center"
-                                WidthRequest="80" />
-                            <CheckBox
-                                CheckedChanged="CheckBox_CheckedChanged"
-                                IsChecked="{Binding IsSelected, Mode=TwoWay}"
-                                VerticalOptions="Center" />
-                        </HorizontalStackLayout>
+                                WidthRequest="90" />
+                            <Rectangle
+                                Grid.Column="1"
+                                Fill="{StaticResource Backcolor}"
+                                HeightRequest="18"
+                                Stroke="{StaticResource Primary}"
+                                StrokeThickness="4"
+                                WidthRequest="18" />
+                            <Label
+                                Grid.Column="1"
+                                BackgroundColor="{StaticResource Primary}"
+                                FontSize="Micro"
+                                HeightRequest="16"
+                                IsVisible="{Binding IsSelected}"
+                                Text=" ✔"
+                                TextColor="White"
+                                WidthRequest="16" />
+
+                        </Grid>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>

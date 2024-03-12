@@ -55,12 +55,7 @@ public partial class SearchPage : ContentPage
     private async void ButtonTapped(object sender, Type type)
     {
         var obj = sender! as View;
-        if (typeof(CheckBox) == type)
-        {
-            var obj1 = sender! as CheckBox;
-            obj = obj1!.Parent as HorizontalStackLayout;
-        }
-        else if (typeof(HorizontalStackLayout) == type)
+        if (typeof(HorizontalStackLayout) == type)
         {
             obj = sender! as HorizontalStackLayout;
         }
@@ -80,11 +75,6 @@ public partial class SearchPage : ContentPage
             Radius = 0,
         };
         await obj!.ScaleTo(1, 200);
-    }
-
-    private void CheckBox_CheckedChanged(object sender, CheckedChangedEventArgs e)
-    {
-        ButtonTapped(sender, sender.GetType());
     }
 
     private void TapGestureRecognizer_Tapped(object sender, TappedEventArgs e)

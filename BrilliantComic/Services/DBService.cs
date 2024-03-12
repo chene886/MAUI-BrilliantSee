@@ -49,6 +49,8 @@ namespace BrilliantComic.Services
         {
             await _db.CreateTableAsync<DBComic>();
             await _db.CreateTableAsync<SettingItem>();
+            var count = await _db.Table<SettingItem>().CountAsync();
+            if(count > 0) { return; }
             var defaultSettingItems = new List<SettingItem>
             {
                 new SettingItem { Name = "包子漫画", Value = "IsSelected", Category = "Source" },
