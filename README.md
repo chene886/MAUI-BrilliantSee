@@ -19,24 +19,23 @@
 ## 项目部分界面截图
 ### 搜索页
 - 搜索漫画、选择图源
-<img src="img/searchPage01.jpg" width="360px" />
-<img src="img/searchPage02.jpg" width="360px" />
+<img src="img/searchPage.jpg" width="360px" />
 
 ### 漫画详情页
 - 收藏、浏览器打开、漫画倒序
 - 一键跳转最后浏览章节
-<img src="img/detailPage_1.jpg" width="360px" />
+<img src="img/detailPage.jpg" width="360px" />
 
 ### 收藏页
 - 一键检查更新
-<img src="img/favoritePage_1.jpg" width="360px" />
+<img src="img/favoritePage.jpg" width="360px" />
 
 ### 历史记录页
 - 清空历史记录
-<img src="img/historyPage_1.jpg" width="360px" />
+<img src="img/historyPage.jpg" width="360px" />
 
 ### 漫画浏览页
-<img src="img/browsePage_1.jpg" width="360px" />
+<img src="img/browsePage.jpg" width="360px" />
 
 ## 适配漫画网站
 添加适配网站仅需在 **BrilliantComic.Models** 项目中添加：
@@ -46,6 +45,7 @@
 
 在 **BrilliantComic.Services** 项目中：
 - 在**SourceService**中注册图源和图源名。
+- 在**DBService**初始化图源设置项。
 
 再根据设配网站的需求略作调整即可
 
