@@ -189,9 +189,9 @@ namespace BrilliantComic.ViewModels
             }
             catch (Exception e)
             {
-                if (e.Message == "接口异常,请等待维护") _ = Toast.Make(e.Message).Show();
+                if (e.Message == "请求失败") _ = Toast.Make(e.Message).Show();
                 else _ = Toast.Make("好像出了点小问题，用浏览器打开试试吧").Show();
-                throw new Exception("获取失败");
+                throw new Exception(e.Message);
             }
         }
 

@@ -55,8 +55,14 @@ namespace BrilliantComic.Services
             {
                 new SettingItem { Name = "包子漫画", Value = "IsSelected", Category = "Source" },
                 new SettingItem { Name = "古风漫画", Value = "IsSelected", Category = "Source" },
-                new SettingItem { Name = "godamanga", Value = "IsSelected", Category = "Source" },
+                new SettingItem { Name = "Goda漫画", Value = "IsSelected", Category = "Source" },
                 new SettingItem { Name = "mangahasu", Value = "IsSelected", Category = "Source" },
+                new SettingItem { Name = "分享应用", Value = "去分享", Category = "通用" },
+                new SettingItem { Name = "错误反馈", Value = "去反馈", Category = "通用" },
+                new SettingItem { Name = "支持开源", Value = "去支持", Category = "通用" },
+                new SettingItem { Name = "免责声明", Value = "点击查看", Category = "关于" },
+                new SettingItem { Name = "隐私政策", Value = "点击查看", Category = "关于" },
+                new SettingItem { Name = "用户协议", Value = "点击查看", Category = "关于" },
             };
             await _db.InsertAllAsync(defaultSettingItems);
         }

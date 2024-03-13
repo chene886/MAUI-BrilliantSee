@@ -19,12 +19,11 @@
                         <SwipeView.RightItems>
                             <SwipeItemView>
                                 <ImageButton
-                                    Margin="4,0,0,0"
                                     BackgroundColor="Transparent"
                                     Command="{Binding CancelFavoriteCommand, Source={RelativeSource AncestorType={x:Type vm:FavoriteViewModel}}}"
                                     CommandParameter="{Binding}"
                                     Source="broken_heart.png"
-                                    WidthRequest="36" />
+                                    WidthRequest="40" />
                             </SwipeItemView>
                         </SwipeView.RightItems>
                         <Frame

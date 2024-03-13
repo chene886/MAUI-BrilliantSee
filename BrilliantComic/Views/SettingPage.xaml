@@ -4,4 +4,83 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     Title="设置"
-    Shell.TabBarIsVisible="False" />
+    Shell.TabBarIsVisible="False">
+    <Grid>
+        <CollectionView
+            BackgroundColor="{StaticResource Backcolor}"
+            IsGrouped="True"
+            ItemsSource="{Binding SettingGroups}">
+            <CollectionView.GroupHeaderTemplate>
+                <DataTemplate>
+                    <VerticalStackLayout Padding="16,8,16,0">
+                        <Label
+                            FontAttributes="Bold"
+                            FontSize="Large"
+                            Text="{Binding Name}" />
+                    </VerticalStackLayout>
+                </DataTemplate>
+            </CollectionView.GroupHeaderTemplate>
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Frame
+                        Margin="14,12,16,0"
+                        Padding="0"
+                        CornerRadius="10">
+                        <Grid BackgroundColor="{StaticResource White}">
+                            <Label
+                                Margin="8,16,0,16"
+                                FontSize="Body"
+                                Text="{Binding Name}"
+                                VerticalOptions="Center" />
+                            <Button
+                                Margin="0,0,8,0"
+                                Padding="8,0,8,1"
+                                BackgroundColor="{StaticResource Primary}"
+                                Clicked="Button_Clicked"
+                                HeightRequest="36"
+                                HorizontalOptions="End"
+                                Text="{Binding Value}"
+                                TextColor="White" />
+                        </Grid>
+                    </Frame>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+        <Frame
+            Margin="0,0,0,120"
+            Padding="0"
+            BackgroundColor="{StaticResource Backcolor}"
+            BorderColor="{StaticResource Primary}"
+            CornerRadius="10"
+            HeightRequest="320"
+            IsVisible="{Binding IsWindowVisible}"
+            WidthRequest="240">
+            <Grid>
+                <Frame
+                    Margin="12,12,12,0"
+                    Padding="0"
+                    BorderColor="White"
+                    CornerRadius="10"
+                    HeightRequest="240"
+                    VerticalOptions="Start">
+                    <ScrollView>
+                        <Label
+                            Margin="8,16,0,16"
+                            FontSize="Body"
+                            Text="{Binding Message}"
+                            VerticalOptions="Start" />
+                    </ScrollView>
+                </Frame>
+                <Button
+                    Margin="48,0,48,12"
+                    Padding="8,0,8,1"
+                    BackgroundColor="{StaticResource Primary}"
+                    Clicked="Button_Clicked"
+                    HeightRequest="36"
+                    Text="确定"
+                    TextColor="White"
+                    VerticalOptions="End" />
+            </Grid>
+        </Frame>
+    </Grid>
+</ContentPage>

@@ -25,7 +25,7 @@ namespace BrilliantComic.Models.Sources
             }
         };
 
-        public string Name { get; set; } = "godamanga";
+        public string Name { get; set; } = "Goda漫画";
 
         [ObservableProperty]
         public bool _isSelected = true;
@@ -64,7 +64,7 @@ namespace BrilliantComic.Models.Sources
                     var comic = new GodaComic("https://godamanga.com" + match.Groups[1].Value, match.Groups[3].Value, match.Groups[2].Value.Replace("%3A", ":").Replace("%2F", "/"), "暂无作者信息")
                     {
                         Source = this,
-                        SourceName = "godamanga",
+                        SourceName = "Goda漫画",
                         LastestUpdateTime = "(暂无最后更新信息)"
                     };
                     comics.Add(comic);

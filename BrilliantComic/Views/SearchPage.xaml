@@ -59,10 +59,10 @@
                                 WidthRequest="90" />
                             <Rectangle
                                 Grid.Column="1"
-                                Fill="{StaticResource Backcolor}"
+                                Fill="Transparent"
                                 HeightRequest="18"
                                 Stroke="{StaticResource Primary}"
-                                StrokeThickness="4"
+                                StrokeThickness="2"
                                 WidthRequest="18" />
                             <Label
                                 Grid.Column="1"
@@ -73,7 +73,6 @@
                                 Text=" ✔"
                                 TextColor="White"
                                 WidthRequest="16" />
-
                         </Grid>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>

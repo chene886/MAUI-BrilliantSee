@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -25,16 +26,34 @@ namespace BrilliantComic.Models.Chapters
         {
             try
             {
-                var msg = (await Comic.Source.HttpClient.GetAsync(Url));
-                if (msg.RequestMessage is null || msg.RequestMessage.RequestUri is null)
-                    throw new Exception("接口异常,请等待维护");
-                var html = (await msg.Content.ReadAsStringAsync()).Replace("\n", string.Empty);
-                var match = Regex.Matches(html, "<noscript [\\s\\S]*?src=\\\"([\\s\\S]*?)\\\"[\\s\\S]*?</noscript>");
                 var list = new List<string>();
-                foreach (Match item in match)
+                var url = Url;
+                var count = 1;
+                var html = string.Empty;
+                MatchCollection match;
+                do
                 {
-                    list.Add(item.Groups[1].Value);
-                }
+                    if (count != 1)
+                    {
+                        url = Url.Replace(".html", $"_{count}.html");
+                    }
+                    var msg = (await Comic.Source.HttpClient.GetAsync(url));
+                    if (msg.RequestMessage is null || msg.RequestMessage.RequestUri is null)
+                    {
+                        if (count == 1)
+                        {
+                            throw new Exception("请求失败");
+                        }
+                        break;
+                    }
+                    html = (await msg.Content.ReadAsStringAsync()).Replace("\n", string.Empty);
+                    match = Regex.Matches(html, "<noscript [\\s\\S]*?src=\\\"([\\s\\S]*?)\\\"[\\s\\S]*?</noscript>");
+                    foreach (Match item in match)
+                    {
+                        list.Add(item.Groups[1].Value);
+                    }
+                    count++;
+                } while (Regex.Matches(html, "点击进入下一页").FirstOrDefault() is not null);
                 if (list.Count == 1) list.Add(list[0]);
                 PageCount = list.Count;
                 return list;

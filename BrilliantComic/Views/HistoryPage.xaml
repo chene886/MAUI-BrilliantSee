@@ -19,10 +19,12 @@
                         <SwipeView.RightItems>
                             <SwipeItemView>
                                 <ImageButton
+
                                     BackgroundColor="Transparent"
                                     Command="{Binding ClearCommand, Source={RelativeSource AncestorType={x:Type vm:HistoryViewModel}}}"
                                     CommandParameter="{Binding}"
-                                    Source="clean.png" />
+                                    Source="clean.png"
+                                    WidthRequest="40" />
                             </SwipeItemView>
                         </SwipeView.RightItems>
                         <Frame
@@ -65,7 +67,6 @@
         </CollectionView>
         <Frame
             Margin="280,576,0,0"
-            Padding="0,0,2,4"
             BackgroundColor="{StaticResource Primary}"
             BorderColor="{StaticResource Primary}"
             CornerRadius="100"
