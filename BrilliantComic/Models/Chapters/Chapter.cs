@@ -42,6 +42,8 @@ namespace BrilliantComic.Models.Chapters
         [ObservableProperty]
         public bool _isSpecial = false;
 
+        public List<string> PicUrls { get; set; } = new List<string>();
+
         public Chapter(string name, string url, int index, bool isSpecial)
         {
             Name = name;
@@ -54,6 +56,6 @@ namespace BrilliantComic.Models.Chapters
         /// 获取章节图片枚举器
         /// </summary>
         /// <returns></returns>
-        public abstract Task<IEnumerable<string>> GetPicEnumeratorAsync();
+        public abstract Task GetPicEnumeratorAsync();
     }
 }

@@ -19,17 +19,17 @@
         </ResourceDictionary>
     </ContentPage.Resources>
     <Grid>
-        <RefreshView Command="{Binding LoadLastChapterCommand}" IsRefreshing="{Binding IsShowRefresh}">
-            <CollectionView ItemsSource="{Binding Images}" Scrolled="CollectionView_Scrolled">
-                <CollectionView.EmptyView>
-                    <ActivityIndicator
-                        Margin="0,0,0,100"
-                        HeightRequest="55"
-                        IsRunning="True"
-                        WidthRequest="55" />
-                </CollectionView.EmptyView>
-                <CollectionView.ItemTemplate>
-                    <DataTemplate>
+        <ListView
+            x:Name="list"
+            HasUnevenRows="True"
+            IsPullToRefreshEnabled="True"
+            IsRefreshing="{Binding IsShowRefresh}"
+            ItemsSource="{Binding Images}"
+            RefreshCommand="{Binding LoadLastChapterCommand}"
+            SeparatorVisibility="None">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <ViewCell>
                         <Grid>
                             <Image x:Name="img" Source="{Binding}" />
                             <Label
@@ -41,13 +41,28 @@
                                 TextColor="Black"
                                 VerticalOptions="Center" />
                         </Grid>
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
-                <CollectionView.Footer>
-                    <HorizontalStackLayout Padding="0,0,0,1" />
-                </CollectionView.Footer>
-            </CollectionView>
-        </RefreshView>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+            <ListView.Footer>
+                <Button
+                    Padding="0,24,0,40"
+                    BackgroundColor="White"
+                    Clicked="Button_Clicked"
+                    CornerRadius="0"
+                    FontAttributes="Italic"
+                    FontSize="24"
+                    IsVisible="{Binding IsShowButton}"
+                    Text="{Binding ButtonContent}"
+                    TextColor="{StaticResource Gray600}"
+                    VerticalOptions="Center" />
+            </ListView.Footer>
+        </ListView>
+        <ActivityIndicator
+            Margin="0,0,0,100"
+            HeightRequest="55"
+            IsRunning="{Binding IsLoading}"
+            WidthRequest="55" />
         <HorizontalStackLayout
             Padding="5,2,10,2"
             BackgroundColor="#95212121"
@@ -55,9 +70,8 @@
             VerticalOptions="End">
             <Label Margin="0,0,5,0">
                 <Label.Text>
-                    <MultiBinding StringFormat="{}{0} {1}/{2}">
+                    <MultiBinding StringFormat="{}{0} 共 {1} 页">
                         <Binding Path="Chapter.Name" />
-                        <Binding Path="CurrentPageNum" />
                         <Binding Path="Chapter.PageCount" />
                     </MultiBinding>
                 </Label.Text>

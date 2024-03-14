@@ -19,7 +19,7 @@ namespace BrilliantComic.Models.Chapters
         /// </summary>
         /// <returns>章节图片枚举器</returns>
         /// <exception cref="Exception"></exception>
-        public override async Task<IEnumerable<string>> GetPicEnumeratorAsync()
+        public override async Task GetPicEnumeratorAsync()
         {
             try
             {
@@ -29,14 +29,12 @@ namespace BrilliantComic.Models.Chapters
                 var html = await msg.Content.ReadAsStringAsync();
                 html = html.Substring(html.IndexOf("w-full h-full"));
                 var match = Regex.Matches(html, "w-full h-full[\\s\\S]*?src=\"(.*?)\"");
-                var list = new List<string>();
                 foreach (Match item in match)
                 {
-                    list.Add(item.Groups[1].Value);
+                    PicUrls.Add(item.Groups[1].Value);
                 }
-                if (list.Count == 1) list.Add(list[0]);
-                PageCount = list.Count;
-                return list;
+                if (PicUrls.Count == 1) PicUrls.Add(PicUrls[0]);
+                PageCount = PicUrls.Count;
             }
             catch (Exception e)
             {

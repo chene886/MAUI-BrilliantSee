@@ -14,14 +14,14 @@ public partial class BrowsePage : ContentPage
         InitializeComponent();
     }
 
-    /// <summary>
-    /// 位置发生变化时
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
-    private async void CollectionView_Scrolled(object sender, ItemsViewScrolledEventArgs e)
+    private async void Button_Clicked(object sender, EventArgs e)
     {
-        await _vm.ViewChanged(e.FirstVisibleItemIndex,e.CenterItemIndex,e.LastVisibleItemIndex);
+        var button = sender as Button;
+        if (button!.Text == "点击加载下一话")
+        {
+            InitializeComponent();
+            await _vm.LoadNextChapterAsync();
+        }        
     }
 
 }

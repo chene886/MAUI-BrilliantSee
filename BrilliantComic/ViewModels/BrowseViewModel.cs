@@ -4,6 +4,7 @@ using BrilliantComic.Services;
 using CommunityToolkit.Maui.Alerts;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Microsoft.Maui.Controls;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -28,11 +29,6 @@ namespace BrilliantComic.ViewModels
         public int _currentChapterIndex = 0;
 
         /// <summary>
-        /// 截止当前章节图片数量
-        /// </summary>
-        public int utillCrrentChapterImageCount = 0;
-
-        /// <summary>
         /// 已加载章节集合
         /// </summary>
         [ObservableProperty]
@@ -41,32 +37,22 @@ namespace BrilliantComic.ViewModels
         /// <summary>
         /// 已加载章节图片集合
         /// </summary>
-        [ObservableProperty]
-        public ObservableCollection<ImageSource> _images = new ObservableCollection<ImageSource>();
+        public ObservableCollection<string> Images { get; set; } = new();
 
         /// <summary>
         /// 是否正在加载
         /// </summary>
-        public bool IsLoading { get; set; } = false;
+        [ObservableProperty]
+        public bool _isLoading = false;
 
         [ObservableProperty]
         public bool _isShowRefresh = false;
 
-        /// <summary>
-        /// 当前界面第一个item的索引
-        /// </summary>
-        private int crrentViewFirstItemIndex = 0;
+        [ObservableProperty]
+        public bool _isShowButton = false;
 
-        /// <summary>
-        /// 当前界面最后一个item的索引
-        /// </summary>
-        private int crrentViewLastItemIndex = 1;
-
-        /// <summary>
-        /// 位于当前界面正中的item的索引
-        /// </summary>
-        private int crrentViewCentricItemIndex = 0;
-
+        [ObservableProperty]
+        public string _buttonContent = "点击加载下一话";
         /// <summary>
         /// 当前页码
         /// </summary>
@@ -94,20 +80,10 @@ namespace BrilliantComic.ViewModels
                 {
                     _currentChapterIndex = value;
                     OnPropertyChanged(nameof(CurrentChapterIndex));
-                    var newChapter = LoadedChapter[value];
-                    if (Chapter != newChapter)
-                    {
-                        if (Chapter!.Index > newChapter.Index) utillCrrentChapterImageCount -= Chapter.PageCount;
-                        else utillCrrentChapterImageCount += newChapter.PageCount;
-                        Chapter!.IsSpecial = false;
-                        Chapter = LoadedChapter[value];
-                        Chapter.IsSpecial = true;
-                    }
-                    else
-                    {
-                        utillCrrentChapterImageCount += LoadedChapter[0].PageCount;
-                    }
                 }
+                Chapter!.IsSpecial = false;
+                Chapter = LoadedChapter[value];
+                Chapter.IsSpecial = true;
             }
         }
 
@@ -128,6 +104,7 @@ namespace BrilliantComic.ViewModels
             {
                 return;
             }
+            IsLoading = true;
             var LastIndex = Chapter.Comic.LastReadedChapterIndex;
             if (Chapter.Index != LastIndex)
             {
@@ -137,11 +114,14 @@ namespace BrilliantComic.ViewModels
                     if (Chapter.Comic.IsReverseList) position = Chapter.Comic.Chapters.Count() - LastIndex - 1;
                     Chapter.Comic.Chapters.ToList()[position].IsSpecial = false;
                 }
-                _ = StoreLastReadedChapterIndex();
                 Chapter.IsSpecial = true;
+                _ = StoreLastReadedChapterIndex();
             }
             await LoadChapterPicAsync(Chapter, "Init");
             OnPropertyChanged(nameof(Chapter));
+            IsLoading = false;
+            IsShowButton = true;
+            LoadedChapter.Add(Chapter);
         }
 
         /// <summary>
@@ -152,47 +132,45 @@ namespace BrilliantComic.ViewModels
         /// <returns></returns>
         private async Task LoadChapterPicAsync(Chapter chapter, string flag)
         {
-            try
+            if(chapter.PicUrls.Count == 0)
             {
-                var tasks = new List<Task<ImageSource>>();
-                var picEnumerator = await chapter.GetPicEnumeratorAsync();
-                if (flag == "Last")
+                try
                 {
-                    picEnumerator = picEnumerator.Reverse();
+                    await chapter.GetPicEnumeratorAsync();
                 }
-                var sourceName = chapter.Comic.SourceName;
-                var results = Array.Empty<ImageSource>();
-                if (sourceName != "mangahasu")
+                catch (Exception e)
                 {
-                    results = picEnumerator.Select(pic => ImageSource.FromUri(new Uri(pic))).ToArray();
+                    if (e.Message == "请求失败") _ = Toast.Make(e.Message).Show();
+                    else _ = Toast.Make("好像出了点小问题，用浏览器打开试试吧").Show();
+                    throw new Exception(e.Message);
                 }
-                else
-                {
-                    foreach (var pic in picEnumerator)
-                    {
-                        tasks.Add(Task.Run(async () =>
-                        {
-                            byte[] bytes = await chapter.Comic.Source.HttpClient.GetByteArrayAsync(pic);
-                            return ImageSource.FromStream(() => new MemoryStream(bytes));
-                        }));
-                    }
-                    results = await Task.WhenAll(tasks);
-                }
-                foreach (var image in results)
-                {
-                    if (flag == "Last") Images.Insert(0, image);
-                    else Images.Add(image);
-                }
-                if (flag == "Last") LoadedChapter.Insert(0, chapter);
-                else LoadedChapter.Add(chapter);
-                if (flag == "Init") utillCrrentChapterImageCount = Chapter!.PageCount;
             }
-            catch (Exception e)
+            Images.Clear();
+            foreach (var image in chapter.PicUrls)
             {
-                if (e.Message == "请求失败") _ = Toast.Make(e.Message).Show();
-                else _ = Toast.Make("好像出了点小问题，用浏览器打开试试吧").Show();
-                throw new Exception(e.Message);
+                Images.Add(image);
             }
+            ButtonContent = chapter!.Index == chapter.Comic.ChapterCount - 1? "已是最新一话" : "点击加载下一话";
+            //var tasks = new List<Task<ImageSource>>();
+            //var sourceName = chapter.Comic.SourceName;
+            //var results = Array.Empty<ImageSource>();
+            //if (sourceName != "mangahasu")
+            //{
+            //    results = picEnumerator.Select(pic => ImageSource.FromUri(new Uri(pic))).ToArray();
+            //}
+            //else
+            //{
+            //foreach (var pic in picEnumerator)
+            //{
+            //    tasks.Add(Task.Run(async () =>
+            //    {
+            //        byte[] bytes = await Chapter!.Comic.Source.HttpClient.GetByteArrayAsync(new Uri(pic));
+            //        return ImageSource.FromStream(() => new MemoryStream(bytes));
+            //    }));
+            //}
+            //results = await Task.WhenAll(tasks);
+            //}
+
         }
 
         /// <summary>
@@ -202,21 +180,47 @@ namespace BrilliantComic.ViewModels
         /// <returns></returns>
         public async Task<bool> UpdateChapterAsync(string flag)
         {
-            Chapter? newChapter = Chapter!.Comic.GetNearChapter(Chapter, flag);
-            if (newChapter is not null)
+            Chapter? newChapter;
+            var hasNew = false;
+            if (CurrentChapterIndex > 0 && flag == "Last")
             {
-                try
-                {
-                    await LoadChapterPicAsync(newChapter, flag);
-                    if (flag == "Last")
-                    {
-                        CurrentChapterIndex++;
-                    }
-                    return true;
-                }
-                catch { }
+                newChapter = LoadedChapter[CurrentChapterIndex - 1];
+                CurrentChapterIndex--;
             }
-            return false;
+            else if (CurrentChapterIndex < LoadedChapter.Count - 1 && flag == "Next")
+            {
+                newChapter = LoadedChapter[CurrentChapterIndex + 1];
+                CurrentChapterIndex++;
+            }
+            else
+            {
+                hasNew = true;
+                newChapter = Chapter!.Comic.GetNearChapter(Chapter, flag);
+                if (newChapter is null)
+                {
+                    return false;
+                }
+            }
+            try
+            {
+                await LoadChapterPicAsync(newChapter, flag);   
+            }
+            catch { }
+            if (hasNew)
+            {
+                if (flag == "Next")
+                {
+                    LoadedChapter.Add(newChapter);
+                    CurrentChapterIndex++;
+                }
+                else
+                {
+                    LoadedChapter.Insert(0, newChapter);
+                    CurrentChapterIndex = 0;
+                }           
+            }
+            _ = StoreLastReadedChapterIndex();
+            return true;
         }
 
         /// <summary>
@@ -237,68 +241,10 @@ namespace BrilliantComic.ViewModels
             Chapter.Comic.Category = category;
         }
 
-        /// <summary>
-        /// 根据视图变化更新当前章节和页码
-        /// </summary>
-        /// <param name="fIndex">视图变化后第一个item索引</param>
-        /// <param name="cIndex">视图变化后位于正中的item索引</param>
-        /// <param name="lIndex">视图变化后最后一个item索引</param>
-        /// <returns></returns>
-        public async Task ViewChanged(int fIndex, int cIndex, int lIndex)
-        {
-            if (cIndex != crrentViewCentricItemIndex)
-            {
-                if (cIndex - crrentViewCentricItemIndex == -1)
-                {
-                    CurrentPageNum--;
-                    if (cIndex != 0 && cIndex == utillCrrentChapterImageCount - Chapter!.PageCount - 1)
-                    {
-                        CurrentChapterIndex--;
-                        CurrentPageNum = Chapter.PageCount;
-                        _ = StoreLastReadedChapterIndex();
-                    }
-                }
-                else if (cIndex - crrentViewCentricItemIndex == 1)
-                {
-                    CurrentPageNum++;
-                    if (cIndex == utillCrrentChapterImageCount)
-                    {
-                        CurrentChapterIndex++;
-                        CurrentPageNum = 1;
-                        _ = StoreLastReadedChapterIndex();
-                    }
-                }
-                crrentViewCentricItemIndex = cIndex;
-            }
-            if (fIndex != crrentViewFirstItemIndex)
-            {
-                crrentViewFirstItemIndex = fIndex;
-            }
-            if (lIndex != crrentViewLastItemIndex)
-            {
-                crrentViewLastItemIndex = lIndex;
-                if (Images.ToList().Count != 0 && lIndex == Images.LongCount() && !IsLoading)
-                {
-                    IsLoading = true;
-                    _ = Toast.Make("正在加载下一章...").Show();
-                    var result = await UpdateChapterAsync("Next");
-                    if (result)
-                    {
-                        _ = Toast.Make("加载成功").Show();
-                    }
-                    else
-                    {
-                        _ = Toast.Make("已是最新一话").Show();
-                    }
-                    IsLoading = false;
-                }
-            }
-        }
-
         [RelayCommand]
         public async Task LoadLastChapterAsync()
         {
-            _ = Toast.Make("正在加载上一章...").Show();
+            _ = Toast.Make("正在加载上一话...").Show();
             var result = await UpdateChapterAsync("Last");
             if (result)
             {
@@ -308,8 +254,23 @@ namespace BrilliantComic.ViewModels
             {
                 _ = Toast.Make("已是第一话").Show();
             }
-
             IsShowRefresh = false;
+        }
+
+        public async Task LoadNextChapterAsync()
+        {
+            IsLoading = true;
+            _ = Toast.Make("正在加载下一话...").Show();
+            var result = await UpdateChapterAsync("Next");
+            if (result)
+            {
+                _ = Toast.Make("加载成功").Show();
+            }
+            else
+            {
+                _ = Toast.Make("已是最新一话").Show();
+            }
+            IsLoading = false;
         }
     }
 }

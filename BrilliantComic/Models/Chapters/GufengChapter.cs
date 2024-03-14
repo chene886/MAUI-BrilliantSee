@@ -14,7 +14,7 @@ namespace BrilliantComic.Models.Chapters
         {
         }
 
-        public override async Task<IEnumerable<string>> GetPicEnumeratorAsync()
+        public override async Task GetPicEnumeratorAsync()
         {
             try
             {
@@ -31,14 +31,12 @@ namespace BrilliantComic.Models.Chapters
                 html = html.Substring(start, end - start);
                 var match = Regex.Matches(html, "[\\[,]\"(.*?)\"");
                 var pathHead = "https://res.xiaoqinre.com/" + Regex.Match(html, "chapterPath = \"(.*?)\"").Groups[1].Value;
-                var list = new List<string>();
                 foreach (Match item in match)
                 {
-                    list.Add(pathHead + item.Groups[1].Value);
+                    PicUrls.Add(pathHead + item.Groups[1].Value);
                 }
-                if (list.Count == 1) list.Add(list[0]);
-                PageCount = list.Count;
-                return list;
+                if (PicUrls.Count == 1) PicUrls.Add(PicUrls[0]);
+                PageCount = PicUrls.Count;
             }
             catch (Exception e)
             {

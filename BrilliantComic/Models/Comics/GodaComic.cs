@@ -122,6 +122,7 @@ namespace BrilliantComic.Models.Comics
             await MainThread.InvokeOnMainThreadAsync(() =>
             {
                 Chapters = chapters;
+                ChapterCount = Chapters.Count();
             });
         }
 

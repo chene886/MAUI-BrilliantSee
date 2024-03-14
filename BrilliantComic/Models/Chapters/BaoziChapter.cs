@@ -18,15 +18,14 @@ namespace BrilliantComic.Models.Chapters
         }
 
         /// <summary>
-        /// 获取章节图片枚举器
+        /// 获取章节图片
         /// </summary>
         /// <returns></returns>
         /// <exception cref="Exception"></exception>
-        public override async Task<IEnumerable<string>> GetPicEnumeratorAsync()
+        public override async Task GetPicEnumeratorAsync()
         {
             try
             {
-                var list = new List<string>();
                 var url = Url;
                 var count = 1;
                 var html = string.Empty;
@@ -50,13 +49,12 @@ namespace BrilliantComic.Models.Chapters
                     match = Regex.Matches(html, "<noscript [\\s\\S]*?src=\\\"([\\s\\S]*?)\\\"[\\s\\S]*?</noscript>");
                     foreach (Match item in match)
                     {
-                        list.Add(item.Groups[1].Value);
+                        PicUrls.Add(item.Groups[1].Value);
                     }
                     count++;
                 } while (Regex.Matches(html, "点击进入下一页").FirstOrDefault() is not null);
-                if (list.Count == 1) list.Add(list[0]);
-                PageCount = list.Count;
-                return list;
+                if (PicUrls.Count == 1) PicUrls.Add(PicUrls[0]);
+                PageCount = PicUrls.Count;
             }
             catch (Exception e)
             {

@@ -90,6 +90,11 @@ namespace BrilliantComic.Models.Comics
         public IEnumerable<Chapter> _chapters = new List<Chapter>();
 
         /// <summary>
+        /// 章节数量
+        /// </summary>
+        public int ChapterCount { get; set; } = 0;
+
+        /// <summary>
         /// 漫画章节是否倒序
         /// </summary>
         public bool IsReverseList { get; set; } = true;
