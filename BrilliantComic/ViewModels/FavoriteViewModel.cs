@@ -17,6 +17,8 @@ namespace BrilliantComic.ViewModels
     {
         public readonly DBService _db;
 
+        public readonly AIService _aiService;
+
         /// <summary>
         /// 是否正在获取结果
         /// </summary>
@@ -50,9 +52,10 @@ namespace BrilliantComic.ViewModels
             }
         }
 
-        public FavoriteViewModel(DBService db)
+        public FavoriteViewModel(DBService db, AIService aiService)
         {
             _db = db;
+            _aiService = aiService;
         }
 
         /// <summary>

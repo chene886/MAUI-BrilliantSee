@@ -76,7 +76,7 @@ namespace BrilliantComic.ViewModels
                 IsGettingResult = true;
                 IsSourceListVisible = false;
                 Comics.Clear();
-                await _sourceService.SearchAsync(keyword, Comics);
+                await _sourceService.SearchAsync(keyword, Comics, "Default");
                 if (Comics.Count == 0) { _ = Toast.Make("搜索结果为空，换一个图源试试吧").Show(); }
                 IsGettingResult = false;
             }

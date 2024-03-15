@@ -52,9 +52,17 @@ namespace BrilliantComic.Services
         /// <param name="keyword">搜索关键词</param>
         /// <param name="comics">保存结果的集合</param>
         /// <returns></returns>
-        public async Task SearchAsync(string keyword, ObservableCollection<Comic> comics)
+        public async Task SearchAsync(string keyword, ObservableCollection<Comic> comics, string flag)
         {
-            var sources = _sources.Values.Where(s => s.IsSelected == true);
+            IEnumerable<ISource> sources;
+            if (flag == "Default")
+            {
+                sources = _sources.Values.Where(s => s.IsSelected == true);
+            }
+            else
+            {
+                sources = _sources.Values;
+            }
             //并发使用所有图源去搜索
             var tasks = new List<Task>();
             foreach (var source in sources)

@@ -54,6 +54,7 @@ namespace BrilliantComic
             //服务
             services.AddSingleton<DBService>();
             services.AddSingleton<SourceService>();
+            services.AddSingleton<AIService>();
         }
     }
 }
