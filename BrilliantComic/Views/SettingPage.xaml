@@ -15,6 +15,7 @@
                     <VerticalStackLayout Padding="16,8,16,0">
                         <Label
                             FontAttributes="Bold"
+                            FontFamily="Default"
                             FontSize="Large"
                             Text="{Binding Name}" />
                     </VerticalStackLayout>
@@ -29,6 +30,7 @@
                         <Grid BackgroundColor="{StaticResource White}">
                             <Label
                                 Margin="8,16,0,16"
+                                FontFamily="Default"
                                 FontSize="Body"
                                 Text="{Binding Name}"
                                 VerticalOptions="Center" />
@@ -37,6 +39,7 @@
                                 Padding="8,0,8,1"
                                 BackgroundColor="{StaticResource Primary}"
                                 Clicked="Button_Clicked"
+                                FontFamily="Default"
                                 HeightRequest="36"
                                 HorizontalOptions="End"
                                 Text="{Binding Value}"
@@ -76,6 +79,7 @@
                     Padding="8,0,8,1"
                     BackgroundColor="{StaticResource Primary}"
                     Clicked="Button_Clicked"
+                    FontFamily="Default"
                     HeightRequest="36"
                     Text="确定"
                     TextColor="White"

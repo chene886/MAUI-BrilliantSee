@@ -14,14 +14,13 @@ public partial class BrowsePage : ContentPage
         InitializeComponent();
     }
 
-    private async void Button_Clicked(object sender, EventArgs e)
+    private void Button_Clicked(object sender, EventArgs e)
     {
         var button = sender as Button;
         if (button!.Text == "点击加载下一话")
         {
-            InitializeComponent();
-            await _vm.LoadNextChapterAsync();
-        }        
+            this.list.Command.Execute("Next");
+            this.listView.ScrollTo(_vm.Images.First(), ScrollToPosition.Start, false);
+        }
     }
-
 }

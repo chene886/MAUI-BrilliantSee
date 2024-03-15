@@ -19,45 +19,50 @@
         </ResourceDictionary>
     </ContentPage.Resources>
     <Grid>
-        <ListView
+        <RefreshView
             x:Name="list"
-            HasUnevenRows="True"
-            IsPullToRefreshEnabled="True"
-            IsRefreshing="{Binding IsShowRefresh}"
-            ItemsSource="{Binding Images}"
-            RefreshCommand="{Binding LoadLastChapterCommand}"
-            SeparatorVisibility="None">
-            <ListView.ItemTemplate>
-                <DataTemplate>
-                    <ViewCell>
-                        <Grid>
-                            <Image x:Name="img" Source="{Binding}" />
-                            <Label
-                                Margin="100"
-                                HeightRequest="400"
-                                HorizontalOptions="Center"
-                                IsVisible="{Binding IsLoading, Source={x:Reference img}}"
-                                Text="加载中..."
-                                TextColor="Black"
-                                VerticalOptions="Center" />
-                        </Grid>
-                    </ViewCell>
-                </DataTemplate>
-            </ListView.ItemTemplate>
-            <ListView.Footer>
-                <Button
-                    Padding="0,24,0,40"
-                    BackgroundColor="White"
-                    Clicked="Button_Clicked"
-                    CornerRadius="0"
-                    FontAttributes="Italic"
-                    FontSize="24"
-                    IsVisible="{Binding IsShowButton}"
-                    Text="{Binding ButtonContent}"
-                    TextColor="{StaticResource Gray600}"
-                    VerticalOptions="Center" />
-            </ListView.Footer>
-        </ListView>
+            Command="{Binding LoadNearChapterCommand}"
+            CommandParameter="Last"
+            IsRefreshing="{Binding IsShowRefresh}">
+            <ListView
+                x:Name="listView"
+                HasUnevenRows="True"
+                IsPullToRefreshEnabled="False"
+                ItemsSource="{Binding Images}"
+                SeparatorVisibility="None">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <Grid>
+                                <Image x:Name="img" Source="{Binding}" />
+                                <Label
+                                    Margin="100"
+                                    HeightRequest="400"
+                                    HorizontalOptions="Center"
+                                    IsVisible="{Binding IsLoading, Source={x:Reference img}}"
+                                    Text="加载中..."
+                                    TextColor="Black"
+                                    VerticalOptions="Center" />
+                            </Grid>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+                <ListView.Footer>
+                    <Button
+                        Padding="0,24,0,40"
+                        BackgroundColor="White"
+                        Clicked="Button_Clicked"
+                        CornerRadius="0"
+                        FontAttributes="Italic"
+                        FontFamily="Default"
+                        FontSize="24"
+                        IsVisible="{Binding IsShowButton}"
+                        Text="{Binding ButtonContent}"
+                        TextColor="{StaticResource Gray600}"
+                        VerticalOptions="Center" />
+                </ListView.Footer>
+            </ListView>
+        </RefreshView>
         <ActivityIndicator
             Margin="0,0,0,100"
             HeightRequest="55"

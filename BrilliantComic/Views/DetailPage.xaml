@@ -75,6 +75,7 @@
                             <Label
                                 Margin="1,0"
                                 BackgroundColor="#95212121"
+                                FontFamily="Default"
                                 FontSize="12"
                                 HorizontalOptions="End"
                                 Text="{Binding Comic.Status}"
@@ -87,25 +88,26 @@
                         Grid.Column="1"
                         Spacing="6">
                         <Label
-                            FontFamily="Bold"
+                            FontAttributes="Bold"
+                            FontFamily="Default"
                             FontSize="18"
                             LineBreakMode="TailTruncation"
                             MaxLines="1"
                             Text="{Binding Comic.Name}" />
                         <Label
                             Margin="0,0,0,2"
-                            FontFamily="Bold"
+                            FontFamily="Default"
                             FontSize="Body"
                             MaxLines="1"
                             Text="{Binding Comic.Author}" />
                         <Label
-                            FontFamily="Bold"
+                            FontFamily="Default"
                             FontSize="13"
                             HeightRequest="88"
                             MaxLines="5"
                             Text="{Binding Comic.Description}" />
                         <Label
-                            FontFamily="Bold"
+                            FontFamily="Default"
                             FontSize="13"
                             HorizontalOptions="End"
                             Text="{Binding Comic.LastestUpdateTime}" />
@@ -135,6 +137,7 @@
                         </Frame.Triggers>
                         <Label
                             x:Name="label"
+                            FontFamily="Default"
                             Style="{StaticResource labelStyle}"
                             Text="{Binding Name, Mode=OneWay}"
                             TextColor="{StaticResource Gray500}" />

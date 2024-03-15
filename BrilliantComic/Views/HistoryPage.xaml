@@ -19,7 +19,6 @@
                         <SwipeView.RightItems>
                             <SwipeItemView>
                                 <ImageButton
-
                                     BackgroundColor="Transparent"
                                     Command="{Binding ClearCommand, Source={RelativeSource AncestorType={x:Type vm:HistoryViewModel}}}"
                                     CommandParameter="{Binding}"
@@ -39,8 +38,8 @@
                             <Grid RowSpacing="1">
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="160" />
-                                    <RowDefinition Height="18" />
-                                    <RowDefinition Height="18" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
                                 </Grid.RowDefinitions>
                                 <Image
                                     Aspect="AspectFill"
@@ -50,12 +49,14 @@
                                     Grid.Row="1"
                                     Padding="2,0"
                                     FontAttributes="Bold"
+                                    FontFamily="Default"
                                     HorizontalOptions="Start"
                                     LineBreakMode="TailTruncation"
                                     Text="{Binding Name}" />
                                 <Label
                                     Grid.Row="2"
                                     Padding="2,0"
+                                    FontFamily="Default"
                                     FontSize="13"
                                     HorizontalOptions="Start"
                                     Text="{Binding SourceName}" />

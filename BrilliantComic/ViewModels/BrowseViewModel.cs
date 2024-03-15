@@ -53,6 +53,7 @@ namespace BrilliantComic.ViewModels
 
         [ObservableProperty]
         public string _buttonContent = "点击加载下一话";
+
         /// <summary>
         /// 当前页码
         /// </summary>
@@ -132,7 +133,7 @@ namespace BrilliantComic.ViewModels
         /// <returns></returns>
         private async Task LoadChapterPicAsync(Chapter chapter, string flag)
         {
-            if(chapter.PicUrls.Count == 0)
+            if (chapter.PicUrls.Count == 0)
             {
                 try
                 {
@@ -150,7 +151,7 @@ namespace BrilliantComic.ViewModels
             {
                 Images.Add(image);
             }
-            ButtonContent = chapter!.Index == chapter.Comic.ChapterCount - 1? "已是最新一话" : "点击加载下一话";
+            ButtonContent = chapter!.Index == chapter.Comic.ChapterCount - 1 ? "已是最新一话" : "点击加载下一话";
             //var tasks = new List<Task<ImageSource>>();
             //var sourceName = chapter.Comic.SourceName;
             //var results = Array.Empty<ImageSource>();
@@ -170,7 +171,6 @@ namespace BrilliantComic.ViewModels
             //}
             //results = await Task.WhenAll(tasks);
             //}
-
         }
 
         /// <summary>
@@ -203,7 +203,7 @@ namespace BrilliantComic.ViewModels
             }
             try
             {
-                await LoadChapterPicAsync(newChapter, flag);   
+                await LoadChapterPicAsync(newChapter, flag);
             }
             catch { }
             if (hasNew)
@@ -217,7 +217,7 @@ namespace BrilliantComic.ViewModels
                 {
                     LoadedChapter.Insert(0, newChapter);
                     CurrentChapterIndex = 0;
-                }           
+                }
             }
             _ = StoreLastReadedChapterIndex();
             return true;
@@ -242,35 +242,23 @@ namespace BrilliantComic.ViewModels
         }
 
         [RelayCommand]
-        public async Task LoadLastChapterAsync()
+        public async Task LoadNearChapterAsync(string flag)
         {
-            _ = Toast.Make("正在加载上一话...").Show();
-            var result = await UpdateChapterAsync("Last");
-            if (result)
-            {
-                _ = Toast.Make("加载成功").Show();
-            }
-            else
-            {
-                _ = Toast.Make("已是第一话").Show();
-            }
-            IsShowRefresh = false;
-        }
-
-        public async Task LoadNextChapterAsync()
-        {
+            var result = false;
+            var unSuccess = flag == "Next" ? "已是最新一话" : "已是第一话";
             IsLoading = true;
-            _ = Toast.Make("正在加载下一话...").Show();
-            var result = await UpdateChapterAsync("Next");
+            _ = Toast.Make("正在加载...").Show();
+            result = await UpdateChapterAsync(flag);
             if (result)
             {
                 _ = Toast.Make("加载成功").Show();
             }
             else
             {
-                _ = Toast.Make("已是最新一话").Show();
+                _ = Toast.Make(unSuccess).Show();
             }
             IsLoading = false;
+            IsShowRefresh = false;
         }
     }
 }
