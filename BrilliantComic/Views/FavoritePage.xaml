@@ -12,7 +12,10 @@
             Text="搜索" />
     </ContentPage.ToolbarItems>
     <Grid>
-        <CollectionView ItemsLayout="VerticalGrid, 3" ItemsSource="{Binding Comics}">
+        <CollectionView
+            ItemsLayout="VerticalGrid, 3"
+            ItemsSource="{Binding Comics}"
+            ZIndex="-1">
             <CollectionView.ItemTemplate>
                 <DataTemplate>
                     <SwipeView>
@@ -83,7 +86,8 @@
             CornerRadius="100"
             HasShadow="True"
             HeightRequest="56"
-            WidthRequest="56">
+            WidthRequest="56"
+            ZIndex="0">
             <Frame.GestureRecognizers>
                 <TapGestureRecognizer Tapped="AITapped" />
             </Frame.GestureRecognizers>
@@ -104,7 +108,8 @@
             HasShadow="True"
             HeightRequest="320"
             IsVisible="False"
-            WidthRequest="240">
+            WidthRequest="240"
+            ZIndex="0">
             <VerticalStackLayout Spacing="20" VerticalOptions="Center">
                 <Entry
                     x:Name="model"
@@ -145,7 +150,8 @@
             CornerRadius="100"
             HasShadow="True"
             HeightRequest="56"
-            WidthRequest="56">
+            WidthRequest="56"
+            ZIndex="0">
             <Frame.GestureRecognizers>
                 <TapGestureRecognizer Command="{Binding CheckForUpdatedCommand}" Tapped="TapGestureRecognizer_Tapped" />
             </Frame.GestureRecognizers>
@@ -159,6 +165,7 @@
             HeightRequest="55"
             IsRunning="True"
             IsVisible="{Binding IsGettingResult}"
-            WidthRequest="55" />
+            WidthRequest="55"
+            ZIndex="1" />
     </Grid>
 </ContentPage>

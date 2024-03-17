@@ -1,5 +1,6 @@
 using BrilliantComic.ViewModels;
 using CommunityToolkit.Maui.Alerts;
+using CommunityToolkit.Maui.Core.Platform;
 
 namespace BrilliantComic.Views;
 
@@ -46,8 +47,9 @@ public partial class FavoritePage : ContentPage
     private void AITapped(object sender, TappedEventArgs e)
     {
         TapGestureRecognizer_Tapped(sender, e);
-        if (_vm._aiService.hasModel)
+        if (_vm.hasModel)
         {
+            this.pormpt.Text = string.Empty;
             this.model.IsVisible = false;
             this.key.IsVisible = false;
             this.url.IsVisible = false;
@@ -67,7 +69,7 @@ public partial class FavoritePage : ContentPage
     {
         _vm.IsGettingResult = true;
         var message = string.Empty;
-        if (_vm._aiService.hasModel)
+        if (_vm.hasModel)
         {
             await _vm._aiService.SolvePromptAsync(this.pormpt.Text);
             message = "圆满完成任务";
@@ -80,12 +82,11 @@ public partial class FavoritePage : ContentPage
             }
             else
             {
-                _vm._aiService.UpdateModel(this.model.Text, this.key.Text, this.url.Text);
+                _vm.UpdateModel(this.model.Text, this.key.Text, this.url.Text);
                 message = "模型信息已导入";
             }
         }
         _vm.IsGettingResult = false;
-        this.AIWindow.IsVisible = false;
         _ = Toast.Make(message).Show();
     }
 }

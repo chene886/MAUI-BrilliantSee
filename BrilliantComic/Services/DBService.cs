@@ -65,7 +65,7 @@ namespace BrilliantComic.Services
                 new SettingItem { Name = "用户协议", Value = "点击查看", Category = "关于" },
                 new SettingItem { Name = "ModelId", Value = "", Category = "AIModel" },
                 new SettingItem { Name = "ApiKey", Value ="", Category = "AIModel" },
-                new SettingItem { Name = "ApiUrl", Value = "", Category = "AIModel" }
+                new SettingItem { Name = "ApiUrl", Value = "", Category = "AIModel" },
             };
             await _db.InsertAllAsync(defaultSettingItems);
         }

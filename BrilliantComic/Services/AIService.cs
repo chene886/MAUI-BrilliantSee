@@ -2,66 +2,31 @@
 using BrilliantComic.Models;
 using Microsoft.SemanticKernel;
 using Microsoft.SemanticKernel.Connectors.OpenAI;
+using BrilliantComic.Models.Comics;
+using BrilliantComic.Models.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.ComponentModel;
+using System.Runtime.Intrinsics.Arm;
 
 namespace BrilliantComic.Services
 {
     public class AIService
     {
         private readonly DBService _db;
+        private readonly SourceService _sourceService;
         public Kernel kernel { get; set; } = new Kernel();
-        private KernelPlugin? kernelPlugins { get; set; }
-        private string pluginDirectory { get; set; } = string.Empty;
-        public bool hasModel { get; set; } = false;
-        private List<SettingItem> modelConfigs { get; set; } = new List<SettingItem>();
 
-        public AIService(DBService db)
+        public AIService(DBService db, SourceService sourceService)
         {
             _db = db;
-            _ = InitModelAsync();
+            _sourceService = sourceService;
         }
 
-        public async Task InitModelAsync()
-        {
-            modelConfigs = await _db.GetSettingItemsAsync("AIModel");
-            var modelId = modelConfigs.Where(s => s.Name == "ModelId").First().Value;
-            var apiKey = modelConfigs.Where(s => s.Name == "ApiKey").First().Value;
-            var apiUrl = modelConfigs.Where(s => s.Name == "ApiUrl").First().Value;
-            if (modelId != "" && apiKey != "" && apiUrl != "")
-            {
-                UpdateModel(modelId, apiKey, apiUrl);
-                hasModel = true;
-            }
-        }
-
-        public void UpdateModel(string model, string key, string url)
-        {
-            InitKernel(model, key, url);
-            foreach (var item in modelConfigs)
-            {
-                switch (item.Name)
-                {
-                    case "ModelId":
-                        item.Value = model;
-                        break;
-
-                    case "ApiKey":
-                        item.Value = key;
-                        break;
-
-                    case "ApiUrl":
-                        item.Value = url;
-                        break;
-                }
-                _ = _db.UpdateSettingItemAsync(item);
-            }
-        }
-
-        private void InitKernel(string model, string key, string url)
+        public void InitKernel(string model, string key, string url)
         {
             var handler = new OpenAIHttpClentHandler();
             handler.url = url;
@@ -71,9 +36,7 @@ namespace BrilliantComic.Services
                 apiKey: key,
                 httpClient: new HttpClient(handler));
             kernel = builder.Build();
-
-            pluginDirectory = Path.Combine(System.IO.Directory.GetCurrentDirectory(), "Plugins");
-            kernelPlugins = kernel.ImportPluginFromPromptDirectory(pluginDirectory);
+            kernel.ImportPluginFromObject(new Plugins.ComicPlugin(_db, _sourceService));
         }
 
         public async Task<string> SolvePromptAsync(string msg)
