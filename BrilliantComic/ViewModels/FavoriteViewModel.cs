@@ -18,8 +18,6 @@ namespace BrilliantComic.ViewModels
     {
         public readonly DBService _db;
 
-        public readonly AIService _aiService;
-
         /// <summary>
         /// 是否正在获取结果
         /// </summary>
@@ -32,9 +30,6 @@ namespace BrilliantComic.ViewModels
         /// 储存收藏漫画集合
         /// </summary>
         public ObservableCollection<Comic> Comics { get; set; } = new();
-
-        public bool hasModel { get; set; } = false;
-        private List<SettingItem> modelConfigs { get; set; } = new List<SettingItem>();
 
         /// <summary>
         /// 加载收藏漫画
@@ -56,48 +51,9 @@ namespace BrilliantComic.ViewModels
             }
         }
 
-        public FavoriteViewModel(DBService db, AIService aiService)
+        public FavoriteViewModel(DBService db)
         {
             _db = db;
-            _aiService = aiService;
-            _ = InitModelAsync();
-        }
-
-        public async Task InitModelAsync()
-        {
-            modelConfigs = await _db.GetSettingItemsAsync("AIModel");
-            var modelId = modelConfigs.Where(s => s.Name == "ModelId").First().Value;
-            var apiKey = modelConfigs.Where(s => s.Name == "ApiKey").First().Value;
-            var apiUrl = modelConfigs.Where(s => s.Name == "ApiUrl").First().Value;
-            if (modelId != "" && apiKey != "" && apiUrl != "")
-            {
-                _aiService.InitKernel(modelId, apiKey, apiUrl);
-                hasModel = true;
-            }
-        }
-
-        public void UpdateModel(string model, string key, string url)
-        {
-            _aiService.InitKernel(model, key, url);
-            foreach (var item in modelConfigs)
-            {
-                switch (item.Name)
-                {
-                    case "ModelId":
-                        item.Value = model;
-                        break;
-
-                    case "ApiKey":
-                        item.Value = key;
-                        break;
-
-                    case "ApiUrl":
-                        item.Value = url;
-                        break;
-                }
-                _ = _db.UpdateSettingItemAsync(item);
-            }
-            hasModel = true;
         }
 
         /// <summary>
@@ -169,5 +125,11 @@ namespace BrilliantComic.ViewModels
                         _ = Toast.Make(message).Show();
                     });
                 });
+
+        [RelayCommand]
+        private async Task JumpToAIPage()
+        {
+            await Shell.Current.GoToAsync("AIPage");
+        }
     }
 }

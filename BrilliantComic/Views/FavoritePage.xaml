@@ -89,7 +89,7 @@
             WidthRequest="56"
             ZIndex="0">
             <Frame.GestureRecognizers>
-                <TapGestureRecognizer Tapped="AITapped" />
+                <TapGestureRecognizer Command="{Binding JumpToAIPageCommand}" Tapped="TapGestureRecognizer_Tapped" />
             </Frame.GestureRecognizers>
             <Label
                 FontAttributes="Bold"
@@ -98,49 +98,6 @@
                 Text="AI"
                 TextColor="White"
                 VerticalOptions="Center" />
-        </Frame>
-        <Frame
-            x:Name="AIWindow"
-            Margin="0,0,0,120"
-            BackgroundColor="White"
-            BorderColor="Transparent"
-            CornerRadius="10"
-            HasShadow="True"
-            HeightRequest="320"
-            IsVisible="False"
-            WidthRequest="240"
-            ZIndex="0">
-            <VerticalStackLayout Spacing="20" VerticalOptions="Center">
-                <Entry
-                    x:Name="model"
-                    FontFamily="Default"
-                    Placeholder="请输入模型,如:gpt-3.5-turbo-16k"
-                    VerticalOptions="Start" />
-                <Entry
-                    x:Name="key"
-                    FontFamily="Default"
-                    Placeholder="请输入你的Key"
-                    VerticalOptions="Start" />
-                <Entry
-                    x:Name="url"
-                    FontFamily="Default"
-                    Placeholder="请输入你的代理地址"
-                    VerticalOptions="Start" />
-                <Entry
-                    x:Name="pormpt"
-                    FontFamily="Default"
-                    Placeholder="你好，需要我做什么呢"
-                    VerticalOptions="Start" />
-                <Button
-                    Margin="48,0,48,12"
-                    Padding="8,0,8,1"
-                    BackgroundColor="{StaticResource Primary}"
-                    Clicked="Button_Clicked"
-                    FontFamily="Default"
-                    HeightRequest="36"
-                    Text="确定"
-                    TextColor="White" />
-            </VerticalStackLayout>
         </Frame>
         <Frame
             Margin="280,576,0,0"

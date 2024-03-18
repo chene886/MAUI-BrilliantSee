@@ -42,6 +42,7 @@ namespace BrilliantComic
             services.AddTransient<SearchPage>();
             services.AddTransient<DetailPage>();
             services.AddTransient<BrowsePage>();
+            services.AddTransient<AIPage>();
 
             //视图模型
             services.AddSingleton<FavoriteViewModel>();
@@ -50,6 +51,7 @@ namespace BrilliantComic
             services.AddTransient<SearchViewModel>();
             services.AddTransient<DetailViewModel>();
             services.AddTransient<BrowseViewModel>();
+            services.AddTransient<AIViewModel>();
 
             //服务
             services.AddSingleton<DBService>();

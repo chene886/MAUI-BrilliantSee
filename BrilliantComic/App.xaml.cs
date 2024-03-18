@@ -14,6 +14,7 @@ namespace BrilliantComic
             Routing.RegisterRoute("SearchPage", typeof(SearchPage));
             Routing.RegisterRoute("DetailPage", typeof(DetailPage));
             Routing.RegisterRoute("BrowsePage", typeof(BrowsePage));
+            Routing.RegisterRoute("AIPage", typeof(AIPage));
         }
     }
 }

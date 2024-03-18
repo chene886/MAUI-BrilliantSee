@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="BrilliantComic.Views.AIPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    Title="AI助手"
+    Shell.NavBarHasShadow="True"
+    Shell.TabBarIsVisible="False">
+    <ContentPage.ToolbarItems>
+        <ToolbarItem
+            Clicked="ToolbarItem_Clicked"
+            IconImageSource="filter.png"
+            Text="更新模型" />
+    </ContentPage.ToolbarItems>
+    <Grid>
+        <ScrollView x:Name="chatList">
+            <StackLayout
+                x:Name="chat"
+                Margin="0,0,0,60"
+                Padding="10,0,10,10" />
+        </ScrollView>
+        <Grid
+            Padding="8,12,8,12"
+            BackgroundColor="White"
+            ColumnSpacing="8"
+            HeightRequest="60"
+            VerticalOptions="EndAndExpand">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <Grid>
+                <Entry
+                    x:Name="prompt"
+                    FontFamily="Default"
+                    Placeholder="开始聊天或输入指令" />
+            </Grid>
+            <Button
+                Grid.Column="1"
+                Padding="8,0,8,1"
+                BackgroundColor="{StaticResource Primary}"
+                Clicked="StartChat"
+                FontFamily="Default"
+                HeightRequest="36"
+                Text="发送"
+                TextColor="White"
+                VerticalOptions="End"
+                WidthRequest="64" />
+        </Grid>
+        <ActivityIndicator
+            Margin="0,0,0,100"
+            HeightRequest="55"
+            IsRunning="True"
+            IsVisible="{Binding IsGettingResult}"
+            WidthRequest="55"
+            Color="Black" />
+        <BoxView
+            x:Name="cover"
+            BackgroundColor="#64000000"
+            IsVisible="false"
+            ZIndex="1" />
+        <Frame
+            x:Name="model"
+            Margin="0,0,0,240"
+            Padding="12"
+            BackgroundColor="White"
+            BorderColor="White"
+            CornerRadius="8"
+            HasShadow="False"
+            HeightRequest="240"
+            IsVisible="false"
+            WidthRequest="240"
+            ZIndex="1">
+            <VerticalStackLayout
+                x:Name="AIModel"
+                Spacing="10"
+                VerticalOptions="Center">
+                <Entry
+                    x:Name="name"
+                    FontFamily="Default"
+                    Placeholder="请输入模型,如:gpt-3.5-turbo-16k"
+                    VerticalOptions="Start" />
+                <Entry
+                    x:Name="key"
+                    FontFamily="Default"
+                    Placeholder="请输入你的Key"
+                    VerticalOptions="Start" />
+                <Entry
+                    x:Name="url"
+                    FontFamily="Default"
+                    Placeholder="请输入你的代理地址"
+                    VerticalOptions="Start" />
+                <Button
+                    Margin="48,0,48,12"
+                    Padding="8,0,8,1"
+                    BackgroundColor="{StaticResource Primary}"
+                    Clicked="UpdateModel"
+                    FontFamily="Default"
+                    HeightRequest="36"
+                    Text="确定"
+                    TextColor="White" />
+            </VerticalStackLayout>
+        </Frame>
+    </Grid>
+</ContentPage>
