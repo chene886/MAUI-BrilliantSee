@@ -91,13 +91,10 @@
             <Frame.GestureRecognizers>
                 <TapGestureRecognizer Command="{Binding JumpToAIPageCommand}" Tapped="TapGestureRecognizer_Tapped" />
             </Frame.GestureRecognizers>
-            <Label
-                FontAttributes="Bold"
-                FontSize="Default"
-                HorizontalOptions="Center"
-                Text="AI"
-                TextColor="White"
-                VerticalOptions="Center" />
+            <Image
+                HeightRequest="40"
+                Source="ai.png"
+                WidthRequest="40" />
         </Frame>
         <Frame
             Margin="280,576,0,0"

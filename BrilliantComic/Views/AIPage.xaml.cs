@@ -45,6 +45,10 @@ public partial class AIPage : ContentPage
     private async void StartChat(object sender, EventArgs e)
     {
         Button_Clicked(sender, e);
+        if (_vm.hasModel == false)
+        {
+            _ = Toast.Make("«Îœ»≈‰÷√ƒ£–Õ").Show();
+        }
         var input = this.prompt.Text;
         if (!string.IsNullOrEmpty(input))
         {
