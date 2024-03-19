@@ -21,6 +21,8 @@ namespace BrilliantComic.ViewModels
 
         private readonly DBService _db;
 
+        private readonly AIService _ai;
+
         /// <summary>
         /// 储存搜索漫画的结果集合
         /// </summary>
@@ -40,12 +42,18 @@ namespace BrilliantComic.ViewModels
 
         private List<SettingItem> SettingItems { get; set; } = new();
 
-        public SearchViewModel(SourceService sourceService, DBService db)
+        public SearchViewModel(SourceService sourceService, DBService db, AIService ai)
         {
             _sourceService = sourceService;
             _db = db;
+            _ai = ai;
             Sources = _sourceService.GetSources();
             _ = InitSettingsAsync();
+            if (_ai.hasModel)
+            {
+                _ai.RemovePlugins();
+                _ai.ImportPlugins(new Services.Plugins.SearchPlugins(_db, _sourceService));
+            }
         }
 
         public async Task InitSettingsAsync()

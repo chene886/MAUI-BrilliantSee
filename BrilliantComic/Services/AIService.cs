@@ -11,20 +11,15 @@ using System.Text;
 using System.Threading.Tasks;
 using System.ComponentModel;
 using System.Runtime.Intrinsics.Arm;
+using Microsoft.SemanticKernel.Services;
 
 namespace BrilliantComic.Services
 {
     public class AIService
     {
-        private readonly DBService _db;
-        private readonly SourceService _sourceService;
         public Kernel kernel { get; set; } = new Kernel();
 
-        public AIService(DBService db, SourceService sourceService)
-        {
-            _db = db;
-            _sourceService = sourceService;
-        }
+        public bool hasModel { get; set; } = false;
 
         public void InitKernel(string model, string key, string url)
         {
@@ -36,7 +31,18 @@ namespace BrilliantComic.Services
                 apiKey: key,
                 httpClient: new HttpClient(handler));
             kernel = builder.Build();
-            kernel.ImportPluginFromObject(new Plugins.ComicPlugin(_db, _sourceService));
+            hasModel = true;
+        }
+
+        public void ImportPlugins(Object plugin)
+        {
+            kernel.ImportPluginFromObject(plugin);
+        }
+
+        public void RemovePlugins()
+        {
+            if (kernel.Plugins.Any())
+                kernel.Plugins.Remove(kernel.Plugins.First());
         }
 
         public async Task<string> SolvePromptAsync(string msg)
@@ -45,8 +51,15 @@ namespace BrilliantComic.Services
             {
                 ToolCallBehavior = ToolCallBehavior.AutoInvokeKernelFunctions,
             };
-            var result = await kernel.InvokePromptAsync(msg, new(settings));
-            return result.ToString();
+            try
+            {
+                var result = await kernel.InvokePromptAsync(msg, new(settings));
+                return result.ToString();
+            }
+            catch(Exception e)
+            {
+                return e.Message;
+            }
         }
     }
 

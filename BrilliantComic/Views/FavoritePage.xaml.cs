@@ -27,6 +27,11 @@ public partial class FavoritePage : ContentPage
     {
         base.OnAppearing();
         await _vm.OnLoadFavoriteComicAsync();
+        if (_vm._ai.hasModel)
+        {
+            _vm._ai.RemovePlugins();
+            _vm._ai.ImportPlugins(new Services.Plugins.FavoritePlugin(_vm._db));
+        }
     }
 
     private async void TapGestureRecognizer_Tapped(object sender, TappedEventArgs e)

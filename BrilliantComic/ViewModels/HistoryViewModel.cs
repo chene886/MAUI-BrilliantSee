@@ -17,6 +17,7 @@ namespace BrilliantComic.ViewModels
     public partial class HistoryViewModel : ObservableObject
     {
         public readonly DBService _db;
+        public readonly AIService _ai;
 
         /// <summary>
         /// 是否正在获取结果
@@ -46,9 +47,10 @@ namespace BrilliantComic.ViewModels
             IsGettingResult = false;
         }
 
-        public HistoryViewModel(DBService db)
+        public HistoryViewModel(DBService db, AIService ai)
         {
             _db = db;
+            _ai = ai;
         }
 
         /// <summary>

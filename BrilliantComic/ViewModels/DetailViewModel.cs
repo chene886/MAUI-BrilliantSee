@@ -15,6 +15,10 @@ namespace BrilliantComic.ViewModels
 {
     public partial class DetailViewModel : ObservableObject, IQueryAttributable
     {
+        private readonly DBService _db;
+
+        private readonly AIService _ai;
+
         /// <summary>
         /// 当前漫画
         /// </summary>
@@ -45,11 +49,15 @@ namespace BrilliantComic.ViewModels
         [ObservableProperty]
         private bool _isGettingResult;
 
-        private readonly DBService _db;
-
-        public DetailViewModel(DBService db)
+        public DetailViewModel(DBService db, AIService ai)
         {
             _db = db;
+            _ai = ai;
+            if (_ai.hasModel)
+            {
+                _ai.RemovePlugins();
+                _ai.ImportPlugins(new Services.Plugins.DetailPlugins(_db));
+            }
         }
 
         /// <summary>

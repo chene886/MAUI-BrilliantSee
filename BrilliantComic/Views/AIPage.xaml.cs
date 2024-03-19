@@ -15,6 +15,21 @@ public partial class AIPage : ContentPage
         InitializeComponent();
     }
 
+    /// <summary>
+    /// 页面出现时检测是否有模型
+    /// </summary>
+    protected override void OnAppearing()
+    {
+        base.OnAppearing();
+        if (!_vm.hasModel)
+        {
+            this.updateModel.IsEnabled = false;
+            this.model.IsVisible = true;
+            this.cover.IsVisible = true;
+            this.cover.IsEnabled = false;
+        }
+    }
+
     private void ToolbarItem_Clicked(object sender, EventArgs e)
     {
         this.model.IsVisible = !this.model.IsVisible;
@@ -39,16 +54,34 @@ public partial class AIPage : ContentPage
     private void UpdateModel(object sender, EventArgs e)
     {
         Button_Clicked(sender, e);
-        _vm.UpdateModel(this.name.Text, this.key.Text, this.url.Text);
+        var message = string.Empty;
+        if (this.name.Text is null || this.key.Text is null || this.url.Text is null)
+        {
+            message = "请填写完整信息";
+        }
+        else
+        {
+#if ANDROID
+        _ = this.name.HideKeyboardAsync(CancellationToken.None);
+        _ = this.key.HideKeyboardAsync(CancellationToken.None);
+        _ = this.url.HideKeyboardAsync(CancellationToken.None);
+#endif
+            _vm.UpdateModel(this.name.Text, this.key.Text, this.url.Text);
+            message = "模型导入成功";
+            this.cover.IsVisible = false;
+            this.model.IsVisible = false;
+            if (this.updateModel.IsEnabled is false)
+            {
+                this.updateModel.IsEnabled = true;
+                this.cover.IsEnabled = true;
+            }
+        }
+        _ = Toast.Make(message).Show();
     }
 
     private async void StartChat(object sender, EventArgs e)
     {
         Button_Clicked(sender, e);
-        if (_vm.hasModel == false)
-        {
-            _ = Toast.Make("请先配置模型").Show();
-        }
         var input = this.prompt.Text;
         if (!string.IsNullOrEmpty(input))
         {
@@ -101,5 +134,10 @@ public partial class AIPage : ContentPage
         {
             _ = Toast.Make("请正确输入内容").Show();
         }
+    }
+
+    private void TapGestureRecognizer_Tapped(object sender, TappedEventArgs e)
+    {
+        ToolbarItem_Clicked(sender, e);
     }
 }

@@ -17,6 +17,7 @@ namespace BrilliantComic.ViewModels
     public partial class FavoriteViewModel : ObservableObject
     {
         public readonly DBService _db;
+        public readonly AIService _ai;
 
         /// <summary>
         /// 是否正在获取结果
@@ -51,9 +52,10 @@ namespace BrilliantComic.ViewModels
             }
         }
 
-        public FavoriteViewModel(DBService db)
+        public FavoriteViewModel(DBService db, AIService ai)
         {
             _db = db;
+            _ai = ai;
         }
 
         /// <summary>

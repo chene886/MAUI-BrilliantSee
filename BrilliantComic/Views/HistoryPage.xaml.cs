@@ -21,6 +21,11 @@ public partial class HistoryPage : ContentPage
     {
         base.OnAppearing();
         await _vm.OnLoadHistoryComicAsync();
+        if (_vm._ai.hasModel)
+        {
+            _vm._ai.RemovePlugins();
+            _vm._ai.ImportPlugins(new Services.Plugins.HistoryPlugins(_vm._db));
+        }
     }
 
     private async void CleanTapped(object sender, TappedEventArgs e)

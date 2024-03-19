@@ -8,6 +8,7 @@
     Shell.TabBarIsVisible="False">
     <ContentPage.ToolbarItems>
         <ToolbarItem
+            x:Name="updateModel"
             Clicked="ToolbarItem_Clicked"
             IconImageSource="filter.png"
             Text="更新模型" />
@@ -32,6 +33,7 @@
             <Grid>
                 <Entry
                     x:Name="prompt"
+                    ClearButtonVisibility="WhileEditing"
                     FontFamily="Default"
                     Placeholder="开始聊天或输入指令" />
             </Grid>
@@ -58,7 +60,11 @@
             x:Name="cover"
             BackgroundColor="#64000000"
             IsVisible="false"
-            ZIndex="1" />
+            ZIndex="1">
+            <BoxView.GestureRecognizers>
+                <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped" />
+            </BoxView.GestureRecognizers>
+        </BoxView>
         <Frame
             x:Name="model"
             Margin="0,0,0,240"
@@ -77,16 +83,19 @@
                 VerticalOptions="Center">
                 <Entry
                     x:Name="name"
+                    ClearButtonVisibility="WhileEditing"
                     FontFamily="Default"
                     Placeholder="请输入模型,如:gpt-3.5-turbo-16k"
                     VerticalOptions="Start" />
                 <Entry
                     x:Name="key"
+                    ClearButtonVisibility="WhileEditing"
                     FontFamily="Default"
                     Placeholder="请输入你的Key"
                     VerticalOptions="Start" />
                 <Entry
                     x:Name="url"
+                    ClearButtonVisibility="WhileEditing"
                     FontFamily="Default"
                     Placeholder="请输入你的代理地址"
                     VerticalOptions="Start" />

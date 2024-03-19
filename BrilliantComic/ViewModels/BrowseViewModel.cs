@@ -17,6 +17,8 @@ namespace BrilliantComic.ViewModels
 {
     public partial class BrowseViewModel : ObservableObject, IQueryAttributable
     {
+        private readonly AIService _ai;
+
         /// <summary>
         /// 当前章节
         /// </summary>
@@ -88,9 +90,15 @@ namespace BrilliantComic.ViewModels
             }
         }
 
-        public BrowseViewModel(DBService db)
+        public BrowseViewModel(DBService db, AIService ai)
         {
             _db = db;
+            _ai = ai;
+            if (_ai.hasModel)
+            {
+                _ai.RemovePlugins();
+                _ai.ImportPlugins(new Services.Plugins.BrowsePlugins(_db));
+            }
             _timer = new Timer((o) => { OnPropertyChanged(nameof(CurrentTime)); }, null, (60 - DateTime.Now.Second) * 1000, 60000);
         }
 
