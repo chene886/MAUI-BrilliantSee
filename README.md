@@ -18,8 +18,13 @@
 - 拓宽领域至小说、动漫甚至影视作品
 - 顺应当下潮流，开发基于semantic-kernel的AI交互助手，便利用户操作
   - 目前ai助手基础代码已完成，但在调用时不太顺利，比如往kernel导入plugins(20240315)
+  - ai助手插件已正常导入，但由于sk的planner似乎不见了的原因，且其他替代方案不顺利，目前只能进行部分单步操作(20240318)
 
 ## 项目部分界面截图
+### AI助手页
+<img src="img/aiPage1.jpg" width="360px" />
+<img src="img/aiPage2.jpg" width="360px" />
+
 ### 搜索页
 - 搜索漫画、选择图源
 <img src="img/searchPage.jpg" width="360px" />
@@ -39,6 +44,9 @@
 
 ### 漫画浏览页
 <img src="img/browsePage.jpg" width="360px" />
+
+### 系统设置页（暂无功能）
+<img src="img/settingPage.jpg" width="360px" />
 
 ## 适配漫画网站
 添加适配网站仅需在 **BrilliantComic.Models** 项目中添加：
