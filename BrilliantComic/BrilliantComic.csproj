@@ -80,8 +80,12 @@
 		<PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="8.0.6" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="8.0.0" />
 		<PackageReference Include="Microsoft.SemanticKernel" Version="1.6.2" />
+		<PackageReference Include="NAudio" Version="2.2.1" />
+		<PackageReference Include="Plugin.Maui.Audio" Version="2.1.0" />
 		<PackageReference Include="sqlite-net-pcl" Version="1.8.116" />
 		<PackageReference Include="SQLitePCLRaw.bundle_green" Version="2.1.8" />
+		<PackageReference Include="Whisper.net" Version="1.4.7" />
+		<PackageReference Include="Whisper.net.Runtime" Version="1.4.7" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -112,6 +116,10 @@
 	  <MauiXaml Update="Views\SettingPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="Services\WhisperModels\" />
 	</ItemGroup>
 
 </Project>

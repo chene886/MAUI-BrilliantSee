@@ -1,17 +1,21 @@
 ﻿using BrilliantComic.Models;
 using BrilliantComic.Services;
+using CommunityToolkit.Maui.Alerts;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace BrilliantComic.ViewModels
 {
     public partial class AIViewModel : ObservableObject
     {
-        private readonly AIService _aiService;
+        public readonly AIService _aiService;
         private readonly DBService _db;
         public bool hasModel { get; set; } = false;
 
@@ -28,10 +32,11 @@ namespace BrilliantComic.ViewModels
             _aiService.RemovePlugins();
         }
 
-        public void UpdateModel(string name, string key, string url)
+        public async void UpdateModel(string name, string key, string url)
         {
             IsGettingResult = true;
             _aiService.InitKernel(name, key, url);
+            modelConfigs = await _db.GetSettingItemsAsync("AIModel");
             foreach (var item in modelConfigs)
             {
                 switch (item.Name)

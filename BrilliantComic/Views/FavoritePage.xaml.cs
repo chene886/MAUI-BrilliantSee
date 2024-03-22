@@ -32,6 +32,16 @@ public partial class FavoritePage : ContentPage
             _vm._ai.RemovePlugins();
             _vm._ai.ImportPlugins(new Services.Plugins.FavoritePlugin(_vm._db));
         }
+        var status = await Permissions.CheckStatusAsync<Permissions.StorageWrite>();
+        if (status != PermissionStatus.Granted)
+        {
+            status = await Permissions.RequestAsync<Permissions.StorageWrite>();
+        }
+        status = await Permissions.CheckStatusAsync<Permissions.Microphone>();
+        if (status != PermissionStatus.Granted)
+        {
+            status = await Permissions.RequestAsync<Permissions.Microphone>();
+        }
     }
 
     private async void TapGestureRecognizer_Tapped(object sender, TappedEventArgs e)

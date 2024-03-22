@@ -21,16 +21,28 @@
                 Padding="10,0,10,10" />
         </ScrollView>
         <Grid
-            Padding="8,12,8,12"
+            Padding="8,4,8,4"
             BackgroundColor="White"
             ColumnSpacing="8"
             HeightRequest="60"
             VerticalOptions="EndAndExpand">
             <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
-            <Grid>
+            <Button
+                x:Name="voice"
+                Padding="8,0,8,1"
+                BackgroundColor="{StaticResource Primary}"
+                Clicked="Button_Clicked_1"
+                CornerRadius="20"
+                FontFamily="Default"
+                HeightRequest="36"
+                Text="音"
+                TextColor="White"
+                WidthRequest="36" />
+            <Grid Grid.Column="1">
                 <Entry
                     x:Name="prompt"
                     ClearButtonVisibility="WhileEditing"
@@ -38,7 +50,7 @@
                     Placeholder="开始聊天或输入指令" />
             </Grid>
             <Button
-                Grid.Column="1"
+                Grid.Column="2"
                 Padding="8,0,8,1"
                 BackgroundColor="{StaticResource Primary}"
                 Clicked="StartChat"
@@ -46,7 +58,6 @@
                 HeightRequest="36"
                 Text="发送"
                 TextColor="White"
-                VerticalOptions="End"
                 WidthRequest="64" />
         </Grid>
         <ActivityIndicator

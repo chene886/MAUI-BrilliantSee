@@ -1,12 +1,16 @@
 using BrilliantComic.ViewModels;
 using CommunityToolkit.Maui.Alerts;
 using CommunityToolkit.Maui.Core.Platform;
+using CommunityToolkit.Maui.Media;
+using CommunityToolkit.Mvvm.Input;
+using System.Globalization;
 
 namespace BrilliantComic.Views;
 
 public partial class AIPage : ContentPage
 {
     private readonly AIViewModel _vm;
+    public bool IsVoice { get; set; } = false;
 
     public AIPage(AIViewModel vm)
     {
@@ -36,6 +40,11 @@ public partial class AIPage : ContentPage
         this.cover.IsVisible = !this.cover.IsVisible;
     }
 
+    private void TapGestureRecognizer_Tapped(object sender, TappedEventArgs e)
+    {
+        ToolbarItem_Clicked(sender, e);
+    }
+
     private async void Button_Clicked(object sender, EventArgs e)
     {
         var obj = sender! as Button;
@@ -62,9 +71,9 @@ public partial class AIPage : ContentPage
         else
         {
 #if ANDROID
-        _ = this.name.HideKeyboardAsync(CancellationToken.None);
-        _ = this.key.HideKeyboardAsync(CancellationToken.None);
-        _ = this.url.HideKeyboardAsync(CancellationToken.None);
+            _ = this.name.HideKeyboardAsync(CancellationToken.None);
+            _ = this.key.HideKeyboardAsync(CancellationToken.None);
+            _ = this.url.HideKeyboardAsync(CancellationToken.None);
 #endif
             _vm.UpdateModel(this.name.Text, this.key.Text, this.url.Text);
             message = "模型导入成功";
@@ -87,48 +96,12 @@ public partial class AIPage : ContentPage
         {
             this.prompt.Text = string.Empty;
 #if ANDROID
-        if (prompt.IsSoftKeyboardShowing())
-        {
-            _ = prompt.HideKeyboardAsync(CancellationToken.None);
-        }
-#endif
-            this.chat.Children.Add(new Frame()
+            if (prompt.IsSoftKeyboardShowing())
             {
-                Content = new Label()
-                {
-                    Text = input,
-
-                    TextColor = Color.FromArgb("#512BD4"),
-                },
-                BackgroundColor = Color.FromArgb("#FFFFFF"),
-                Padding = new Thickness(8),
-                Margin = new Thickness(0, 24, 0, 0),
-                CornerRadius = 10,
-                MaximumWidthRequest = 320,
-                HorizontalOptions = LayoutOptions.End,
-                VerticalOptions = LayoutOptions.End,
-            });
-            await this.chatList.ScrollToAsync(chat, ScrollToPosition.End, false);
-            var result = await _vm.Chat(input);
-            if (result is not null)
-            {
-                this.chat.Children.Add(new Frame()
-                {
-                    Content = new Label()
-                    {
-                        Text = result,
-                        TextColor = Color.FromArgb("#FFFFFF"),
-                    },
-                    CornerRadius = 10,
-                    Padding = new Thickness(8),
-                    Margin = new Thickness(0, 24, 0, 0),
-                    BackgroundColor = Color.FromArgb("#512BD4"),
-                    MaximumWidthRequest = 320,
-                    HorizontalOptions = LayoutOptions.Start,
-                    VerticalOptions = LayoutOptions.End,
-                });
-                await this.chatList.ScrollToAsync(chat, ScrollToPosition.End, false);
+                _ = prompt.HideKeyboardAsync(CancellationToken.None);
             }
+#endif
+            await Chat(input);
         }
         else
         {
@@ -136,8 +109,60 @@ public partial class AIPage : ContentPage
         }
     }
 
-    private void TapGestureRecognizer_Tapped(object sender, TappedEventArgs e)
+    private async void Button_Clicked_1(object sender, EventArgs e)
     {
-        ToolbarItem_Clicked(sender, e);
+        Button_Clicked(sender, e);
+        if (IsVoice)
+        {
+            IsVoice = false;
+            this.voice.Text = "音";
+            _vm.IsGettingResult = true;
+            var result = await _vm._aiService.StopMessageAsync();
+            await Chat(result);
+        }
+        else
+        {
+            IsVoice = true;
+            this.voice.Text = "停";
+            await _vm._aiService.BeingMessageAsync();
+        }
+    }
+
+    private async Task Chat(string input)
+    {
+        this.chat.Children.Add(new Frame()
+        {
+            Content = new Label()
+            {
+                Text = input,
+                TextColor = Color.FromArgb("#512BD4"),
+            },
+            BackgroundColor = Color.FromArgb("#FFFFFF"),
+            Padding = new Thickness(8),
+            Margin = new Thickness(0, 24, 0, 0),
+            CornerRadius = 10,
+            MaximumWidthRequest = 320,
+            HorizontalOptions = LayoutOptions.End,
+            VerticalOptions = LayoutOptions.End,
+        });
+        var result = await _vm.Chat(input);
+        if (result is not null)
+        {
+            this.chat.Children.Add(new Frame()
+            {
+                Content = new Label()
+                {
+                    Text = result,
+                    TextColor = Color.FromArgb("#FFFFFF"),
+                },
+                CornerRadius = 10,
+                Padding = new Thickness(8),
+                Margin = new Thickness(0, 24, 0, 0),
+                BackgroundColor = Color.FromArgb("#512BD4"),
+                MaximumWidthRequest = 320,
+                HorizontalOptions = LayoutOptions.Start,
+                VerticalOptions = LayoutOptions.End,
+            });
+        }
     }
 }
