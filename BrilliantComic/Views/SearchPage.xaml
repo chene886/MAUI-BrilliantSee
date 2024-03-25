@@ -59,23 +59,21 @@
                                 Text="{Binding Name}"
                                 VerticalOptions="Center"
                                 WidthRequest="90" />
-                            <Rectangle
+                            <RoundRectangle
                                 Grid.Column="1"
+                                CornerRadius="20"
                                 Fill="Transparent"
-                                HeightRequest="18"
+                                HeightRequest="20"
                                 Stroke="{StaticResource Primary}"
                                 StrokeThickness="2"
-                                WidthRequest="18" />
-                            <Label
+                                WidthRequest="20" />
+                            <RoundRectangle
                                 Grid.Column="1"
                                 BackgroundColor="{StaticResource Primary}"
-                                FontFamily="Default"
-                                FontSize="Micro"
-                                HeightRequest="16"
+                                CornerRadius="20"
+                                HeightRequest="14"
                                 IsVisible="{Binding IsSelected}"
-                                Text="✔"
-                                TextColor="White"
-                                WidthRequest="16" />
+                                WidthRequest="14" />
                         </Grid>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
@@ -192,16 +190,18 @@
             WidthRequest="55" />
         <Button
             x:Name="floatButton"
-            Margin="290,584,0,0"
+            Margin="0,0,30,60"
             Padding="0"
             BackgroundColor="{StaticResource Primary}"
             BorderColor="{StaticResource Primary}"
             Clicked="BacktoTop"
             CornerRadius="100"
             HeightRequest="32"
+            HorizontalOptions="End"
             ImageSource="back2top.svg"
             IsVisible="false"
             Pressed="floatButton_Pressed"
+            VerticalOptions="End"
             WidthRequest="32"
             ZIndex="1" />
         <BoxView

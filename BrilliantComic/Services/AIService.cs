@@ -48,7 +48,7 @@ namespace BrilliantComic.Services
                 httpClient: new HttpClient(handler));
             kernel = builder.Build();
             hasModel = true;
-            InitWhisper();
+            //InitWhisper();
         }
 
         public async void InitWhisper()

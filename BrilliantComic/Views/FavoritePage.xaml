@@ -79,13 +79,15 @@
             </CollectionView.ItemTemplate>
         </CollectionView>
         <Frame
-            Margin="280,440,0,0"
+            Margin="0,0,30,100"
             Padding="0"
             BackgroundColor="{StaticResource Primary}"
             BorderColor="{StaticResource Primary}"
             CornerRadius="100"
             HasShadow="True"
             HeightRequest="56"
+            HorizontalOptions="End"
+            VerticalOptions="End"
             WidthRequest="56"
             ZIndex="0">
             <Frame.GestureRecognizers>
@@ -97,13 +99,15 @@
                 WidthRequest="40" />
         </Frame>
         <Frame
-            Margin="280,576,0,0"
+            Margin="0,0,30,30"
             Padding="0"
             BackgroundColor="{StaticResource Primary}"
             BorderColor="{StaticResource Primary}"
             CornerRadius="100"
             HasShadow="True"
             HeightRequest="56"
+            HorizontalOptions="End"
+            VerticalOptions="End"
             WidthRequest="56"
             ZIndex="0">
             <Frame.GestureRecognizers>
@@ -114,6 +118,39 @@
                 Source="refresh.png"
                 WidthRequest="40" />
         </Frame>
+        <Grid HeightRequest="200" VerticalOptions="End">
+            <ImageButton
+                Margin="4"
+                BackgroundColor="Transparent"
+                Clicked="ImageButton_Finished"
+                CornerRadius="20"
+                HeightRequest="48"
+                Pressed="ImageButton_Clicked"
+                Source="voice.svg"
+                VerticalOptions="End"
+                WidthRequest="48"
+                ZIndex="0">
+                <ImageButton.GestureRecognizers>
+                    <PanGestureRecognizer PanUpdated="PanGestureRecognizer_PanUpdated" />
+                </ImageButton.GestureRecognizers>
+            </ImageButton>
+            <BoxView
+                x:Name="listening"
+                BackgroundColor="Transparent"
+                CornerRadius="200"
+                HeightRequest="400"
+                IsVisible="false"
+                TranslationY="240"
+                VerticalOptions="End"
+                WidthRequest="400"
+                Color="#99512BD4" />
+            <Image
+                x:Name="wave"
+                HeightRequest="50"
+                IsVisible="false"
+                Source="audio_wave.png"
+                WidthRequest="50" />
+        </Grid>
         <ActivityIndicator
             Margin="0,0,0,100"
             HeightRequest="55"

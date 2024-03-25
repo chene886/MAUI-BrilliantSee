@@ -146,13 +146,15 @@
             </CollectionView.ItemTemplate>
         </CollectionView>
         <Frame
-            Margin="280,576,0,0"
+            Margin="0,0,30,30"
             Padding="0"
             BackgroundColor="{StaticResource Primary}"
             BorderColor="{StaticResource Primary}"
             CornerRadius="100"
             HasShadow="True"
             HeightRequest="56"
+            HorizontalOptions="End"
+            VerticalOptions="End"
             WidthRequest="56">
             <Frame.GestureRecognizers>
                 <TapGestureRecognizer Command="{Binding OpenHistoryCommand}" Tapped="TapGestureRecognizer_Tapped" />

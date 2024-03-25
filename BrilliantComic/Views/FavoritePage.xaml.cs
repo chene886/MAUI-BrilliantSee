@@ -58,4 +58,22 @@ public partial class FavoritePage : ContentPage
         await obj!.ScaleTo(1, 200);
         obj!.Shadow = shadow;
     }
+
+    private void ImageButton_Clicked(object sender, EventArgs e)
+    {
+        this.listening.IsVisible = true;
+        this.wave.IsVisible = true;
+    }
+
+    private void ImageButton_Finished(object sender, EventArgs e)
+    {
+        this.listening.IsVisible = false;
+        this.wave.IsVisible = false;
+    }
+
+    private void PanGestureRecognizer_PanUpdated(object sender, PanUpdatedEventArgs e)
+    {
+        this.listening.IsVisible = false;
+        this.wave.IsVisible = false;
+    }
 }
