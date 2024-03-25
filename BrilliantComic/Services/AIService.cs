@@ -48,7 +48,7 @@ namespace BrilliantComic.Services
                 httpClient: new HttpClient(handler));
             kernel = builder.Build();
             hasModel = true;
-            //InitWhisper();
+            InitWhisper();
         }
 
         public async void InitWhisper()
@@ -78,30 +78,37 @@ namespace BrilliantComic.Services
 
         public async Task BeingMessageAsync()
         {
-            var path = FileSystem.AppDataDirectory;
-            if (!File.Exists(Path.Combine(path, "recorde.wav")))
-                using (File.Create(Path.Combine(path, "recorde.wav"))) { }
+            //var path = FileSystem.AppDataDirectory;
+            //if (!File.Exists(Path.Combine(path, "recorde.wav")))
+            //    using (File.Create(Path.Combine(path, "recorde.wav"))) { }
             if (!_audioRecorder.IsRecording)
-                await _audioRecorder.StartAsync(Path.Combine(path, "recorde.wav"));
+                await _audioRecorder.StartAsync();
         }
 
-        public async Task<string> StopMessageAsync()
+        public async Task<string> StopMessageAsync(string flag)
         {
             if (_audioRecorder.IsRecording)
             {
                 var record = await _audioRecorder.StopAsync();
-                using var Stream = record.GetAudioStream();
-                using var wavStream = new MemoryStream();
-                await using var reader = new WaveFileReader(Stream);
-                var resampler = new WdlResamplingSampleProvider(reader.ToSampleProvider(), 16000);
-                WaveFileWriter.WriteWavFileToStream(wavStream, resampler.ToWaveProvider16());
-                wavStream.Seek(0, SeekOrigin.Begin);
-                var text = string.Empty;
-                await foreach (var result in whisper!.ProcessAsync(wavStream))
+                if (flag == "Finished")
                 {
-                    text += result.Text;
+                    using var Stream = record.GetAudioStream();
+                    using var wavStream = new MemoryStream();
+                    await using var reader = new WaveFileReader(Stream);
+                    var resampler = new WdlResamplingSampleProvider(reader.ToSampleProvider(), 16000);
+                    WaveFileWriter.WriteWavFileToStream(wavStream, resampler.ToWaveProvider16());
+                    wavStream.Seek(0, SeekOrigin.Begin);
+                    var text = string.Empty;
+                    await foreach (var result in whisper!.ProcessAsync(wavStream))
+                    {
+                        text += result.Text;
+                    }
+                    return text;
                 }
-                return text;
+                else
+                {
+                    return "";
+                }
             }
             return "";
         }

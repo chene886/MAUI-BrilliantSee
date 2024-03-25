@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView
+    x:Class="BrilliantComic.Controls.AudioRecognition"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    VerticalOptions="End">
+    <Grid HeightRequest="200">
+        <ImageButton
+            Margin="4"
+            BackgroundColor="Transparent"
+            Clicked="ImageButton_Finished"
+            CornerRadius="26"
+            HeightRequest="40"
+            Pressed="ImageButton_Pressed"
+            Source="voice.svg"
+            VerticalOptions="End"
+            WidthRequest="40"
+            ZIndex="0">
+            <ImageButton.GestureRecognizers>
+                <PanGestureRecognizer PanUpdated="PanGestureRecognizer_PanUpdated" />
+            </ImageButton.GestureRecognizers>
+        </ImageButton>
+        <BoxView
+            x:Name="listening"
+            BackgroundColor="Transparent"
+            CornerRadius="200"
+            HeightRequest="400"
+            IsVisible="false"
+            TranslationY="240"
+            VerticalOptions="End"
+            WidthRequest="400"
+            Color="#ee512BD4" />
+        <Image
+            x:Name="wave"
+            HeightRequest="50"
+            IsVisible="false"
+            Source="audio_wave.png"
+            WidthRequest="50" />
+    </Grid>
+</ContentView>

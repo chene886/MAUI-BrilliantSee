@@ -3,6 +3,7 @@
     x:Class="BrilliantComic.Views.FavoritePage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:controls="clr-namespace:BrilliantComic.Controls"
     xmlns:vm="clr-namespace:BrilliantComic.ViewModels"
     Title="收藏">
     <ContentPage.ToolbarItems>
@@ -118,39 +119,7 @@
                 Source="refresh.png"
                 WidthRequest="40" />
         </Frame>
-        <Grid HeightRequest="200" VerticalOptions="End">
-            <ImageButton
-                Margin="4"
-                BackgroundColor="Transparent"
-                Clicked="ImageButton_Finished"
-                CornerRadius="20"
-                HeightRequest="48"
-                Pressed="ImageButton_Clicked"
-                Source="voice.svg"
-                VerticalOptions="End"
-                WidthRequest="48"
-                ZIndex="0">
-                <ImageButton.GestureRecognizers>
-                    <PanGestureRecognizer PanUpdated="PanGestureRecognizer_PanUpdated" />
-                </ImageButton.GestureRecognizers>
-            </ImageButton>
-            <BoxView
-                x:Name="listening"
-                BackgroundColor="Transparent"
-                CornerRadius="200"
-                HeightRequest="400"
-                IsVisible="false"
-                TranslationY="240"
-                VerticalOptions="End"
-                WidthRequest="400"
-                Color="#99512BD4" />
-            <Image
-                x:Name="wave"
-                HeightRequest="50"
-                IsVisible="false"
-                Source="audio_wave.png"
-                WidthRequest="50" />
-        </Grid>
+        <controls:AudioRecognition x:Name="audio" IsVisible="false" />
         <ActivityIndicator
             Margin="0,0,0,100"
             HeightRequest="55"

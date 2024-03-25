@@ -26,6 +26,7 @@ public partial class HistoryPage : ContentPage
             _vm._ai.RemovePlugins();
             _vm._ai.ImportPlugins(new Services.Plugins.HistoryPlugins(_vm._db));
         }
+        this.audio.IsVisible = await _vm._db.GetAudioStatus();
     }
 
     private async void CleanTapped(object sender, TappedEventArgs e)

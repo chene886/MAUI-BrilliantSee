@@ -19,7 +19,7 @@ namespace BrilliantComic.ViewModels
     {
         private readonly SourceService _sourceService;
 
-        private readonly DBService _db;
+        public readonly DBService _db;
 
         private readonly AIService _ai;
 

@@ -3,6 +3,7 @@
     x:Class="BrilliantComic.Views.SearchPage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:controls="clr-namespace:BrilliantComic.Controls"
     xmlns:vm="clr-namespace:BrilliantComic.ViewModels"
     Title="搜索"
     Shell.ForegroundColor="Black"
@@ -204,6 +205,7 @@
             VerticalOptions="End"
             WidthRequest="32"
             ZIndex="1" />
+        <controls:AudioRecognition x:Name="audio" IsVisible="false" />
         <BoxView
             BackgroundColor="#64000000"
             IsVisible="{Binding IsSourceListVisible}"

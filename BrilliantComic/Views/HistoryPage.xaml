@@ -3,6 +3,7 @@
     x:Class="BrilliantComic.Views.HistoryPage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:controls="clr-namespace:BrilliantComic.Controls"
     xmlns:vm="clr-namespace:BrilliantComic.ViewModels"
     Title="历史">
     <ContentPage.ToolbarItems>
@@ -84,6 +85,7 @@
                 Source="clean_all.png"
                 WidthRequest="40" />
         </Frame>
+        <controls:AudioRecognition x:Name="audio" IsVisible="false" />
         <ActivityIndicator
             Margin="0,0,0,100"
             HeightRequest="55"

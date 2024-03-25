@@ -25,6 +25,7 @@ public partial class SearchPage : ContentPage
         this.input.Focus();
         await Task.Delay(250);
         this.input.Focus();
+        this.audio.IsVisible = await _vm._db.GetAudioStatus();
     }
 
     private void HideKeyboard(object sender, TappedEventArgs e)

@@ -3,6 +3,7 @@
     x:Class="BrilliantComic.Views.DetailPage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:controls="clr-namespace:BrilliantComic.Controls"
     xmlns:vm="clr-namespace:BrilliantComic.ViewModels"
     Title="{Binding Comic.Name}"
     Shell.ForegroundColor="Black"
@@ -164,6 +165,7 @@
                 Source="rollback.png"
                 WidthRequest="40" />
         </Frame>
+        <controls:AudioRecognition x:Name="audio" IsVisible="false" />
         <ActivityIndicator
             Margin="0,0,0,100"
             HeightRequest="55"

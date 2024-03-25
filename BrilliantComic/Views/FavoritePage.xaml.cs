@@ -32,6 +32,7 @@ public partial class FavoritePage : ContentPage
             _vm._ai.RemovePlugins();
             _vm._ai.ImportPlugins(new Services.Plugins.FavoritePlugin(_vm._db));
         }
+        this.audio.IsVisible = await _vm._db.GetAudioStatus();
         var status = await Permissions.CheckStatusAsync<Permissions.StorageWrite>();
         if (status != PermissionStatus.Granted)
         {
@@ -57,23 +58,5 @@ public partial class FavoritePage : ContentPage
         await obj!.ScaleTo(1.15, 200);
         await obj!.ScaleTo(1, 200);
         obj!.Shadow = shadow;
-    }
-
-    private void ImageButton_Clicked(object sender, EventArgs e)
-    {
-        this.listening.IsVisible = true;
-        this.wave.IsVisible = true;
-    }
-
-    private void ImageButton_Finished(object sender, EventArgs e)
-    {
-        this.listening.IsVisible = false;
-        this.wave.IsVisible = false;
-    }
-
-    private void PanGestureRecognizer_PanUpdated(object sender, PanUpdatedEventArgs e)
-    {
-        this.listening.IsVisible = false;
-        this.wave.IsVisible = false;
     }
 }

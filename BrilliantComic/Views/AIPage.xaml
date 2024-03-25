@@ -3,10 +3,16 @@
     x:Class="BrilliantComic.Views.AIPage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:controls="clr-namespace:BrilliantComic.Controls"
     Title="AI助手"
     Shell.NavBarHasShadow="True"
     Shell.TabBarIsVisible="False">
     <ContentPage.ToolbarItems>
+        <ToolbarItem
+            x:Name="audioStatus"
+            Clicked="ChangeAudioStatus"
+            IconImageSource="{Binding AudioIcon}"
+            Text="启动语音识别" />
         <ToolbarItem
             x:Name="updateModel"
             Clicked="ToolbarItem_Clicked"
@@ -14,7 +20,7 @@
             Text="更新模型" />
     </ContentPage.ToolbarItems>
     <Grid>
-        <ScrollView x:Name="chatList">
+        <ScrollView x:Name="chatList" Margin="0,0,0,60">
             <StackLayout
                 x:Name="chat"
                 Margin="0,0,0,60"
@@ -25,24 +31,13 @@
             BackgroundColor="White"
             ColumnSpacing="8"
             HeightRequest="60"
-            VerticalOptions="EndAndExpand">
+            VerticalOptions="EndAndExpand"
+            ZIndex="1">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
-            <Button
-                x:Name="voice"
-                Padding="8,0,8,1"
-                BackgroundColor="{StaticResource Primary}"
-                Clicked="Button_Clicked_1"
-                CornerRadius="20"
-                FontFamily="Default"
-                HeightRequest="36"
-                Text="音"
-                TextColor="White"
-                WidthRequest="36" />
-            <Grid Grid.Column="1">
+            <Grid>
                 <Entry
                     x:Name="prompt"
                     ClearButtonVisibility="WhileEditing"
@@ -50,7 +45,7 @@
                     Placeholder="开始聊天或输入指令" />
             </Grid>
             <Button
-                Grid.Column="2"
+                Grid.Column="1"
                 Padding="8,0,8,1"
                 BackgroundColor="{StaticResource Primary}"
                 Clicked="StartChat"
@@ -60,6 +55,10 @@
                 TextColor="White"
                 WidthRequest="64" />
         </Grid>
+        <controls:AudioRecognition
+            x:Name="audio"
+            Margin="0,0,0,60"
+            IsVisible="false" />
         <ActivityIndicator
             Margin="0,0,0,100"
             HeightRequest="55"

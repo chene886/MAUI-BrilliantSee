@@ -1,3 +1,4 @@
+using BrilliantComic.Models;
 using BrilliantComic.ViewModels;
 using CommunityToolkit.Maui.Alerts;
 using CommunityToolkit.Maui.Core.Platform;
@@ -12,11 +13,22 @@ public partial class AIPage : ContentPage
     private readonly AIViewModel _vm;
     public bool IsVoice { get; set; } = false;
 
+    public SettingItem AudioSetting { get; set; } = new SettingItem();
+
     public AIPage(AIViewModel vm)
     {
         _vm = vm;
         this.BindingContext = _vm;
+        _ = InitSetting();
         InitializeComponent();
+    }
+
+    private async Task InitSetting()
+    {
+        var audio = await _vm._db.GetSettingItemsAsync("Audio");
+        AudioSetting = audio[0];
+        _vm.AudioIcon = AudioSetting.Value == "true" ? ImageSource.FromFile("enable_audio.png") : ImageSource.FromFile("disable_audio.png");
+        this.audio.IsVisible = AudioSetting.Value == "true";
     }
 
     /// <summary>
@@ -31,6 +43,7 @@ public partial class AIPage : ContentPage
             this.model.IsVisible = true;
             this.cover.IsVisible = true;
             this.cover.IsEnabled = false;
+            this.audioStatus.IsEnabled = false;
         }
     }
 
@@ -83,6 +96,7 @@ public partial class AIPage : ContentPage
             {
                 this.updateModel.IsEnabled = true;
                 this.cover.IsEnabled = true;
+                this.audioStatus.IsEnabled = true;
             }
         }
         _ = Toast.Make(message).Show();
@@ -109,24 +123,24 @@ public partial class AIPage : ContentPage
         }
     }
 
-    private async void Button_Clicked_1(object sender, EventArgs e)
-    {
-        Button_Clicked(sender, e);
-        if (IsVoice)
-        {
-            IsVoice = false;
-            this.voice.Text = "“Ù";
-            _vm.IsGettingResult = true;
-            var result = await _vm._aiService.StopMessageAsync();
-            await Chat(result);
-        }
-        else
-        {
-            IsVoice = true;
-            this.voice.Text = "Õ£";
-            await _vm._aiService.BeingMessageAsync();
-        }
-    }
+    //private async void Button_Clicked_1(object sender, EventArgs e)
+    //{
+    //    Button_Clicked(sender, e);
+    //    if (IsVoice)
+    //    {
+    //        IsVoice = false;
+    //        this.voice.Text = "“Ù";
+    //        _vm.IsGettingResult = true;
+    //        var result = await _vm._aiService.StopMessageAsync();
+    //        await Chat(result);
+    //    }
+    //    else
+    //    {
+    //        IsVoice = true;
+    //        this.voice.Text = "Õ£";
+    //        await _vm._aiService.BeingMessageAsync();
+    //    }
+    //}
 
     private async Task Chat(string input)
     {
@@ -164,5 +178,13 @@ public partial class AIPage : ContentPage
                 VerticalOptions = LayoutOptions.End,
             });
         }
+    }
+
+    private void ChangeAudioStatus(object sender, EventArgs e)
+    {
+        AudioSetting.Value = AudioSetting.Value == "true" ? "false" : "true";
+        _vm.AudioIcon = AudioSetting.Value == "true" ? ImageSource.FromFile("enable_audio.png") : ImageSource.FromFile("disable_audio.png");
+        this.audio.IsVisible = AudioSetting.Value == "true";
+        _ = _vm._db.UpdateSettingItemAsync(AudioSetting);
     }
 }

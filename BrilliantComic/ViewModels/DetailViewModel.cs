@@ -15,7 +15,7 @@ namespace BrilliantComic.ViewModels
 {
     public partial class DetailViewModel : ObservableObject, IQueryAttributable
     {
-        private readonly DBService _db;
+        public readonly DBService _db;
 
         private readonly AIService _ai;
 

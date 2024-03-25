@@ -95,6 +95,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <MauiXaml Update="Controls\AudioRecognition.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Views\AIPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>

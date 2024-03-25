@@ -16,13 +16,18 @@ namespace BrilliantComic.ViewModels
     public partial class AIViewModel : ObservableObject
     {
         public readonly AIService _aiService;
-        private readonly DBService _db;
+        public readonly DBService _db;
         public bool hasModel { get; set; } = false;
 
         [ObservableProperty]
         public bool _isGettingResult = false;
 
+        [ObservableProperty]
+        public ImageSource _audioIcon = ImageSource.FromFile("disable_audio.png");
+
         public List<SettingItem> modelConfigs { get; set; } = new List<SettingItem>();
+
+        public string AudioStatus { get; set; } = "false";
 
         public AIViewModel(AIService aiService, DBService db)
         {
@@ -30,6 +35,12 @@ namespace BrilliantComic.ViewModels
             _db = db;
             hasModel = _aiService.hasModel;
             _aiService.RemovePlugins();
+        }
+
+        private async Task GetAudioStatus()
+        {
+            var audio = await _db.GetSettingItemsAsync("Audio");
+            AudioStatus = audio[0].Value;
         }
 
         public async void UpdateModel(string name, string key, string url)

@@ -66,6 +66,7 @@ namespace BrilliantComic.Services
                 new SettingItem { Name = "ModelId", Value = "", Category = "AIModel" },
                 new SettingItem { Name = "ApiKey", Value ="", Category = "AIModel" },
                 new SettingItem { Name = "ApiUrl", Value = "", Category = "AIModel" },
+                new SettingItem { Name = "AudioStatus", Value = "false", Category = "Audio" },
             };
             await _db.InsertAllAsync(defaultSettingItems);
         }
@@ -152,6 +153,12 @@ namespace BrilliantComic.Services
         public async Task<int> UpdateSettingItemAsync(SettingItem setting)
         {
             return await _db.UpdateAsync(setting);
+        }
+
+        public async Task<bool> GetAudioStatus()
+        {
+            var Item = await GetSettingItemsAsync("Audio");
+            return Item[0].Value == "true";
         }
     }
 }

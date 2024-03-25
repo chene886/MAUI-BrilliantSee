@@ -14,6 +14,12 @@ public partial class DetailPage : ContentPage
         _vm = vm;
         this.BindingContext = _vm;
         InitializeComponent();
+        this.Loaded += DetailPage_Loaded;
+    }
+
+    private async void DetailPage_Loaded(object? sender, EventArgs e)
+    {
+        this.audio.IsVisible = await _vm._db.GetAudioStatus();
     }
 
     private async void TapGestureRecognizer_Tapped(object sender, TappedEventArgs e)
