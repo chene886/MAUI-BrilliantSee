@@ -27,6 +27,8 @@ namespace BrilliantComic.ViewModels
 
         private bool IsRefresh { get; set; } = false;
 
+        public List<SettingItem> modelConfigs { get; set; } = new List<SettingItem>();
+
         /// <summary>
         /// 储存收藏漫画集合
         /// </summary>
@@ -52,10 +54,24 @@ namespace BrilliantComic.ViewModels
             }
         }
 
-        public FavoriteViewModel(DBService db, AIService ai)
+        public FavoriteViewModel(DBService db)
         {
             _db = db;
-            _ai = ai;
+            _ai = MauiProgram.servicesProvider!.GetRequiredService<AIService>();
+            _ = InitKernelAsync();
+        }
+
+        private async Task InitKernelAsync()
+        {
+            modelConfigs = await _db.GetSettingItemsAsync("AIModel");
+            var modelId = modelConfigs.Where(s => s.Name == "ModelId").First().Value;
+            var apiKey = modelConfigs.Where(s => s.Name == "ApiKey").First().Value;
+            var apiUrl = modelConfigs.Where(s => s.Name == "ApiUrl").First().Value;
+            if (modelId != "" && apiKey != "" && apiUrl != "")
+            {
+                _ai.InitKernel(modelId, apiKey, apiUrl);
+                _ai.hasModel = true;
+            }
         }
 
         /// <summary>

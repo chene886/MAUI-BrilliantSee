@@ -25,12 +25,12 @@ namespace BrilliantComic
 
             // 添加服务
             AddServices(builder.Services);
-            servicesProvider = builder.Services.BuildServiceProvider();
 
 #if DEBUG
             builder.Logging.AddDebug();
 #endif
 
+            servicesProvider = builder.Services.BuildServiceProvider();
             return builder.Build();
         }
 
