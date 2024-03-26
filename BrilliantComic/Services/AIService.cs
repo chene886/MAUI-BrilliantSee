@@ -26,7 +26,6 @@ namespace BrilliantComic.Services
     {
         public Kernel kernel { get; set; } = new Kernel();
         public WhisperProcessor? whisper { get; set; }
-        private readonly Channel<string> channel = Channel.CreateUnbounded<string>();
         private readonly IAudioManager _audioManager;
         private readonly IAudioRecorder _audioRecorder;
         public bool hasModel { get; set; } = false;
@@ -48,7 +47,7 @@ namespace BrilliantComic.Services
                 httpClient: new HttpClient(handler));
             kernel = builder.Build();
             hasModel = true;
-            InitWhisper();
+            //InitWhisper();
         }
 
         public async void InitWhisper()

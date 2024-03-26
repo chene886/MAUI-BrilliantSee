@@ -9,8 +9,7 @@ public partial class AudioRecognition : ContentView
 
     public AudioRecognition()
     {
-        var services = new ServiceCollection();
-        _ai = services.BuildServiceProvider().GetService<AIService>()!;
+        _ai = MauiProgram.servicesProvider!.GetService<AIService>()!;
         InitializeComponent();
     }
 

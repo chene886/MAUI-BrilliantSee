@@ -10,6 +10,8 @@ namespace BrilliantComic
 {
     public static class MauiProgram
     {
+        public static IServiceProvider? servicesProvider;
+
         public static MauiApp CreateMauiApp()
         {
             var builder = MauiApp.CreateBuilder();
@@ -23,6 +25,7 @@ namespace BrilliantComic
 
             // 添加服务
             AddServices(builder.Services);
+            servicesProvider = builder.Services.BuildServiceProvider();
 
 #if DEBUG
             builder.Logging.AddDebug();
