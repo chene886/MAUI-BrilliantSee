@@ -49,10 +49,10 @@ namespace BrilliantComic.ViewModels
         [ObservableProperty]
         private bool _isGettingResult;
 
-        public DetailViewModel(DBService db, AIService ai)
+        public DetailViewModel(DBService db)
         {
             _db = db;
-            _ai = ai;
+            _ai = MauiProgram.servicesProvider!.GetRequiredService<AIService>();
             if (_ai.hasModel)
             {
                 _ai.RemovePlugins();

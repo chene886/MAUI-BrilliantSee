@@ -123,24 +123,6 @@ public partial class AIPage : ContentPage
         }
     }
 
-    //private async void Button_Clicked_1(object sender, EventArgs e)
-    //{
-    //    Button_Clicked(sender, e);
-    //    if (IsVoice)
-    //    {
-    //        IsVoice = false;
-    //        this.voice.Text = "“Ù";
-    //        _vm.IsGettingResult = true;
-    //        var result = await _vm._aiService.StopMessageAsync();
-    //        await Chat(result);
-    //    }
-    //    else
-    //    {
-    //        IsVoice = true;
-    //        this.voice.Text = "Õ£";
-    //        await _vm._aiService.BeingMessageAsync();
-    //    }
-    //}
 
     private async Task Chat(string input)
     {
@@ -159,6 +141,7 @@ public partial class AIPage : ContentPage
             HorizontalOptions = LayoutOptions.End,
             VerticalOptions = LayoutOptions.End,
         });
+        await ScrollAsync();
         var result = await _vm.Chat(input);
         if (result is not null)
         {
@@ -177,7 +160,13 @@ public partial class AIPage : ContentPage
                 HorizontalOptions = LayoutOptions.Start,
                 VerticalOptions = LayoutOptions.End,
             });
+            await ScrollAsync();
         }
+    }
+
+    private async Task ScrollAsync()
+    {
+        await this.chatList.ScrollToAsync(this.Bottom, ScrollToPosition.MakeVisible, false);
     }
 
     private void ChangeAudioStatus(object sender, EventArgs e)

@@ -29,9 +29,9 @@ namespace BrilliantComic.ViewModels
 
         public string AudioStatus { get; set; } = "false";
 
-        public AIViewModel(AIService aiService, DBService db)
+        public AIViewModel(DBService db)
         {
-            _aiService = aiService;
+            _aiService = MauiProgram.servicesProvider!.GetRequiredService<AIService>();
             _db = db;
             hasModel = _aiService.hasModel;
             _aiService.RemovePlugins();

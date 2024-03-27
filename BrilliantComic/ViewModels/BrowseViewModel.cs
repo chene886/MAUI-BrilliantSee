@@ -90,10 +90,10 @@ namespace BrilliantComic.ViewModels
             }
         }
 
-        public BrowseViewModel(DBService db, AIService ai)
+        public BrowseViewModel(DBService db)
         {
             _db = db;
-            _ai = ai;
+            _ai = MauiProgram.servicesProvider!.GetRequiredService<AIService>();
             if (_ai.hasModel)
             {
                 _ai.RemovePlugins();

@@ -47,10 +47,10 @@ namespace BrilliantComic.ViewModels
             IsGettingResult = false;
         }
 
-        public HistoryViewModel(DBService db, AIService ai)
+        public HistoryViewModel(DBService db)
         {
             _db = db;
-            _ai = ai;
+            _ai = MauiProgram.servicesProvider!.GetRequiredService<AIService>();
         }
 
         /// <summary>

@@ -21,10 +21,13 @@
     </ContentPage.ToolbarItems>
     <Grid>
         <ScrollView x:Name="chatList" Margin="0,0,0,60">
-            <StackLayout
-                x:Name="chat"
-                Margin="0,0,0,60"
-                Padding="10,0,10,10" />
+            <StackLayout>
+                <StackLayout
+                    x:Name="chat"
+                    Margin="0,0,0,60"
+                    Padding="10,0,10,10" />
+                <Label x:Name="Bottom" HeightRequest="1" />
+            </StackLayout>
         </ScrollView>
         <Grid
             Padding="8,4,8,4"

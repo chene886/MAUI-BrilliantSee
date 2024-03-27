@@ -42,11 +42,11 @@ namespace BrilliantComic.ViewModels
 
         private List<SettingItem> SettingItems { get; set; } = new();
 
-        public SearchViewModel(SourceService sourceService, DBService db, AIService ai)
+        public SearchViewModel(SourceService sourceService, DBService db)
         {
             _sourceService = sourceService;
             _db = db;
-            _ai = ai;
+            _ai = MauiProgram.servicesProvider!.GetRequiredService<AIService>();
             Sources = _sourceService.GetSources();
             _ = InitSettingsAsync();
             if (_ai.hasModel)
