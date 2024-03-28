@@ -62,7 +62,8 @@
                                 <Label
                                     Grid.Row="1"
                                     Padding="2,0"
-                                    FontFamily="Bold"
+                                    FontAttributes="Bold"
+                                    FontFamily="Default"
                                     HorizontalOptions="Start"
                                     LineBreakMode="TailTruncation"
                                     Text="{Binding Name}" />

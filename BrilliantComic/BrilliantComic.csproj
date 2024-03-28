@@ -71,6 +71,7 @@
 	  <None Remove="Resources\Images\history.png" />
 	  <None Remove="Resources\Images\reverse.png" />
 	  <None Remove="Resources\Images\search.svg" />
+	  <None Remove="Services\WhisperModels\ggml-base.bin" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -123,10 +124,6 @@
 	  <MauiXaml Update="Views\SettingPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	</ItemGroup>
-
-	<ItemGroup>
-	  <MauiAsset Include="Services\WhisperModels\ggml-base.bin" />
 	</ItemGroup>
 
 </Project>

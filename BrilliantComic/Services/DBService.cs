@@ -80,10 +80,10 @@ namespace BrilliantComic.Services
         public async Task<List<Comic>> GetComicsAsync(DBComicCategory category)
         {
             var dbComics = await _db.Table<DBComic>()
-                    .Where(i => i.Category == category)
-                    .ToListAsync();
+                .Where(i => i.Category == category)
+                .ToListAsync();
             var ret = dbComics
-                .Select(i => _sourceService.GetSource(i.Source)?.CreateComicFromDBComic(i))
+                .Select(i => _sourceService.GetComic(i.SourceName)!.CreateComicFromDBComic(i))
                 .Where(c => c is not null)
                 .Select(c => c!).ToList();
 
@@ -109,7 +109,7 @@ namespace BrilliantComic.Services
         /// <returns></returns>
         public async Task<int> SaveComicAsync(Comic comic, DBComicCategory category)
         {
-            var dbComic = comic.Source.CreateDBComicFromComic(comic);
+            var dbComic = comic.CreateDBComicFromComic(comic);
             dbComic.Category = category;
             if (_db.Table<DBComic>().Where(i => i.Url == comic.Url && i.Category == category).CountAsync().Result > 0)
             {
@@ -125,7 +125,7 @@ namespace BrilliantComic.Services
         /// <returns></returns>
         public async Task<int> UpdateComicAsync(Comic comic)
         {
-            var dbComic = comic.Source.CreateDBComicFromComic(comic);
+            var dbComic = comic.CreateDBComicFromComic(comic);
             var existingComic = await _db.Table<DBComic>()
                                     .Where(c => c.Url == comic.Url && c.Category == comic.Category)
                                     .FirstOrDefaultAsync();
@@ -145,16 +145,31 @@ namespace BrilliantComic.Services
             return await _db.Table<DBComic>().DeleteAsync(i => i.Url == comic.Url && i.Category == category);
         }
 
+        
+        /// <summary>
+        /// 获取对应类别的设置项
+        /// </summary>
+        /// <param name="category">类别</param>
+        /// <returns></returns>
         public async Task<List<SettingItem>> GetSettingItemsAsync(string category)
         {
             return await _db.Table<SettingItem>().Where(i => i.Category == category).ToListAsync();
         }
 
+        /// <summary>
+        /// 更新设置项
+        /// </summary>
+        /// <param name="setting">设置项</param>
+        /// <returns></returns>
         public async Task<int> UpdateSettingItemAsync(SettingItem setting)
         {
             return await _db.UpdateAsync(setting);
         }
 
+        /// <summary>
+        /// 获取语音功能状态
+        /// </summary>
+        /// <returns></returns>
         public async Task<bool> GetAudioStatus()
         {
             var Item = await GetSettingItemsAsync("Audio");

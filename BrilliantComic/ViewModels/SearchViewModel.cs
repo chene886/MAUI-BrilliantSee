@@ -38,7 +38,7 @@ namespace BrilliantComic.ViewModels
         private bool _isSourceListVisible = false;
 
         [ObservableProperty]
-        private List<ISource> _sources = new();
+        private List<Source> _sources = new();
 
         private List<SettingItem> SettingItems { get; set; } = new();
 
@@ -109,7 +109,7 @@ namespace BrilliantComic.ViewModels
         }
 
         [RelayCommand]
-        private async Task ChangeIsSelectedAsync(ISource source)
+        private async Task ChangeIsSelectedAsync(Source source)
         {
             source.IsSelected = !source.IsSelected;
             var item = SettingItems.First(s => s.Name == source.Name);

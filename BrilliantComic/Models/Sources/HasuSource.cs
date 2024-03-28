@@ -11,38 +11,23 @@ using System.Threading.Tasks;
 
 namespace BrilliantComic.Models.Sources
 {
-    public partial class HasuSource : ObservableObject, ISource
+    public partial class HasuSource : Source
     {
-        public HttpClient HttpClient { get; set; } = new HttpClient(new HttpClientHandler()
-        {
-            AutomaticDecompression = DecompressionMethods.GZip
-        })
-        {
-            DefaultRequestHeaders =
-            {
-                { "User-Agent", "Mozilla/5.0 (iPhone; CPU iPhone OS 16_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.6 Mobile/15E148 Safari/604.1 Edg/122.0.0.0"},
-                { "Referer", "https://mangahasu.se/"}
-            }
-        };
-
-        public string Name { get; set; } = "mangahasu";
-
-        [ObservableProperty]
-        public bool _isSelected = true;
-
         private readonly SourceService _sourceService;
 
         public HasuSource(SourceService sourceService)
         {
+            SetHttpClient("https://mangahasu.se/");
+            Name = "HasuManga";
             _sourceService = sourceService;
         }
 
-        public async Task<IEnumerable<Comic>> SearchAsync(string keyword)
+        public override async Task<IEnumerable<Comic>> SearchAsync(string keyword)
         {
             var url = $"https://mangahasu.se/advanced-search.html?keyword={keyword}";
             try
             {
-                var response = await HttpClient.GetAsync(url);
+                var response = await HttpClient!.GetAsync(url);
                 if (!response.IsSuccessStatusCode)
                 {
                     return Array.Empty<Comic>();
@@ -65,7 +50,7 @@ namespace BrilliantComic.Models.Sources
                 foreach (Match match in matches)
                 {
                     var comic = new HasuComic(match.Groups[2].Value, match.Groups[3].Value.Replace("&quot;", ""), match.Groups[1].Value, "(暂无作者信息)")
-                    { Source = this, SourceName = "mangahasu", LastestUpdateTime = "(暂无最后更新信息)" };
+                    { Source = this, SourceName = Name, LastestUpdateTime = "(暂无最后更新信息)" };
                     comics.Add(comic);
                     if (comics.Count == matches.Count - 10)
                     {
@@ -79,50 +64,6 @@ namespace BrilliantComic.Models.Sources
             {
                 return Array.Empty<Comic>();
             }
-        }
-
-        /// <summary>
-        /// 从存储的漫画数据创建漫画实体
-        /// </summary>
-        /// <param name="dbComic"></param>
-        /// <returns></returns>
-        public Comic CreateComicFromDBComic(DBComic dbComic)
-        {
-            Comic comic = new HasuComic(dbComic.Url, dbComic.Name, dbComic.Cover, dbComic.Author)
-            {
-                Id = dbComic.Id,
-                Category = dbComic.Category,
-                LastReadedChapterIndex = dbComic.LastReadedChapterIndex,
-                IsUpdate = dbComic.IsUpdate,
-                LastestChapterName = dbComic.LastestChapterName,
-                SourceName = dbComic.SourceName,
-                Source = this
-            };
-
-            return comic;
-        }
-
-        /// <summary>
-        /// 从漫画实体创建存储的漫画数据
-        /// </summary>
-        /// <param name="comic"></param>
-        /// <returns></returns>
-        public DBComic CreateDBComicFromComic(Comic comic)
-        {
-            return new DBComic
-            {
-                Id = comic.Id,
-                Name = comic.Name,
-                Author = comic.Author,
-                Cover = comic.Cover,
-                Source = _sourceService.GetSourceName(this)!,
-                Url = comic.Url,
-                Category = comic.Category,
-                LastReadedChapterIndex = comic.LastReadedChapterIndex,
-                IsUpdate = comic.IsUpdate,
-                LastestChapterName = comic.LastestChapterName,
-                SourceName = comic.SourceName
-            };
         }
     }
 }

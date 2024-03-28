@@ -15,12 +15,11 @@ namespace BrilliantComic.Services
         /// <summary>
         /// 储存图源的字典
         /// </summary>
-        private Dictionary<string, ISource> _sources = new();
-
+        private Dictionary<string, Source> _sources = new();
         /// <summary>
-        /// 储存图源名的字典
+        /// 储存漫画的字典
         /// </summary>
-        private Dictionary<ISource, string> _sourceNames = new();
+        private Dictionary<string, Comic> _comics = new();
 
         /// <summary>
         /// 注册图源
@@ -30,18 +29,20 @@ namespace BrilliantComic.Services
             var baozi = new BaoziSource(this);
             var gufeng = new GufengSource(this);
             var goda = new GodaSource(this);
-            //var hasu = new HasuSource(this);
-            _sources.Add("BaoZi", baozi);
-            _sourceNames.Add(baozi, "BaoZi");
-            _sources.Add("GuFeng", gufeng);
-            _sourceNames.Add(gufeng, "GuFeng");
-            _sources.Add("Goda", goda);
-            _sourceNames.Add(goda, "Goda");
-            //_sources.Add("Hasu", hasu);
-            //_sourceNames.Add(hasu, "Hasu");
+            var baoziComic = new BaoziComic() { Source = baozi };
+            var gufengComic = new GufengComic() { Source = gufeng };
+            var godaComic = new GodaComic() { Source = goda };
+            //var hasu = new HasuSource();
+            _sources.Add(baozi.Name, baozi);
+            _sources.Add(gufeng.Name, gufeng);
+            _sources.Add(goda.Name, goda);
+            _comics.Add(baozi.Name, baoziComic);
+            _comics.Add(gufeng.Name, gufengComic);
+            _comics.Add(goda.Name, godaComic);
+            //_sources.Add(hasu.Name, hasu);
         }
 
-        public List<ISource> GetSources()
+        public List<Source> GetSources()
         {
             return _sources.Values.ToList();
         }
@@ -54,7 +55,7 @@ namespace BrilliantComic.Services
         /// <returns></returns>
         public async Task SearchAsync(string keyword, ObservableCollection<Comic> comics, string flag)
         {
-            IEnumerable<ISource> sources;
+            IEnumerable<Source> sources;
             if (flag == "Default")
             {
                 sources = _sources.Values.Where(s => s.IsSelected == true);
@@ -98,22 +99,22 @@ namespace BrilliantComic.Services
         /// <summary>
         /// 根据图源名获取图源实体
         /// </summary>
-        /// <param name="source">图源名</param>
+        /// <param name="name">图源名</param>
         /// <returns></returns>
-        public ISource? GetSource(string source)
+        public Source? GetSource(string name)
         {
-            _sources.TryGetValue(source, out var result);
+            _sources.TryGetValue(name, out var result);
             return result;
         }
 
         /// <summary>
-        /// 根据图源实体获取图源名
+        /// 根据图源名获取图源漫画实体
         /// </summary>
-        /// <param name="source">图源</param>
+        /// <param name="name">图源名</param>
         /// <returns></returns>
-        public string? GetSourceName(ISource source)
+        public Comic? GetComic(string name)
         {
-            _sourceNames.TryGetValue(source, out var result);
+            _comics.TryGetValue(name, out var result);
             return result;
         }
     }

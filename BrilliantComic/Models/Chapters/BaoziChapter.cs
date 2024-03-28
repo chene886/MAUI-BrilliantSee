@@ -36,7 +36,7 @@ namespace BrilliantComic.Models.Chapters
                     {
                         url = Url.Replace(".html", $"_{count}.html");
                     }
-                    var msg = (await Comic.Source.HttpClient.GetAsync(url));
+                    var msg = (await Comic.Source.HttpClient!.GetAsync(url));
                     if (msg.RequestMessage is null || msg.RequestMessage.RequestUri is null)
                     {
                         if (count == 1)

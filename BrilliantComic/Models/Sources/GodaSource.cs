@@ -11,29 +11,14 @@ using System.Threading.Tasks;
 
 namespace BrilliantComic.Models.Sources
 {
-    public partial class GodaSource : ObservableObject, ISource
+    public partial class GodaSource : Source
     {
-        public HttpClient HttpClient { get; set; } = new HttpClient(new HttpClientHandler()
-        {
-            AutomaticDecompression = DecompressionMethods.GZip
-        })
-        {
-            DefaultRequestHeaders =
-            {
-                { "User-Agent", "Mozilla/5.0 (iPhone; CPU iPhone OS 16_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.6 Mobile/15E148 Safari/604.1 Edg/122.0.0.0"},
-                { "Referer", "https://godamanga.com/"}
-            }
-        };
-
-        public string Name { get; set; } = "Goda漫画";
-
-        [ObservableProperty]
-        public bool _isSelected = true;
-
         private readonly SourceService _sourceService;
 
         public GodaSource(SourceService sourceService)
         {
+            SetHttpClient("https://godamanga.com/");
+            Name = "Goda漫画";
             _sourceService = sourceService;
         }
 
@@ -42,12 +27,12 @@ namespace BrilliantComic.Models.Sources
         /// </summary>
         /// <param name="keyword">搜索关键词</param>
         /// <returns></returns>
-        public async Task<IEnumerable<Comic>> SearchAsync(string keyword)
+        public override async Task<IEnumerable<Comic>> SearchAsync(string keyword)
         {
             var url = $"https://godamanga.com/s/{keyword}?pagw=1";
             try
             {
-                var response = await HttpClient.GetAsync(url);
+                var response = await HttpClient!.GetAsync(url);
 
                 if (!response.IsSuccessStatusCode)
                 {
@@ -64,7 +49,7 @@ namespace BrilliantComic.Models.Sources
                     var comic = new GodaComic("https://godamanga.com" + match.Groups[1].Value, match.Groups[3].Value, match.Groups[2].Value.Replace("%3A", ":").Replace("%2F", "/"), "暂无作者信息")
                     {
                         Source = this,
-                        SourceName = "Goda漫画",
+                        SourceName = Name,
                         LastestUpdateTime = "(暂无最后更新信息)"
                     };
                     comics.Add(comic);
@@ -76,50 +61,6 @@ namespace BrilliantComic.Models.Sources
             {
                 return Array.Empty<Comic>();
             }
-        }
-
-        /// <summary>
-        /// 从存储的漫画数据创建漫画实体
-        /// </summary>
-        /// <param name="dbComic"></param>
-        /// <returns></returns>
-        public Comic CreateComicFromDBComic(DBComic dbComic)
-        {
-            Comic comic = new GodaComic(dbComic.Url, dbComic.Name, dbComic.Cover, dbComic.Author)
-            {
-                Id = dbComic.Id,
-                Category = dbComic.Category,
-                LastReadedChapterIndex = dbComic.LastReadedChapterIndex,
-                IsUpdate = dbComic.IsUpdate,
-                LastestChapterName = dbComic.LastestChapterName,
-                SourceName = dbComic.SourceName,
-                Source = this
-            };
-
-            return comic;
-        }
-
-        /// <summary>
-        /// 从漫画实体创建存储的漫画数据
-        /// </summary>
-        /// <param name="comic"></param>
-        /// <returns></returns>
-        public DBComic CreateDBComicFromComic(Comic comic)
-        {
-            return new DBComic
-            {
-                Id = comic.Id,
-                Name = comic.Name,
-                Author = comic.Author,
-                Cover = comic.Cover,
-                Source = _sourceService.GetSourceName(this)!,
-                Url = comic.Url,
-                Category = comic.Category,
-                LastReadedChapterIndex = comic.LastReadedChapterIndex,
-                IsUpdate = comic.IsUpdate,
-                LastestChapterName = comic.LastestChapterName,
-                SourceName = comic.SourceName
-            };
         }
     }
 }

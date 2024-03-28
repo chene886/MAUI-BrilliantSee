@@ -10,7 +10,6 @@ namespace BrilliantComic.Models.Comics
 {
     public class GodaComic : Comic
     {
-        private string html = string.Empty;
 
         public GodaComic(string url, string name, string cover, string author)
         {
@@ -20,21 +19,8 @@ namespace BrilliantComic.Models.Comics
             Author = author;
         }
 
-        /// <summary>
-        /// 获取漫画网页源代码
-        /// </summary>
-        /// <returns></returns>
-        public override async Task<bool> GetHtmlAsync()
+        public GodaComic()
         {
-            try
-            {
-                html = await Source.HttpClient.GetStringAsync(Url);
-            }
-            catch
-            {
-                return false;
-            }
-            return true;
         }
 
         /// <summary>
@@ -43,9 +29,9 @@ namespace BrilliantComic.Models.Comics
         public override void LoadMoreData()
         {
             //截取两个字符串之间的内容
-            var start = html.IndexOf("bannersUite");
-            var end = html.IndexOf("ed:block\">");
-            if(end < 0) end = html.IndexOf("chapterlist");
+            var start = Html.IndexOf("bannersUite");
+            var end = Html.IndexOf("ed:block\">");
+            if (end < 0) end = Html.IndexOf("chapterlist");
             if (start < 0 || end < 0)
             {
                 Status = "连载中";
@@ -54,8 +40,8 @@ namespace BrilliantComic.Models.Comics
                 Author = "暂无作者";
                 return;
             }
-            var moreDataHtml = html.Substring(start, end - start);
-            if (!string.IsNullOrEmpty(html))
+            var moreDataHtml = Html.Substring(start, end - start);
+            if (!string.IsNullOrEmpty(Html))
             {
                 var result = Regex.Match(moreDataHtml, "<span class=\"text-xs[\\s\\S]*?>[\\s](.*?)[\\s]<[\\s\\S]*?<p[\\s\\S]*?>([\\s\\S]*?)<");
                 Status = result.Groups[1].Value;
@@ -83,9 +69,9 @@ namespace BrilliantComic.Models.Comics
             try
             {
                 var newUrl = Url.Replace("/manga", "/chapterlist");
-                var chaptershtml = await Source.HttpClient.GetStringAsync(newUrl);
+                var chaptershtml = await Source.HttpClient!.GetStringAsync(newUrl);
 
-                if (html.IndexOf(index) < 0)
+                if (Html.IndexOf(index) < 0)
                 {
                     Chapters = Chapters.Append(new GodaChapter("暂无章节", "", -1, false) { Comic = this });
                     return;
@@ -133,11 +119,11 @@ namespace BrilliantComic.Models.Comics
         public override string? GetLastestChapterName()
         {
             var index = "最近章節";
-            if (html.IndexOf(index) < 0)
+            if (Html.IndexOf(index) < 0)
             {
                 return null;
             }
-            var chaptershtml = html.Substring(html.IndexOf(index));
+            var chaptershtml = Html.Substring(Html.IndexOf(index));
             var match = Regex.Match(chaptershtml, "chaptertitle[\\s\\S]*?>[\\s](.*?)[\\s]<");
             if (match is not null)
             {
@@ -146,28 +132,5 @@ namespace BrilliantComic.Models.Comics
             else { return null; }
         }
 
-        /// <summary>
-        /// 获取相邻章节
-        /// </summary>
-        /// <param name="chapter">当前章节</param>
-        /// <param name="flag">上一章或下一章</param>
-        /// <returns></returns>
-        public override Chapter? GetNearChapter(Chapter chapter, string flag)
-        {
-            int index = -1;
-            int change = 1;
-            if (IsReverseList) change = -1;
-            var tempChapters = Chapters.ToList();
-            if (flag == "Last")
-            {
-                index = tempChapters.IndexOf(chapter) - change;
-            }
-            else if (flag == "Next")
-            {
-                index = tempChapters.IndexOf(chapter) + change;
-            }
-            if (index < 0 || index >= Chapters.Count()) return null;
-            return Chapters.ElementAtOrDefault(index)!;
-        }
     }
 }

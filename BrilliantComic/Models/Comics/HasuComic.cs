@@ -10,7 +10,6 @@ namespace BrilliantComic.Models.Comics
 {
     public class HasuComic : Comic
     {
-        private string html = string.Empty;
 
         public HasuComic(string url, string name, string cover, string author)
         {
@@ -20,28 +19,19 @@ namespace BrilliantComic.Models.Comics
             Author = author;
         }
 
-        public override async Task<bool> GetHtmlAsync()
+        public HasuComic()
         {
-            try
-            {
-                html = await Source.HttpClient.GetStringAsync(Url);
-            }
-            catch
-            {
-                return false;
-            }
-            return true;
         }
 
         public override string? GetLastestChapterName()
         {
-            var Istart = html.IndexOf("list-chapter");
-            var end = html.IndexOf("div-comment");
+            var Istart = Html.IndexOf("list-chapter");
+            var end = Html.IndexOf("div-comment");
             if (Istart < 0 || end < 0)
             {
                 return "";
             }
-            var chaptershtml = html.Substring(Istart, end - Istart);
+            var chaptershtml = Html.Substring(Istart, end - Istart);
             var match = Regex.Match(chaptershtml, "name[\\s\\S]*?href=\"(.*?)\"[\\s\\S]*?/span>(.*?)<");
             if (match is not null)
             {
@@ -50,35 +40,17 @@ namespace BrilliantComic.Models.Comics
             return "";
         }
 
-        public override Chapter? GetNearChapter(Chapter chapter, string flag)
-        {
-            int index = -1;
-            int change = 1;
-            if (IsReverseList) change = -1;
-            var tempChapters = Chapters.ToList();
-            if (flag == "Last")
-            {
-                index = tempChapters.IndexOf(chapter) - change;
-            }
-            else if (flag == "Next")
-            {
-                index = tempChapters.IndexOf(chapter) + change;
-            }
-            if (index < 0 || index >= Chapters.Count()) return null;
-            return Chapters.ElementAtOrDefault(index)!;
-        }
-
         public override async Task LoadChaptersAsync()
         {
-            var Istart = html.IndexOf("list-chapter");
-            var end = html.IndexOf("div-comment");
+            var Istart = Html.IndexOf("list-chapter");
+            var end = Html.IndexOf("div-comment");
             var chapters = new List<HasuChapter>();
             if (Istart < 0 || end < 0)
             {
                 Chapters = Chapters.Append(new HasuChapter("暂无章节", "", -1, false) { Comic = this });
                 return;
             }
-            var chaptershtml = html.Substring(Istart, end - Istart);
+            var chaptershtml = Html.Substring(Istart, end - Istart);
             var matches = Regex.Matches(chaptershtml, "name[\\s\\S]*?href=\"(.*?)\"[\\s\\S]*?/span>(.*?)<").ToList();
             var start = matches.Count() - 1;
             if (matches.FirstOrDefault() is not null)
@@ -103,21 +75,21 @@ namespace BrilliantComic.Models.Comics
 
         public override void LoadMoreData()
         {
-            var start = html.IndexOf("Author");
-            var end = html.IndexOf("list-chapter");
+            var start = Html.IndexOf("Author");
+            var end = Html.IndexOf("list-chapter");
             if (start < 0 || end < 0)
             {
                 Chapters = Chapters.Append(new HasuChapter("暂无章节", "", -1, false) { Comic = this });
                 return;
             }
-            var moreDataHtml = html.Substring(start, end - start);
-            if (!string.IsNullOrEmpty(html))
+            var moreDataHtml = Html.Substring(start, end - start);
+            if (!string.IsNullOrEmpty(Html))
             {
                 var result = Regex.Match(moreDataHtml, "Author[\\s\\S]*?<a[\\s\\S]*?>(.*?)<[\\s\\S]*?Artist[\\s\\S]*?<a[\\s\\S]*?>(.*?)<[\\s\\S]*?Status[\\s\\S]*?<a[\\s\\S]*?>(.*?)<");
                 Author = result.Groups[1].Value + "(作者)," + result.Groups[2].Value + "(画手)";
                 Status = result.Groups[3].Value;
                 Description = Regex.Match(moreDataHtml, "Summary[\\s\\S]*?<div>([\\s\\S]*?)</div>").Groups[1].Value.Replace("<p>", "").Replace("\\n", "");
-                moreDataHtml = html.Substring(html.IndexOf("list-chapter"));
+                moreDataHtml = Html.Substring(Html.IndexOf("list-chapter"));
                 LastestUpdateTime = "(" + Regex.Match(moreDataHtml, "td.*?date-updated\">(.*?)<").Groups[1].Value + ")";
             }
         }

@@ -29,6 +29,7 @@
                 HasUnevenRows="True"
                 IsPullToRefreshEnabled="False"
                 ItemsSource="{Binding Images}"
+                SelectionMode="None"
                 SeparatorVisibility="None">
                 <ListView.ItemTemplate>
                     <DataTemplate>
@@ -36,13 +37,13 @@
                             <Grid>
                                 <Image x:Name="img" Source="{Binding}" />
                                 <Label
-                                    Margin="100"
-                                    HeightRequest="400"
+                                    HeightRequest="600"
                                     HorizontalOptions="Center"
+                                    HorizontalTextAlignment="Center"
                                     IsVisible="{Binding IsLoading, Source={x:Reference img}}"
                                     Text="加载中..."
                                     TextColor="Black"
-                                    VerticalOptions="Center" />
+                                    VerticalTextAlignment="Center" />
                             </Grid>
                         </ViewCell>
                     </DataTemplate>

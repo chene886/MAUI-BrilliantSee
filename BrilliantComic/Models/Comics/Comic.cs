@@ -22,6 +22,11 @@ namespace BrilliantComic.Models.Comics
         public int Id { get; set; }
 
         /// <summary>
+        /// 漫画html
+        /// </summary>
+        public string Html { get; set; } = string.Empty;
+
+        /// <summary>
         /// 封面链接
         /// </summary>
         public string Cover { get; set; } = string.Empty;
@@ -55,7 +60,7 @@ namespace BrilliantComic.Models.Comics
         /// <summary>
         /// 漫画源
         /// </summary>
-        public required ISource Source { get; set; }
+        public required Source Source { get; set; }
 
         /// <summary>
         /// 漫画源名
@@ -105,10 +110,64 @@ namespace BrilliantComic.Models.Comics
         public DBComicCategory Category { get; set; } = DBComicCategory.Default;
 
         /// <summary>
+        /// 从存储的漫画数据创建漫画实体
+        /// </summary>
+        /// <param name="dbComic"></param>
+        /// <returns></returns>
+        public Comic CreateComicFromDBComic(DBComic dbComic)
+        {
+            Url = dbComic.Url;
+            Name = dbComic.Name;
+            Cover = dbComic.Cover;
+            Author = dbComic.Author;
+            Id = dbComic.Id;
+            Category = dbComic.Category;
+            LastReadedChapterIndex = dbComic.LastReadedChapterIndex;
+            IsUpdate = dbComic.IsUpdate;
+            LastestChapterName = dbComic.LastestChapterName;
+            SourceName = dbComic.SourceName;
+            return (Comic)this.MemberwiseClone();
+        }
+
+        /// <summary>
+        /// 从漫画实体创建存储的漫画数据
+        /// </summary>
+        /// <param name="comic"></param>
+        /// <returns></returns>
+        public DBComic CreateDBComicFromComic(Comic comic)
+        {
+            return new DBComic
+            {
+                Id = comic.Id,
+                Name = comic.Name,
+                Author = comic.Author,
+                Cover = comic.Cover,
+                Source = this.SourceName,
+                Url = comic.Url,
+                Category = comic.Category,
+                LastReadedChapterIndex = comic.LastReadedChapterIndex,
+                IsUpdate = comic.IsUpdate,
+                LastestChapterName = comic.LastestChapterName,
+                SourceName = comic.SourceName
+            };
+        }
+
+        /// <summary>
         /// 获取网站html
         /// </summary>
         /// <returns></returns>
-        public abstract Task<bool> GetHtmlAsync();
+        public async Task<bool> GetHtmlAsync()
+        {
+            try
+            {
+                Html = await Source.HttpClient!.GetStringAsync(Url);
+            }
+            catch
+            {
+                return false;
+            }
+            return true;
+        }
 
         /// <summary>
         /// 获取更多漫画数据
@@ -134,6 +193,14 @@ namespace BrilliantComic.Models.Comics
         /// <param name="chapter">当前章节</param>
         /// <param name="flag">获取上一章节或下一章节的标志</param>
         /// <returns></returns>
-        public abstract Chapter? GetNearChapter(Chapter chapter, string flag);
+        public Chapter? GetNearChapter(Chapter chapter, string flag)
+        {
+            var tempChapters = Chapters.ToList();
+            int index = tempChapters.IndexOf(chapter);
+            bool turn = flag == "Last";
+            index = IsReverseList == turn ? index + 1 : index - 1;
+            if (index < 0 || index >= Chapters.Count()) return null;
+            return Chapters.ElementAtOrDefault(index)!;
+        }
     }
 }

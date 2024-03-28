@@ -77,9 +77,6 @@ namespace BrilliantComic.Services
 
         public async Task BeingMessageAsync()
         {
-            //var path = FileSystem.AppDataDirectory;
-            //if (!File.Exists(Path.Combine(path, "recorde.wav")))
-            //    using (File.Create(Path.Combine(path, "recorde.wav"))) { }
             if (!_audioRecorder.IsRecording)
                 await _audioRecorder.StartAsync();
         }

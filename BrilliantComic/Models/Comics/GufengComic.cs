@@ -11,8 +11,6 @@ namespace BrilliantComic.Models.Comics
 {
     public class GufengComic : Comic
     {
-        private string html = string.Empty;
-
         public GufengComic(string url, string name, string cover, string author)
         {
             Url = url;
@@ -21,34 +19,21 @@ namespace BrilliantComic.Models.Comics
             Author = author;
         }
 
-        /// <summary>
-        /// 获取漫画网页源代码
-        /// </summary>
-        /// <returns></returns>
-        public override async Task<bool> GetHtmlAsync()
+        public GufengComic()
         {
-            try
-            {
-                html = await Source.HttpClient.GetStringAsync(Url);
-            }
-            catch
-            {
-                return false;
-            }
-            return true;
         }
 
         public override void LoadMoreData()
         {
-            var start = html.IndexOf("Cover");
-            var end = html.IndexOf("comic-chapters");
+            var start = Html.IndexOf("Cover");
+            var end = Html.IndexOf("comic-chapters");
             if (start < 0 || end < 0)
             {
                 Chapters = Chapters.Append(new GufengChapter("暂无章节", "", -1, false) { Comic = this });
                 return;
             }
-            var moreDataHtml = html.Substring(start, end - start);
-            if (!string.IsNullOrEmpty(html))
+            var moreDataHtml = Html.Substring(start, end - start);
+            if (!string.IsNullOrEmpty(Html))
             {
                 var result = Regex.Match(moreDataHtml, "</dd[\\s\\S]*?</dd[\\s\\S]*?</dd[\\s\\S]*?<dd[\\s\\S]*?>(.*?)<[\\s\\S]*?简介：(.*?)<");
                 Status = "连载中";
@@ -59,37 +44,19 @@ namespace BrilliantComic.Models.Comics
 
         public override string? GetLastestChapterName()
         {
-            var start = html.IndexOf("Cover");
-            var end = html.IndexOf("开始阅读");
+            var start = Html.IndexOf("Cover");
+            var end = Html.IndexOf("开始阅读");
             if (start < 0 || end < 0)
             {
                 return "";
             }
-            var moreDataHtml = html.Substring(start, end - start);
-            if (!string.IsNullOrEmpty(html))
+            var moreDataHtml = Html.Substring(start, end - start);
+            if (!string.IsNullOrEmpty(Html))
             {
                 var result = Regex.Match(moreDataHtml, "dd[\\s\\S]*?>(.*?)<");
                 return result.Groups[1].Value;
             }
             return "";
-        }
-
-        public override Chapter? GetNearChapter(Chapter chapter, string flag)
-        {
-            int index = -1;
-            int change = 1;
-            if (IsReverseList) change = -1;
-            var tempChapters = Chapters.ToList();
-            if (flag == "Last")
-            {
-                index = tempChapters.IndexOf(chapter) - change;
-            }
-            else if (flag == "Next")
-            {
-                index = tempChapters.IndexOf(chapter) + change;
-            }
-            if (index < 0 || index >= Chapters.Count()) return null;
-            return Chapters.ElementAtOrDefault(index)!;
         }
 
         public override async Task LoadChaptersAsync()
@@ -98,12 +65,12 @@ namespace BrilliantComic.Models.Comics
             var flag = true;
             var chapters = new List<GufengChapter>();
 
-            if (html.IndexOf(index) < 0)
+            if (Html.IndexOf(index) < 0)
             {
                 Chapters = Chapters.Append(new GufengChapter("暂无章节", "", -1, false) { Comic = this });
                 return;
             }
-            var chaptershtml = html.Substring(html.IndexOf(index));
+            var chaptershtml = Html.Substring(Html.IndexOf(index));
             var matches = Regex.Matches(chaptershtml, "<li>[\\s\\S]*?href=\"(.*?)\"[\\s\\S]*?<span>(.*?)<").ToList();
             if (flag) matches.Reverse();
             var start = matches.Count() - 1;
