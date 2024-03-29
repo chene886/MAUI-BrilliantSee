@@ -13,13 +13,10 @@ namespace BrilliantComic.Models.Sources
 {
     public partial class GodaSource : Source
     {
-        private readonly SourceService _sourceService;
-
-        public GodaSource(SourceService sourceService)
+        public GodaSource()
         {
             SetHttpClient("https://godamanga.com/");
             Name = "Goda漫画";
-            _sourceService = sourceService;
         }
 
         /// <summary>
@@ -46,11 +43,13 @@ namespace BrilliantComic.Models.Sources
 
                 foreach (Match match in matches)
                 {
-                    var comic = new GodaComic("https://godamanga.com" + match.Groups[1].Value, match.Groups[3].Value, match.Groups[2].Value.Replace("%3A", ":").Replace("%2F", "/"), "暂无作者信息")
+                    var comic = new GodaComic()
                     {
+                        Url = "https://godamanga.com" + match.Groups[1].Value,
+                        Name = match.Groups[3].Value,
+                        Cover = match.Groups[2].Value.Replace("%3A", ":").Replace("%2F", "/"),
                         Source = this,
                         SourceName = Name,
-                        LastestUpdateTime = "(暂无最后更新信息)"
                     };
                     comics.Add(comic);
                 }

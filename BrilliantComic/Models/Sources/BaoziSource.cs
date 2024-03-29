@@ -15,13 +15,10 @@ namespace BrilliantComic.Models.Sources
 {
     public partial class BaoziSource : Source
     {
-        private readonly SourceService _sourceService;
-
-        public BaoziSource(SourceService sourceService)
+        public BaoziSource()
         {
             SetHttpClient("https://cn.baozimh.com/");
             Name = "包子漫画";
-            _sourceService = sourceService;
         }
 
         /// <summary>
@@ -48,7 +45,15 @@ namespace BrilliantComic.Models.Sources
 
                 foreach (Match match in matches)
                 {
-                    var comic = new BaoziComic("https://cn.baozimh.com" + match.Groups[1].Value, match.Groups[2].Value, match.Groups[3].Value, match.Groups[4].Value + " ") { Source = this, SourceName = Name, LastestUpdateTime = "(暂无最后更新信息)" };
+                    var comic = new BaoziComic()
+                    {
+                        Url = "https://cn.baozimh.com" + match.Groups[1].Value,
+                        Name = match.Groups[2].Value,
+                        Cover = match.Groups[3].Value,
+                        Author = match.Groups[4].Value,
+                        Source = this,
+                        SourceName = Name
+                    };
                     comics.Add(comic);
                 }
 

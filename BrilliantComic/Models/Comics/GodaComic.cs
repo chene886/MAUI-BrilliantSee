@@ -10,19 +10,6 @@ namespace BrilliantComic.Models.Comics
 {
     public class GodaComic : Comic
     {
-
-        public GodaComic(string url, string name, string cover, string author)
-        {
-            Url = url;
-            Cover = cover;
-            Name = name;
-            Author = author;
-        }
-
-        public GodaComic()
-        {
-        }
-
         /// <summary>
         /// 获取更多漫画信息
         /// </summary>
@@ -85,11 +72,12 @@ namespace BrilliantComic.Models.Comics
                     LastestChapterName = matches.FirstOrDefault()!.Groups[2].Value;
                     foreach (Match match in matches)
                     {
-                        var isSpecial = false;
-                        var url = match.Groups[1].Value;
-                        var name = match.Groups[2].Value;
-                        if (start == LastReadedChapterIndex) isSpecial = true;
-                        chapters.Add(new GodaChapter(name, url, start, isSpecial) { Comic = this });
+                        chapters.Add(new GodaChapter(
+                            match.Groups[2].Value,
+                            match.Groups[1].Value,
+                            start,
+                            start == LastReadedChapterIndex)
+                        { Comic = this });
                         start--;
                     }
                 }
@@ -131,6 +119,5 @@ namespace BrilliantComic.Models.Comics
             }
             else { return null; }
         }
-
     }
 }

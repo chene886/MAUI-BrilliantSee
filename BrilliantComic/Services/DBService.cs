@@ -145,7 +145,6 @@ namespace BrilliantComic.Services
             return await _db.Table<DBComic>().DeleteAsync(i => i.Url == comic.Url && i.Category == category);
         }
 
-        
         /// <summary>
         /// 获取对应类别的设置项
         /// </summary>

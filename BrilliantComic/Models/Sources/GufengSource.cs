@@ -13,13 +13,10 @@ namespace BrilliantComic.Models.Sources
 {
     public partial class GufengSource : Source
     {
-        private readonly SourceService _sourceService;
-
-        public GufengSource(SourceService sourceService)
+        public GufengSource()
         {
             SetHttpClient("https://m.gufengmh9.com/");
             Name = "古风漫画";
-            _sourceService = sourceService;
         }
 
         /// <summary>
@@ -45,7 +42,16 @@ namespace BrilliantComic.Models.Sources
 
                 foreach (Match match in matches)
                 {
-                    var comic = new GufengComic(match.Groups[1].Value, match.Groups[2].Value, match.Groups[3].Value, match.Groups[4].Value) { Source = this, SourceName = Name, LastestUpdateTime = "(更新时间：" + match.Groups[5].Value + ")" };
+                    var comic = new GufengComic()
+                    {
+                        Url = match.Groups[1].Value,
+                        Name = match.Groups[2].Value,
+                        Cover = match.Groups[3].Value,
+                        Author = match.Groups[4].Value,
+                        LastestUpdateTime = "(更新时间：" + match.Groups[5].Value + ")",
+                        Source = this,
+                        SourceName = Name,
+                    };
 
                     comics.Add(comic);
                 }

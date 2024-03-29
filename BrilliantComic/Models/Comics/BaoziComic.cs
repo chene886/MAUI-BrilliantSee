@@ -16,18 +16,6 @@ namespace BrilliantComic.Models.Comics
 {
     public class BaoziComic : Comic
     {
-        public BaoziComic(string url, string name, string cover, string author)
-        {
-            Url = url;
-            Cover = cover;
-            Name = name;
-            Author = author;
-        }
-
-        public BaoziComic()
-        {
-        }
-
         /// <summary>
         /// 获取更多漫画信息
         /// </summary>
@@ -86,11 +74,12 @@ namespace BrilliantComic.Models.Comics
             }
             foreach (Match match in matches)
             {
-                var isSpecial = false;
-                var url = "https://cn.czmanga.com/comic/chapter/" + Url.Split("/").Last() + "/0_" + start.ToString() + ".html";
-                var name = match.Groups[1].Value;
-                if (start == LastReadedChapterIndex) isSpecial = true;
-                chapters.Add(new BaoziChapter(name, url, start, isSpecial) { Comic = this });
+                chapters.Add(new BaoziChapter(
+                    match.Groups[1].Value,
+                    "https://cn.czmanga.com/comic/chapter/" + Url.Split("/").Last() + "/0_" + start.ToString() + ".html",
+                    start,
+                    start == LastReadedChapterIndex)
+                { Comic = this });
                 start--;
             }
             await MainThread.InvokeOnMainThreadAsync(() =>

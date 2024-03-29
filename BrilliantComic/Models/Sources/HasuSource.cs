@@ -13,13 +13,10 @@ namespace BrilliantComic.Models.Sources
 {
     public partial class HasuSource : Source
     {
-        private readonly SourceService _sourceService;
-
-        public HasuSource(SourceService sourceService)
+        public HasuSource()
         {
             SetHttpClient("https://mangahasu.se/");
             Name = "HasuManga";
-            _sourceService = sourceService;
         }
 
         public override async Task<IEnumerable<Comic>> SearchAsync(string keyword)
@@ -49,8 +46,14 @@ namespace BrilliantComic.Models.Sources
                 var comics = new List<Comic>();
                 foreach (Match match in matches)
                 {
-                    var comic = new HasuComic(match.Groups[2].Value, match.Groups[3].Value.Replace("&quot;", ""), match.Groups[1].Value, "(暂无作者信息)")
-                    { Source = this, SourceName = Name, LastestUpdateTime = "(暂无最后更新信息)" };
+                    var comic = new HasuComic()
+                    {
+                        Url = match.Groups[2].Value,
+                        Name = match.Groups[3].Value.Replace("&quot;", ""),
+                        Cover = match.Groups[1].Value,
+                        Source = this,
+                        SourceName = Name
+                    };
                     comics.Add(comic);
                     if (comics.Count == matches.Count - 10)
                     {

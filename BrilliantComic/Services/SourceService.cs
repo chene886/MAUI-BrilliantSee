@@ -16,6 +16,7 @@ namespace BrilliantComic.Services
         /// 储存图源的字典
         /// </summary>
         private Dictionary<string, Source> _sources = new();
+
         /// <summary>
         /// 储存漫画的字典
         /// </summary>
@@ -26,9 +27,9 @@ namespace BrilliantComic.Services
         /// </summary>
         public SourceService()
         {
-            var baozi = new BaoziSource(this);
-            var gufeng = new GufengSource(this);
-            var goda = new GodaSource(this);
+            var baozi = new BaoziSource();
+            var gufeng = new GufengSource();
+            var goda = new GodaSource();
             var baoziComic = new BaoziComic() { Source = baozi };
             var gufengComic = new GufengComic() { Source = gufeng };
             var godaComic = new GodaComic() { Source = goda };
@@ -42,6 +43,10 @@ namespace BrilliantComic.Services
             //_sources.Add(hasu.Name, hasu);
         }
 
+        /// <summary>
+        /// 获取所有图源
+        /// </summary>
+        /// <returns></returns>
         public List<Source> GetSources()
         {
             return _sources.Values.ToList();

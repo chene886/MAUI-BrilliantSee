@@ -8,24 +8,6 @@
     Title="{Binding Comic.Name}"
     Shell.ForegroundColor="Black"
     Shell.TabBarIsVisible="False">
-    <ContentPage.Resources>
-        <Style x:Key="labelStyle" TargetType="Label">
-            <Style.Triggers>
-                <DataTrigger
-                    Binding="{Binding IsSpecial}"
-                    TargetType="Label"
-                    Value="True">
-                    <Setter Property="TextColor" Value="White" />
-                    <Setter Property="Text" Value="最后浏览章节" />
-                    <Setter Property="FontAttributes" Value="Bold" />
-                </DataTrigger>
-            </Style.Triggers>
-            <Setter Property="HorizontalOptions" Value="Center" />
-            <Setter Property="VerticalOptions" Value="Center" />
-            <Setter Property="FontSize" Value="12" />
-            <Setter Property="LineBreakMode" Value="TailTruncation" />
-        </Style>
-    </ContentPage.Resources>
     <ContentPage.ToolbarItems>
         <ToolbarItem
             Command="{Binding SwitchIsFavoriteCommand}"
@@ -139,9 +121,22 @@
                         <Label
                             x:Name="label"
                             FontFamily="Default"
-                            Style="{StaticResource labelStyle}"
-                            Text="{Binding Name, Mode=OneWay}"
-                            TextColor="{StaticResource Gray500}" />
+                            FontSize="12"
+                            HorizontalOptions="Center"
+                            LineBreakMode="TailTruncation"
+                            Text="{Binding Name}"
+                            TextColor="{StaticResource Gray500}"
+                            VerticalOptions="Center">
+                            <Label.Triggers>
+                                <DataTrigger
+                                    Binding="{Binding IsSpecial}"
+                                    TargetType="Label"
+                                    Value="True">
+                                    <Setter Property="TextColor" Value="White" />
+                                    <Setter Property="FontAttributes" Value="Bold" />
+                                </DataTrigger>
+                            </Label.Triggers>
+                        </Label>
                     </Frame>
                 </DataTemplate>
             </CollectionView.ItemTemplate>

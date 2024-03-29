@@ -40,7 +40,7 @@ namespace BrilliantComic.Models.Comics
         /// 漫画作者
         /// </summary>
         [ObservableProperty]
-        public string _author = string.Empty;
+        public string _author = "(暂无作者信息)";
 
         /// <summary>
         /// 漫画简介
@@ -76,7 +76,7 @@ namespace BrilliantComic.Models.Comics
         /// 最新更新时间
         /// </summary>
         [ObservableProperty]
-        public string _lastestUpdateTime = string.Empty;
+        public string _lastestUpdateTime = "(暂无最后更新信息)";
 
         /// <summary>
         /// 是否有更新
@@ -170,6 +170,22 @@ namespace BrilliantComic.Models.Comics
         }
 
         /// <summary>
+        /// 从当前章节获取上一章节或下一章节
+        /// </summary>
+        /// <param name="chapter">当前章节</param>
+        /// <param name="flag">获取上一章节或下一章节的标志</param>
+        /// <returns></returns>
+        public Chapter? GetNearChapter(Chapter chapter, string flag)
+        {
+            var tempChapters = Chapters.ToList();
+            int index = tempChapters.IndexOf(chapter);
+            bool turn = flag == "Last";
+            index = IsReverseList == turn ? index + 1 : index - 1;
+            if (index < 0 || index >= Chapters.Count()) return null;
+            return Chapters.ElementAtOrDefault(index)!;
+        }
+
+        /// <summary>
         /// 获取更多漫画数据
         /// </summary>
         /// <returns></returns>
@@ -186,21 +202,5 @@ namespace BrilliantComic.Models.Comics
         /// </summary>
         /// <returns></returns>
         public abstract Task LoadChaptersAsync();
-
-        /// <summary>
-        /// 从当前章节获取上一章节或下一章节
-        /// </summary>
-        /// <param name="chapter">当前章节</param>
-        /// <param name="flag">获取上一章节或下一章节的标志</param>
-        /// <returns></returns>
-        public Chapter? GetNearChapter(Chapter chapter, string flag)
-        {
-            var tempChapters = Chapters.ToList();
-            int index = tempChapters.IndexOf(chapter);
-            bool turn = flag == "Last";
-            index = IsReverseList == turn ? index + 1 : index - 1;
-            if (index < 0 || index >= Chapters.Count()) return null;
-            return Chapters.ElementAtOrDefault(index)!;
-        }
     }
 }

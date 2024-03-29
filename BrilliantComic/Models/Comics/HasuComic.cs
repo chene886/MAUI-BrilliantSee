@@ -10,19 +10,6 @@ namespace BrilliantComic.Models.Comics
 {
     public class HasuComic : Comic
     {
-
-        public HasuComic(string url, string name, string cover, string author)
-        {
-            Url = url;
-            Cover = cover;
-            Name = name;
-            Author = author;
-        }
-
-        public HasuComic()
-        {
-        }
-
         public override string? GetLastestChapterName()
         {
             var Istart = Html.IndexOf("list-chapter");
@@ -59,11 +46,12 @@ namespace BrilliantComic.Models.Comics
             }
             foreach (Match match in matches)
             {
-                var isSpecial = false;
-                var url = match.Groups[1].Value;
-                var name = match.Groups[2].Value;
-                if (start == LastReadedChapterIndex) isSpecial = true;
-                chapters.Add(new HasuChapter(name, url, start, isSpecial) { Comic = this });
+                chapters.Add(new HasuChapter(
+                    match.Groups[2].Value,
+                    match.Groups[1].Value,
+                    start,
+                    start == LastReadedChapterIndex)
+                { Comic = this });
                 start--;
             }
 

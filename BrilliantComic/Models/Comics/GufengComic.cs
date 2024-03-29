@@ -11,18 +11,6 @@ namespace BrilliantComic.Models.Comics
 {
     public class GufengComic : Comic
     {
-        public GufengComic(string url, string name, string cover, string author)
-        {
-            Url = url;
-            Cover = cover;
-            Name = name;
-            Author = author;
-        }
-
-        public GufengComic()
-        {
-        }
-
         public override void LoadMoreData()
         {
             var start = Html.IndexOf("Cover");
@@ -80,11 +68,12 @@ namespace BrilliantComic.Models.Comics
             }
             foreach (Match match in matches)
             {
-                var isSpecial = false;
-                var url = "https://m.gufengmh9.com/" + match.Groups[1].Value;
-                var name = match.Groups[2].Value;
-                if (start == LastReadedChapterIndex) isSpecial = true;
-                chapters.Add(new GufengChapter(name, url, start, isSpecial) { Comic = this });
+                chapters.Add(new GufengChapter(
+                    match.Groups[2].Value,
+                    "https://m.gufengmh9.com/" + match.Groups[1].Value,
+                    start,
+                    start == LastReadedChapterIndex)
+                { Comic = this });
                 start--;
             }
 
