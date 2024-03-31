@@ -29,40 +29,27 @@ namespace BrilliantComic.Models.Sources
         public override async Task<IEnumerable<Comic>> SearchAsync(string keyword)
         {
             var url = $"https://cn.baozimh.com/search?q={keyword}";
-            try
+            var html = await GetHtmlAsync(url);
+            if (html == string.Empty) { return Array.Empty<Comic>(); }
+
+            string pattern = "comics-card.*?href=\\\"(.*?)\\\".*?title=\\\"(.*?)\\\"[\\s\\S]*?src=\"(.*?)\"[\\s\\S]*?small.*?>[\\s\\r\\n]*([\\s\\S]*?)</small>";
+            var matches = Regex.Matches(html, pattern);
+
+            var comics = new List<Comic>();
+            foreach (Match match in matches)
             {
-                var response = await HttpClient!.GetAsync(url);
-
-                if (!response.IsSuccessStatusCode)
+                var comic = new BaoziComic()
                 {
-                    return Array.Empty<Comic>();
-                }
-                var html = await response.Content.ReadAsStringAsync();
-                string pattern = "comics-card.*?href=\\\"(.*?)\\\".*?title=\\\"(.*?)\\\"[\\s\\S]*?src=\"(.*?)\"[\\s\\S]*?small.*?>[\\s\\r\\n]*([\\s\\S]*?)</small>";
-                var matches = Regex.Matches(html, pattern);
-
-                var comics = new List<Comic>();
-
-                foreach (Match match in matches)
-                {
-                    var comic = new BaoziComic()
-                    {
-                        Url = "https://cn.baozimh.com" + match.Groups[1].Value,
-                        Name = match.Groups[2].Value,
-                        Cover = match.Groups[3].Value,
-                        Author = match.Groups[4].Value,
-                        Source = this,
-                        SourceName = Name
-                    };
-                    comics.Add(comic);
-                }
-
-                return comics;
+                    Url = "https://cn.baozimh.com" + match.Groups[1].Value,
+                    Name = match.Groups[2].Value,
+                    Cover = match.Groups[3].Value,
+                    Author = match.Groups[4].Value,
+                    Source = this,
+                    SourceName = Name
+                };
+                comics.Add(comic);
             }
-            catch
-            {
-                return Array.Empty<Comic>();
-            }
+            return comics;
         }
     }
 }

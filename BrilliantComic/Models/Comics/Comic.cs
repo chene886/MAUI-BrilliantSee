@@ -158,11 +158,8 @@ namespace BrilliantComic.Models.Comics
         /// <returns></returns>
         public async Task<bool> GetHtmlAsync()
         {
-            try
-            {
-                Html = await Source.HttpClient!.GetStringAsync(Url);
-            }
-            catch
+            Html = await Source.GetHtmlAsync(Url);
+            if (Html == string.Empty)
             {
                 return false;
             }

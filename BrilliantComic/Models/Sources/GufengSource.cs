@@ -27,41 +27,28 @@ namespace BrilliantComic.Models.Sources
         public override async Task<IEnumerable<Comic>> SearchAsync(string keyword)
         {
             var url = $"https://m.gufengmh9.com/search/?keywords={keyword}&page=1";
-            try
+            var html = await GetHtmlAsync(url);
+            if (html == string.Empty) { return Array.Empty<Comic>(); }
+
+            string pattern = "itemBox\"[\\s\\S]*?href=\"(.*?)\"[\\s\\S]*?alt=\"(.*?)\"[\\s\\S]*?src=\"(.*?)\"[\\s\\S]*?me\">(.*?)<[\\s\\S]*?date\">(.*?)<";
+            var matches = Regex.Matches(html, pattern);
+
+            var comics = new List<Comic>();
+            foreach (Match match in matches)
             {
-                var response = await HttpClient!.GetAsync(url);
-                if (!response.IsSuccessStatusCode)
+                var comic = new GufengComic()
                 {
-                    return Array.Empty<Comic>();
-                }
-                var html = await response.Content.ReadAsStringAsync();
-                string pattern = "itemBox\"[\\s\\S]*?href=\"(.*?)\"[\\s\\S]*?alt=\"(.*?)\"[\\s\\S]*?src=\"(.*?)\"[\\s\\S]*?me\">(.*?)<[\\s\\S]*?date\">(.*?)<";
-                var matches = Regex.Matches(html, pattern);
-
-                var comics = new List<Comic>();
-
-                foreach (Match match in matches)
-                {
-                    var comic = new GufengComic()
-                    {
-                        Url = match.Groups[1].Value,
-                        Name = match.Groups[2].Value,
-                        Cover = match.Groups[3].Value,
-                        Author = match.Groups[4].Value,
-                        LastestUpdateTime = "(更新时间：" + match.Groups[5].Value + ")",
-                        Source = this,
-                        SourceName = Name,
-                    };
-
-                    comics.Add(comic);
-                }
-
-                return comics;
+                    Url = match.Groups[1].Value,
+                    Name = match.Groups[2].Value,
+                    Cover = match.Groups[3].Value,
+                    Author = match.Groups[4].Value,
+                    LastestUpdateTime = "(更新时间：" + match.Groups[5].Value + ")",
+                    Source = this,
+                    SourceName = Name,
+                };
+                comics.Add(comic);
             }
-            catch
-            {
-                return Array.Empty<Comic>();
-            }
+            return comics;
         }
     }
 }

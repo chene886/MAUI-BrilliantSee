@@ -27,39 +27,27 @@ namespace BrilliantComic.Models.Sources
         public override async Task<IEnumerable<Comic>> SearchAsync(string keyword)
         {
             var url = $"https://godamanga.com/s/{keyword}?pagw=1";
-            try
+            var html = await GetHtmlAsync(url);
+            if (html == string.Empty) { return Array.Empty<Comic>(); }
+
+            string pattern = "pb-2\"[\\s\\S]*?href=\"(.*?)\"[\\s\\S]*?url=(.*?)&[\\s\\S]*?h3[\\s\\S]*?>(.*?)<";
+            var matches = Regex.Matches(html, pattern);
+
+            var comics = new List<Comic>();
+            foreach (Match match in matches)
             {
-                var response = await HttpClient!.GetAsync(url);
-
-                if (!response.IsSuccessStatusCode)
+                var comic = new GodaComic()
                 {
-                    return Array.Empty<Comic>();
-                }
-                var html = await response.Content.ReadAsStringAsync();
-                string pattern = "pb-2\"[\\s\\S]*?href=\"(.*?)\"[\\s\\S]*?url=(.*?)&[\\s\\S]*?h3[\\s\\S]*?>(.*?)<";
-                var matches = Regex.Matches(html, pattern);
-
-                var comics = new List<Comic>();
-
-                foreach (Match match in matches)
-                {
-                    var comic = new GodaComic()
-                    {
-                        Url = "https://godamanga.com" + match.Groups[1].Value,
-                        Name = match.Groups[3].Value,
-                        Cover = match.Groups[2].Value.Replace("%3A", ":").Replace("%2F", "/"),
-                        Source = this,
-                        SourceName = Name,
-                    };
-                    comics.Add(comic);
-                }
-
-                return comics;
+                    Url = "https://godamanga.com" + match.Groups[1].Value,
+                    Name = match.Groups[3].Value,
+                    Cover = match.Groups[2].Value.Replace("%3A", ":").Replace("%2F", "/"),
+                    Source = this,
+                    SourceName = Name,
+                };
+                comics.Add(comic);
             }
-            catch
-            {
-                return Array.Empty<Comic>();
-            }
+
+            return comics;
         }
     }
 }
