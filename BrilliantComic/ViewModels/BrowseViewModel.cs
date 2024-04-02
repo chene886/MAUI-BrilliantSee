@@ -160,25 +160,6 @@ namespace BrilliantComic.ViewModels
                 Images.Add(image);
             }
             ButtonContent = chapter!.Index == chapter.Comic.ChapterCount - 1 ? "已是最新一话" : "点击加载下一话";
-            //var tasks = new List<Task<ImageSource>>();
-            //var sourceName = chapter.Comic.SourceName;
-            //var results = Array.Empty<ImageSource>();
-            //if (sourceName != "mangahasu")
-            //{
-            //    results = picEnumerator.Select(pic => ImageSource.FromUri(new Uri(pic))).ToArray();
-            //}
-            //else
-            //{
-            //foreach (var pic in picEnumerator)
-            //{
-            //    tasks.Add(Task.Run(async () =>
-            //    {
-            //        byte[] bytes = await Chapter!.Comic.Source.HttpClient.GetByteArrayAsync(new Uri(pic));
-            //        return ImageSource.FromStream(() => new MemoryStream(bytes));
-            //    }));
-            //}
-            //results = await Task.WhenAll(tasks);
-            //}
         }
 
         /// <summary>

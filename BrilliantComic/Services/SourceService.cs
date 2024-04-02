@@ -30,16 +30,21 @@ namespace BrilliantComic.Services
             var baozi = new BaoziSource();
             var gufeng = new GufengSource();
             var goda = new GodaSource();
+            var godaEn = new GodaEnSource();
             var baoziComic = new BaoziComic() { Source = baozi };
             var gufengComic = new GufengComic() { Source = gufeng };
             var godaComic = new GodaComic() { Source = goda };
+            var godaEnComic = new GodaEnComic() { Source = godaEn };
+
             //var hasu = new HasuSource();
             _sources.Add(baozi.Name, baozi);
             _sources.Add(gufeng.Name, gufeng);
             _sources.Add(goda.Name, goda);
+            _sources.Add(godaEn.Name, godaEn);
             _comics.Add(baozi.Name, baoziComic);
             _comics.Add(gufeng.Name, gufengComic);
             _comics.Add(goda.Name, godaComic);
+            _comics.Add(godaEn.Name, godaEnComic);
             //_sources.Add(hasu.Name, hasu);
         }
 

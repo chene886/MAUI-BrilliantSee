@@ -56,6 +56,7 @@ namespace BrilliantComic.Services
                 new SettingItem { Name = "包子漫画", Value = "IsSelected", Category = "Source" },
                 new SettingItem { Name = "古风漫画", Value = "IsSelected", Category = "Source" },
                 new SettingItem { Name = "Goda漫画", Value = "IsSelected", Category = "Source" },
+                new SettingItem { Name = "Goda(英)", Value = "IsSelected", Category = "Source" },
                 //new SettingItem { Name = "mangahasu", Value = "IsSelected", Category = "Source" },
                 new SettingItem { Name = "分享应用", Value = "去分享", Category = "通用" },
                 new SettingItem { Name = "错误反馈", Value = "去反馈", Category = "通用" },
