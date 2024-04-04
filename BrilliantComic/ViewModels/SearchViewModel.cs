@@ -37,6 +37,8 @@ namespace BrilliantComic.ViewModels
         [ObservableProperty]
         private bool _isSourceListVisible = false;
 
+        private string Keyword = string.Empty;
+
         [ObservableProperty]
         private List<Source> _sources = new();
 
@@ -81,10 +83,11 @@ namespace BrilliantComic.ViewModels
             var hasSourceSelected = Sources.Where(s => s.IsSelected == true).Count() > 0;
             if (hasSourceSelected)
             {
+                Keyword = keyword;
                 IsGettingResult = true;
                 IsSourceListVisible = false;
                 Comics.Clear();
-                await _sourceService.SearchAsync(keyword, Comics, "Default");
+                await _sourceService.SearchAsync(keyword, Comics, "Init");
                 if (Comics.Count == 0) { _ = Toast.Make("搜索结果为空，换一个图源试试吧").Show(); }
                 IsGettingResult = false;
             }
@@ -93,6 +96,18 @@ namespace BrilliantComic.ViewModels
                 _ = Toast.Make("请选择至少一个图源").Show();
                 return;
             }
+        }
+
+        public async Task GetMoreAsync()
+        {
+            _ = Toast.Make("正在加载更多结果").Show();
+            var count = Comics.Count;
+            IsGettingResult = true;
+            IsSourceListVisible = false;
+            await _sourceService.SearchAsync(Keyword, Comics, "More");
+            var message = Comics.Count == count ? "没有更多结果了" : $"加载了{Comics.Count - count}个结果";
+            _ = Toast.Make(message).Show();
+            IsGettingResult = false;
         }
 
         /// <summary>

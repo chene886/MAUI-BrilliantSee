@@ -17,6 +17,7 @@ namespace BrilliantComic.Models.Sources
         {
             SetHttpClient("https://godamanga.com/");
             Name = "Goda漫画";
+            HasMore = 1;
         }
 
         /// <summary>
@@ -26,12 +27,13 @@ namespace BrilliantComic.Models.Sources
         /// <returns></returns>
         public override async Task<IEnumerable<Comic>> SearchAsync(string keyword)
         {
-            var url = $"https://godamanga.com/s/{keyword}?pagw=1";
+            var url = $"https://godamanga.com/s/{keyword}?page={ResultNum}";
             var html = await GetHtmlAsync(url);
             if (html == string.Empty) { return Array.Empty<Comic>(); }
 
             string pattern = "pb-2\"[\\s\\S]*?href=\"(.*?)\"[\\s\\S]*?url=(.*?)&[\\s\\S]*?h3[\\s\\S]*?>(.*?)<";
             var matches = Regex.Matches(html, pattern);
+            if (matches.Count < 30) { HasMore = 0; }
 
             var comics = new List<Comic>();
             foreach (Match match in matches)

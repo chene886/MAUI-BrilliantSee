@@ -34,7 +34,7 @@ namespace BrilliantComic.Services.Plugins
                                              [Description("要查找的漫画名称")] string name,
                                                 [Description("存放搜索结果的漫画集合")] ObservableCollection<Comic> Comics)
         {
-            await _sc.SearchAsync(name, Comics, "AI");
+            await _sc.SearchAsync(name, Comics, "Init");
         }
 
         [KernelFunction, Description("获取漫画集合中指定下标的漫画")]

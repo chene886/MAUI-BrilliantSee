@@ -66,13 +66,23 @@ namespace BrilliantComic.Services
         public async Task SearchAsync(string keyword, ObservableCollection<Comic> comics, string flag)
         {
             IEnumerable<Source> sources;
-            if (flag == "Default")
+            if (flag == "Init")
             {
                 sources = _sources.Values.Where(s => s.IsSelected == true);
+                foreach (var source in sources)
+                {
+                    source.HasMore = source.HasMore == -1 ? -1 : 1;
+                    source.ResultNum = 1;
+                }
             }
             else
             {
-                sources = _sources.Values;
+                sources = _sources.Values.Where(s => s.IsSelected == true && s.HasMore == 1);
+                if (!sources.Any()) return;
+                foreach (var source in sources)
+                {
+                    source.ResultNum++;
+                }
             }
             //并发使用所有图源去搜索
             var tasks = new List<Task>();
@@ -85,7 +95,7 @@ namespace BrilliantComic.Services
                     {
                         foreach (var item in result)
                         {
-                            if (item == result.First() && comics.Any())
+                            if (item == result.First() && comics.Any() && flag == "Init")
                             {
                                 await MainThread.InvokeOnMainThreadAsync(() =>
                                 {

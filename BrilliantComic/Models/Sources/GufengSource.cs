@@ -17,6 +17,7 @@ namespace BrilliantComic.Models.Sources
         {
             SetHttpClient("https://m.gufengmh9.com/");
             Name = "古风漫画";
+            HasMore = 1;
         }
 
         /// <summary>
@@ -26,12 +27,13 @@ namespace BrilliantComic.Models.Sources
         /// <returns></returns>
         public override async Task<IEnumerable<Comic>> SearchAsync(string keyword)
         {
-            var url = $"https://m.gufengmh9.com/search/?keywords={keyword}&page=1";
+            var url = $"https://m.gufengmh9.com/search/?keywords={keyword}&page={ResultNum}";
             var html = await GetHtmlAsync(url);
             if (html == string.Empty) { return Array.Empty<Comic>(); }
 
             string pattern = "itemBox\"[\\s\\S]*?href=\"(.*?)\"[\\s\\S]*?alt=\"(.*?)\"[\\s\\S]*?src=\"(.*?)\"[\\s\\S]*?me\">(.*?)<[\\s\\S]*?date\">(.*?)<";
             var matches = Regex.Matches(html, pattern);
+            if (matches.Count < 36) { HasMore = 0; }
 
             var comics = new List<Comic>();
             foreach (Match match in matches)

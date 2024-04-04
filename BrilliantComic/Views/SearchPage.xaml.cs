@@ -38,15 +38,12 @@ public partial class SearchPage : ContentPage
 #endif
     }
 
-    private void CollectionView_Scrolled(object sender, ItemsViewScrolledEventArgs e)
+    private async void CollectionView_Scrolled(object sender, ItemsViewScrolledEventArgs e)
     {
-        if (e.FirstVisibleItemIndex == 0)
+        this.floatButton.IsVisible = e.FirstVisibleItemIndex == 0 ? false : true;
+        if (e.LastVisibleItemIndex == _vm.Comics.Count-1 && _vm.IsGettingResult == false && _vm.Comics.Count!=0)
         {
-            this.floatButton.IsVisible = false;
-        }
-        else
-        {
-            this.floatButton.IsVisible = true;
+            await _vm.GetMoreAsync();
         }
     }
 

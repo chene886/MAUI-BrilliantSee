@@ -17,6 +17,10 @@ namespace BrilliantComic.Models.Sources
 
         public string Name { get; set; } = string.Empty;
 
+        public int HasMore { get; set; } = -1;
+
+        public int ResultNum { get; set; } = 1;
+
         [ObservableProperty]
         public bool _isSelected = false;
 
