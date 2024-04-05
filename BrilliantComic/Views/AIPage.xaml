@@ -5,6 +5,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:controls="clr-namespace:BrilliantComic.Controls"
     Title="AI助手"
+    Shell.ForegroundColor="Black"
     Shell.NavBarHasShadow="True"
     Shell.TabBarIsVisible="False">
     <ContentPage.ToolbarItems>

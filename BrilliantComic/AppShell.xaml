@@ -7,9 +7,7 @@
     xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
     xmlns:views="clr-namespace:BrilliantComic.Views"
     Title="BrilliantComic"
-    BackgroundColor="#FAFAFA"
     FlyoutBehavior="Disabled"
-    ForegroundColor="Black"
     TitleColor="Black">
     <Shell.Behaviors>
         <toolkit:StatusBarBehavior StatusBarColor="{StaticResource Backcolor}" StatusBarStyle="DarkContent" />
