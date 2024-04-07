@@ -45,7 +45,7 @@
                 <Entry
                     x:Name="prompt"
                     ClearButtonVisibility="WhileEditing"
-                    FontFamily="Default"
+                    FontFamily=""
                     Placeholder="开始聊天或输入指令" />
             </Grid>
             <Button
@@ -53,7 +53,7 @@
                 Padding="8,0,8,1"
                 BackgroundColor="{StaticResource Primary}"
                 Clicked="StartChat"
-                FontFamily="Default"
+                FontFamily=""
                 HeightRequest="36"
                 Text="发送"
                 TextColor="White"
@@ -98,19 +98,19 @@
                 <Entry
                     x:Name="name"
                     ClearButtonVisibility="WhileEditing"
-                    FontFamily="Default"
+                    FontFamily=""
                     Placeholder="请输入模型,如:gpt-3.5-turbo-16k"
                     VerticalOptions="Start" />
                 <Entry
                     x:Name="key"
                     ClearButtonVisibility="WhileEditing"
-                    FontFamily="Default"
+                    FontFamily=""
                     Placeholder="请输入你的Key"
                     VerticalOptions="Start" />
                 <Entry
                     x:Name="url"
                     ClearButtonVisibility="WhileEditing"
-                    FontFamily="Default"
+                    FontFamily=""
                     Placeholder="请输入你的代理地址"
                     VerticalOptions="Start" />
                 <Button
@@ -118,7 +118,7 @@
                     Padding="8,0,8,1"
                     BackgroundColor="{StaticResource Primary}"
                     Clicked="UpdateModel"
-                    FontFamily="Default"
+                    FontFamily=""
                     HeightRequest="36"
                     Text="确定"
                     TextColor="White" />

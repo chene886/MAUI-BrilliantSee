@@ -66,18 +66,19 @@
                                 <Label
                                     Grid.Row="1"
                                     Padding="2,0"
-                                    FontAttributes="Bold"
-                                    FontFamily="Default"
+                                    FontFamily=""
+                                    FontSize="16"
                                     HorizontalOptions="Start"
                                     LineBreakMode="TailTruncation"
                                     Text="{Binding Name}" />
                                 <Label
                                     Grid.Row="2"
                                     Padding="2,0"
-                                    FontFamily="Default"
+                                    FontFamily=""
                                     FontSize="13"
                                     HorizontalOptions="Start"
-                                    Text="{Binding SourceName}" />
+                                    Text="{Binding SourceName}"
+                                    TextColor="{StaticResource Gray500}" />
                             </Grid>
                         </Frame>
                     </SwipeView>

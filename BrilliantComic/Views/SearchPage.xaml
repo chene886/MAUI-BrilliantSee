@@ -12,7 +12,7 @@
         <Entry
             x:Name="input"
             ClearButtonVisibility="WhileEditing"
-            FontFamily="Default"
+            FontFamily=""
             Placeholder="点击输入关键词"
             ReturnCommand="{Binding SearchCommand}"
             ReturnCommandParameter="{Binding Text, Source={RelativeSource Mode=Self}}"
@@ -56,7 +56,7 @@
                                     Tapped="TapGestureRecognizer_Tapped" />
                             </Grid.GestureRecognizers>
                             <Label
-                                FontFamily="Default"
+                                FontFamily=""
                                 Text="{Binding Name}"
                                 VerticalOptions="Center"
                                 WidthRequest="90" />
@@ -122,7 +122,7 @@
                                         Aspect="AspectFill"
                                         Source="{Binding Cover}" />
                                     <Label
-                                        FontFamily="Default"
+                                        FontFamily=""
                                         FontSize="Micro"
                                         HorizontalOptions="Center"
                                         IsVisible="{Binding IsLoading, Source={x:Reference img}}"
@@ -143,14 +143,14 @@
                                 </Grid.RowDefinitions>
                                 <Grid>
                                     <Label
-                                        FontFamily="Default"
+                                        FontFamily=""
                                         FontSize="18"
                                         HorizontalOptions="Start"
                                         LineBreakMode="NoWrap"
                                         MaximumWidthRequest="180"
                                         Text="{Binding Name}" />
                                     <Label
-                                        FontFamily="Default"
+                                        FontFamily=""
                                         FontSize="13"
                                         HorizontalOptions="End"
                                         Text="{Binding SourceName}"
@@ -158,20 +158,21 @@
                                 </Grid>
                                 <Label
                                     Grid.Row="1"
-                                    FontFamily="Default"
+                                    FontFamily=""
                                     FontSize="15"
                                     MaxLines="1"
                                     Text="{Binding Author}"
                                     TextColor="{StaticResource Gray300}" />
                                 <Label
                                     Grid.Row="2"
+                                    FontFamily=""
                                     FontSize="12"
                                     LineBreakMode="TailTruncation"
                                     Text="{Binding Url}"
                                     TextColor="{StaticResource Gray300}" />
                                 <Label
                                     Grid.Row="3"
-                                    FontFamily="Default"
+                                    FontFamily=""
                                     FontSize="13"
                                     HorizontalOptions="End"
                                     Text="{Binding LastestUpdateTime}"

@@ -19,9 +19,6 @@ namespace BrilliantComic.ViewModels
         public List<SettingItem> SettingItems_1 { get; set; } = new List<SettingItem>();
         public List<SettingItem> SettingItems_2 { get; set; } = new List<SettingItem>();
 
-        [ObservableProperty]
-        public bool _isWindowVisible = false;
-
         public SettingViewModel(DBService db)
         {
             _db = db;

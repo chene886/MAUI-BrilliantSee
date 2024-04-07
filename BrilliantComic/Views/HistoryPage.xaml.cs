@@ -39,14 +39,14 @@ public partial class HistoryPage : ContentPage
             Opacity = (float)0.3,
             Radius = 14,
         };
-        await obj!.ScaleTo(1.15, 200);
+        await obj!.ScaleTo(1.05, 100);
+        await obj!.ScaleTo(1, 100);
+        obj!.Shadow = shadow;
         bool answer = await DisplayAlert("清空历史记录", "历史记录清空后无法恢复，是否继续?", "确定", "取消");
         if (answer)
         {
             await _vm.ClearHistoryComicsAsync();
         }
-        await obj!.ScaleTo(1, 200);
-        obj!.Shadow = shadow;
     }
 
     private void JumpToSettingPage(object sender, EventArgs e)

@@ -32,8 +32,8 @@ public partial class DetailPage : ContentPage
             Opacity = (float)0.3,
             Radius = 14,
         };
-        await obj!.ScaleTo(1.15, 250);
-        await obj!.ScaleTo(1, 250);
+        await obj!.ScaleTo(1.05, 100);
+        await obj!.ScaleTo(1, 100);
         obj!.Shadow = shadow;
     }
 }

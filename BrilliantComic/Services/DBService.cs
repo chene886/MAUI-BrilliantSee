@@ -172,8 +172,12 @@ namespace BrilliantComic.Services
         /// <returns></returns>
         public async Task<bool> GetAudioStatus()
         {
-            var Item = await GetSettingItemsAsync("Audio");
-            return Item[0].Value == "true";
+            var Item = await _db.Table<SettingItem>().Where(i => i.Category == "Audio").FirstOrDefaultAsync();
+            if (Item == null)
+            {
+                return false;
+            }
+            return Item.Value == "true";
         }
     }
 }

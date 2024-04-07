@@ -68,8 +68,8 @@ public partial class AIPage : ContentPage
             Opacity = (float)0.3,
             Radius = 14,
         };
-        await obj!.ScaleTo(1.15, 200);
-        await obj!.ScaleTo(1, 200);
+        await obj!.ScaleTo(1.05, 50);
+        await obj!.ScaleTo(1, 50);
         obj!.Shadow = shadow;
     }
 
@@ -132,6 +132,7 @@ public partial class AIPage : ContentPage
             {
                 Text = input,
                 TextColor = Color.FromArgb("#512BD4"),
+                FontFamily = "",
             },
             BackgroundColor = Color.FromArgb("#FFFFFF"),
             Padding = new Thickness(8),
@@ -151,6 +152,7 @@ public partial class AIPage : ContentPage
                 {
                     Text = result,
                     TextColor = Color.FromArgb("#FFFFFF"),
+                    FontFamily = "",
                 },
                 CornerRadius = 10,
                 Padding = new Thickness(8),

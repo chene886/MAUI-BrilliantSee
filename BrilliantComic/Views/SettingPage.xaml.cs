@@ -23,9 +23,15 @@ public partial class SettingPage : ContentPage
             Opacity = (float)0.3,
             Radius = 14,
         };
-        await obj!.ScaleTo(1.15, 125);
-        await obj!.ScaleTo(1, 125);
+        await obj!.ScaleTo(1.05, 50);
+        await obj!.ScaleTo(1, 50);
         obj!.Shadow = shadow;
-        _vm.IsWindowVisible = !_vm.IsWindowVisible;
+        TapGestureRecognizer_Tapped(sender,new TappedEventArgs(e));
+    }
+
+    private void TapGestureRecognizer_Tapped(object sender, TappedEventArgs e)
+    {
+        this.cover.IsVisible = !this.cover.IsVisible;
+        this.window.IsVisible = !this.window.IsVisible;
     }
 }

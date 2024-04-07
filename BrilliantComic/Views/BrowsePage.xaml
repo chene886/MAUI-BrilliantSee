@@ -37,6 +37,7 @@
                             <Grid>
                                 <Image x:Name="img" Source="{Binding}" />
                                 <Label
+                                    FontFamily=""
                                     HeightRequest="600"
                                     HorizontalOptions="Center"
                                     HorizontalTextAlignment="Center"
@@ -54,8 +55,7 @@
                         BackgroundColor="White"
                         Clicked="Button_Clicked"
                         CornerRadius="0"
-                        FontAttributes="Italic"
-                        FontFamily="Default"
+                        FontFamily=""
                         FontSize="24"
                         IsVisible="{Binding IsShowButton}"
                         Text="{Binding ButtonContent}"
@@ -74,7 +74,7 @@
             BackgroundColor="#95212121"
             HorizontalOptions="End"
             VerticalOptions="End">
-            <Label Margin="0,0,5,0">
+            <Label Margin="0,0,5,0" FontFamily="">
                 <Label.Text>
                     <MultiBinding StringFormat="{}{0} 共 {1} 页">
                         <Binding Path="Chapter.Name" />
