@@ -64,6 +64,7 @@
                 </ListView.Footer>
             </ListView>
         </RefreshView>
+        <BoxView BackgroundColor="{AppThemeBinding Light={StaticResource Transparent}, Dark={StaticResource BlackTransparent}}" ZIndex="1" />
         <ActivityIndicator
             Margin="0,0,0,100"
             HeightRequest="55"

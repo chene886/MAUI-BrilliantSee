@@ -26,7 +26,13 @@ public partial class SettingPage : ContentPage
         await obj!.ScaleTo(1.05, 50);
         await obj!.ScaleTo(1, 50);
         obj!.Shadow = shadow;
-        TapGestureRecognizer_Tapped(sender,new TappedEventArgs(e));
+        if (obj!.Text.Contains("È¥")) await _vm.GoToAsync(obj!.Text);
+        else if (obj!.Text is "È·¶¨") TapGestureRecognizer_Tapped(sender, new TappedEventArgs(e));
+        else
+        {
+            TapGestureRecognizer_Tapped(sender, new TappedEventArgs(e));
+            await _vm.SetMessageAsync(obj.Text);
+        }
     }
 
     private void TapGestureRecognizer_Tapped(object sender, TappedEventArgs e)

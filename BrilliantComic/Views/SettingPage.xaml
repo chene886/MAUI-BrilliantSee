@@ -59,38 +59,37 @@
                 <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped" />
             </BoxView.GestureRecognizers>
         </BoxView>
-        <Grid
+        <Frame
             x:Name="window"
-            Margin="0,0,0,120"
-            HeightRequest="240"
+            Padding="0"
+            BorderColor="White"
+            CornerRadius="10"
+            HeightRequest="340"
             IsVisible="false"
-            WidthRequest="240"
+            WidthRequest="288"
             ZIndex="2">
-            <Frame
-                Margin="12,12,12,0"
-                Padding="0"
-                BorderColor="White"
-                CornerRadius="10"
-                HeightRequest="240"
-                VerticalOptions="Start">
+            <Grid Padding="10" RowSpacing="10">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
                 <ScrollView>
                     <Label
-                        Margin="8,16,0,16"
-                        FontSize="Body"
+                        FontSize="Small"
                         Text="{Binding Message}"
-                        VerticalOptions="Start" />
+                        VerticalOptions="Center" />
                 </ScrollView>
-            </Frame>
-            <Button
-                Margin="48,0,48,12"
-                Padding="8,0,8,1"
-                BackgroundColor="{StaticResource Primary}"
-                Clicked="Button_Clicked"
-                FontFamily="Default"
-                HeightRequest="36"
-                Text="确定"
-                TextColor="White"
-                VerticalOptions="End" />
-        </Grid>
+                <Button
+                    Grid.Row="1"
+                    Margin="64,0,64,0"
+                    Padding="8,0,8,1"
+                    BackgroundColor="{StaticResource Primary}"
+                    Clicked="Button_Clicked"
+                    FontFamily=""
+                    HeightRequest="36"
+                    Text="确定"
+                    TextColor="White" />
+            </Grid>
+        </Frame>
     </Grid>
 </ContentPage>
