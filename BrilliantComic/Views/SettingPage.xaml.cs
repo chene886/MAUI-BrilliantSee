@@ -26,13 +26,16 @@ public partial class SettingPage : ContentPage
         await obj!.ScaleTo(1.05, 50);
         await obj!.ScaleTo(1, 50);
         obj!.Shadow = shadow;
-        if (obj!.Text.Contains("去")) await _vm.GoToAsync(obj!.Text);
-        else if (obj!.Text is "确定") TapGestureRecognizer_Tapped(sender, new TappedEventArgs(e));
-        else
+        if (!obj!.Text.Contains("去"))
         {
             TapGestureRecognizer_Tapped(sender, new TappedEventArgs(e));
-            await _vm.SetMessageAsync(obj.Text);
+            if (obj!.Text.Contains("查看"))
+            {
+                await this.message.ScrollToAsync(this.message.Children.First(), ScrollToPosition.Start, false);
+                await _vm.SetMessageAsync(obj!.Text);
+            }
         }
+        else await _vm.GoToAsync(obj.Text);
     }
 
     private void TapGestureRecognizer_Tapped(object sender, TappedEventArgs e)

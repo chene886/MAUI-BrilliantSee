@@ -1,7 +1,9 @@
 ﻿using BrilliantComic.Models;
 using BrilliantComic.Models.Group;
 using BrilliantComic.Services;
+using CommunityToolkit.Maui.Alerts;
 using CommunityToolkit.Mvvm.ComponentModel;
+using Microsoft.Maui.ApplicationModel.Communication;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -53,19 +55,19 @@ namespace BrilliantComic.ViewModels
         {
             switch (value)
             {
-                case "去反馈":
-                    //await Launcher.OpenAsync(new Uri(""));
-                    break;
-
                 case "去支持":
                     await Launcher.OpenAsync(new Uri("https://github.com/chene886/MAUI-BrilliantComic"));
                     break;
 
                 case "去分享":
-                    //await Launcher.OpenAsync(new Uri(""));
+                    var Message = await _db.GetSettingItemMessageAsync("去分享");
+                    await Clipboard.SetTextAsync(Message);
+                    _ = Toast.Make("已复制下载链接，快分享给您的小伙伴吧").Show();
                     break;
 
                 default:
+                    if (Email.Default.IsComposeSupported)await Email.Default.ComposeAsync("BrilliantComic用户反馈","","3256366564@qq.com");
+                    else _ = Toast.Make("未找到邮件应用").Show();
                     break;
             };
         }
