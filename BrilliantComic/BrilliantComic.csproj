@@ -50,7 +50,7 @@
 		<!-- App Icon -->
 		<MauiIcon Include="Resources\AppIcon\appicon.svg" BaseSize="128,128" Color="#FFFFFF" />
 		<!-- Splash Screen -->
-		<MauiSplashScreen Include="Resources\Splash\splash.svg" Color="#00FAFAFA" BaseSize="168,168" Resize="True"/>
+		<MauiSplashScreen Include="Resources\Splash\splash.svg" Color="#00FAFAFA" BaseSize="168,168" Resize="True" />
 		<!-- Images -->
 		<MauiImage Include="Resources\Images\*" />
 		<MauiImage Update="Resources\Images\dotnet_bot.png" Resize="True" BaseSize="300,185" />
@@ -73,11 +73,6 @@
 	  <None Remove="Resources\Images\history.png" />
 	  <None Remove="Resources\Images\reverse.png" />
 	  <None Remove="Resources\Images\search.svg" />
-	  <None Remove="Services\WhisperModels\ggml-base.bin" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <EmbeddedResource Include="Services\WhisperModels\ggml-base.bin" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -87,12 +82,8 @@
 		<PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="8.0.6" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="8.0.0" />
 		<PackageReference Include="Microsoft.SemanticKernel" Version="1.6.2" />
-		<PackageReference Include="NAudio" Version="2.2.1" />
-		<PackageReference Include="Plugin.Maui.Audio" Version="2.1.0" />
 		<PackageReference Include="sqlite-net-pcl" Version="1.8.116" />
 		<PackageReference Include="SQLitePCLRaw.bundle_green" Version="2.1.8" />
-		<PackageReference Include="Whisper.net" Version="1.4.7" />
-		<PackageReference Include="Whisper.net.Runtime" Version="1.4.7" />
 	</ItemGroup>
 
 	<ItemGroup>

@@ -4,7 +4,6 @@ using CommunityToolkit.Maui;
 using BrilliantComic.ViewModels;
 using BrilliantComic.Services;
 using CommunityToolkit.Maui.Media;
-using Plugin.Maui.Audio;
 
 namespace BrilliantComic
 {
@@ -62,7 +61,6 @@ namespace BrilliantComic
             services.AddSingleton<DBService>();
             services.AddSingleton<SourceService>();
             services.AddSingleton<AIService>();
-            services.AddSingleton(AudioManager.Current);
         }
     }
 }

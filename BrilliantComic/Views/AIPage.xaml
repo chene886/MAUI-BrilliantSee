@@ -9,11 +9,11 @@
     Shell.NavBarHasShadow="True"
     Shell.TabBarIsVisible="False">
     <ContentPage.ToolbarItems>
-        <ToolbarItem
+        <!--<ToolbarItem
             x:Name="audioStatus"
             Clicked="ChangeAudioStatus"
             IconImageSource="{Binding AudioIcon}"
-            Text="启动语音识别" />
+            Text="启动语音识别" />-->
         <ToolbarItem
             x:Name="updateModel"
             Clicked="ToolbarItem_Clicked"

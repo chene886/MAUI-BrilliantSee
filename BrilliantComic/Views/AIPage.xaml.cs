@@ -43,7 +43,7 @@ public partial class AIPage : ContentPage
             this.model.IsVisible = true;
             this.cover.IsVisible = true;
             this.cover.IsEnabled = false;
-            this.audioStatus.IsEnabled = false;
+            //this.audioStatus.IsEnabled = false;
         }
     }
 
@@ -96,7 +96,7 @@ public partial class AIPage : ContentPage
             {
                 this.updateModel.IsEnabled = true;
                 this.cover.IsEnabled = true;
-                this.audioStatus.IsEnabled = true;
+                //this.audioStatus.IsEnabled = true;
             }
         }
         _ = Toast.Make(message).Show();
@@ -122,7 +122,6 @@ public partial class AIPage : ContentPage
             _ = Toast.Make("请正确输入内容").Show();
         }
     }
-
 
     private async Task Chat(string input)
     {
