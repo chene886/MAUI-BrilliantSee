@@ -1,6 +1,7 @@
 using BrilliantComic.ViewModels;
 using CommunityToolkit.Maui.Alerts;
 using CommunityToolkit.Maui.Core.Platform;
+using System.Text.RegularExpressions;
 
 namespace BrilliantComic.Views;
 
@@ -13,6 +14,7 @@ public partial class FavoritePage : ContentPage
         _vm = vm;
         this.BindingContext = _vm;
         InitializeComponent();
+        _ = CheckUpdate();
     }
 
     private void JumpToSearchPage(object sender, EventArgs e)
@@ -58,5 +60,25 @@ public partial class FavoritePage : ContentPage
         await obj!.ScaleTo(1.05, 100);
         await obj!.ScaleTo(1, 100);
         obj!.Shadow = shadow;
+    }
+
+    public async Task CheckUpdate()
+    {
+        var httpClient = new HttpClient();
+        var response = await httpClient.GetAsync("https://www.123pan.com/s/6cnjjv-6njBv.html");
+        var html = await response.Content.ReadAsStringAsync();
+        var match = Regex.Match(html, "\"FileName\"[\\s\\S]*?\"(.*?)\"");
+        if (match.Success)
+        {
+            var version = match.Groups[1].Value;
+            if (version != "BrilliantComic_v1.1.1")
+            {
+                bool answer = await DisplayAlert("检测到新版本", "是否更新?", "前往下载", "稍后更新");
+                if (answer)
+                {
+                    await Launcher.OpenAsync("https://www.123pan.com/s/6cnjjv-6njBv.html");
+                }
+            }
+        }
     }
 }

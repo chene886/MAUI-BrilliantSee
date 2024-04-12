@@ -20,7 +20,7 @@ public partial class BrowsePage : ContentPage
         if (button!.Text == "点击加载下一话")
         {
             this.list.Command.Execute("Next");
-            this.listView.ScrollTo(_vm.Images.First(), ScrollToPosition.Start, false);
+            if (_vm.Images.Count > 0) this.listView.ScrollTo(_vm.Images.First(), ScrollToPosition.Start, false);
         }
     }
 }
