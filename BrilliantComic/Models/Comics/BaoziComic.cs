@@ -62,7 +62,7 @@ namespace BrilliantComic.Models.Comics
             }
 
             var chaptershtml = Html.Substring(Html.IndexOf(index));
-            var matches = Regex.Matches(chaptershtml, "comics-chapters[\\s\\S]*?<span.*?>([\\s\\S]*?)</span>").ToList();
+            var matches = Regex.Matches(chaptershtml, "comics-chapters\"[\\s\\S]*?href=\"(.*?)\"[\\s\\S]*?<span.*?>([\\s\\S]*?)</span>").ToList();
             var start = matches.Count() - 1;
             if (flag)
             {
@@ -75,8 +75,8 @@ namespace BrilliantComic.Models.Comics
             foreach (Match match in matches)
             {
                 chapters.Add(new BaoziChapter(
-                    match.Groups[1].Value,
-                    "https://cn.czmanga.com/comic/chapter/" + Url.Split("/").Last() + "/0_" + start.ToString() + ".html",
+                    match.Groups[2].Value,
+                    "https://www.czmanga.com" + match.Groups[1].Value.Replace("amp;", ""),
                     start,
                     start == LastReadedChapterIndex)
                 { Comic = this });

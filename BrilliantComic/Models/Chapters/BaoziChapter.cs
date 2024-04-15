@@ -34,7 +34,7 @@ namespace BrilliantComic.Models.Chapters
                 {
                     if (count != 1)
                     {
-                        url = Url.Replace(".html", $"_{count}.html");
+                        url = Url + $"_{count}";
                     }
                     var msg = (await Comic.Source.HttpClient!.GetAsync(url));
                     if (msg.RequestMessage is null || msg.RequestMessage.RequestUri is null)
@@ -52,7 +52,7 @@ namespace BrilliantComic.Models.Chapters
                         PicUrls.Add(item.Groups[1].Value);
                     }
                     count++;
-                } while (Regex.Matches(html, "点击进入下一页").FirstOrDefault() is not null);
+                } while (Regex.Matches(html, "点击进入下一页").FirstOrDefault() is not null || Regex.Matches(html, "點擊進入下一頁").FirstOrDefault() is not null);
                 if (PicUrls.Count == 1) PicUrls.Add(PicUrls[0]);
                 PageCount = PicUrls.Count;
             }
