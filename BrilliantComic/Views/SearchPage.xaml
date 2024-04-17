@@ -28,7 +28,8 @@
     <Grid>
         <Frame
             x:Name="sourceList"
-            Padding="6,2"
+            Margin="0,0,1,0"
+            Padding="2"
             BackgroundColor="White"
             HasShadow="True"
             HeightRequest="184"
@@ -37,11 +38,11 @@
             VerticalOptions="Start"
             WidthRequest="140"
             ZIndex="3">
-            <CollectionView ItemsSource="{Binding Sources}">
+            <CollectionView HorizontalOptions="Center" ItemsSource="{Binding Sources}">
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
                         <Grid
-                            Margin="0,2"
+                            Margin="3,4,4,0"
                             Padding="8,0"
                             BackgroundColor="{StaticResource Backcolor}"
                             HeightRequest="40">

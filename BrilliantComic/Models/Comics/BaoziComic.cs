@@ -70,7 +70,7 @@ namespace BrilliantComic.Models.Comics
             }
             if (matches.FirstOrDefault() is not null)
             {
-                LastestChapterName = matches.FirstOrDefault()!.Groups[1].Value;
+                LastestChapterName = matches.FirstOrDefault()!.Groups[2].Value;
             }
             foreach (Match match in matches)
             {
