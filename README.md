@@ -1,4 +1,4 @@
-# BrilliantComic
+# BrilliantSee
 ## 项目介绍
 .NET平台下MAUI跨平台框架漫画阅读器，旨在为已适配的漫画网站提供更好的阅读体验。
 
