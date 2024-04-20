@@ -1,4 +1,4 @@
-﻿using BrilliantComic.Models.Comics;
+﻿using BrilliantSee.Models.Objs;
 using Microsoft.SemanticKernel;
 using System;
 using System.Collections.Generic;
@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BrilliantComic.Services.Plugins
+namespace BrilliantSee.Services.Plugins
 {
     public sealed class SearchPlugins
     {
@@ -32,15 +32,15 @@ namespace BrilliantComic.Services.Plugins
         [KernelFunction, Description("搜索指定名字的漫画")]
         public async Task FindComicByNameAsync(
                                              [Description("要查找的漫画名称")] string name,
-                                                [Description("存放搜索结果的漫画集合")] ObservableCollection<Comic> Comics)
+                                                [Description("存放搜索结果的漫画集合")] ObservableCollection<Obj> Comics)
         {
             await _sc.SearchAsync(name, Comics, "Init");
         }
 
         [KernelFunction, Description("获取漫画集合中指定下标的漫画")]
         [return: Description("获取到的漫画（可能没有）")]
-        public Comic? GetComicAsync(
-                                                [Description("用于获取结果的漫画集合")] ObservableCollection<Comic> comics,
+        public Obj? GetComicAsync(
+                                                [Description("用于获取结果的漫画集合")] ObservableCollection<Obj> comics,
             [Description("指定的下标")] int index)
         {
             return comics[index];

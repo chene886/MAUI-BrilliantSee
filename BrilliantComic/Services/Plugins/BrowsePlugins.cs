@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BrilliantComic.Services.Plugins
+namespace BrilliantSee.Services.Plugins
 {
     public sealed class BrowsePlugins
     {

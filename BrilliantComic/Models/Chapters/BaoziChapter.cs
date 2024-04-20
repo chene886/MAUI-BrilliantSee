@@ -1,4 +1,4 @@
-﻿using BrilliantComic.Models.Comics;
+﻿using BrilliantSee.Models.Objs;
 using CommunityToolkit.Mvvm.ComponentModel;
 using System;
 using System.Collections.Generic;
@@ -9,7 +9,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace BrilliantComic.Models.Chapters
+namespace BrilliantSee.Models.Chapters
 {
     public class BaoziChapter : Chapter
     {

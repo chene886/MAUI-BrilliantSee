@@ -1,7 +1,8 @@
-using BrilliantComic.ViewModels;
+using BrilliantSee.Models.Enums;
+using BrilliantSee.ViewModels;
 using CommunityToolkit.Maui.Core.Platform;
 
-namespace BrilliantComic.Views;
+namespace BrilliantSee.Views;
 
 public partial class SearchPage : ContentPage
 {
@@ -41,7 +42,7 @@ public partial class SearchPage : ContentPage
     private async void CollectionView_Scrolled(object sender, ItemsViewScrolledEventArgs e)
     {
         this.floatButton.IsVisible = e.FirstVisibleItemIndex == 0 ? false : true;
-        if (e.LastVisibleItemIndex == _vm.Comics.Count-1 && _vm.IsGettingResult == false && _vm.Comics.Count!=0)
+        if (e.LastVisibleItemIndex == _vm.Objs.Count - 1 && _vm.IsGettingResult == false && _vm.Objs.Count != 0)
         {
             await _vm.GetMoreAsync();
         }
@@ -85,5 +86,22 @@ public partial class SearchPage : ContentPage
     private void floatButton_Pressed(object sender, EventArgs e)
     {
         ButtonTapped(sender, sender.GetType());
+    }
+
+    private void Button_Clicked(object sender, EventArgs e)
+    {
+        var button = sender! as Button;
+        var text = button!.Text;
+        var buttons = new List<Button>() { this.comics, this.novels, this.videos };
+        foreach (var item in buttons)
+        {
+            item.FontSize = item.Text == text ? 18 : 14;
+        }
+        _vm.CurrentCategory = text == "Âþ»­" ? SourceCategory.Comic : text == "Ð¡Ëµ" ? SourceCategory.Novel : SourceCategory.Video;
+    }
+
+    private void comicList_ChildAdded(object sender, ElementEventArgs e)
+    {
+        this.select.IsVisible = true;
     }
 }

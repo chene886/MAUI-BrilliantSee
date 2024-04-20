@@ -1,6 +1,6 @@
-using BrilliantComic.Services;
+using BrilliantSee.Services;
 
-namespace BrilliantComic.Controls;
+namespace BrilliantSee.Controls;
 
 public partial class AudioRecognition : ContentView
 {

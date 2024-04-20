@@ -1,5 +1,6 @@
-﻿using BrilliantComic.Models.Comics;
-using BrilliantComic.Services;
+﻿using BrilliantSee.Models.Objs;
+using BrilliantSee.Models.Enums;
+using BrilliantSee.Services;
 using CommunityToolkit.Mvvm.ComponentModel;
 using System;
 using System.Collections.Generic;
@@ -9,7 +10,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace BrilliantComic.Models.Sources
+namespace BrilliantSee.Models.Sources
 {
     public abstract partial class Source : ObservableObject
     {
@@ -23,6 +24,8 @@ namespace BrilliantComic.Models.Sources
 
         [ObservableProperty]
         public bool _isSelected = false;
+
+        public SourceCategory Category { get; set; } = SourceCategory.Comic;
 
         /// <summary>
         /// 配置HttpClient
@@ -100,6 +103,6 @@ namespace BrilliantComic.Models.Sources
         /// </summary>
         /// <param name="keyword">搜索关键词</param>
         /// <returns></returns>
-        public abstract Task<IEnumerable<Comic>> SearchAsync(string keyword);
+        public abstract Task<IEnumerable<Obj>> SearchAsync(string keyword);
     }
 }

@@ -1,7 +1,7 @@
 ﻿using ObjCRuntime;
 using UIKit;
 
-namespace BrilliantComic
+namespace BrilliantSee
 {
     public class Program
     {

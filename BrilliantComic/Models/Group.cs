@@ -1,17 +1,18 @@
-﻿using System;
+﻿using BrilliantSee.Models.Sources;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BrilliantComic.Models.Group
+namespace BrilliantSee.Models
 {
-    public class SettingGroup : List<SettingItem>
+    public class Group<T> : List<T>
     {
         public string Name { get; set; }
 
-        public SettingGroup(string name, List<SettingItem> items) : base(items)
+        public Group(string name, List<T> items) : base(items)
         {
             Name = name;
         }

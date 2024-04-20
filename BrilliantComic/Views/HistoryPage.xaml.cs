@@ -1,7 +1,8 @@
-using BrilliantComic.ViewModels;
+using BrilliantSee.Models.Enums;
+using BrilliantSee.ViewModels;
 using System.Diagnostics;
 
-namespace BrilliantComic.Views;
+namespace BrilliantSee.Views;
 
 public partial class HistoryPage : ContentPage
 {
@@ -20,7 +21,7 @@ public partial class HistoryPage : ContentPage
     protected override async void OnAppearing()
     {
         base.OnAppearing();
-        await _vm.OnLoadHistoryComicAsync();
+        await _vm.OnLoadHistoryObjAsync();
         if (_vm._ai.hasModel)
         {
             _vm._ai.RemovePlugins();
@@ -45,12 +46,25 @@ public partial class HistoryPage : ContentPage
         bool answer = await DisplayAlert("清空历史记录", "历史记录清空后无法恢复，是否继续?", "确定", "取消");
         if (answer)
         {
-            await _vm.ClearHistoryComicsAsync();
+            await _vm.ClearHistoryObjsAsync();
         }
     }
 
     private void JumpToSettingPage(object sender, EventArgs e)
     {
         Shell.Current.GoToAsync("SettingPage");
+    }
+
+    private async void Button_Clicked(object sender, EventArgs e)
+    {
+        var button = sender! as Button;
+        var text = button!.Text;
+        var buttons = new List<Button>() { this.comics, this.novels, this.videos };
+        foreach (var item in buttons)
+        {
+            item.FontSize = item.Text == text ? 18 : 14;
+        }
+        _vm.CurrentCategory = text == "漫画" ? SourceCategory.Comic : text == "小说" ? SourceCategory.Novel : SourceCategory.Video;
+        await _vm.OnLoadHistoryObjAsync();
     }
 }

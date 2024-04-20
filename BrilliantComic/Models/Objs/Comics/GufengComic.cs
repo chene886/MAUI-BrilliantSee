@@ -1,4 +1,4 @@
-﻿using BrilliantComic.Models.Chapters;
+﻿using BrilliantSee.Models.Chapters;
 using CommunityToolkit.Maui.Alerts;
 using System;
 using System.Collections.Generic;
@@ -7,9 +7,9 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace BrilliantComic.Models.Comics
+namespace BrilliantSee.Models.Objs.Comics
 {
-    public class GufengComic : Comic
+    public class GufengComic : Obj
     {
         public override void LoadMoreData()
         {

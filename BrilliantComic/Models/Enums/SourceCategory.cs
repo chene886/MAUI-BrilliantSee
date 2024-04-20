@@ -4,23 +4,23 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BrilliantComic.Models.Enums
+namespace BrilliantSee.Models.Enums
 {
-    public enum DBComicCategory
+    public enum SourceCategory
     {
         /// <summary>
-        /// 收藏
+        /// 小说
         /// </summary>
-        Favorite = 1,
+        Novel = 1,
 
         /// <summary>
-        /// 历史
+        /// 漫画
         /// </summary>
-        History = 2,
+        Comic = 2,
 
         /// <summary>
-        /// 默认
+        /// 视频
         /// </summary>
-        Default = 3,
+        Video = 3,
     }
 }

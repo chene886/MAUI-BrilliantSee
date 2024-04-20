@@ -1,8 +1,8 @@
 ﻿<maui:MauiWinUIApplication
-    x:Class="BrilliantComic.WinUI.App"
+    x:Class="BrilliantSee.WinUI.App"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:maui="using:Microsoft.Maui"
-    xmlns:local="using:BrilliantComic.WinUI">
+    xmlns:local="using:BrilliantSee.WinUI">
 
 </maui:MauiWinUIApplication>

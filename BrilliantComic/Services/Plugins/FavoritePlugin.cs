@@ -1,6 +1,6 @@
 ﻿using Microsoft.SemanticKernel;
-using BrilliantComic.Models.Comics;
-using BrilliantComic.Models.Enums;
+using BrilliantSee.Models.Objs;
+using BrilliantSee.Models.Enums;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -8,10 +8,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using CommunityToolkit.Maui.Alerts;
-using BrilliantComic.Models.Chapters;
+using BrilliantSee.Models.Chapters;
 using System.Collections.ObjectModel;
 
-namespace BrilliantComic.Services.Plugins
+namespace BrilliantSee.Services.Plugins
 {
     public sealed class FavoritePlugin
     {
@@ -27,9 +27,9 @@ namespace BrilliantComic.Services.Plugins
         [KernelFunction, Description("取消收藏指定漫画")]
         [return: Description("是否成功取消收藏")]
         public async Task<bool> CancelFavoriteComicAsync(
-            [Description("指定的漫画")] Comic comic)
+            [Description("指定的漫画")] Obj comic)
         {
-            var result = await _db.DeleteComicAsync(comic, comic.Category);
+            var result = await _db.DeleteObjAsync(comic, comic.Category);
             if (result > -1)
             {
                 return true;
@@ -44,12 +44,12 @@ namespace BrilliantComic.Services.Plugins
         [return: Description("是否成功清空")]
         public async Task<bool> ClearFavoriteAsync()
         {
-            var Comics = await _db.GetComicsAsync(DBComicCategory.Favorite);
+            var Comics = await _db.GetObjsAsync(DBObjCategory.Favorite, SourceCategory.Comic);
             foreach (var item in Comics)
             {
-                await _db.DeleteComicAsync(item, item.Category);
+                await _db.DeleteObjAsync(item, item.Category);
             }
-            Comics = await _db.GetComicsAsync(DBComicCategory.Favorite);
+            Comics = await _db.GetObjsAsync(DBObjCategory.Favorite, SourceCategory.Comic);
             if (Comics.Count == 0)
             {
                 return true;
@@ -63,7 +63,7 @@ namespace BrilliantComic.Services.Plugins
         //打开功能
         [KernelFunction, Description("打开指定的收藏漫画")]
         public async Task OpenComicAsync(
-               [Description("要打开的漫画")] Comic comic)
+               [Description("要打开的漫画")] Obj comic)
         {
             if (comic is not null)
                 await MainThread.InvokeOnMainThreadAsync(async () =>
@@ -82,10 +82,10 @@ namespace BrilliantComic.Services.Plugins
         //查找功能
         [KernelFunction, Description("查找指定的收藏漫画")]
         [return: Description("查到的漫画（可能没有）")]
-        public async Task<Comic>? FindFavoriteAsync(
+        public async Task<Obj>? FindFavoriteAsync(
                           [Description("要查找的漫画名称")] string name)
         {
-            var Comics = await _db.GetComicsAsync(DBComicCategory.Favorite);
+            var Comics = await _db.GetObjsAsync(DBObjCategory.Favorite, SourceCategory.Comic);
             //模糊查找漫画名取第一个
             var comic = Comics.Where(c => c.Name.Contains(name)).FirstOrDefault();
             return comic;

@@ -1,5 +1,5 @@
-﻿using BrilliantComic.Models.Chapters;
-using BrilliantComic.Models.Sources;
+﻿using BrilliantSee.Models.Chapters;
+using BrilliantSee.Models.Sources;
 using CommunityToolkit.Maui.Alerts;
 using Microsoft.Maui.Controls;
 using SQLite;
@@ -12,9 +12,9 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace BrilliantComic.Models.Comics
+namespace BrilliantSee.Models.Objs.Comics
 {
-    public class BaoziComic : Comic
+    public class BaoziComic : Obj
     {
         /// <summary>
         /// 获取更多漫画信息

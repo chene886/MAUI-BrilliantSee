@@ -1,5 +1,6 @@
-﻿using BrilliantComic.Models.Comics;
-using BrilliantComic.Services;
+﻿using BrilliantSee.Models.Objs;
+using BrilliantSee.Models.Objs.Comics;
+using BrilliantSee.Services;
 using CommunityToolkit.Mvvm.ComponentModel;
 using System;
 using System.Collections.Generic;
@@ -9,7 +10,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace BrilliantComic.Models.Sources
+namespace BrilliantSee.Models.Sources.ComicSources
 {
     public partial class GodaSource : Source
     {
@@ -25,17 +26,17 @@ namespace BrilliantComic.Models.Sources
         /// </summary>
         /// <param name="keyword">搜索关键词</param>
         /// <returns></returns>
-        public override async Task<IEnumerable<Comic>> SearchAsync(string keyword)
+        public override async Task<IEnumerable<Obj>> SearchAsync(string keyword)
         {
             var url = $"https://godamanga.com/s/{keyword}?page={ResultNum}";
             var html = await GetHtmlAsync(url);
-            if (html == string.Empty) { return Array.Empty<Comic>(); }
+            if (html == string.Empty) { return Array.Empty<Obj>(); }
 
             string pattern = "pb-2\"[\\s\\S]*?href=\"(.*?)\"[\\s\\S]*?url=(.*?)&[\\s\\S]*?h3[\\s\\S]*?>(.*?)<";
             var matches = Regex.Matches(html, pattern);
             if (matches.Count < 30) { HasMore = 0; }
 
-            var comics = new List<Comic>();
+            var comics = new List<Obj>();
             foreach (Match match in matches)
             {
                 var comic = new GodaComic()
@@ -45,6 +46,7 @@ namespace BrilliantComic.Models.Sources
                     Cover = match.Groups[2].Value.Replace("%3A", ":").Replace("%2F", "/"),
                     Source = this,
                     SourceName = Name,
+                    SourceCategory = Category
                 };
                 comics.Add(comic);
             }

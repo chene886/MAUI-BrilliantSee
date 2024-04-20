@@ -1,6 +1,6 @@
-using BrilliantComic.ViewModels;
+using BrilliantSee.ViewModels;
 
-namespace BrilliantComic.Views;
+namespace BrilliantSee.Views;
 
 public partial class SettingPage : ContentPage
 {

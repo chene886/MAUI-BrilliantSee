@@ -1,8 +1,8 @@
-﻿using BrilliantComic.Models;
-using BrilliantComic.Services;
-using BrilliantComic.Views;
+﻿using BrilliantSee.Models;
+using BrilliantSee.Services;
+using BrilliantSee.Views;
 
-namespace BrilliantComic
+namespace BrilliantSee
 {
     public partial class App : Application
     {
@@ -17,6 +17,7 @@ namespace BrilliantComic
             Routing.RegisterRoute("DetailPage", typeof(DetailPage));
             Routing.RegisterRoute("BrowsePage", typeof(BrowsePage));
             Routing.RegisterRoute("AIPage", typeof(AIPage));
+            Routing.RegisterRoute("VideoPage", typeof(VideoPage));
         }
     }
 }

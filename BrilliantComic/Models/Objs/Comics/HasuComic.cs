@@ -1,4 +1,4 @@
-﻿using BrilliantComic.Models.Chapters;
+﻿using BrilliantSee.Models.Chapters;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,9 +6,9 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace BrilliantComic.Models.Comics
+namespace BrilliantSee.Models.Objs.Comics
 {
-    public class HasuComic : Comic
+    public class HasuComic : Obj
     {
         public override string? GetLastestChapterName()
         {

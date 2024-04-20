@@ -1,6 +1,6 @@
-﻿using BrilliantComic.Models.Comics;
-using BrilliantComic.Models.Enums;
-using BrilliantComic.Services;
+﻿using BrilliantSee.Models.Objs;
+using BrilliantSee.Models.Enums;
+using BrilliantSee.Services;
 using CommunityToolkit.Maui.Alerts;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -12,12 +12,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BrilliantComic.ViewModels
+namespace BrilliantSee.ViewModels
 {
     public partial class HistoryViewModel : ObservableObject
     {
         public readonly DBService _db;
         public readonly AIService _ai;
+
+        public SourceCategory CurrentCategory { get; set; } = SourceCategory.Comic;
 
         /// <summary>
         /// 是否正在获取结果
@@ -28,21 +30,21 @@ namespace BrilliantComic.ViewModels
         /// <summary>
         /// 储存历史漫画的集合
         /// </summary>
-        public ObservableCollection<Comic> Comics { get; set; } = new();
+        public ObservableCollection<Obj> Objs { get; set; } = new();
 
         /// <summary>
         /// 加载历史漫画
         /// </summary>
         /// <returns></returns>
-        public async Task OnLoadHistoryComicAsync()
+        public async Task OnLoadHistoryObjAsync()
         {
-            Comics.Clear();
+            Objs.Clear();
             IsGettingResult = true;
-            var comics = await _db.GetComicsAsync(Models.Enums.DBComicCategory.History);
-            comics.Reverse();
-            foreach (var item in comics)
+            var objs = await _db.GetObjsAsync(Models.Enums.DBObjCategory.History, CurrentCategory);
+            objs.Reverse();
+            foreach (var item in objs)
             {
-                Comics.Add(item);
+                Objs.Add(item);
             }
             IsGettingResult = false;
         }
@@ -57,37 +59,40 @@ namespace BrilliantComic.ViewModels
         /// 清空历史漫画
         /// </summary>
         /// <returns></returns>
-        public async Task ClearHistoryComicsAsync()
+        public async Task ClearHistoryObjsAsync()
         {
-            if (Comics.Count == 0)
+            if (Objs.Count == 0)
             {
                 _ = Toast.Make("暂无历史记录").Show();
                 return;
             }
-            foreach (var item in Comics)
+            foreach (var item in Objs)
             {
-                await _db.DeleteComicAsync(item, item.Category);
+                await _db.DeleteObjAsync(item, item.Category);
             }
-            Comics.Clear();
+            Objs.Clear();
             _ = Toast.Make("历史记录已清空").Show();
         }
 
         /// <summary>
         /// 导航到漫画详情页并传递漫画对象
         /// </summary>
-        /// <param name="comic">指定打开的漫画</param>
+        /// <param name="obj">指定打开的实体</param>
         /// <returns></returns>
         [RelayCommand]
-        private async Task OpenComicAsync(Comic comic)
+        private async Task OpenObjAsync(Obj obj)
         {
-            await Shell.Current.GoToAsync("DetailPage", new Dictionary<string, object> { { "Comic", comic } });
+            if (obj.SourceCategory == SourceCategory.Comic)
+                await Shell.Current.GoToAsync("DetailPage", new Dictionary<string, object> { { "Comic", obj } });
+            else
+                await Shell.Current.GoToAsync("VideoPage", new Dictionary<string, object> { { "Video", obj } });
         }
 
         [RelayCommand]
-        private async Task ClearAsync(Comic comic)
+        private async Task ClearObjAsync(Obj comic)
         {
-            await _db.DeleteComicAsync(comic, comic.Category);
-            Comics.Remove(comic);
+            await _db.DeleteObjAsync(comic, comic.Category);
+            Objs.Remove(comic);
         }
     }
 }

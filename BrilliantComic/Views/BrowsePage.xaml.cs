@@ -1,7 +1,7 @@
-using BrilliantComic.ViewModels;
+using BrilliantSee.ViewModels;
 using CommunityToolkit.Maui.Alerts;
 
-namespace BrilliantComic.Views;
+namespace BrilliantSee.Views;
 
 public partial class BrowsePage : ContentPage
 {

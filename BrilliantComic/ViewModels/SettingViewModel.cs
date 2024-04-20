@@ -1,6 +1,5 @@
-﻿using BrilliantComic.Models;
-using BrilliantComic.Models.Group;
-using BrilliantComic.Services;
+﻿using BrilliantSee.Models;
+using BrilliantSee.Services;
 using CommunityToolkit.Maui.Alerts;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Microsoft.Maui.ApplicationModel.Communication;
@@ -11,12 +10,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BrilliantComic.ViewModels
+namespace BrilliantSee.ViewModels
 {
     public partial class SettingViewModel : ObservableObject
     {
         private readonly DBService _db;
-        public ObservableCollection<SettingGroup> SettingGroups { get; set; } = new ObservableCollection<SettingGroup>();
+        public ObservableCollection<Group<SettingItem>> SettingGroups { get; set; } = new ObservableCollection<Group<SettingItem>>();
 
         public List<SettingItem> SettingItems_1 { get; set; } = new List<SettingItem>();
         public List<SettingItem> SettingItems_2 { get; set; } = new List<SettingItem>();
@@ -42,8 +41,8 @@ namespace BrilliantComic.ViewModels
             {
                 SettingItems_2.Add(item);
             }
-            SettingGroups.Add(new SettingGroup("通用", SettingItems_1));
-            SettingGroups.Add(new SettingGroup("关于", SettingItems_2));
+            SettingGroups.Add(new Group<SettingItem>("通用", SettingItems_1));
+            SettingGroups.Add(new Group<SettingItem>("关于", SettingItems_2));
         }
 
         public async Task SetMessageAsync(string value)
@@ -56,7 +55,7 @@ namespace BrilliantComic.ViewModels
             switch (value)
             {
                 case "去支持":
-                    await Launcher.OpenAsync(new Uri("https://github.com/chene886/MAUI-BrilliantComic"));
+                    await Launcher.OpenAsync(new Uri("https://github.com/chene886/MAUI-BrilliantSee"));
                     break;
 
                 case "去分享":
@@ -66,7 +65,7 @@ namespace BrilliantComic.ViewModels
                     break;
 
                 default:
-                    if (Email.Default.IsComposeSupported)await Email.Default.ComposeAsync("BrilliantComic用户反馈","","3256366564@qq.com");
+                    if (Email.Default.IsComposeSupported) await Email.Default.ComposeAsync("BrilliantSee用户反馈", "", "3256366564@qq.com");
                     else _ = Toast.Make("未找到邮件应用").Show();
                     break;
             };

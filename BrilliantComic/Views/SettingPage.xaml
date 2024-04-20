@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage
-    x:Class="BrilliantComic.Views.SettingPage"
+    x:Class="BrilliantSee.Views.SettingPage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     Title="设置"
@@ -13,12 +13,11 @@
             ItemsSource="{Binding SettingGroups}">
             <CollectionView.GroupHeaderTemplate>
                 <DataTemplate>
-                    <VerticalStackLayout Padding="16,8,16,0">
-                        <Label
-                            FontFamily=""
-                            FontSize="Large"
-                            Text="{Binding Name}" />
-                    </VerticalStackLayout>
+                    <Label
+                        Margin="16,12,16,0"
+                        FontFamily=""
+                        FontSize="Large"
+                        Text="{Binding Name}" />
                 </DataTemplate>
             </CollectionView.GroupHeaderTemplate>
             <CollectionView.ItemTemplate>

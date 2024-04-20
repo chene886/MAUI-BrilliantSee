@@ -1,7 +1,7 @@
-﻿using BrilliantComic.Models.Chapters;
-using BrilliantComic.Models.Comics;
-using BrilliantComic.Models.Enums;
-using BrilliantComic.Services;
+﻿using BrilliantSee.Models.Chapters;
+using BrilliantSee.Models.Objs;
+using BrilliantSee.Models.Enums;
+using BrilliantSee.Services;
 using CommunityToolkit.Maui.Alerts;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -11,7 +11,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BrilliantComic.ViewModels
+namespace BrilliantSee.ViewModels
 {
     public partial class DetailViewModel : ObservableObject, IQueryAttributable
     {
@@ -23,7 +23,7 @@ namespace BrilliantComic.ViewModels
         /// 当前漫画
         /// </summary>
         [ObservableProperty]
-        private Comic? _comic;
+        private Obj? _comic;
 
         /// <summary>
         /// 收藏图标
@@ -70,14 +70,14 @@ namespace BrilliantComic.ViewModels
             {
                 return;
             }
-            Comic = query["Comic"] as Comic;
+            Comic = query["Comic"] as Obj;
 
             IsGettingResult = true;
-            var isExist = await _db.IsComicExistAsync(Comic!, DBComicCategory.Favorite);
+            var isExist = await _db.IsComicExistAsync(Comic!, DBObjCategory.Favorite);
             if (isExist)
             {
                 FavoriteImage = ImageSource.FromFile("is_favorite.png");
-                Comic!.Category = DBComicCategory.Favorite;
+                Comic!.Category = DBObjCategory.Favorite;
             }
             else FavoriteImage = ImageSource.FromFile("not_favorite.png");
             var isSuccess = await Comic!.GetHtmlAsync();
@@ -95,7 +95,7 @@ namespace BrilliantComic.ViewModels
                     Comic!.IsUpdate = false;
                     _ = _db.UpdateComicAsync(Comic!);
                 }
-                _ = AddHistoryComicAsync();
+                _ = AddHistoryAsync();
             }
             else _ = Toast.Make("好像出了点小问题，用浏览器打开试试吧").Show();
         }
@@ -103,9 +103,9 @@ namespace BrilliantComic.ViewModels
         /// <summary>
         /// 储存漫画到历史记录
         /// </summary>
-        private async Task AddHistoryComicAsync()
+        private async Task AddHistoryAsync()
         {
-            await _db.SaveComicAsync(Comic!, DBComicCategory.History);
+            await _db.SaveObjAsync(Comic!, DBObjCategory.History);
         }
 
         /// <summary>
@@ -119,17 +119,17 @@ namespace BrilliantComic.ViewModels
             {
                 return;
             }
-            if (Comic.Category == DBComicCategory.Favorite)
+            if (Comic.Category == DBObjCategory.Favorite)
             {
                 FavoriteImage = ImageSource.FromFile("not_favorite.png");
-                await _db.DeleteComicAsync(Comic, Comic.Category);
-                Comic.Category = DBComicCategory.History;
+                await _db.DeleteObjAsync(Comic, Comic.Category);
+                Comic.Category = DBObjCategory.History;
             }
             else
             {
                 FavoriteImage = ImageSource.FromFile("is_favorite.png");
-                Comic.Category = DBComicCategory.Favorite;
-                await _db.SaveComicAsync(Comic, Comic.Category);
+                Comic.Category = DBObjCategory.Favorite;
+                await _db.SaveObjAsync(Comic, Comic.Category);
             }
             OnPropertyChanged(nameof(Comic));
         }

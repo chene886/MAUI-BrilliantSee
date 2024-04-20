@@ -6,7 +6,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
-namespace BrilliantComic.Models.Chapters
+namespace BrilliantSee.Models.Chapters
 {
     public class HasuChapter : Chapter
     {

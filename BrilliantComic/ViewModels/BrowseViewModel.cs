@@ -1,6 +1,6 @@
-﻿using BrilliantComic.Models.Chapters;
-using BrilliantComic.Models.Enums;
-using BrilliantComic.Services;
+﻿using BrilliantSee.Models.Chapters;
+using BrilliantSee.Models.Enums;
+using BrilliantSee.Services;
 using CommunityToolkit.Maui.Alerts;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -13,7 +13,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BrilliantComic.ViewModels
+namespace BrilliantSee.ViewModels
 {
     public partial class BrowseViewModel : ObservableObject, IQueryAttributable
     {
@@ -220,11 +220,11 @@ namespace BrilliantComic.ViewModels
         {
             Chapter!.Comic.LastReadedChapterIndex = Chapter.Index;
             var category = Chapter.Comic.Category;
-            Chapter.Comic.Category = DBComicCategory.History;
+            Chapter.Comic.Category = DBObjCategory.History;
             await _db.UpdateComicAsync(Chapter.Comic);
-            if (await _db.IsComicExistAsync(Chapter.Comic, DBComicCategory.Favorite))
+            if (await _db.IsComicExistAsync(Chapter.Comic, DBObjCategory.Favorite))
             {
-                Chapter.Comic.Category = DBComicCategory.Favorite;
+                Chapter.Comic.Category = DBObjCategory.Favorite;
                 await _db.UpdateComicAsync(Chapter.Comic);
             }
             Chapter.Comic.Category = category;

@@ -1,4 +1,4 @@
-﻿namespace BrilliantComic
+﻿namespace BrilliantSee
 {
     public partial class AppShell : Shell
     {

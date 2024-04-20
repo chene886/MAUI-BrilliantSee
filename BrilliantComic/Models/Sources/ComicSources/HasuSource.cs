@@ -1,5 +1,6 @@
-﻿using BrilliantComic.Models.Comics;
-using BrilliantComic.Services;
+﻿using BrilliantSee.Models.Objs;
+using BrilliantSee.Models.Objs.Comics;
+using BrilliantSee.Services;
 using CommunityToolkit.Mvvm.ComponentModel;
 using System;
 using System.Collections.Generic;
@@ -9,7 +10,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace BrilliantComic.Models.Sources
+namespace BrilliantSee.Models.Sources.ComicSources
 {
     public partial class HasuSource : Source
     {
@@ -19,11 +20,11 @@ namespace BrilliantComic.Models.Sources
             Name = "HasuManga";
         }
 
-        public override async Task<IEnumerable<Comic>> SearchAsync(string keyword)
+        public override async Task<IEnumerable<Obj>> SearchAsync(string keyword)
         {
             var url = $"https://mangahasu.se/advanced-search.html?keyword={keyword}";
             var html = await GetHtmlAsync(url);
-            if (html == string.Empty) { return Array.Empty<Comic>(); }
+            if (html == string.Empty) { return Array.Empty<Obj>(); }
 
             var start = html.IndexOf("imgage");
             var end = html.IndexOf("setTimeout");
@@ -35,10 +36,10 @@ namespace BrilliantComic.Models.Sources
             string pattern = "lazy[\\s\\S]*?src=\"(.*?)\"[\\s\\S]*?href=\"(.*?)\"[\\s\\S]*?h3>(.*?)<";
             if (html.IndexOf("date_") == -1)
             {
-                return Array.Empty<Comic>();
+                return Array.Empty<Obj>();
             }
             var matches = Regex.Matches(html, pattern);
-            var comics = new List<Comic>();
+            var comics = new List<Obj>();
             foreach (Match match in matches)
             {
                 var comic = new HasuComic()
@@ -47,7 +48,8 @@ namespace BrilliantComic.Models.Sources
                     Name = match.Groups[3].Value.Replace("&quot;", ""),
                     Cover = match.Groups[1].Value,
                     Source = this,
-                    SourceName = Name
+                    SourceName = Name,
+                    SourceCategory = Category
                 };
                 comics.Add(comic);
                 if (comics.Count == matches.Count - 10)

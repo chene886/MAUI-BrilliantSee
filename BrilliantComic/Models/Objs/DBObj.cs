@@ -1,10 +1,10 @@
-﻿using BrilliantComic.Models.Chapters;
-using BrilliantComic.Models.Enums;
+﻿using BrilliantSee.Models.Chapters;
+using BrilliantSee.Models.Enums;
 using SQLite;
 
-namespace BrilliantComic.Models.Comics
+namespace BrilliantSee.Models.Objs
 {
-    public class DBComic
+    public class DBObj
     {
         /// <summary>
         /// 储存数据库的主键
@@ -58,8 +58,13 @@ namespace BrilliantComic.Models.Comics
         public string SourceName { get; set; } = string.Empty;
 
         /// <summary>
-        /// 章节分类
+        /// 分类
         /// </summary>
-        public DBComicCategory Category { get; set; } = DBComicCategory.Default;
+        public DBObjCategory Category { get; set; } = DBObjCategory.Default;
+
+        /// <summary>
+        /// 来源分类
+        /// </summary>
+        public SourceCategory SourceCategory { get; set; }
     }
 }

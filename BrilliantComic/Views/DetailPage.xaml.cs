@@ -1,9 +1,8 @@
-using BrilliantComic.Models.Comics;
-using BrilliantComic.ViewModels;
+using BrilliantSee.ViewModels;
 using CommunityToolkit.Mvvm.ComponentModel;
 using System.Diagnostics.Metrics;
 
-namespace BrilliantComic.Views;
+namespace BrilliantSee.Views;
 
 public partial class DetailPage : ContentPage
 {

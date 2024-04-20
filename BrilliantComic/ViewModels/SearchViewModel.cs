@@ -1,8 +1,9 @@
-﻿using BrilliantComic.Models;
-using BrilliantComic.Models.Chapters;
-using BrilliantComic.Models.Comics;
-using BrilliantComic.Models.Sources;
-using BrilliantComic.Services;
+﻿using BrilliantSee.Models;
+using BrilliantSee.Models.Chapters;
+using BrilliantSee.Models.Objs;
+using BrilliantSee.Models.Enums;
+using BrilliantSee.Models.Sources;
+using BrilliantSee.Services;
 using CommunityToolkit.Maui.Alerts;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -13,7 +14,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BrilliantComic.ViewModels
+namespace BrilliantSee.ViewModels
 {
     public partial class SearchViewModel : ObservableObject
     {
@@ -24,9 +25,13 @@ namespace BrilliantComic.ViewModels
         private readonly AIService _ai;
 
         /// <summary>
-        /// 储存搜索漫画的结果集合
+        /// 储存搜索结果集合
         /// </summary>
-        public ObservableCollection<Comic> Comics { get; set; } = new();
+        public ObservableCollection<Obj> Objs { get; set; } = new();
+
+        public ObservableCollection<Obj> ObjsOnDisplay { get; set; } = new();
+
+        public SourceCategory CurrentCategory { get; set; } = SourceCategory.Comic;
 
         /// <summary>
         /// 是否正在获取结果
@@ -42,6 +47,8 @@ namespace BrilliantComic.ViewModels
         [ObservableProperty]
         private List<Source> _sources = new();
 
+        public ObservableCollection<Group<Source>> SourceGroups { get; set; } = new ObservableCollection<Group<Source>>();
+
         private List<SettingItem> SettingItems { get; set; } = new();
 
         public SearchViewModel(SourceService sourceService, DBService db)
@@ -50,6 +57,8 @@ namespace BrilliantComic.ViewModels
             _db = db;
             _ai = MauiProgram.servicesProvider!.GetRequiredService<AIService>();
             Sources = _sourceService.GetSources();
+            SourceGroups.Add(new Group<Source>("漫画", Sources.Where(s => s.Category == SourceCategory.Comic).ToList()));
+            SourceGroups.Add(new Group<Source>("动漫", Sources.Where(s => s.Category == SourceCategory.Video).ToList()));
             _ = InitSettingsAsync();
             if (_ai.hasModel)
             {
@@ -86,9 +95,9 @@ namespace BrilliantComic.ViewModels
                 Keyword = keyword;
                 IsGettingResult = true;
                 IsSourceListVisible = false;
-                Comics.Clear();
-                await _sourceService.SearchAsync(keyword, Comics, "Init");
-                if (Comics.Count == 0) { _ = Toast.Make("搜索结果为空，换一个图源试试吧").Show(); }
+                Objs.Clear();
+                await _sourceService.SearchAsync(keyword, Objs, "Init");
+                if (Objs.Count == 0) { _ = Toast.Make("搜索结果为空，换一个图源试试吧").Show(); }
                 IsGettingResult = false;
             }
             else
@@ -101,11 +110,11 @@ namespace BrilliantComic.ViewModels
         public async Task GetMoreAsync()
         {
             _ = Toast.Make("正在加载更多结果").Show();
-            var count = Comics.Count;
+            var count = Objs.Count;
             IsGettingResult = true;
             IsSourceListVisible = false;
-            await _sourceService.SearchAsync(Keyword, Comics, "More");
-            var message = Comics.Count == count ? "没有更多结果了" : $"加载了{Comics.Count - count}个结果";
+            await _sourceService.SearchAsync(Keyword, Objs, "More");
+            var message = Objs.Count == count ? "没有更多结果了" : $"加载了{Objs.Count - count}个结果";
             _ = Toast.Make(message).Show();
             IsGettingResult = false;
         }
@@ -113,14 +122,17 @@ namespace BrilliantComic.ViewModels
         /// <summary>
         /// 打开漫画详情页并传递漫画对象
         /// </summary>
-        /// <param name="comic">指定打开的漫画</param>
+        /// <param name="obj">指定打开的实体</param>
         /// <returns></returns>
         [RelayCommand]
-        private async Task OpenComicAsync(Comic comic)
+        private async Task OpenComicAsync(Obj obj)
         {
             IsSourceListVisible = false;
-            comic.Chapters = new List<Chapter>();
-            await Shell.Current.GoToAsync("DetailPage", new Dictionary<string, object> { { "Comic", comic } });
+            obj.Chapters = new List<Chapter>();
+            if (obj.SourceCategory == SourceCategory.Comic)
+                await Shell.Current.GoToAsync("DetailPage", new Dictionary<string, object> { { "Comic", obj } });
+            else
+                await Shell.Current.GoToAsync("VideoPage", new Dictionary<string, object> { { "Video", obj } });
         }
 
         [RelayCommand]

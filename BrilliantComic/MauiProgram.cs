@@ -1,11 +1,11 @@
-﻿using BrilliantComic.Views;
+﻿using BrilliantSee.Views;
 using Microsoft.Extensions.Logging;
 using CommunityToolkit.Maui;
-using BrilliantComic.ViewModels;
-using BrilliantComic.Services;
+using BrilliantSee.ViewModels;
+using BrilliantSee.Services;
 using CommunityToolkit.Maui.Media;
 
-namespace BrilliantComic
+namespace BrilliantSee
 {
     public static class MauiProgram
     {
@@ -15,6 +15,7 @@ namespace BrilliantComic
         {
             var builder = MauiApp.CreateBuilder();
             builder.UseMauiApp<App>()
+                .UseMauiCommunityToolkitMediaElement()
                 .UseMauiCommunityToolkit()
                 .ConfigureFonts(fonts =>
                 {
@@ -47,6 +48,7 @@ namespace BrilliantComic
             services.AddTransient<DetailPage>();
             services.AddTransient<BrowsePage>();
             services.AddTransient<AIPage>();
+            services.AddTransient<VideoPage>();
 
             //视图模型
             services.AddSingleton<FavoriteViewModel>();

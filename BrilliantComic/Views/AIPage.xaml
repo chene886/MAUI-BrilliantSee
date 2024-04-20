@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage
-    x:Class="BrilliantComic.Views.AIPage"
+    x:Class="BrilliantSee.Views.AIPage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:controls="clr-namespace:BrilliantComic.Controls"
+    xmlns:controls="clr-namespace:BrilliantSee.Controls"
     Title="AI助手"
     Shell.ForegroundColor="Black"
     Shell.NavBarHasShadow="True"

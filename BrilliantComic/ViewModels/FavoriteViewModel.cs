@@ -1,7 +1,7 @@
-﻿using BrilliantComic.Models;
-using BrilliantComic.Models.Comics;
-using BrilliantComic.Models.Enums;
-using BrilliantComic.Services;
+﻿using BrilliantSee.Models;
+using BrilliantSee.Models.Objs;
+using BrilliantSee.Models.Enums;
+using BrilliantSee.Services;
 using CommunityToolkit.Maui.Alerts;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -12,12 +12,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BrilliantComic.ViewModels
+namespace BrilliantSee.ViewModels
 {
     public partial class FavoriteViewModel : ObservableObject
     {
         public readonly DBService _db;
         public readonly AIService _ai;
+
+        public SourceCategory CurrentCategory { get; set; } = SourceCategory.Comic;
 
         /// <summary>
         /// 是否正在获取结果
@@ -32,21 +34,21 @@ namespace BrilliantComic.ViewModels
         /// <summary>
         /// 储存收藏漫画集合
         /// </summary>
-        public ObservableCollection<Comic> Comics { get; set; } = new();
+        public ObservableCollection<Obj> Objs { get; set; } = new();
 
         /// <summary>
         /// 加载收藏漫画
         /// </summary>
         /// <returns></returns>
-        public async Task OnLoadFavoriteComicAsync()
+        public async Task OnLoadFavoriteObjAsync()
         {
-            Comics.Clear();
+            Objs.Clear();
             IsGettingResult = true;
-            var comics = await _db.GetComicsAsync(DBComicCategory.Favorite);
+            var comics = await _db.GetObjsAsync(DBObjCategory.Favorite, CurrentCategory);
             comics.Reverse();
             foreach (var item in comics)
             {
-                Comics.Add(item);
+                Objs.Add(item);
             }
             if (!IsRefresh)
             {
@@ -77,19 +79,22 @@ namespace BrilliantComic.ViewModels
         /// <summary>
         /// 导航到漫画详情页并传递漫画对象
         /// </summary>
-        /// <param name="comic">指定打开的漫画</param>
+        /// <param name="obj">指定打开的实体</param>
         /// <returns></returns>
         [RelayCommand]
-        private async Task OpenComicAsync(Comic comic)
+        private async Task OpenObjAsync(Obj obj)
         {
-            await Shell.Current.GoToAsync("DetailPage", new Dictionary<string, object> { { "Comic", comic } });
+            if (obj.SourceCategory == SourceCategory.Comic)
+                await Shell.Current.GoToAsync("DetailPage", new Dictionary<string, object> { { "Comic", obj } });
+            else
+                await Shell.Current.GoToAsync("VideoPage", new Dictionary<string, object> { { "Video", obj } });
         }
 
         [RelayCommand]
-        private async Task CancelFavoriteAsync(Comic comic)
+        private async Task CancelFavoriteAsync(Obj comic)
         {
-            await _db.DeleteComicAsync(comic, comic.Category);
-            Comics.Remove(comic);
+            await _db.DeleteObjAsync(comic, comic.Category);
+            Objs.Remove(comic);
         }
 
         /// <summary>
@@ -100,13 +105,13 @@ namespace BrilliantComic.ViewModels
         private async Task CheckForUpdatedAsync() =>
             await Task.Run(async () =>
                 {
-                    var hasComicUpdate = false;
-                    var message = "暂无收藏漫画";
+                    var hasUpdate = false;
+                    var message = "暂无收藏内容";
                     _ = MainThread.InvokeOnMainThreadAsync(() => { IsGettingResult = true; IsRefresh = true; });
-                    var comics = await _db.GetComicsAsync(DBComicCategory.Favorite);
-                    if (comics.Count() != 0)
+                    var objs = await _db.GetObjsAsync(DBObjCategory.Favorite, CurrentCategory);
+                    if (objs.Count() != 0)
                     {
-                        foreach (var item in comics)
+                        foreach (var item in objs)
                         {
                             if (!item.IsUpdate)
                             {
@@ -117,14 +122,15 @@ namespace BrilliantComic.ViewModels
                                     if (lastestChapterName is not null && lastestChapterName != item.LastestChapterName)
                                     {
                                         item.IsUpdate = true;
-                                        hasComicUpdate = true;
-                                        await _db.SaveComicAsync(item, DBComicCategory.Favorite);
-                                        _ = MainThread.InvokeOnMainThreadAsync(() => _ = OnLoadFavoriteComicAsync());
+                                        hasUpdate = true;
+                                        await _db.SaveObjAsync(item, DBObjCategory.Favorite);
+                                        _ = MainThread.InvokeOnMainThreadAsync(() => _ = OnLoadFavoriteObjAsync());
                                     }
                                 }
                                 else
                                 {
                                     var message1 = $"{item.Name}检查更新失败,不如点开看看吧";
+                                    await Task.Delay(500);
                                     _ = MainThread.InvokeOnMainThreadAsync(() =>
                                     {
                                         _ = Toast.Make(message1).Show();
@@ -133,8 +139,7 @@ namespace BrilliantComic.ViewModels
                                 }
                             }
                         }
-                        if (!hasComicUpdate && message == "暂无收藏漫画") message = "暂无漫画更新";
-                        else if (hasComicUpdate && message == "暂无收藏漫画") message = "检查更新完成";
+                        message = hasUpdate ? "检查更新完成" : "暂无内容更新";
                     }
                     _ = MainThread.InvokeOnMainThreadAsync(() =>
                     {

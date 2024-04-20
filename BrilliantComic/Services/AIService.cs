@@ -1,9 +1,9 @@
 ﻿using Azure.AI.OpenAI;
-using BrilliantComic.Models;
+using BrilliantSee.Models;
 using Microsoft.SemanticKernel;
 using Microsoft.SemanticKernel.Connectors.OpenAI;
-using BrilliantComic.Models.Comics;
-using BrilliantComic.Models.Enums;
+using BrilliantSee.Models.Objs;
+using BrilliantSee.Models.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,7 +15,7 @@ using Microsoft.SemanticKernel.Services;
 using System.Threading.Channels;
 using System.Reflection;
 
-namespace BrilliantComic.Services
+namespace BrilliantSee.Services
 {
     public class AIService
     {

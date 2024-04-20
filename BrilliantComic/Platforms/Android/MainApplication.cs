@@ -1,7 +1,7 @@
 ﻿using Android.App;
 using Android.Runtime;
 
-namespace BrilliantComic
+namespace BrilliantSee
 {
     [Application]
     public class MainApplication : MauiApplication

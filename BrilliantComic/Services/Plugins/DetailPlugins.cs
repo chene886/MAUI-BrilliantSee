@@ -1,5 +1,5 @@
-﻿using BrilliantComic.Models.Chapters;
-using BrilliantComic.Models.Comics;
+﻿using BrilliantSee.Models.Chapters;
+using BrilliantSee.Models.Objs;
 using CommunityToolkit.Maui.Alerts;
 using Microsoft.SemanticKernel;
 using System;
@@ -9,7 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BrilliantComic.Services.Plugins
+namespace BrilliantSee.Services.Plugins
 {
     public sealed class DetailPlugins
     {
@@ -42,7 +42,7 @@ namespace BrilliantComic.Services.Plugins
         [KernelFunction, Description("查找指定名字的章节")]
         [return: Description("获取到的章节（可能没有）")]
         public Chapter? FindChapterAsync(
-            [Description("用于查找的漫画")] Comic comic,
+            [Description("用于查找的漫画")] Obj comic,
                          [Description("要查找的章节名称")] string name)
         {
             var chapter = comic.Chapters.Where(c => c.Name.Contains(name)).FirstOrDefault();
@@ -52,7 +52,7 @@ namespace BrilliantComic.Services.Plugins
         [KernelFunction, Description("查找第一个章节")]
         [return: Description("获取到的章节（可能没有）")]
         public Chapter? GetFirstChapterAsync(
-                                             [Description("用于查找漫画")] Comic comic)
+                                             [Description("用于查找漫画")] Obj comic)
         {
             if (comic.IsReverseList == true) return comic.Chapters.LastOrDefault();
             else return comic.Chapters.FirstOrDefault();
@@ -61,7 +61,7 @@ namespace BrilliantComic.Services.Plugins
         [KernelFunction, Description("查找最后一个或最新章节")]
         [return: Description("获取到的章节（可能没有）")]
         public Chapter? GetLastChapterAsync(
-                                                        [Description("用于查找的漫画")] Comic comic)
+                                                        [Description("用于查找的漫画")] Obj comic)
         {
             if (comic.IsReverseList == true) return comic.Chapters.FirstOrDefault();
             else return comic.Chapters.LastOrDefault();
@@ -70,7 +70,7 @@ namespace BrilliantComic.Services.Plugins
         [KernelFunction, Description("查找最后浏览章节")]
         [return: Description("获取到的章节（可能没有）")]
         public Chapter? GetLastReadChapterAsync(
-                                                                   [Description("用于查找的漫画")] Comic comic)
+                                                                   [Description("用于查找的漫画")] Obj comic)
         {
             if (comic.LastReadedChapterIndex == -1) return null;
             return comic.Chapters.ToList()[comic.LastReadedChapterIndex];

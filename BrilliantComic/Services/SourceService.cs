@@ -1,5 +1,9 @@
-﻿using BrilliantComic.Models.Comics;
-using BrilliantComic.Models.Sources;
+﻿using BrilliantSee.Models.Objs;
+using BrilliantSee.Models.Objs.Videos;
+using BrilliantSee.Models.Objs.Comics;
+using BrilliantSee.Models.Sources;
+using BrilliantSee.Models.Sources.ComicSources;
+using BrilliantSee.Models.Sources.VideoSources;
 using CommunityToolkit.Maui.Alerts;
 using System;
 using System.Collections.Generic;
@@ -7,8 +11,9 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using BrilliantSee.Models.Enums;
 
-namespace BrilliantComic.Services
+namespace BrilliantSee.Services
 {
     public class SourceService
     {
@@ -20,13 +25,14 @@ namespace BrilliantComic.Services
         /// <summary>
         /// 储存漫画的字典
         /// </summary>
-        private Dictionary<string, Comic> _comics = new();
+        private Dictionary<string, Obj> _objs = new();
 
         /// <summary>
         /// 注册图源
         /// </summary>
         public SourceService()
         {
+            //漫画图源
             var baozi = new BaoziSource();
             var gufeng = new GufengSource();
             var goda = new GodaSource();
@@ -35,17 +41,24 @@ namespace BrilliantComic.Services
             var gufengComic = new GufengComic() { Source = gufeng };
             var godaComic = new GodaComic() { Source = goda };
             var godaEnComic = new GodaEnComic() { Source = godaEn };
-
-            //var hasu = new HasuSource();
             _sources.Add(baozi.Name, baozi);
             _sources.Add(gufeng.Name, gufeng);
             _sources.Add(goda.Name, goda);
             _sources.Add(godaEn.Name, godaEn);
-            _comics.Add(baozi.Name, baoziComic);
-            _comics.Add(gufeng.Name, gufengComic);
-            _comics.Add(goda.Name, godaComic);
-            _comics.Add(godaEn.Name, godaEnComic);
-            //_sources.Add(hasu.Name, hasu);
+            _objs.Add(baozi.Name, baoziComic);
+            _objs.Add(gufeng.Name, gufengComic);
+            _objs.Add(goda.Name, godaComic);
+            _objs.Add(godaEn.Name, godaEnComic);
+
+            //动漫图源
+            //var yhwang = new YHWangSource();
+            //var omofun = new OmoFunSource();
+            //var yhwangVideo = new YHWangVideo() { Source = yhwang };
+            //var omofunVideo = new OmoFunVideo() { Source = omofun };
+            //_sources.Add(yhwang.Name, yhwang);
+            //_objs.Add(yhwang.Name, yhwangVideo);
+            //_sources.Add(omofun.Name, omofun);
+            //_objs.Add(omofun.Name, omofunVideo);
         }
 
         /// <summary>
@@ -61,9 +74,9 @@ namespace BrilliantComic.Services
         /// 搜索漫画
         /// </summary>
         /// <param name="keyword">搜索关键词</param>
-        /// <param name="comics">保存结果的集合</param>
+        /// <param name="objs">保存结果的集合</param>
         /// <returns></returns>
-        public async Task SearchAsync(string keyword, ObservableCollection<Comic> comics, string flag)
+        public async Task SearchAsync(string keyword, ObservableCollection<Obj> objs, string flag)
         {
             IEnumerable<Source> sources;
             if (flag == "Init")
@@ -95,17 +108,17 @@ namespace BrilliantComic.Services
                     {
                         foreach (var item in result)
                         {
-                            if (item == result.First() && comics.Any() && flag == "Init")
+                            if (item == result.First() && objs.Any() && flag == "Init")
                             {
                                 await MainThread.InvokeOnMainThreadAsync(() =>
                                 {
-                                    comics.Insert(1, item);
+                                    objs.Insert(1, item);
                                 });
                                 continue;
                             }
                             await MainThread.InvokeOnMainThreadAsync(() =>
                             {
-                                comics.Add(item);
+                                objs.Add(item);
                             });
                         }
                     }
@@ -132,9 +145,9 @@ namespace BrilliantComic.Services
         /// </summary>
         /// <param name="name">图源名</param>
         /// <returns></returns>
-        public Comic? GetComic(string name)
+        public Obj? GetComic(string name)
         {
-            _comics.TryGetValue(name, out var result);
+            _objs.TryGetValue(name, out var result);
             return result;
         }
     }

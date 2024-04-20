@@ -1,4 +1,4 @@
-﻿using BrilliantComic.Models.Comics;
+﻿using BrilliantSee.Models.Objs;
 using CommunityToolkit.Mvvm.ComponentModel;
 using System;
 using System.Collections.Generic;
@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BrilliantComic.Models.Chapters
+namespace BrilliantSee.Models.Chapters
 {
     public abstract partial class Chapter : ObservableObject
     {
@@ -24,7 +24,7 @@ namespace BrilliantComic.Models.Chapters
         /// <summary>
         /// 章节所属的漫画
         /// </summary>
-        public required Comic Comic { get; set; }
+        public required Obj Comic { get; set; }
 
         /// <summary>
         /// 章节页数

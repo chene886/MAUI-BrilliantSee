@@ -1,6 +1,6 @@
 ﻿using Foundation;
 
-namespace BrilliantComic
+namespace BrilliantSee
 {
     [Register("AppDelegate")]
     public class AppDelegate : MauiUIApplicationDelegate

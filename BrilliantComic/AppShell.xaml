@@ -1,18 +1,17 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <Shell
-    x:Class="BrilliantComic.AppShell"
+    x:Class="BrilliantSee.AppShell"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:local="clr-namespace:BrilliantComic"
+    xmlns:local="clr-namespace:BrilliantSee"
     xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
-    xmlns:views="clr-namespace:BrilliantComic.Views"
-    Title="BrilliantComic"
+    xmlns:views="clr-namespace:BrilliantSee.Views"
+    Title="BrilliantSee"
     FlyoutBehavior="Disabled"
     TitleColor="Black">
     <Shell.Behaviors>
         <toolkit:StatusBarBehavior StatusBarColor="{StaticResource Backcolor}" StatusBarStyle="DarkContent" />
     </Shell.Behaviors>
-
     <TabBar>
         <Tab Title="收藏" Icon="favorite.png">
             <ShellContent ContentTemplate="{DataTemplate views:FavoritePage}" Route="FavoritePage" />

@@ -1,9 +1,10 @@
-using BrilliantComic.ViewModels;
+using BrilliantSee.Models.Enums;
+using BrilliantSee.ViewModels;
 using CommunityToolkit.Maui.Alerts;
 using CommunityToolkit.Maui.Core.Platform;
 using System.Text.RegularExpressions;
 
-namespace BrilliantComic.Views;
+namespace BrilliantSee.Views;
 
 public partial class FavoritePage : ContentPage
 {
@@ -28,7 +29,7 @@ public partial class FavoritePage : ContentPage
     protected override async void OnAppearing()
     {
         base.OnAppearing();
-        await _vm.OnLoadFavoriteComicAsync();
+        await _vm.OnLoadFavoriteObjAsync();
         if (_vm._ai.hasModel)
         {
             _vm._ai.RemovePlugins();
@@ -53,7 +54,7 @@ public partial class FavoritePage : ContentPage
         var shadow = obj!.Shadow;
         obj!.Shadow = new Shadow()
         {
-            Offset = new Point(0, 8),
+            Offset = new Point(0, 0),
             Opacity = (float)0.3,
             Radius = 14,
         };
@@ -71,14 +72,27 @@ public partial class FavoritePage : ContentPage
         if (match.Success)
         {
             var version = match.Groups[1].Value;
-            if (version != "BrilliantComic_v1.1.1")
+            if (version != "BrilliantSee_v2.0")
             {
-                bool answer = await DisplayAlert("检测到新版本", "是否更新?", "前往下载", "稍后更新");
+                bool answer = await DisplayAlert("检测到新版本", "是否更新?", "快让朕瞧瞧", "朕不感兴趣");
                 if (answer)
                 {
                     await Launcher.OpenAsync("https://www.123pan.com/s/6cnjjv-6njBv.html");
                 }
             }
         }
+    }
+
+    private async void Button_Clicked(object sender, EventArgs e)
+    {
+        var button = sender! as Button;
+        var text = button!.Text;
+        var buttons = new List<Button>() { this.comics, this.novels, this.videos };
+        foreach (var item in buttons)
+        {
+            item.FontSize = item.Text == text ? 18 : 14;
+        }
+        _vm.CurrentCategory = text == "漫画" ? SourceCategory.Comic : text == "小说" ? SourceCategory.Novel : SourceCategory.Video;
+        await _vm.OnLoadFavoriteObjAsync();
     }
 }

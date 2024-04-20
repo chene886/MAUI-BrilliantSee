@@ -1,5 +1,5 @@
-﻿using BrilliantComic.Models;
-using BrilliantComic.Services;
+﻿using BrilliantSee.Models;
+using BrilliantSee.Services;
 using CommunityToolkit.Maui.Alerts;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -11,7 +11,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace BrilliantComic.ViewModels
+namespace BrilliantSee.ViewModels
 {
     public partial class AIViewModel : ObservableObject
     {

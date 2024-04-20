@@ -1,6 +1,6 @@
 ﻿using System.Runtime.Versioning;
 
-namespace BrilliantComic.Behaviors
+namespace BrilliantSee.Behaviors
 {
     internal class AndroidBarColorBehavior : Behavior<Page>
     {

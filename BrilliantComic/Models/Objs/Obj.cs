@@ -1,6 +1,6 @@
-﻿using BrilliantComic.Models.Chapters;
-using BrilliantComic.Models.Enums;
-using BrilliantComic.Models.Sources;
+﻿using BrilliantSee.Models.Chapters;
+using BrilliantSee.Models.Enums;
+using BrilliantSee.Models.Sources;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using SQLite;
@@ -11,9 +11,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BrilliantComic.Models.Comics
+namespace BrilliantSee.Models.Objs
 {
-    public abstract partial class Comic : ObservableObject
+    public abstract partial class Obj : ObservableObject
     {
         /// <summary>
         /// 储存数据库的主键
@@ -105,50 +105,57 @@ namespace BrilliantComic.Models.Comics
         public bool IsReverseList { get; set; } = true;
 
         /// <summary>
-        /// 漫画分类
+        /// 实体分类
         /// </summary>
-        public DBComicCategory Category { get; set; } = DBComicCategory.Default;
+        public DBObjCategory Category { get; set; } = DBObjCategory.Default;
+
+        /// <summary>
+        /// 实体来源分类
+        /// </summary>
+        public SourceCategory SourceCategory { get; set; }
 
         /// <summary>
         /// 从存储的漫画数据创建漫画实体
         /// </summary>
-        /// <param name="dbComic"></param>
+        /// <param name="dbObj"></param>
         /// <returns></returns>
-        public Comic CreateComicFromDBComic(DBComic dbComic)
+        public Obj CreateObjFromDBObj(DBObj dbObj)
         {
-            Url = dbComic.Url;
-            Name = dbComic.Name;
-            Cover = dbComic.Cover;
-            Author = dbComic.Author;
-            Id = dbComic.Id;
-            Category = dbComic.Category;
-            LastReadedChapterIndex = dbComic.LastReadedChapterIndex;
-            IsUpdate = dbComic.IsUpdate;
-            LastestChapterName = dbComic.LastestChapterName;
-            SourceName = dbComic.SourceName;
-            return (Comic)this.MemberwiseClone();
+            Url = dbObj.Url;
+            Name = dbObj.Name;
+            Cover = dbObj.Cover;
+            Author = dbObj.Author;
+            Id = dbObj.Id;
+            Category = dbObj.Category;
+            SourceCategory = dbObj.SourceCategory;
+            LastReadedChapterIndex = dbObj.LastReadedChapterIndex;
+            IsUpdate = dbObj.IsUpdate;
+            LastestChapterName = dbObj.LastestChapterName;
+            SourceName = dbObj.SourceName;
+            return (Obj)this.MemberwiseClone();
         }
 
         /// <summary>
         /// 从漫画实体创建存储的漫画数据
         /// </summary>
-        /// <param name="comic"></param>
+        /// <param name="obj"></param>
         /// <returns></returns>
-        public DBComic CreateDBComicFromComic(Comic comic)
+        public DBObj CreateDBObjFromObj(Obj obj)
         {
-            return new DBComic
+            return new DBObj
             {
-                Id = comic.Id,
-                Name = comic.Name,
-                Author = comic.Author,
-                Cover = comic.Cover,
+                Id = obj.Id,
+                Name = obj.Name,
+                Author = obj.Author,
+                Cover = obj.Cover,
                 Source = this.SourceName,
-                Url = comic.Url,
-                Category = comic.Category,
-                LastReadedChapterIndex = comic.LastReadedChapterIndex,
-                IsUpdate = comic.IsUpdate,
-                LastestChapterName = comic.LastestChapterName,
-                SourceName = comic.SourceName
+                Url = obj.Url,
+                Category = obj.Category,
+                SourceCategory = obj.SourceCategory,
+                LastReadedChapterIndex = obj.LastReadedChapterIndex,
+                IsUpdate = obj.IsUpdate,
+                LastestChapterName = obj.LastestChapterName,
+                SourceName = obj.SourceName
             };
         }
 

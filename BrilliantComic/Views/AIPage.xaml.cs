@@ -1,12 +1,12 @@
-using BrilliantComic.Models;
-using BrilliantComic.ViewModels;
+using BrilliantSee.Models;
+using BrilliantSee.ViewModels;
 using CommunityToolkit.Maui.Alerts;
 using CommunityToolkit.Maui.Core.Platform;
 using CommunityToolkit.Maui.Media;
 using CommunityToolkit.Mvvm.Input;
 using System.Globalization;
 
-namespace BrilliantComic.Views;
+namespace BrilliantSee.Views;
 
 public partial class AIPage : ContentPage
 {

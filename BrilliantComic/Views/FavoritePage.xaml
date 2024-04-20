@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage
-    x:Class="BrilliantComic.Views.FavoritePage"
+    x:Class="BrilliantSee.Views.FavoritePage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:behaviors="clr-namespace:BrilliantComic.Behaviors"
-    xmlns:controls="clr-namespace:BrilliantComic.Controls"
-    xmlns:vm="clr-namespace:BrilliantComic.ViewModels"
+    xmlns:behaviors="clr-namespace:BrilliantSee.Behaviors"
+    xmlns:controls="clr-namespace:BrilliantSee.Controls"
+    xmlns:vm="clr-namespace:BrilliantSee.ViewModels"
     Title="收藏">
     <ContentPage.Behaviors>
         <behaviors:AndroidBarColorBehavior />
@@ -17,74 +17,107 @@
             Text="搜索" />
     </ContentPage.ToolbarItems>
     <Grid>
-        <CollectionView
-            ItemsLayout="VerticalGrid, 3"
-            ItemsSource="{Binding Comics}"
-            ZIndex="-1">
-            <CollectionView.ItemTemplate>
-                <DataTemplate>
-                    <SwipeView>
-                        <SwipeView.RightItems>
-                            <SwipeItemView>
-                                <ImageButton
-                                    BackgroundColor="Transparent"
-                                    Command="{Binding CancelFavoriteCommand, Source={RelativeSource AncestorType={x:Type vm:FavoriteViewModel}}}"
-                                    CommandParameter="{Binding}"
-                                    Source="broken_heart.png"
-                                    WidthRequest="40" />
-                            </SwipeItemView>
-                        </SwipeView.RightItems>
-                        <Frame
-                            Margin="5,10"
-                            Padding="0"
-                            BackgroundColor="White"
-                            CornerRadius="8"
-                            HasShadow="True">
-                            <Frame.GestureRecognizers>
-                                <TapGestureRecognizer Command="{Binding OpenComicCommand, Source={RelativeSource AncestorType={x:Type vm:FavoriteViewModel}}}" CommandParameter="{Binding}" />
-                            </Frame.GestureRecognizers>
-                            <Grid RowSpacing="1">
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="160" />
-                                    <RowDefinition Height="Auto" />
-                                    <RowDefinition Height="Auto" />
-                                </Grid.RowDefinitions>
-                                <Image
-                                    Aspect="AspectFill"
-                                    HeightRequest="160"
-                                    Source="{Binding Cover}" />
-                                <Frame
-                                    BackgroundColor="{StaticResource Primary}"
-                                    BorderColor="#88512BD4"
-                                    CornerRadius="100"
-                                    HasShadow="True"
-                                    IsVisible="{Binding IsUpdate}"
-                                    MaximumHeightRequest="16"
-                                    MaximumWidthRequest="16"
-                                    TranslationX="48"
-                                    TranslationY="-70" />
-                                <Label
-                                    Grid.Row="1"
-                                    Padding="2,0"
-                                    FontFamily=""
-                                    FontSize="16"
-                                    HorizontalOptions="Start"
-                                    LineBreakMode="TailTruncation"
-                                    Text="{Binding Name}" />
-                                <Label
-                                    Grid.Row="2"
-                                    Padding="2,0"
-                                    FontFamily=""
-                                    FontSize="13"
-                                    HorizontalOptions="Start"
-                                    Text="{Binding SourceName}"
-                                    TextColor="{StaticResource Gray500}" />
-                            </Grid>
-                        </Frame>
-                    </SwipeView>
-                </DataTemplate>
-            </CollectionView.ItemTemplate>
-        </CollectionView>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <HorizontalStackLayout Margin="2,0,0,0" Background="Transparent">
+                <Button
+                    x:Name="novels"
+                    BackgroundColor="Transparent"
+                    Clicked="Button_Clicked"
+                    FontFamily=""
+                    FontSize="14"
+                    Text="小说"
+                    TextColor="#212121" />
+                <Button
+                    x:Name="comics"
+                    BackgroundColor="Transparent"
+                    Clicked="Button_Clicked"
+                    FontFamily=""
+                    FontSize="18"
+                    Text="漫画"
+                    TextColor="#212121" />
+                <Button
+                    x:Name="videos"
+                    BackgroundColor="Transparent"
+                    Clicked="Button_Clicked"
+                    FontFamily=""
+                    FontSize="14"
+                    Text="动漫"
+                    TextColor="#212121" />
+            </HorizontalStackLayout>
+            <CollectionView
+                Grid.Row="1"
+                ItemsLayout="VerticalGrid, 3"
+                ItemsSource="{Binding Objs}"
+                ZIndex="-1">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <SwipeView>
+                            <SwipeView.RightItems>
+                                <SwipeItemView>
+                                    <ImageButton
+                                        BackgroundColor="Transparent"
+                                        Command="{Binding CancelFavoriteCommand, Source={RelativeSource AncestorType={x:Type vm:FavoriteViewModel}}}"
+                                        CommandParameter="{Binding}"
+                                        Source="broken_heart.png"
+                                        WidthRequest="40" />
+                                </SwipeItemView>
+                            </SwipeView.RightItems>
+                            <Frame
+                                Margin="5,0,5,20"
+                                Padding="0"
+                                BackgroundColor="{StaticResource White}"
+                                CornerRadius="8"
+                                HasShadow="True">
+                                <Frame.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding OpenObjCommand, Source={RelativeSource AncestorType={x:Type vm:FavoriteViewModel}}}" CommandParameter="{Binding}" />
+                                </Frame.GestureRecognizers>
+                                <Grid RowSpacing="1">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="160" />
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                    </Grid.RowDefinitions>
+                                    <Image
+                                        Aspect="AspectFill"
+                                        HeightRequest="160"
+                                        Source="{Binding Cover}" />
+                                    <Frame
+                                        BackgroundColor="{StaticResource Primary}"
+                                        BorderColor="#88512BD4"
+                                        CornerRadius="100"
+                                        HasShadow="True"
+                                        IsVisible="{Binding IsUpdate}"
+                                        MaximumHeightRequest="16"
+                                        MaximumWidthRequest="16"
+                                        TranslationX="48"
+                                        TranslationY="-70" />
+                                    <Label
+                                        Grid.Row="1"
+                                        Padding="2,0"
+                                        FontFamily=""
+                                        FontSize="16"
+                                        HorizontalOptions="Start"
+                                        LineBreakMode="TailTruncation"
+                                        Text="{Binding Name}" />
+                                    <Label
+                                        Grid.Row="2"
+                                        Padding="2,0"
+                                        FontFamily=""
+                                        FontSize="13"
+                                        HorizontalOptions="Start"
+                                        Text="{Binding SourceName}"
+                                        TextColor="{StaticResource Gray500}" />
+                                </Grid>
+                            </Frame>
+                        </SwipeView>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </Grid>
         <Frame
             Margin="0,0,30,100"
             Padding="0"
@@ -92,10 +125,10 @@
             BorderColor="{StaticResource Primary}"
             CornerRadius="100"
             HasShadow="True"
-            HeightRequest="56"
+            HeightRequest="48"
             HorizontalOptions="End"
             VerticalOptions="End"
-            WidthRequest="56"
+            WidthRequest="48"
             ZIndex="0">
             <Frame.GestureRecognizers>
                 <TapGestureRecognizer Command="{Binding JumpToAIPageCommand}" Tapped="TapGestureRecognizer_Tapped" />
@@ -106,16 +139,16 @@
                 WidthRequest="40" />
         </Frame>
         <Frame
-            Margin="0,0,30,30"
+            Margin="0,0,30,40"
             Padding="0"
             BackgroundColor="{StaticResource Primary}"
             BorderColor="{StaticResource Primary}"
             CornerRadius="100"
             HasShadow="True"
-            HeightRequest="56"
+            HeightRequest="48"
             HorizontalOptions="End"
             VerticalOptions="End"
-            WidthRequest="56"
+            WidthRequest="48"
             ZIndex="0">
             <Frame.GestureRecognizers>
                 <TapGestureRecognizer Command="{Binding CheckForUpdatedCommand}" Tapped="TapGestureRecognizer_Tapped" />
