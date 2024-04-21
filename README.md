@@ -61,7 +61,7 @@
 - 继承**Obj** 类、实现抽象方法的实体类、
 - 继承**Chapter** 类、实现抽象方法的章节类。
 
-在 **BrilliantComic.Services** 项目中：
+在 **BrilliantSee.Services** 项目中：
 - 在**SourceService**中注册源和对应实体。
 - 在**DBService**初始化源设置项。
 
