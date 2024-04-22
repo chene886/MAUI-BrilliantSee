@@ -1,6 +1,6 @@
-# BrilliantComic
+# BrilliantSee
 ## 项目介绍
-.NET平台下MAUI跨平台框架漫画阅读器，旨在为已适配的漫画网站提供更好的阅读体验。
+.NET平台下MAUI跨平台框架小说，漫画，影视集成浏览软件，旨在为已适配的源网站提供更好的观看体验。
 
 - 项目当前属于开发阶段，目前适配了四个图源网站（包含一个英文漫画网站）、部分功能待完善...
 - 主打安卓平台，可能存在异常，请谅解...
@@ -20,6 +20,7 @@
   - 本来有一个英文网站，因为性能问题关掉了，后续考虑适配其他外文网站 (20240315)
   - 适配了一个新英文漫画网站，极少的作品存在缺少较新章节的问题，可以选择浏览器打开观看(20240402)
 - 拓宽领域至小说、动漫甚至影视作品
+  - 新增了小说、动漫模块，目前有两个动漫源雏形，项目更名为BrilliantSee(20240420)
 - 顺应当下潮流，开发基于semantic-kernel的AI交互助手，便利用户操作
   - 目前ai助手基础代码已完成，但在调用时不太顺利，比如往kernel导入plugins(20240315)
   - ai助手插件已正常导入，但由于sk的planner似乎不见了的原因，且其他替代方案不顺利，目前只能进行部分单步操作(20240318)
@@ -29,41 +30,40 @@
 
 ## 项目部分界面截图
 ### AI助手页
-<img src="img/aiPage1.jpg" width="360px" />
-<img src="img/aiPage2.jpg" width="360px" />
+<img src="img/aiPage11.jpg" width="360px" />
 
 ### 搜索页
 - 搜索漫画、选择图源
-<img src="img/searchPage.jpg" width="360px" />
+<img src="img/searchPage11.jpg" width="360px" />
 
-### 漫画详情页
+### 详情页
 - 收藏、浏览器打开、漫画倒序
 - 一键跳转最后浏览章节
-<img src="img/detailPage.jpg" width="360px" />
+<img src="img/detailPage11.jpg" width="360px" />
 
 ### 收藏页
 - 一键检查更新
-<img src="img/favoritePage.jpg" width="360px" />
+<img src="img/favoritePage11.jpg" width="360px" />
 
 ### 历史记录页
 - 清空历史记录
-<img src="img/historyPage.jpg" width="360px" />
+<img src="img/historyPage11.jpg" width="360px" />
 
 ### 漫画浏览页
-<img src="img/browsePage.jpg" width="360px" />
+<img src="img/browsePage11.png" width="360px" />
 
-### 系统设置页（暂无功能）
-<img src="img/settingPage.jpg" width="360px" />
+### 系统设置页
+<img src="img/settingPage11.jpg" width="360px" />
 
-## 适配漫画网站
-添加适配网站仅需在 **BrilliantComic.Models** 项目中添加：
-- 实现 **Source** 抽象功能的图源类、
-- 继承**Comic** 类、实现抽象方法的漫画类、
+## 适配源网站
+添加适配网站仅需在 **BrilliantSee.Models** 项目中添加：
+- 实现 **Source** 抽象功能的源类、
+- 继承**Obj** 类、实现抽象方法的实体类、
 - 继承**Chapter** 类、实现抽象方法的章节类。
 
-在 **BrilliantComic.Services** 项目中：
-- 在**SourceService**中注册图源和对应漫画。
-- 在**DBService**初始化图源设置项。
+在 **BrilliantSee.Services** 项目中：
+- 在**SourceService**中注册源和对应实体。
+- 在**DBService**初始化源设置项。
 
 再根据设配网站的需求略作调整即可
 
