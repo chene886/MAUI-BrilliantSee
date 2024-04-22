@@ -23,7 +23,10 @@ namespace BrilliantSee.ViewModels
         /// 当前漫画
         /// </summary>
         [ObservableProperty]
-        private Obj? _comic;
+        private Obj? _obj;
+
+        [ObservableProperty]
+        public string _videoUrl = string.Empty;
 
         /// <summary>
         /// 收藏图标
@@ -66,34 +69,34 @@ namespace BrilliantSee.ViewModels
         /// <param name="query">储存导航传递数据的字典</param>
         public async void ApplyQueryAttributes(IDictionary<string, object> query)
         {
-            if (Comic is not null)
+            if (Obj is not null)
             {
                 return;
             }
-            Comic = query["Comic"] as Obj;
+            Obj = query["Obj"] as Obj;
 
             IsGettingResult = true;
-            var isExist = await _db.IsComicExistAsync(Comic!, DBObjCategory.Favorite);
+            var isExist = await _db.IsComicExistAsync(Obj!, DBObjCategory.Favorite);
             if (isExist)
             {
                 FavoriteImage = ImageSource.FromFile("is_favorite.png");
-                Comic!.Category = DBObjCategory.Favorite;
+                Obj!.Category = DBObjCategory.Favorite;
             }
             else FavoriteImage = ImageSource.FromFile("not_favorite.png");
-            var isSuccess = await Comic!.GetHtmlAsync();
+            var isSuccess = await Obj!.GetHtmlAsync();
             if (isSuccess)
             {
-                Comic!.LoadMoreData();
-                OnPropertyChanged(nameof(Comic));
+                Obj!.LoadMoreData();
+                OnPropertyChanged(nameof(Obj));
                 IsReverseListEnabled = false;
-                await Task.Run(() => Comic!.LoadChaptersAsync());
+                await Task.Run(() => Obj!.LoadItemsAsync());
                 IsReverseListEnabled = true;
                 IsGettingResult = false;
 
-                if (isExist && Comic!.IsUpdate)
+                if (isExist && Obj!.IsUpdate)
                 {
-                    Comic!.IsUpdate = false;
-                    _ = _db.UpdateComicAsync(Comic!);
+                    Obj!.IsUpdate = false;
+                    _ = _db.UpdateComicAsync(Obj!);
                 }
                 _ = AddHistoryAsync();
             }
@@ -105,7 +108,7 @@ namespace BrilliantSee.ViewModels
         /// </summary>
         private async Task AddHistoryAsync()
         {
-            await _db.SaveObjAsync(Comic!, DBObjCategory.History);
+            await _db.SaveObjAsync(Obj!, DBObjCategory.History);
         }
 
         /// <summary>
@@ -115,23 +118,23 @@ namespace BrilliantSee.ViewModels
         [RelayCommand]
         private async Task SwitchIsFavorite()
         {
-            if (Comic is null)
+            if (Obj is null)
             {
                 return;
             }
-            if (Comic.Category == DBObjCategory.Favorite)
+            if (Obj.Category == DBObjCategory.Favorite)
             {
                 FavoriteImage = ImageSource.FromFile("not_favorite.png");
-                await _db.DeleteObjAsync(Comic, Comic.Category);
-                Comic.Category = DBObjCategory.History;
+                await _db.DeleteObjAsync(Obj, Obj.Category);
+                Obj.Category = DBObjCategory.History;
             }
             else
             {
                 FavoriteImage = ImageSource.FromFile("is_favorite.png");
-                Comic.Category = DBObjCategory.Favorite;
-                await _db.SaveObjAsync(Comic, Comic.Category);
+                Obj.Category = DBObjCategory.Favorite;
+                await _db.SaveObjAsync(Obj, Obj.Category);
             }
-            OnPropertyChanged(nameof(Comic));
+            OnPropertyChanged(nameof(Obj));
         }
 
         /// <summary>
@@ -141,7 +144,7 @@ namespace BrilliantSee.ViewModels
         [RelayCommand]
         private async Task JumpToBrowserAsync()
         {
-            await Launcher.OpenAsync(new Uri(Comic!.Url));
+            await Launcher.OpenAsync(new Uri(Obj!.Url));
         }
 
         /// <summary>
@@ -153,8 +156,8 @@ namespace BrilliantSee.ViewModels
         {
             IsGettingResult = true;
             IsReverseListEnabled = false;
-            Comic!.IsReverseList = !Comic.IsReverseList;
-            if (!Comic!.IsReverseList)
+            Obj!.IsReverseList = !Obj.IsReverseList;
+            if (!Obj!.IsReverseList)
             {
                 OrderImage = ImageSource.FromFile("positive.png");
             }
@@ -164,9 +167,9 @@ namespace BrilliantSee.ViewModels
             }
             await Task.Run(() =>
             {
-                var tempChapters = Comic!.Chapters.ToList();
+                var tempChapters = Obj!.Items.ToList();
                 tempChapters.Reverse();
-                Comic.Chapters = tempChapters;
+                Obj.Items = tempChapters;
             });
             IsReverseListEnabled = true;
             IsGettingResult = false;
@@ -191,15 +194,22 @@ namespace BrilliantSee.ViewModels
             }
         }
 
+        [RelayCommand]
+        private async Task SetVideoAsync(Chapter chapter)
+        {
+            await chapter.GetResourcesAsync();
+            VideoUrl = chapter.VideoUrl;
+        }
+
         /// <summary>
         /// 跳转到最后浏览章节
         /// </summary>
         [RelayCommand]
         private async Task OpenHistoryAsync()
         {
-            if (Comic!.LastReadedChapterIndex != -1 && Comic.Chapters.Any())
+            if (Obj!.LastReadedItemIndex != -1 && Obj.Items.Any())
             {
-                var historyChapter = Comic.Chapters.ToList().Find(c => c.Index == Comic.LastReadedChapterIndex);
+                var historyChapter = Obj.Items.ToList().Find(c => c.Index == Obj.LastReadedItemIndex);
                 await OpenChapterAsync(historyChapter!);
             }
             else

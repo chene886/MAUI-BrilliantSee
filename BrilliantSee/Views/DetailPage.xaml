@@ -5,7 +5,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:controls="clr-namespace:BrilliantSee.Controls"
     xmlns:vm="clr-namespace:BrilliantSee.ViewModels"
-    Title="{Binding Comic.Name}"
+    Title="{Binding Obj.Name}"
     Shell.ForegroundColor="Black"
     Shell.TabBarIsVisible="False">
     <ContentPage.ToolbarItems>
@@ -24,7 +24,7 @@
             Text="反转列表" />
     </ContentPage.ToolbarItems>
     <Grid>
-        <CollectionView ItemsLayout="VerticalGrid, 3" ItemsSource="{Binding Comic.Chapters}">
+        <CollectionView ItemsLayout="VerticalGrid, 3" ItemsSource="{Binding Obj.Items}">
             <CollectionView.Header>
                 <Grid Padding="10">
                     <Grid.RowDefinitions>
@@ -41,7 +41,7 @@
                         FontFamily=""
                         FontSize="12"
                         LineBreakMode="TailTruncation"
-                        Text="{Binding Comic.Url}" />
+                        Text="{Binding Obj.Url}" />
                     <Frame
                         Grid.Row="1"
                         Margin="0,0,10,5"
@@ -53,7 +53,7 @@
                             <Image
                                 Aspect="AspectFill"
                                 HeightRequest="170"
-                                Source="{Binding Comic.Cover}"
+                                Source="{Binding Obj.Cover}"
                                 WidthRequest="120" />
                             <Label
                                 Margin="1,0"
@@ -61,7 +61,7 @@
                                 FontFamily=""
                                 FontSize="12"
                                 HorizontalOptions="End"
-                                Text="{Binding Comic.Status}"
+                                Text="{Binding Obj.Status}"
                                 TextColor="#FAFAFA"
                                 VerticalOptions="End" />
                         </Grid>
@@ -75,24 +75,24 @@
                             FontSize="18"
                             LineBreakMode="TailTruncation"
                             MaxLines="1"
-                            Text="{Binding Comic.Name}" />
+                            Text="{Binding Obj.Name}" />
                         <Label
                             FontFamily=""
                             FontSize="Body"
                             MaxLines="1"
-                            Text="{Binding Comic.Author}"
+                            Text="{Binding Obj.Author}"
                             TextColor="{StaticResource Gray500}" />
                         <Label
                             FontFamily=""
                             FontSize="13"
                             MaxLines="5"
-                            Text="{Binding Comic.Description}"
+                            Text="{Binding Obj.Description}"
                             TextColor="{StaticResource Gray500}" />
                         <Label
                             FontFamily=""
                             FontSize="13"
                             HorizontalOptions="End"
-                            Text="{Binding Comic.LastestUpdateTime}"
+                            Text="{Binding Obj.LastestUpdateTime}"
                             TextColor="{StaticResource Gray500}" />
                     </VerticalStackLayout>
                 </Grid>

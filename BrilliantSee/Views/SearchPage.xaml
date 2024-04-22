@@ -146,7 +146,7 @@
                             HasShadow="True">
                             <Frame.GestureRecognizers>
                                 <TapGestureRecognizer
-                                    Command="{Binding OpenComicCommand, Source={RelativeSource AncestorType={x:Type vm:SearchViewModel}}}"
+                                    Command="{Binding OpenObjCommand, Source={RelativeSource AncestorType={x:Type vm:SearchViewModel}}}"
                                     CommandParameter="{Binding}"
                                     Tapped="HideKeyboard" />
                             </Frame.GestureRecognizers>
@@ -163,7 +163,7 @@
                                     WidthRequest="80">
                                     <Frame.GestureRecognizers>
                                         <TapGestureRecognizer
-                                            Command="{Binding OpenComicCommand, Source={RelativeSource AncestorType={x:Type vm:SearchViewModel}}}"
+                                            Command="{Binding OpenObjCommand, Source={RelativeSource AncestorType={x:Type vm:SearchViewModel}}}"
                                             CommandParameter="{Binding}"
                                             Tapped="HideKeyboard" />
                                     </Frame.GestureRecognizers>

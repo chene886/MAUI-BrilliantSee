@@ -125,14 +125,12 @@ namespace BrilliantSee.ViewModels
         /// <param name="obj">指定打开的实体</param>
         /// <returns></returns>
         [RelayCommand]
-        private async Task OpenComicAsync(Obj obj)
+        private async Task OpenObjAsync(Obj obj)
         {
             IsSourceListVisible = false;
-            obj.Chapters = new List<Chapter>();
-            if (obj.SourceCategory == SourceCategory.Comic)
-                await Shell.Current.GoToAsync("DetailPage", new Dictionary<string, object> { { "Comic", obj } });
-            else
-                await Shell.Current.GoToAsync("VideoPage", new Dictionary<string, object> { { "Video", obj } });
+            obj.Items = new List<Chapter>();
+            var page = obj.SourceCategory == SourceCategory.Comic ? "DetailPage" : "VideoPage";
+            await Shell.Current.GoToAsync(page, new Dictionary<string, object> { { "Obj", obj } });
         }
 
         [RelayCommand]

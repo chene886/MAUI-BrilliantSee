@@ -14,11 +14,11 @@ namespace BrilliantSee.Models.Chapters
         {
         }
 
-        public override async Task GetPicEnumeratorAsync()
+        public override async Task GetResourcesAsync()
         {
             try
             {
-                var msg = (await Comic.Source.HttpClient!.GetAsync(Url));
+                var msg = (await Obj.Source.HttpClient!.GetAsync(Url));
                 if (msg.RequestMessage is null || msg.RequestMessage.RequestUri is null)
                     throw new Exception("接口异常,请等待维护");
                 var html = await msg.Content.ReadAsStringAsync();

@@ -28,7 +28,7 @@ namespace BrilliantSee.Models.Objs.Comics
             var end = Html.IndexOf("猜你喜欢");
             if (start < 0 || end < 0)
             {
-                Chapters = Chapters.Append(new BaoziChapter("暂无章节", "", -1, false) { Comic = this });
+                Items = Items.Append(new BaoziChapter("暂无章节", "", -1, false) { Obj = this });
                 return;
             }
             var moreDataHtml = Html.Substring(start, end - start);
@@ -45,7 +45,7 @@ namespace BrilliantSee.Models.Objs.Comics
         /// 获取漫画章节信息
         /// </summary>
         /// <returns></returns>
-        public override async Task LoadChaptersAsync()
+        public override async Task LoadItemsAsync()
         {
             var index = "章节目录";
             var flag = true;
@@ -56,7 +56,7 @@ namespace BrilliantSee.Models.Objs.Comics
                 flag = !flag;
                 if (Html.IndexOf(index) < 0)
                 {
-                    Chapters = Chapters.Append(new BaoziChapter("暂无章节", "", -1, false) { Comic = this });
+                    Items = Items.Append(new BaoziChapter("暂无章节", "", -1, false) { Obj = this });
                     return;
                 }
             }
@@ -70,7 +70,7 @@ namespace BrilliantSee.Models.Objs.Comics
             }
             if (matches.FirstOrDefault() is not null)
             {
-                LastestChapterName = matches.FirstOrDefault()!.Groups[2].Value;
+                LastestItemName = matches.FirstOrDefault()!.Groups[2].Value;
             }
             foreach (Match match in matches)
             {
@@ -78,18 +78,18 @@ namespace BrilliantSee.Models.Objs.Comics
                     match.Groups[2].Value,
                     "https://www.czmanga.com" + match.Groups[1].Value.Replace("amp;", ""),
                     start,
-                    start == LastReadedChapterIndex)
-                { Comic = this });
+                    start == LastReadedItemIndex)
+                { Obj = this });
                 start--;
             }
             await MainThread.InvokeOnMainThreadAsync(() =>
             {
-                Chapters = chapters;
-                ChapterCount = Chapters.Count();
+                Items = chapters;
+                ItemCount = Items.Count();
             });
         }
 
-        public override string? GetLastestChapterName()
+        public override string? GetLastestItemName()
         {
             var index = "章节目录";
             var flag = true;

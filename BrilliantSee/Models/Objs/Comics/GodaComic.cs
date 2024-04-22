@@ -48,7 +48,7 @@ namespace BrilliantSee.Models.Objs.Comics
         /// 获取漫画章节信息
         /// </summary>
         /// <returns></returns>
-        public override async Task LoadChaptersAsync()
+        public override async Task LoadItemsAsync()
         {
             var index = "最近章節";
             var flag = true;
@@ -60,7 +60,7 @@ namespace BrilliantSee.Models.Objs.Comics
 
                 if (Html.IndexOf(index) < 0)
                 {
-                    Chapters = Chapters.Append(new GodaChapter("暂无章节", "", -1, false) { Comic = this });
+                    Items = Items.Append(new GodaChapter("暂无章节", "", -1, false) { Obj = this });
                     return;
                 }
                 chaptershtml = chaptershtml.Substring(chaptershtml.IndexOf(index));
@@ -69,34 +69,34 @@ namespace BrilliantSee.Models.Objs.Comics
                 var start = matches.Count() - 1;
                 if (matches.FirstOrDefault() is not null)
                 {
-                    LastestChapterName = matches.FirstOrDefault()!.Groups[2].Value;
+                    LastestItemName = matches.FirstOrDefault()!.Groups[2].Value;
                     foreach (Match match in matches)
                     {
                         chapters.Add(new GodaChapter(
                             match.Groups[2].Value,
                             match.Groups[1].Value,
                             start,
-                            start == LastReadedChapterIndex)
-                        { Comic = this });
+                            start == LastReadedItemIndex)
+                        { Obj = this });
                         start--;
                     }
                 }
                 else
                 {
-                    LastestChapterName = "";
-                    Chapters = Chapters.Append(new GodaChapter("暂无章节", "", -1, false) { Comic = this });
+                    LastestItemName = "";
+                    Items = Items.Append(new GodaChapter("暂无章节", "", -1, false) { Obj = this });
                     return;
                 }
             }
             catch
             {
-                Chapters = Chapters.Append(new GodaChapter("暂无章节", "", -1, false) { Comic = this });
+                Items = Items.Append(new GodaChapter("暂无章节", "", -1, false) { Obj = this });
                 return;
             }
             await MainThread.InvokeOnMainThreadAsync(() =>
             {
-                Chapters = chapters;
-                ChapterCount = Chapters.Count();
+                Items = chapters;
+                ItemCount = Items.Count();
             });
         }
 
@@ -104,7 +104,7 @@ namespace BrilliantSee.Models.Objs.Comics
         /// 获取最新章节名
         /// </summary>
         /// <returns></returns>
-        public override string? GetLastestChapterName()
+        public override string? GetLastestItemName()
         {
             var index = "最近章節";
             if (Html.IndexOf(index) < 0)

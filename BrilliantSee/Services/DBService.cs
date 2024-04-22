@@ -62,7 +62,7 @@ namespace BrilliantSee.Services
                 new SettingItem { Name = "古风漫画", Value = "IsSelected", Category = "Source" },
                 new SettingItem { Name = "Goda漫画", Value = "IsSelected", Category = "Source" },
                 new SettingItem { Name = "Goda(英)", Value = "IsSelected", Category = "Source" },
-                //new SettingItem { Name = "樱花动漫网", Value = "IsSelected", Category = "Source" },
+                new SettingItem { Name = "樱花动漫网", Value = "IsSelected", Category = "Source" },
                 //new SettingItem { Name = "OMO动漫", Value = "IsSelected", Category = "Source" },
                 new SettingItem { Name = "分享应用", Value = "去分享", Category = "通用" ,Description = Share},
                 new SettingItem { Name = "错误反馈", Value = "去反馈", Category = "通用" },
@@ -111,7 +111,7 @@ namespace BrilliantSee.Services
         /// <summary>
         /// 保存漫画
         /// </summary>
-        /// <param name="comic">需要保存的漫画</param>
+        /// <param name="obj">需要保存的漫画</param>
         /// <param name="category">漫画的类型</param>
         /// <returns></returns>
         public async Task<int> SaveObjAsync(Obj obj, DBObjCategory category)

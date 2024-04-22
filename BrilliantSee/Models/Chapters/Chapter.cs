@@ -24,7 +24,7 @@ namespace BrilliantSee.Models.Chapters
         /// <summary>
         /// 章节所属的漫画
         /// </summary>
-        public required Obj Comic { get; set; }
+        public required Obj Obj { get; set; }
 
         /// <summary>
         /// 章节页数
@@ -44,6 +44,10 @@ namespace BrilliantSee.Models.Chapters
 
         public List<string> PicUrls { get; set; } = new List<string>();
 
+        public string Route { get; set; } = string.Empty;
+
+        public string VideoUrl { get; set; } = string.Empty;
+
         public Chapter(string name, string url, int index, bool isSpecial)
         {
             Name = name;
@@ -53,9 +57,9 @@ namespace BrilliantSee.Models.Chapters
         }
 
         /// <summary>
-        /// 获取章节图片枚举器
+        /// 获取资源
         /// </summary>
         /// <returns></returns>
-        public abstract Task GetPicEnumeratorAsync();
+        public abstract Task GetResourcesAsync();
     }
 }

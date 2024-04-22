@@ -114,14 +114,14 @@ namespace BrilliantSee.ViewModels
                 return;
             }
             IsLoading = true;
-            var LastIndex = Chapter.Comic.LastReadedChapterIndex;
+            var LastIndex = Chapter.Obj.LastReadedItemIndex;
             if (Chapter.Index != LastIndex)
             {
                 if (LastIndex != -1)
                 {
                     var position = LastIndex;
-                    if (Chapter.Comic.IsReverseList) position = Chapter.Comic.Chapters.Count() - LastIndex - 1;
-                    Chapter.Comic.Chapters.ToList()[position].IsSpecial = false;
+                    if (Chapter.Obj.IsReverseList) position = Chapter.Obj.Items.Count() - LastIndex - 1;
+                    Chapter.Obj.Items.ToList()[position].IsSpecial = false;
                 }
                 Chapter.IsSpecial = true;
                 _ = StoreLastReadedChapterIndex();
@@ -145,7 +145,7 @@ namespace BrilliantSee.ViewModels
             {
                 try
                 {
-                    await chapter.GetPicEnumeratorAsync();
+                    await chapter.GetResourcesAsync();
                 }
                 catch (Exception e)
                 {
@@ -159,7 +159,7 @@ namespace BrilliantSee.ViewModels
             {
                 Images.Add(image);
             }
-            ButtonContent = chapter!.Index == chapter.Comic.ChapterCount - 1 ? "已是最新一话" : "点击加载下一话";
+            ButtonContent = chapter!.Index == chapter.Obj.ItemCount - 1 ? "已是最新一话" : "点击加载下一话";
         }
 
         /// <summary>
@@ -184,7 +184,7 @@ namespace BrilliantSee.ViewModels
             else
             {
                 hasNew = true;
-                newChapter = Chapter!.Comic.GetNearChapter(Chapter, flag);
+                newChapter = Chapter!.Obj.GetNearItem(Chapter, flag);
                 if (newChapter is null)
                 {
                     return false;
@@ -218,16 +218,16 @@ namespace BrilliantSee.ViewModels
         /// <returns></returns>
         public async Task StoreLastReadedChapterIndex()
         {
-            Chapter!.Comic.LastReadedChapterIndex = Chapter.Index;
-            var category = Chapter.Comic.Category;
-            Chapter.Comic.Category = DBObjCategory.History;
-            await _db.UpdateComicAsync(Chapter.Comic);
-            if (await _db.IsComicExistAsync(Chapter.Comic, DBObjCategory.Favorite))
+            Chapter!.Obj.LastReadedItemIndex = Chapter.Index;
+            var category = Chapter.Obj.Category;
+            Chapter.Obj.Category = DBObjCategory.History;
+            await _db.UpdateComicAsync(Chapter.Obj);
+            if (await _db.IsComicExistAsync(Chapter.Obj, DBObjCategory.Favorite))
             {
-                Chapter.Comic.Category = DBObjCategory.Favorite;
-                await _db.UpdateComicAsync(Chapter.Comic);
+                Chapter.Obj.Category = DBObjCategory.Favorite;
+                await _db.UpdateComicAsync(Chapter.Obj);
             }
-            Chapter.Comic.Category = category;
+            Chapter.Obj.Category = category;
         }
 
         [RelayCommand]

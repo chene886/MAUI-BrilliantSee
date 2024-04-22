@@ -17,7 +17,7 @@ namespace BrilliantSee.Models.Objs.Comics
             var end = Html.IndexOf("comic-chapters");
             if (start < 0 || end < 0)
             {
-                Chapters = Chapters.Append(new GufengChapter("暂无章节", "", -1, false) { Comic = this });
+                Items = Items.Append(new GufengChapter("暂无章节", "", -1, false) { Obj = this });
                 return;
             }
             var moreDataHtml = Html.Substring(start, end - start);
@@ -30,7 +30,7 @@ namespace BrilliantSee.Models.Objs.Comics
             }
         }
 
-        public override string? GetLastestChapterName()
+        public override string? GetLastestItemName()
         {
             var start = Html.IndexOf("Cover");
             var end = Html.IndexOf("开始阅读");
@@ -47,7 +47,7 @@ namespace BrilliantSee.Models.Objs.Comics
             return "";
         }
 
-        public override async Task LoadChaptersAsync()
+        public override async Task LoadItemsAsync()
         {
             var index = "comic-chapters";
             var flag = true;
@@ -55,7 +55,7 @@ namespace BrilliantSee.Models.Objs.Comics
 
             if (Html.IndexOf(index) < 0)
             {
-                Chapters = Chapters.Append(new GufengChapter("暂无章节", "", -1, false) { Comic = this });
+                Items = Items.Append(new GufengChapter("暂无章节", "", -1, false) { Obj = this });
                 return;
             }
             var chaptershtml = Html.Substring(Html.IndexOf(index));
@@ -64,7 +64,7 @@ namespace BrilliantSee.Models.Objs.Comics
             var start = matches.Count() - 1;
             if (matches.FirstOrDefault() is not null)
             {
-                LastestChapterName = matches.FirstOrDefault()!.Groups[2].Value;
+                LastestItemName = matches.FirstOrDefault()!.Groups[2].Value;
             }
             foreach (Match match in matches)
             {
@@ -72,15 +72,15 @@ namespace BrilliantSee.Models.Objs.Comics
                     match.Groups[2].Value,
                     "https://m.gufengmh9.com/" + match.Groups[1].Value,
                     start,
-                    start == LastReadedChapterIndex)
-                { Comic = this });
+                    start == LastReadedItemIndex)
+                { Obj = this });
                 start--;
             }
 
             await MainThread.InvokeOnMainThreadAsync(() =>
             {
-                Chapters = chapters;
-                ChapterCount = Chapters.Count();
+                Items = chapters;
+                ItemCount = Items.Count();
             });
         }
     }

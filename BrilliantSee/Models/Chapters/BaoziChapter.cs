@@ -22,7 +22,7 @@ namespace BrilliantSee.Models.Chapters
         /// </summary>
         /// <returns></returns>
         /// <exception cref="Exception"></exception>
-        public override async Task GetPicEnumeratorAsync()
+        public override async Task GetResourcesAsync()
         {
             try
             {
@@ -36,7 +36,7 @@ namespace BrilliantSee.Models.Chapters
                     {
                         url = Url + $"_{count}";
                     }
-                    var msg = (await Comic.Source.HttpClient!.GetAsync(url));
+                    var msg = (await Obj.Source.HttpClient!.GetAsync(url));
                     if (msg.RequestMessage is null || msg.RequestMessage.RequestUri is null)
                     {
                         if (count == 1)

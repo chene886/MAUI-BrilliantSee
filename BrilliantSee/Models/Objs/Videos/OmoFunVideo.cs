@@ -8,12 +8,12 @@ namespace BrilliantSee.Models.Objs.Videos
 {
     public class OmoFunVideo : Obj
     {
-        public override string? GetLastestChapterName()
+        public override string? GetLastestItemName()
         {
             throw new NotImplementedException();
         }
 
-        public override Task LoadChaptersAsync()
+        public override Task LoadItemsAsync()
         {
             throw new NotImplementedException();
         }

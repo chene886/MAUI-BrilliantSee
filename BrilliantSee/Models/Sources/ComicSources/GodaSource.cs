@@ -41,7 +41,7 @@ namespace BrilliantSee.Models.Sources.ComicSources
             {
                 var comic = new GodaComic()
                 {
-                    Url = "https://godamanga.com" + match.Groups[1].Value,
+                    Url = match.Groups[1].Value,
                     Name = match.Groups[3].Value,
                     Cover = match.Groups[2].Value.Replace("%3A", ":").Replace("%2F", "/"),
                     Source = this,

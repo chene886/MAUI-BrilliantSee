@@ -84,10 +84,8 @@ namespace BrilliantSee.ViewModels
         [RelayCommand]
         private async Task OpenObjAsync(Obj obj)
         {
-            if (obj.SourceCategory == SourceCategory.Comic)
-                await Shell.Current.GoToAsync("DetailPage", new Dictionary<string, object> { { "Comic", obj } });
-            else
-                await Shell.Current.GoToAsync("VideoPage", new Dictionary<string, object> { { "Video", obj } });
+            var page = obj.SourceCategory == SourceCategory.Comic ? "DetailPage" : "VideoPage";
+            await Shell.Current.GoToAsync(page, new Dictionary<string, object> { { "Obj", obj } });
         }
 
         [RelayCommand]
@@ -118,8 +116,8 @@ namespace BrilliantSee.ViewModels
                                 var isSuccess = await item.GetHtmlAsync();
                                 if (isSuccess)
                                 {
-                                    var lastestChapterName = item.GetLastestChapterName();
-                                    if (lastestChapterName is not null && lastestChapterName != item.LastestChapterName)
+                                    var lastestChapterName = item.GetLastestItemName();
+                                    if (lastestChapterName is not null && lastestChapterName != item.LastestItemName)
                                     {
                                         item.IsUpdate = true;
                                         hasUpdate = true;

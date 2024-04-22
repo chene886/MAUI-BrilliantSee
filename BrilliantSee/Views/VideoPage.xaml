@@ -4,138 +4,155 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
-    Title="视频播放"
-    Shell.TabBarIsVisible="False">
+    xmlns:vm="clr-namespace:BrilliantSee.ViewModels"
+    Title="{Binding Obj.Name}"
+    Shell.ForegroundColor="Black"
+    Shell.TabBarIsVisible="False"
+    Unloaded="ContentPage_Unloaded">
     <ContentPage.ToolbarItems>
         <ToolbarItem
             Command="{Binding SwitchIsFavoriteCommand}"
-            IconImageSource="not_favorite.png"
+            IconImageSource="{Binding FavoriteImage}"
             Text="收藏" />
         <ToolbarItem
             Command="{Binding JumpToBrowserCommand}"
             IconImageSource="browser.png"
             Text="浏览器打开" />
     </ContentPage.ToolbarItems>
-    <Grid RowSpacing="10">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="200" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
-        </Grid.RowDefinitions>
-        <toolkit:MediaElement
-            HeightRequest="200"
-            HorizontalOptions="Center"
-            ShouldKeepScreenOn="True"
-            ShouldShowPlaybackControls="True"
-            Source="https://svipsvip.ffzy-online5.com/20240418/26165_0f6f3b45/index.m3u8"
-            VerticalOptions="Start" />
-        <Grid
-            Grid.Row="1"
-            Padding="6,6,14,6"
-            RowSpacing="10">
+    <Grid BackgroundColor="Black">
+        <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
+                <RowDefinition Height="214" />
+                <RowDefinition Height="*" />
             </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
-            <Grid Grid.ColumnSpan="2" RowSpacing="4">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                </Grid.RowDefinitions>
-                <Label FontSize="20" Text="Title" />
-                <Label
-                    Grid.Row="1"
-                    FontSize="Medium"
-                    Text="Author"
-                    TextColor="{StaticResource Gray500}" />
-                <Label
-                    Grid.Row="2"
-                    FontSize="Medium"
-                    Text="2022-01-01"
-                    TextColor="{StaticResource Gray500}" />
-                <Label
-                    Grid.Row="3"
-                    FontSize="Medium"
-                    LineBreakMode="CharacterWrap"
-                    MaxLines="5"
-                    Text="简介：afjnvianvifngwajfoiajvfjavvsvfeqgrtgqmoiajvijiqnfbfrwimbajrisjfbijisnerivavqarnvaiobiorromvaomvod"
-                    TextColor="{StaticResource Gray500}" />
-            </Grid>
-            <Label
-                Grid.Row="1"
-                FontFamily=""
-                FontSize="20"
-                LineBreakMode="TailTruncation"
-                Text="选集"
-                VerticalOptions="Center" />
-            <ImageButton
-                Grid.Row="1"
-                Grid.Column="1"
-                HeightRequest="28"
-                HorizontalOptions="End"
-                Source="reverse.png"
+            <toolkit:MediaElement
+                x:Name="media"
+                HorizontalOptions="Center"
+                ShouldAutoPlay="True"
+                ShouldKeepScreenOn="True"
+                ShouldShowPlaybackControls="True"
+                Source="{Binding VideoUrl}"
                 VerticalOptions="Center"
-                WidthRequest="28" />
-            <HorizontalStackLayout Grid.Row="2">
-                <Label
-                    FontSize="14"
-                    Text="默认线路"
-                    VerticalOptions="Center" />
-            </HorizontalStackLayout>
-        </Grid>
-        <CollectionView
-            Grid.Row="2"
-            ItemsLayout="VerticalGrid, 3"
-            ItemsSource="{Binding Urls}">
-            <CollectionView.ItemTemplate>
-                <DataTemplate>
-                    <Frame
-                        Margin="10,6"
-                        Padding="10,0"
-                        BackgroundColor="White"
-                        BorderColor="{StaticResource Gray500}"
-                        CornerRadius="45"
-                        HeightRequest="32">
-                        <Frame.GestureRecognizers>
-                            <TapGestureRecognizer />
-                        </Frame.GestureRecognizers>
-                        <Frame.Triggers>
-                            <DataTrigger
-                                Binding="{Binding IsSpecial}"
-                                TargetType="Frame"
-                                Value="True">
-                                <Setter Property="BackgroundColor" Value="{StaticResource Primary}" />
-                                <Setter Property="BorderColor" Value="{StaticResource Primary}" />
-                            </DataTrigger>
-                        </Frame.Triggers>
+                ZIndex="1" />
+            <CollectionView
+                Grid.Row="1"
+                BackgroundColor="{StaticResource Backcolor}"
+                ItemsLayout="VerticalGrid, 3"
+                ItemsSource="{Binding Obj.Items}">
+                <CollectionView.Header>
+                    <VerticalStackLayout Padding="6,10,0,6" Spacing="4">
                         <Label
-                            x:Name="label"
+                            FontFamily=""
+                            FontSize="22"
+                            Text="{Binding Obj.Name}" />
+                        <Label
                             FontFamily=""
                             FontSize="12"
-                            HorizontalOptions="Start"
                             LineBreakMode="TailTruncation"
-                            Text="{Binding}"
-                            TextColor="{StaticResource Gray500}"
-                            VerticalOptions="Center">
-                            <Label.Triggers>
+                            Text="{Binding Obj.Url}" />
+                        <Label
+                            FontFamily=""
+                            FontSize="16"
+                            Text="{Binding Obj.Tag}"
+                            TextColor="{StaticResource Gray500}" />
+                        <Label
+                            FontFamily=""
+                            FontSize="16"
+                            Text="{Binding Obj.Director}"
+                            TextColor="{StaticResource Gray500}" />
+                        <Label
+                            FontFamily=""
+                            FontSize="16"
+                            LineBreakMode="TailTruncation"
+                            Text="{Binding Obj.Actors}"
+                            TextColor="{StaticResource Gray500}" />
+                        <Label
+                            FontFamily=""
+                            FontSize="16"
+                            LineBreakMode="TailTruncation"
+                            MaxLines="4"
+                            Text="{Binding Obj.Description}"
+                            TextColor="{StaticResource Gray500}" />
+                        <Grid Margin="0,4,12,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <HorizontalStackLayout Spacing="10">
+                                <Label
+                                    FontFamily=""
+                                    FontSize="20"
+                                    LineBreakMode="TailTruncation"
+                                    Text="选集"
+                                    VerticalOptions="Center" />
+                                <Label
+                                    FontFamily=""
+                                    FontSize="16"
+                                    Text="线路一"
+                                    VerticalOptions="Center" />
+                            </HorizontalStackLayout>
+                            <ImageButton
+                                Grid.Column="1"
+                                Command="{Binding ReverseListCommand}"
+                                HeightRequest="28"
+                                IsEnabled="{Binding IsReverseListEnabled}"
+                                Source="{Binding OrderImage}"
+                                VerticalOptions="Center"
+                                WidthRequest="28" />
+                        </Grid>
+                    </VerticalStackLayout>
+                </CollectionView.Header>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Frame
+                            Margin="6"
+                            Padding="10,0"
+                            BackgroundColor="White"
+                            BorderColor="{StaticResource Gray500}"
+                            CornerRadius="45"
+                            HeightRequest="32">
+                            <Frame.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding SetVideoCommand, Source={RelativeSource AncestorType={x:Type vm:DetailViewModel}}}" CommandParameter="{Binding}" />
+                            </Frame.GestureRecognizers>
+                            <Frame.Triggers>
                                 <DataTrigger
                                     Binding="{Binding IsSpecial}"
-                                    TargetType="Label"
+                                    TargetType="Frame"
                                     Value="True">
-                                    <Setter Property="TextColor" Value="White" />
+                                    <Setter Property="BackgroundColor" Value="{StaticResource Primary}" />
+                                    <Setter Property="BorderColor" Value="{StaticResource Primary}" />
                                 </DataTrigger>
-                            </Label.Triggers>
-                        </Label>
-                    </Frame>
-                </DataTemplate>
-            </CollectionView.ItemTemplate>
-        </CollectionView>
+                            </Frame.Triggers>
+                            <Label
+                                x:Name="label"
+                                FontFamily=""
+                                FontSize="12"
+                                HorizontalOptions="Center"
+                                LineBreakMode="TailTruncation"
+                                Text="{Binding Name}"
+                                TextColor="{StaticResource Gray500}"
+                                VerticalOptions="Center">
+                                <Label.Triggers>
+                                    <DataTrigger
+                                        Binding="{Binding IsSpecial}"
+                                        TargetType="Label"
+                                        Value="True">
+                                        <Setter Property="TextColor" Value="White" />
+                                    </DataTrigger>
+                                </Label.Triggers>
+                            </Label>
+                        </Frame>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </Grid>
+        <ActivityIndicator
+            Margin="0,0,0,100"
+            HeightRequest="55"
+            HorizontalOptions="Center"
+            IsRunning="True"
+            IsVisible="{Binding IsGettingResult}"
+            VerticalOptions="Center"
+            WidthRequest="55" />
     </Grid>
 </ContentPage>

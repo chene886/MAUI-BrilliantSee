@@ -1,19 +1,21 @@
+using BrilliantSee.ViewModels;
+using CommunityToolkit.Maui.Views;
+
 namespace BrilliantSee.Views;
 
 public partial class VideoPage : ContentPage
 {
-    public List<string> Urls = new List<string>()
-    {
-        "第一集",
-        "第二集",
-        "第三集",
-        "第四集",
-        "第五集",
-    };
+    private readonly DetailViewModel _vm;
 
-    public VideoPage()
+    public VideoPage(DetailViewModel vm)
     {
-        this.BindingContext = this;
+        _vm = vm;
+        this.BindingContext = _vm;
         InitializeComponent();
+    }
+
+    private void ContentPage_Unloaded(object sender, EventArgs e)
+    {
+        media.Handler?.DisconnectHandler();
     }
 }

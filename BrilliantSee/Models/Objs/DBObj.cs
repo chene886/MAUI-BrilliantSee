@@ -35,7 +35,7 @@ namespace BrilliantSee.Models.Objs
         /// <summary>
         /// 最后阅读章节索引
         /// </summary>
-        public int LastReadedChapterIndex { get; set; } = -1;
+        public int LastReadedItemIndex { get; set; } = -1;
 
         /// <summary>
         /// 是否有更新
@@ -45,7 +45,7 @@ namespace BrilliantSee.Models.Objs
         /// <summary>
         /// 最新章节名
         /// </summary>
-        public string LastestChapterName { get; set; } = string.Empty;
+        public string LastestItemName { get; set; } = string.Empty;
 
         /// <summary>
         /// 漫画源

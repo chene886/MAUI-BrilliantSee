@@ -45,7 +45,7 @@ namespace BrilliantSee.Services.Plugins
             [Description("用于查找的漫画")] Obj comic,
                          [Description("要查找的章节名称")] string name)
         {
-            var chapter = comic.Chapters.Where(c => c.Name.Contains(name)).FirstOrDefault();
+            var chapter = comic.Items.Where(c => c.Name.Contains(name)).FirstOrDefault();
             return chapter;
         }
 
@@ -54,8 +54,8 @@ namespace BrilliantSee.Services.Plugins
         public Chapter? GetFirstChapterAsync(
                                              [Description("用于查找漫画")] Obj comic)
         {
-            if (comic.IsReverseList == true) return comic.Chapters.LastOrDefault();
-            else return comic.Chapters.FirstOrDefault();
+            if (comic.IsReverseList == true) return comic.Items.LastOrDefault();
+            else return comic.Items.FirstOrDefault();
         }
 
         [KernelFunction, Description("查找最后一个或最新章节")]
@@ -63,8 +63,8 @@ namespace BrilliantSee.Services.Plugins
         public Chapter? GetLastChapterAsync(
                                                         [Description("用于查找的漫画")] Obj comic)
         {
-            if (comic.IsReverseList == true) return comic.Chapters.FirstOrDefault();
-            else return comic.Chapters.LastOrDefault();
+            if (comic.IsReverseList == true) return comic.Items.FirstOrDefault();
+            else return comic.Items.LastOrDefault();
         }
 
         [KernelFunction, Description("查找最后浏览章节")]
@@ -72,8 +72,8 @@ namespace BrilliantSee.Services.Plugins
         public Chapter? GetLastReadChapterAsync(
                                                                    [Description("用于查找的漫画")] Obj comic)
         {
-            if (comic.LastReadedChapterIndex == -1) return null;
-            return comic.Chapters.ToList()[comic.LastReadedChapterIndex];
+            if (comic.LastReadedItemIndex == -1) return null;
+            return comic.Items.ToList()[comic.LastReadedItemIndex];
         }
     }
 }

@@ -51,12 +51,12 @@ namespace BrilliantSee.Services
             _objs.Add(godaEn.Name, godaEnComic);
 
             //动漫图源
-            //var yhwang = new YHWangSource();
+            var yhwang = new YHWangSource();
             //var omofun = new OmoFunSource();
-            //var yhwangVideo = new YHWangVideo() { Source = yhwang };
+            var yhwangVideo = new YHWangVideo() { Source = yhwang };
             //var omofunVideo = new OmoFunVideo() { Source = omofun };
-            //_sources.Add(yhwang.Name, yhwang);
-            //_objs.Add(yhwang.Name, yhwangVideo);
+            _sources.Add(yhwang.Name, yhwang);
+            _objs.Add(yhwang.Name, yhwangVideo);
             //_sources.Add(omofun.Name, omofun);
             //_objs.Add(omofun.Name, omofunVideo);
         }

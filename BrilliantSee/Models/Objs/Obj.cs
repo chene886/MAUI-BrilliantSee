@@ -55,7 +55,7 @@ namespace BrilliantSee.Models.Objs
         /// <summary>
         /// 最后阅读章节索引
         /// </summary>
-        public int LastReadedChapterIndex { get; set; } = -1;
+        public int LastReadedItemIndex { get; set; } = -1;
 
         /// <summary>
         /// 漫画源
@@ -70,7 +70,7 @@ namespace BrilliantSee.Models.Objs
         /// <summary>
         /// 最新章节名
         /// </summary>
-        public string LastestChapterName { get; set; } = string.Empty;
+        public string LastestItemName { get; set; } = string.Empty;
 
         /// <summary>
         /// 最新更新时间
@@ -92,12 +92,12 @@ namespace BrilliantSee.Models.Objs
         /// 漫画章节
         /// </summary>
         [ObservableProperty]
-        public IEnumerable<Chapter> _chapters = new List<Chapter>();
+        public IEnumerable<Chapter> _items = new List<Chapter>();
 
         /// <summary>
         /// 章节数量
         /// </summary>
-        public int ChapterCount { get; set; } = 0;
+        public int ItemCount { get; set; } = 0;
 
         /// <summary>
         /// 漫画章节是否倒序
@@ -114,6 +114,11 @@ namespace BrilliantSee.Models.Objs
         /// </summary>
         public SourceCategory SourceCategory { get; set; }
 
+        public string Director { get; set; } = string.Empty;
+        public string Actors { get; set; } = string.Empty;
+        public string Tag { get; set; } = string.Empty;
+        public string Score { get; set; } = string.Empty;
+
         /// <summary>
         /// 从存储的漫画数据创建漫画实体
         /// </summary>
@@ -128,9 +133,9 @@ namespace BrilliantSee.Models.Objs
             Id = dbObj.Id;
             Category = dbObj.Category;
             SourceCategory = dbObj.SourceCategory;
-            LastReadedChapterIndex = dbObj.LastReadedChapterIndex;
+            LastReadedItemIndex = dbObj.LastReadedItemIndex;
             IsUpdate = dbObj.IsUpdate;
-            LastestChapterName = dbObj.LastestChapterName;
+            LastestItemName = dbObj.LastestItemName;
             SourceName = dbObj.SourceName;
             return (Obj)this.MemberwiseClone();
         }
@@ -152,9 +157,9 @@ namespace BrilliantSee.Models.Objs
                 Url = obj.Url,
                 Category = obj.Category,
                 SourceCategory = obj.SourceCategory,
-                LastReadedChapterIndex = obj.LastReadedChapterIndex,
+                LastReadedItemIndex = obj.LastReadedItemIndex,
                 IsUpdate = obj.IsUpdate,
-                LastestChapterName = obj.LastestChapterName,
+                LastestItemName = obj.LastestItemName,
                 SourceName = obj.SourceName
             };
         }
@@ -179,14 +184,14 @@ namespace BrilliantSee.Models.Objs
         /// <param name="chapter">当前章节</param>
         /// <param name="flag">获取上一章节或下一章节的标志</param>
         /// <returns></returns>
-        public Chapter? GetNearChapter(Chapter chapter, string flag)
+        public Chapter? GetNearItem(Chapter chapter, string flag)
         {
-            var tempChapters = Chapters.ToList();
-            int index = tempChapters.IndexOf(chapter);
+            var tempItems = Items.ToList();
+            int index = tempItems.IndexOf(chapter);
             bool turn = flag == "Last";
             index = IsReverseList == turn ? index + 1 : index - 1;
-            if (index < 0 || index >= Chapters.Count()) return null;
-            return Chapters.ElementAtOrDefault(index)!;
+            if (index < 0 || index >= Items.Count()) return null;
+            return Items.ElementAtOrDefault(index)!;
         }
 
         /// <summary>
@@ -199,12 +204,12 @@ namespace BrilliantSee.Models.Objs
         /// 获取最新章节名
         /// </summary>
         /// <returns></returns>
-        public abstract string? GetLastestChapterName();
+        public abstract string? GetLastestItemName();
 
         /// <summary>
         /// 加载章节信息
         /// </summary>
         /// <returns></returns>
-        public abstract Task LoadChaptersAsync();
+        public abstract Task LoadItemsAsync();
     }
 }
