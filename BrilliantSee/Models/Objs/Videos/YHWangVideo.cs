@@ -1,5 +1,5 @@
-﻿using BrilliantSee.Models.Chapters;
-using BrilliantSee.Models.Episodes;
+﻿using BrilliantSee.Models.Items;
+using BrilliantSee.Models.Items.Episodes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -51,7 +51,7 @@ namespace BrilliantSee.Models.Objs.Videos
         public override void LoadMoreData()
         {
             if (!string.IsNullOrEmpty(Html))
-            {      
+            {
                 Tag = Regex.Match(Html, "<p[\\s\\S]*?>(.*?)<").Groups[1].Value.Replace(" ", "") + "/评分：" + Regex.Match(Html, "评分[\\s\\S]*?</span>(.*?)<").Groups[1].Value;
                 Director = "导演：" + Regex.Match(Html, "导演：(.*?)<").Groups[1].Value;
                 Actors = "主演：" + Regex.Match(Html, "主演：(.*?)<").Groups[1].Value;

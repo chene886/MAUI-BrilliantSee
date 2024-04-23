@@ -74,7 +74,9 @@ namespace BrilliantSee.Services
         /// 搜索漫画
         /// </summary>
         /// <param name="keyword">搜索关键词</param>
-        /// <param name="objs">保存结果的集合</param>
+        /// <param name="comics">保存漫画结果的集合</param>
+        /// <param name="videos">保存动漫结果的集合</param>
+        /// <param name="category">搜索的图源类别</param>
         /// <returns></returns>
         public async Task SearchAsync(string keyword, ObservableCollection<Obj> comics, ObservableCollection<Obj> videos, string flag, SourceCategory category)
         {

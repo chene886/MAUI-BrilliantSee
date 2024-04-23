@@ -7,22 +7,22 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BrilliantSee.Models.Chapters
+namespace BrilliantSee.Models.Items
 {
-    public abstract partial class Chapter : ObservableObject
+    public abstract partial class Item : ObservableObject
     {
         /// <summary>
-        /// 章节名
+        /// 章节、剧集名
         /// </summary>
         public string Name { get; set; } = string.Empty;
 
         /// <summary>
-        /// 章节url
+        /// 章节、剧集url
         /// </summary>
         public string Url { get; set; } = string.Empty;
 
         /// <summary>
-        /// 章节所属的漫画
+        /// 章节剧集所属的实体
         /// </summary>
         public required Obj Obj { get; set; }
 
@@ -32,23 +32,32 @@ namespace BrilliantSee.Models.Chapters
         public int PageCount { get; set; } = 0;
 
         /// <summary>
-        /// 章节索引
+        /// 章节剧集索引
         /// </summary>
         public int Index { get; set; } = -1;
 
         /// <summary>
-        /// 章节是否为最后阅读章节
+        /// 章节剧集是否为最后阅读
         /// </summary>
         [ObservableProperty]
         public bool _isSpecial = false;
 
+        /// <summary>
+        /// 保存章节图片url
+        /// </summary>
         public List<string> PicUrls { get; set; } = new List<string>();
 
+        /// <summary>
+        /// 剧集所属线路
+        /// </summary>
         public string Route { get; set; } = string.Empty;
 
+        /// <summary>
+        /// 剧集资源url
+        /// </summary>
         public string VideoUrl { get; set; } = string.Empty;
 
-        public Chapter(string name, string url, int index, bool isSpecial)
+        public Item(string name, string url, int index, bool isSpecial)
         {
             Name = name;
             Url = url;

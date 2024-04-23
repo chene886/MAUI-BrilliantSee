@@ -1,4 +1,4 @@
-﻿using BrilliantSee.Models.Chapters;
+﻿using BrilliantSee.Models.Items.Chapters;
 using CommunityToolkit.Maui.Alerts;
 using System;
 using System.Collections.Generic;

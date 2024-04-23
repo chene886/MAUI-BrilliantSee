@@ -1,4 +1,4 @@
-﻿using BrilliantSee.Models.Chapters;
+﻿using BrilliantSee.Models.Items;
 using BrilliantSee.Models.Enums;
 using BrilliantSee.Models.Sources;
 using BrilliantSee.Services;
@@ -93,7 +93,7 @@ namespace BrilliantSee.Models.Objs
         /// 漫画章节
         /// </summary>
         [ObservableProperty]
-        public IEnumerable<Chapter> _items = new List<Chapter>();
+        public IEnumerable<Item> _items = new List<Item>();
 
         /// <summary>
         /// 章节数量
@@ -185,7 +185,7 @@ namespace BrilliantSee.Models.Objs
         /// <param name="chapter">当前章节</param>
         /// <param name="flag">获取上一章节或下一章节的标志</param>
         /// <returns></returns>
-        public Chapter? GetNearItem(Chapter chapter, string flag)
+        public Item? GetNearItem(Item chapter, string flag)
         {
             var tempItems = Items.ToList();
             int index = tempItems.IndexOf(chapter);

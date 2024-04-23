@@ -86,7 +86,7 @@ namespace BrilliantSee.Services.Plugins
             var Comics = await _db.GetObjsAsync(DBObjCategory.History, SourceCategory.Comic);
             //模糊查找漫画名取第一个
             var comic = Comics.Where(c => c.Name.Contains(name)).FirstOrDefault();
-            return comic;
+            return comic!;
         }
     }
 }

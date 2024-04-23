@@ -1,4 +1,5 @@
-﻿using BrilliantSee.Models.Objs;
+﻿using BrilliantSee.Models.Items;
+using BrilliantSee.Models.Objs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,9 +7,9 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace BrilliantSee.Models.Chapters
+namespace BrilliantSee.Models.Items.Chapters
 {
-    public class GufengChapter : Chapter
+    public class GufengChapter : Item
     {
         public GufengChapter(string name, string url, int index, bool isSpecial) : base(name, url, index, isSpecial)
         {
@@ -18,7 +19,7 @@ namespace BrilliantSee.Models.Chapters
         {
             try
             {
-                var msg = (await Obj.Source.HttpClient!.GetAsync(Url));
+                var msg = await Obj.Source.HttpClient!.GetAsync(Url);
                 if (msg.RequestMessage is null || msg.RequestMessage.RequestUri is null)
                     throw new Exception("接口异常,请等待维护");
                 var html = await msg.Content.ReadAsStringAsync();

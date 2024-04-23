@@ -1,5 +1,4 @@
-﻿using BrilliantSee.Models.Chapters;
-using BrilliantSee.Models.Enums;
+﻿using BrilliantSee.Models.Enums;
 using SQLite;
 
 namespace BrilliantSee.Models.Objs

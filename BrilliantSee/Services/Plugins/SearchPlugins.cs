@@ -29,14 +29,6 @@ namespace BrilliantSee.Services.Plugins
             await MainThread.InvokeOnMainThreadAsync(() => { Shell.Current.SendBackButtonPressed(); });
         }
 
-        [KernelFunction, Description("搜索指定名字的漫画")]
-        public async Task FindComicByNameAsync(
-                                             [Description("要查找的漫画名称")] string name,
-                                                [Description("存放搜索结果的漫画集合")] ObservableCollection<Obj> Comics)
-        {
-            //await _sc.SearchAsync(name, Comics, "Init");
-        }
-
         [KernelFunction, Description("获取漫画集合中指定下标的漫画")]
         [return: Description("获取到的漫画（可能没有）")]
         public Obj? GetComicAsync(

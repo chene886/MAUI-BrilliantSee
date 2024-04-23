@@ -8,7 +8,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using CommunityToolkit.Maui.Alerts;
-using BrilliantSee.Models.Chapters;
 using System.Collections.ObjectModel;
 
 namespace BrilliantSee.Services.Plugins
@@ -88,7 +87,7 @@ namespace BrilliantSee.Services.Plugins
             var Comics = await _db.GetObjsAsync(DBObjCategory.Favorite, SourceCategory.Comic);
             //模糊查找漫画名取第一个
             var comic = Comics.Where(c => c.Name.Contains(name)).FirstOrDefault();
-            return comic;
+            return comic!;
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿using BrilliantSee.Models.Chapters;
+﻿using BrilliantSee.Models.Items;
 using BrilliantSee.Models.Objs;
 using CommunityToolkit.Maui.Alerts;
 using Microsoft.SemanticKernel;
@@ -24,7 +24,7 @@ namespace BrilliantSee.Services.Plugins
 
         [KernelFunction, Description("打开指定的章节")]
         public async Task OpenChapterAsync(
-                       [Description("要打开的章节")] Chapter chapter)
+                       [Description("要打开的章节")] Item chapter)
         {
             await Shell.Current.GoToAsync("BrowsePage", new Dictionary<string, object> { { "Chapter", chapter } });
         }
@@ -41,7 +41,7 @@ namespace BrilliantSee.Services.Plugins
 
         [KernelFunction, Description("查找指定名字的章节")]
         [return: Description("获取到的章节（可能没有）")]
-        public Chapter? FindChapterAsync(
+        public Item? FindChapterAsync(
             [Description("用于查找的漫画")] Obj comic,
                          [Description("要查找的章节名称")] string name)
         {
@@ -51,7 +51,7 @@ namespace BrilliantSee.Services.Plugins
 
         [KernelFunction, Description("查找第一个章节")]
         [return: Description("获取到的章节（可能没有）")]
-        public Chapter? GetFirstChapterAsync(
+        public Item? GetFirstChapterAsync(
                                              [Description("用于查找漫画")] Obj comic)
         {
             if (comic.IsReverseList == true) return comic.Items.LastOrDefault();
@@ -60,7 +60,7 @@ namespace BrilliantSee.Services.Plugins
 
         [KernelFunction, Description("查找最后一个或最新章节")]
         [return: Description("获取到的章节（可能没有）")]
-        public Chapter? GetLastChapterAsync(
+        public Item? GetLastChapterAsync(
                                                         [Description("用于查找的漫画")] Obj comic)
         {
             if (comic.IsReverseList == true) return comic.Items.FirstOrDefault();
@@ -69,7 +69,7 @@ namespace BrilliantSee.Services.Plugins
 
         [KernelFunction, Description("查找最后浏览章节")]
         [return: Description("获取到的章节（可能没有）")]
-        public Chapter? GetLastReadChapterAsync(
+        public Item? GetLastReadChapterAsync(
                                                                    [Description("用于查找的漫画")] Obj comic)
         {
             if (comic.LastReadedItemIndex == -1) return null;

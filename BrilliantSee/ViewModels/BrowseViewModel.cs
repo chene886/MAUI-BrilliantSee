@@ -1,4 +1,4 @@
-﻿using BrilliantSee.Models.Chapters;
+﻿using BrilliantSee.Models.Items;
 using BrilliantSee.Models.Enums;
 using BrilliantSee.Services;
 using CommunityToolkit.Maui.Alerts;
@@ -23,7 +23,7 @@ namespace BrilliantSee.ViewModels
         /// 当前章节
         /// </summary>
         [ObservableProperty]
-        private Chapter? _chapter;
+        private Item? _chapter;
 
         /// <summary>
         /// 当前章节在已加载章节集合中的索引
@@ -34,7 +34,7 @@ namespace BrilliantSee.ViewModels
         /// 已加载章节集合
         /// </summary>
         [ObservableProperty]
-        public List<Chapter> _loadedChapter = new List<Chapter>();
+        public List<Item> _loadedChapter = new List<Item>();
 
         /// <summary>
         /// 已加载章节图片集合
@@ -106,7 +106,7 @@ namespace BrilliantSee.ViewModels
         /// <param name="query">保存传递数据的字典</param>
         public async void ApplyQueryAttributes(IDictionary<string, object> query)
         {
-            Chapter = (query["Chapter"] as Chapter)!;
+            Chapter = (query["Chapter"] as Item)!;
             if (Chapter.Url == "")
             {
                 return;
@@ -126,7 +126,7 @@ namespace BrilliantSee.ViewModels
         /// <param name="chapter">指定的章节</param>
         /// <param name="flag">加载模式</param>
         /// <returns></returns>
-        private async Task LoadChapterPicAsync(Chapter chapter, string flag)
+        private async Task LoadChapterPicAsync(Item chapter, string flag)
         {
             if (chapter.PicUrls.Count == 0)
             {
@@ -156,7 +156,7 @@ namespace BrilliantSee.ViewModels
         /// <returns></returns>
         public async Task<bool> UpdateChapterAsync(string flag)
         {
-            Chapter? newChapter;
+            Item? newChapter;
             var hasNew = false;
             if (CurrentChapterIndex > 0 && flag == "Last")
             {

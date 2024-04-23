@@ -1,4 +1,4 @@
-﻿using BrilliantSee.Models.Chapters;
+﻿using BrilliantSee.Models.Items.Chapters;
 using BrilliantSee.Models.Sources;
 using CommunityToolkit.Maui.Alerts;
 using Microsoft.Maui.Controls;

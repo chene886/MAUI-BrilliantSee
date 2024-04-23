@@ -1,5 +1,5 @@
 ﻿using BrilliantSee.Models;
-using BrilliantSee.Models.Chapters;
+using BrilliantSee.Models.Items;
 using BrilliantSee.Models.Objs;
 using BrilliantSee.Models.Enums;
 using BrilliantSee.Models.Sources;
@@ -126,7 +126,7 @@ namespace BrilliantSee.ViewModels
         private async Task OpenObjAsync(Obj obj)
         {
             IsSourceListVisible = false;
-            obj.Items = new List<Chapter>();
+            obj.Items = new List<Item>();
             var page = obj.SourceCategory == SourceCategory.Comic ? "DetailPage" : "VideoPage";
             await Shell.Current.GoToAsync(page, new Dictionary<string, object> { { "Obj", obj } });
         }

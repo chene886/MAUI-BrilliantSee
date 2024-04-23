@@ -1,4 +1,5 @@
-﻿using BrilliantSee.Models.Objs;
+﻿using BrilliantSee.Models.Items;
+using BrilliantSee.Models.Objs;
 using CommunityToolkit.Mvvm.ComponentModel;
 using System;
 using System.Collections.Generic;
@@ -9,9 +10,9 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace BrilliantSee.Models.Chapters
+namespace BrilliantSee.Models.Items.Chapters
 {
-    public class BaoziChapter : Chapter
+    public class BaoziChapter : Item
     {
         public BaoziChapter(string name, string url, int index, bool isSpecial) : base(name, url, index, isSpecial)
         {
@@ -36,7 +37,7 @@ namespace BrilliantSee.Models.Chapters
                     {
                         url = Url + $"_{count}";
                     }
-                    var msg = (await Obj.Source.HttpClient!.GetAsync(url));
+                    var msg = await Obj.Source.HttpClient!.GetAsync(url);
                     if (msg.RequestMessage is null || msg.RequestMessage.RequestUri is null)
                     {
                         if (count == 1)

@@ -1,4 +1,5 @@
-﻿using BrilliantSee.Models.Objs;
+﻿using BrilliantSee.Models.Items;
+using BrilliantSee.Models.Objs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,11 +7,11 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace BrilliantSee.Models.Chapters
+namespace BrilliantSee.Models.Items.Chapters
 {
-    public class GodaEnChapter : Chapter
+    public class GodaChapter : Item
     {
-        public GodaEnChapter(string name, string url, int index, bool isSpecial) : base(name, url, index, isSpecial)
+        public GodaChapter(string name, string url, int index, bool isSpecial) : base(name, url, index, isSpecial)
         {
         }
 
@@ -23,11 +24,12 @@ namespace BrilliantSee.Models.Chapters
         {
             try
             {
-                var msg = (await Obj.Source.HttpClient!.GetAsync(Url));
+                var msg = await Obj.Source.HttpClient!.GetAsync(Url);
                 if (msg.RequestMessage is null || msg.RequestMessage.RequestUri is null)
                     throw new Exception("接口异常,请等待维护");
                 var html = await msg.Content.ReadAsStringAsync();
-                var match = Regex.Matches(html, "<noscript>[\\s\\S]*?src=\"(.*?)\"[\\s\\S]*?</noscript>");
+                html = html.Substring(html.IndexOf("w-full h-full"));
+                var match = Regex.Matches(html, "w-full h-full[\\s\\S]*?src=\"(.*?)\"");
                 foreach (Match item in match)
                 {
                     PicUrls.Add(item.Groups[1].Value);

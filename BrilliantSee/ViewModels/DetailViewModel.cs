@@ -1,4 +1,4 @@
-﻿using BrilliantSee.Models.Chapters;
+﻿using BrilliantSee.Models.Items;
 using BrilliantSee.Models.Objs;
 using BrilliantSee.Models.Enums;
 using BrilliantSee.Services;
@@ -54,7 +54,7 @@ namespace BrilliantSee.ViewModels
         private bool _isGettingResult;
 
         [ObservableProperty]
-        public IEnumerable<Chapter> _itemsOnDisPlay = new List<Chapter>();
+        public IEnumerable<Item> _itemsOnDisPlay = new List<Item>();
 
         public DetailViewModel(DBService db)
         {
@@ -94,7 +94,7 @@ namespace BrilliantSee.ViewModels
                 OnPropertyChanged(nameof(Obj));
                 IsReverseListEnabled = false;
                 await Task.Run(() => Obj!.LoadItemsAsync());
-                ItemsOnDisPlay = new ObservableCollection<Chapter>(Obj!.Items.Where(c => c.Route == "线路一"));
+                ItemsOnDisPlay = new ObservableCollection<Item>(Obj!.Items.Where(c => c.Route == "线路一"));
                 IsReverseListEnabled = true;
                 IsGettingResult = false;
 
@@ -173,7 +173,7 @@ namespace BrilliantSee.ViewModels
             await Task.Run(() =>
             {
                 Obj.Items = Obj.Items.Reverse();
-                if(ItemsOnDisPlay.Any())
+                if (ItemsOnDisPlay.Any())
                 {
                     ItemsOnDisPlay = ItemsOnDisPlay.Reverse();
                 }
@@ -188,7 +188,7 @@ namespace BrilliantSee.ViewModels
         /// <param name="chapter">导航传递章节</param>
         /// <returns></returns>
         [RelayCommand]
-        private async Task OpenChapterAsync(Chapter chapter)
+        private async Task OpenChapterAsync(Item chapter)
         {
             if (chapter.Name != "暂无章节")
             {
@@ -202,7 +202,7 @@ namespace BrilliantSee.ViewModels
         }
 
         [RelayCommand]
-        private async Task SetVideoAsync(Chapter chapter)
+        private async Task SetVideoAsync(Item chapter)
         {
             _ = chapter.Obj.ChangeLastReadedItemIndex(chapter.Index, _db);
             await chapter.GetResourcesAsync();

@@ -1,4 +1,4 @@
-﻿using BrilliantSee.Models.Chapters;
+﻿using BrilliantSee.Models.Items.Chapters;
 using System;
 using System.Collections.Generic;
 using System.Linq;
