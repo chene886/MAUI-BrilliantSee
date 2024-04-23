@@ -100,10 +100,7 @@
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
-            <HorizontalStackLayout
-                x:Name="select"
-                Margin="2,0"
-                IsVisible="False">
+            <HorizontalStackLayout x:Name="select" Margin="2,0">
                 <Button
                     x:Name="novels"
                     BackgroundColor="Transparent"
@@ -133,8 +130,7 @@
                 x:Name="comicList"
                 Grid.Row="1"
                 Margin="0,5,0,0"
-                ChildAdded="comicList_ChildAdded"
-                ItemsSource="{Binding Objs}"
+                ItemsSource="{Binding Comics}"
                 Scrolled="CollectionView_Scrolled">
                 <CollectionView.ItemTemplate>
                     <DataTemplate>

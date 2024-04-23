@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Collections.ObjectModel;
 
 namespace BrilliantSee.ViewModels
 {
@@ -52,6 +53,9 @@ namespace BrilliantSee.ViewModels
         [ObservableProperty]
         private bool _isGettingResult;
 
+        [ObservableProperty]
+        public IEnumerable<Chapter> _itemsOnDisPlay = new List<Chapter>();
+
         public DetailViewModel(DBService db)
         {
             _db = db;
@@ -90,6 +94,7 @@ namespace BrilliantSee.ViewModels
                 OnPropertyChanged(nameof(Obj));
                 IsReverseListEnabled = false;
                 await Task.Run(() => Obj!.LoadItemsAsync());
+                ItemsOnDisPlay = new ObservableCollection<Chapter>(Obj!.Items.Where(c => c.Route == "线路一"));
                 IsReverseListEnabled = true;
                 IsGettingResult = false;
 
@@ -167,9 +172,11 @@ namespace BrilliantSee.ViewModels
             }
             await Task.Run(() =>
             {
-                var tempChapters = Obj!.Items.ToList();
-                tempChapters.Reverse();
-                Obj.Items = tempChapters;
+                Obj.Items = Obj.Items.Reverse();
+                if(ItemsOnDisPlay.Any())
+                {
+                    ItemsOnDisPlay = ItemsOnDisPlay.Reverse();
+                }
             });
             IsReverseListEnabled = true;
             IsGettingResult = false;
@@ -197,6 +204,7 @@ namespace BrilliantSee.ViewModels
         [RelayCommand]
         private async Task SetVideoAsync(Chapter chapter)
         {
+            _ = chapter.Obj.ChangeLastReadedItemIndex(chapter.Index, _db);
             await chapter.GetResourcesAsync();
             VideoUrl = chapter.VideoUrl;
         }
@@ -209,14 +217,22 @@ namespace BrilliantSee.ViewModels
         {
             if (Obj!.LastReadedItemIndex != -1 && Obj.Items.Any())
             {
-                var historyChapter = Obj.Items.ToList().Find(c => c.Index == Obj.LastReadedItemIndex);
-                await OpenChapterAsync(historyChapter!);
+                var historyItem = Obj.Items.ToList().Find(c => c.Index == Obj.LastReadedItemIndex);
+                if (Obj.SourceCategory == SourceCategory.Video) await SetVideoAsync(historyItem!);
+                else await OpenChapterAsync(historyItem!);
             }
             else
             {
                 var toast = Toast.Make("暂无章节浏览记录");
                 _ = toast.Show();
             }
+        }
+
+        public void SetItemsOnDisplay(string route)
+        {
+            IsGettingResult = true;
+            ItemsOnDisPlay = Obj!.Items.Where(c => c.Route == route);
+            IsGettingResult = false;
         }
     }
 }

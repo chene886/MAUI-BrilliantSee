@@ -24,14 +24,9 @@ namespace BrilliantSee.ViewModels
 
         private readonly AIService _ai;
 
-        /// <summary>
-        /// 储存搜索结果集合
-        /// </summary>
-        public ObservableCollection<Obj> Objs { get; set; } = new();
-
-        public ObservableCollection<Obj> ObjsOnDisplay { get; set; } = new();
-
-        public SourceCategory CurrentCategory { get; set; } = SourceCategory.Comic;
+        public ObservableCollection<Obj> Novels { get; set; } = new();
+        public ObservableCollection<Obj> Comics { get; set; } = new();
+        public ObservableCollection<Obj> Videos { get; set; } = new();
 
         /// <summary>
         /// 是否正在获取结果
@@ -95,9 +90,11 @@ namespace BrilliantSee.ViewModels
                 Keyword = keyword;
                 IsGettingResult = true;
                 IsSourceListVisible = false;
-                Objs.Clear();
-                await _sourceService.SearchAsync(keyword, Objs, "Init");
-                if (Objs.Count == 0) { _ = Toast.Make("搜索结果为空，换一个图源试试吧").Show(); }
+                Comics.Clear();
+                Videos.Clear();
+                await _sourceService.SearchAsync(keyword, Comics, Videos, "Init", SourceCategory.All);
+                if (Comics.Count == 0) { _ = Toast.Make("漫画搜索结果为空，换一个源试试吧").Show(); }
+                if (Videos.Count == 0) { _ = Toast.Make("动漫搜索结果为空，换一个源试试吧").Show(); }
                 IsGettingResult = false;
             }
             else
@@ -107,14 +104,15 @@ namespace BrilliantSee.ViewModels
             }
         }
 
-        public async Task GetMoreAsync()
+        public async Task GetMoreAsync(SourceCategory category)
         {
             _ = Toast.Make("正在加载更多结果").Show();
-            var count = Objs.Count;
+            var count = Comics.Count;
+            var count1 = Videos.Count;
             IsGettingResult = true;
             IsSourceListVisible = false;
-            await _sourceService.SearchAsync(Keyword, Objs, "More");
-            var message = Objs.Count == count ? "没有更多结果了" : $"加载了{Objs.Count - count}个结果";
+            await _sourceService.SearchAsync(Keyword, Comics, Videos, "More", category);
+            var message = Comics.Count + Videos.Count > count + count1 ? $"加载了{Comics.Count + Videos.Count - count - count1}个结果" : "没有更多结果了";
             _ = Toast.Make(message).Show();
             IsGettingResult = false;
         }

@@ -76,7 +76,7 @@ namespace BrilliantSee.Services
         /// <param name="keyword">搜索关键词</param>
         /// <param name="objs">保存结果的集合</param>
         /// <returns></returns>
-        public async Task SearchAsync(string keyword, ObservableCollection<Obj> objs, string flag)
+        public async Task SearchAsync(string keyword, ObservableCollection<Obj> comics, ObservableCollection<Obj> videos, string flag, SourceCategory category)
         {
             IEnumerable<Source> sources;
             if (flag == "Init")
@@ -90,7 +90,7 @@ namespace BrilliantSee.Services
             }
             else
             {
-                sources = _sources.Values.Where(s => s.IsSelected == true && s.HasMore == 1);
+                sources = _sources.Values.Where(s => s.IsSelected == true && s.HasMore == 1 && s.Category == category);
                 if (!sources.Any()) return;
                 foreach (var source in sources)
                 {
@@ -101,6 +101,7 @@ namespace BrilliantSee.Services
             var tasks = new List<Task>();
             foreach (var source in sources)
             {
+                var objs = source.Category == SourceCategory.Comic ? comics : videos;
                 tasks.Add(Task.Run(async () =>
                 {
                     var result = await source.SearchAsync(keyword)!;
@@ -108,7 +109,7 @@ namespace BrilliantSee.Services
                     {
                         foreach (var item in result)
                         {
-                            if (item == result.First() && objs.Any() && flag == "Init")
+                            if (item == result.First() && flag == "Init" && objs.Any())
                             {
                                 await MainThread.InvokeOnMainThreadAsync(() =>
                                 {

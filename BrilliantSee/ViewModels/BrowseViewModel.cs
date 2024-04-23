@@ -84,9 +84,7 @@ namespace BrilliantSee.ViewModels
                     _currentChapterIndex = value;
                     OnPropertyChanged(nameof(CurrentChapterIndex));
                 }
-                Chapter!.IsSpecial = false;
                 Chapter = LoadedChapter[value];
-                Chapter.IsSpecial = true;
             }
         }
 
@@ -114,18 +112,7 @@ namespace BrilliantSee.ViewModels
                 return;
             }
             IsLoading = true;
-            var LastIndex = Chapter.Obj.LastReadedItemIndex;
-            if (Chapter.Index != LastIndex)
-            {
-                if (LastIndex != -1)
-                {
-                    var position = LastIndex;
-                    if (Chapter.Obj.IsReverseList) position = Chapter.Obj.Items.Count() - LastIndex - 1;
-                    Chapter.Obj.Items.ToList()[position].IsSpecial = false;
-                }
-                Chapter.IsSpecial = true;
-                _ = StoreLastReadedChapterIndex();
-            }
+            _ = Chapter.Obj.ChangeLastReadedItemIndex(Chapter.Index, _db);
             await LoadChapterPicAsync(Chapter, "Init");
             OnPropertyChanged(nameof(Chapter));
             IsLoading = false;
@@ -208,26 +195,8 @@ namespace BrilliantSee.ViewModels
                     CurrentChapterIndex = 0;
                 }
             }
-            _ = StoreLastReadedChapterIndex();
+            _ = Chapter!.Obj.ChangeLastReadedItemIndex(newChapter!.Index, _db);
             return true;
-        }
-
-        /// <summary>
-        /// 同步收藏和历史的最后阅读章节索引
-        /// </summary>
-        /// <returns></returns>
-        public async Task StoreLastReadedChapterIndex()
-        {
-            Chapter!.Obj.LastReadedItemIndex = Chapter.Index;
-            var category = Chapter.Obj.Category;
-            Chapter.Obj.Category = DBObjCategory.History;
-            await _db.UpdateComicAsync(Chapter.Obj);
-            if (await _db.IsComicExistAsync(Chapter.Obj, DBObjCategory.Favorite))
-            {
-                Chapter.Obj.Category = DBObjCategory.Favorite;
-                await _db.UpdateComicAsync(Chapter.Obj);
-            }
-            Chapter.Obj.Category = category;
         }
 
         [RelayCommand]

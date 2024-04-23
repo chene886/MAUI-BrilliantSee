@@ -33,9 +33,6 @@ namespace BrilliantSee.Models.Objs.Videos
             }
             foreach (Match match in matches)
             {
-                //获取第一个参数的第一个字符
-                var ch = match.Groups[1].Value[0];
-
                 episodes.Add(new YHWangEpisode(
                     match.Groups[2].Value,
                     "https://www.yhdmwang.com" + match.Groups[3].Value,
@@ -54,12 +51,12 @@ namespace BrilliantSee.Models.Objs.Videos
         public override void LoadMoreData()
         {
             if (!string.IsNullOrEmpty(Html))
-            {
-                var match = Regex.Match(Html, "<p[\\s\\S]*?>(.*?)<[\\s\\S]*?导演：(.*?)<[\\s\\S]*?主演：(.*?)<[\\s\\S]*?muted[\\s\\S]*?</span>(.*?)<[\\s\\S]*?<p>(.*?)</p>");
-                Tag = match.Groups[1].Value.Replace(" ", "") + "/评分：" + match.Groups[4].Value;
-                Director = "导演："+ match.Groups[2].Value;
-                Actors ="主演："+ match.Groups[3].Value;
-                Description = "简介：" + Regex.Replace(match.Groups[5].Value, "<[^>]+>", "").Replace("　　", "");
+            {      
+                Tag = Regex.Match(Html, "<p[\\s\\S]*?>(.*?)<").Groups[1].Value.Replace(" ", "") + "/评分：" + Regex.Match(Html, "评分[\\s\\S]*?</span>(.*?)<").Groups[1].Value;
+                Director = "导演：" + Regex.Match(Html, "导演：(.*?)<").Groups[1].Value;
+                Actors = "主演：" + Regex.Match(Html, "主演：(.*?)<").Groups[1].Value;
+                var match = Regex.Match(Html, "description[\\s\\S]*?剧情：(.*?)\"");
+                Description = "简介：" + Regex.Replace(match.Groups[1].Value, "<[^>]+>", "").Replace("　　", "");
             }
         }
     }

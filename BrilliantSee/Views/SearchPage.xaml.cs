@@ -8,6 +8,8 @@ public partial class SearchPage : ContentPage
 {
     private readonly SearchViewModel _vm;
 
+    private SourceCategory category = SourceCategory.Comic;
+
     public SearchPage(SearchViewModel vm)
     {
         _vm = vm;
@@ -42,9 +44,10 @@ public partial class SearchPage : ContentPage
     private async void CollectionView_Scrolled(object sender, ItemsViewScrolledEventArgs e)
     {
         this.floatButton.IsVisible = e.FirstVisibleItemIndex == 0 ? false : true;
-        if (e.LastVisibleItemIndex == _vm.Objs.Count - 1 && _vm.IsGettingResult == false && _vm.Objs.Count != 0)
+        var count = category == SourceCategory.Comic ? _vm.Comics.Count : category == SourceCategory.Novel ? _vm.Novels.Count : _vm.Videos.Count;
+        if (e.LastVisibleItemIndex == count - 1 && _vm.IsGettingResult == false && count != 0)
         {
-            await _vm.GetMoreAsync();
+            await _vm.GetMoreAsync(category);
         }
     }
 
@@ -97,11 +100,9 @@ public partial class SearchPage : ContentPage
         {
             item.FontSize = item.Text == text ? 18 : 14;
         }
-        _vm.CurrentCategory = text == "漫画" ? SourceCategory.Comic : text == "小说" ? SourceCategory.Novel : SourceCategory.Video;
-    }
-
-    private void comicList_ChildAdded(object sender, ElementEventArgs e)
-    {
-        this.select.IsVisible = true;
+        _vm.IsGettingResult = true;
+        this.comicList.ItemsSource = text == "漫画" ? _vm.Comics : text == "小说" ? _vm.Novels : _vm.Videos;
+        _vm.IsGettingResult = false;
+        category = text == "漫画" ? SourceCategory.Comic : text == "小说" ? SourceCategory.Novel : SourceCategory.Video;
     }
 }

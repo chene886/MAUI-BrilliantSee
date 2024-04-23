@@ -36,16 +36,16 @@ public partial class FavoritePage : ContentPage
             _vm._ai.ImportPlugins(new Services.Plugins.FavoritePlugin(_vm._db));
         }
         this.audio.IsVisible = await _vm._db.GetAudioStatus();
-        var status = await Permissions.CheckStatusAsync<Permissions.StorageWrite>();
-        if (status != PermissionStatus.Granted)
-        {
-            status = await Permissions.RequestAsync<Permissions.StorageWrite>();
-        }
-        status = await Permissions.CheckStatusAsync<Permissions.Microphone>();
-        if (status != PermissionStatus.Granted)
-        {
-            status = await Permissions.RequestAsync<Permissions.Microphone>();
-        }
+        //var status = await Permissions.CheckStatusAsync<Permissions.StorageWrite>();
+        //if (status != PermissionStatus.Granted)
+        //{
+        //    status = await Permissions.RequestAsync<Permissions.StorageWrite>();
+        //}
+        //status = await Permissions.CheckStatusAsync<Permissions.Microphone>();
+        //if (status != PermissionStatus.Granted)
+        //{
+        //    status = await Permissions.RequestAsync<Permissions.Microphone>();
+        //}
     }
 
     private async void TapGestureRecognizer_Tapped(object sender, TappedEventArgs e)

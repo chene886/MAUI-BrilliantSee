@@ -22,7 +22,7 @@
     <Grid BackgroundColor="Black">
         <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition Height="214" />
+                <RowDefinition Height="228" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
             <toolkit:MediaElement
@@ -35,10 +35,11 @@
                 VerticalOptions="Center"
                 ZIndex="1" />
             <CollectionView
+                x:Name="list"
                 Grid.Row="1"
                 BackgroundColor="{StaticResource Backcolor}"
                 ItemsLayout="VerticalGrid, 3"
-                ItemsSource="{Binding Obj.Items}">
+                ItemsSource="{Binding ItemsOnDisPlay}">
                 <CollectionView.Header>
                     <VerticalStackLayout Padding="6,10,0,6" Spacing="4">
                         <Label
@@ -73,7 +74,7 @@
                             MaxLines="4"
                             Text="{Binding Obj.Description}"
                             TextColor="{StaticResource Gray500}" />
-                        <Grid Margin="0,4,12,0">
+                        <Grid Margin="4,4,12,0">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*" />
                                 <ColumnDefinition Width="Auto" />
@@ -85,10 +86,47 @@
                                     LineBreakMode="TailTruncation"
                                     Text="选集"
                                     VerticalOptions="Center" />
-                                <Label
+                                <Button
+                                    x:Name="route1"
+                                    Padding="4"
+                                    BackgroundColor="Transparent"
+                                    Clicked="Button_Clicked"
                                     FontFamily=""
                                     FontSize="16"
                                     Text="线路一"
+                                    TextColor="#512BD4"
+                                    VerticalOptions="Center" />
+                                <Button
+                                    x:Name="route2"
+                                    Padding="4"
+                                    BackgroundColor="Transparent"
+                                    Clicked="Button_Clicked"
+                                    FontFamily=""
+                                    FontSize="16"
+                                    Text="线路二"
+                                    TextColor="Black"
+                                    VerticalOptions="Center" />
+                                <Button
+                                    x:Name="route3"
+                                    Padding="4"
+                                    BackgroundColor="Transparent"
+                                    Clicked="Button_Clicked"
+                                    FontFamily=""
+                                    FontSize="16"
+                                    IsVisible="False"
+                                    Text="线路三"
+                                    TextColor="Black"
+                                    VerticalOptions="Center" />
+                                <Button
+                                    x:Name="route4"
+                                    Padding="4"
+                                    BackgroundColor="Transparent"
+                                    Clicked="Button_Clicked"
+                                    FontFamily=""
+                                    FontSize="16"
+                                    IsVisible="False"
+                                    Text="线路四"
+                                    TextColor="Black"
                                     VerticalOptions="Center" />
                             </HorizontalStackLayout>
                             <ImageButton
@@ -146,6 +184,25 @@
                 </CollectionView.ItemTemplate>
             </CollectionView>
         </Grid>
+        <Frame
+            Margin="0,0,30,40"
+            Padding="0"
+            BackgroundColor="{StaticResource Primary}"
+            BorderColor="{StaticResource Primary}"
+            CornerRadius="100"
+            HasShadow="True"
+            HeightRequest="48"
+            HorizontalOptions="End"
+            VerticalOptions="End"
+            WidthRequest="48">
+            <Frame.GestureRecognizers>
+                <TapGestureRecognizer Command="{Binding OpenHistoryCommand}" Tapped="TapGestureRecognizer_Tapped" />
+            </Frame.GestureRecognizers>
+            <Image
+                HeightRequest="40"
+                Source="rollback.png"
+                WidthRequest="40" />
+        </Frame>
         <ActivityIndicator
             Margin="0,0,0,100"
             HeightRequest="55"

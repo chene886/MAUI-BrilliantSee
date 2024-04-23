@@ -1,6 +1,7 @@
 ﻿using BrilliantSee.Models.Chapters;
 using BrilliantSee.Models.Enums;
 using BrilliantSee.Models.Sources;
+using BrilliantSee.Services;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using SQLite;
@@ -192,6 +193,30 @@ namespace BrilliantSee.Models.Objs
             index = IsReverseList == turn ? index + 1 : index - 1;
             if (index < 0 || index >= Items.Count()) return null;
             return Items.ElementAtOrDefault(index)!;
+        }
+
+        public async Task ChangeLastReadedItemIndex(int index, DBService _db)
+        {
+            if (index != LastReadedItemIndex)
+            {
+                var position = IsReverseList ? Items.Count() - index - 1 : index;
+                Items.ToList()[position].IsSpecial = true;
+                if (LastReadedItemIndex != -1)
+                {
+                    position = IsReverseList ? Items.Count() - LastReadedItemIndex - 1 : LastReadedItemIndex;
+                    Items.ToList()[position].IsSpecial = false;
+                }
+                LastReadedItemIndex = index;
+                var category = Category;
+                Category = DBObjCategory.History;
+                await _db.UpdateComicAsync(this);
+                if (await _db.IsComicExistAsync(this, DBObjCategory.Favorite))
+                {
+                    Category = DBObjCategory.Favorite;
+                    await _db.UpdateComicAsync(this);
+                }
+                Category = category;
+            }
         }
 
         /// <summary>

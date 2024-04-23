@@ -9,6 +9,11 @@ namespace BrilliantSee.Models.Enums
     public enum SourceCategory
     {
         /// <summary>
+        /// 所有
+        /// </summary>
+        All = 0,
+
+        /// <summary>
         /// 小说
         /// </summary>
         Novel = 1,
