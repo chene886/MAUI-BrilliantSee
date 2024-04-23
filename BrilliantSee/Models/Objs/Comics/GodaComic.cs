@@ -17,7 +17,7 @@ namespace BrilliantSee.Models.Objs.Comics
         {
             //截取两个字符串之间的内容
             var start = Html.IndexOf("bannersUite");
-            var end = Html.IndexOf("ed:block\">");
+            var end = Html.IndexOf("ChapterHistory");
             if (end < 0) end = Html.IndexOf("chapterlist");
             if (start < 0 || end < 0)
             {
@@ -34,8 +34,8 @@ namespace BrilliantSee.Models.Objs.Comics
                 Status = result.Groups[1].Value;
                 Description = result.Groups[2].Value.Replace("\\n", "").Replace("amp;", "");
                 var result1 = Regex.Match(moreDataHtml, "italic[\\s\\S]*?>(.*?)[\\s]<");
-                LastestUpdateTime = "(更新时间：" + result1.Groups[1].Value + ")";
-                var result2 = Regex.Matches(moreDataHtml, "author[\\s\\S]*?<span>[\\s](.*?)<").ToList();
+                LastestUpdateTime = "(最新章节：" + result1.Groups[1].Value + ")";
+                var result2 = Regex.Matches(moreDataHtml, "\"/manga-author[\\s\\S]*?<span>(.*?)<").ToList();
                 Author = "";
                 foreach (Match item in result2)
                 {
