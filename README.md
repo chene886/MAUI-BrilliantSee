@@ -63,7 +63,7 @@
 添加适配网站仅需在 **BrilliantSee.Models** 项目中添加：
 - 实现 **Source** 抽象功能的源类、
 - 继承**Obj** 类、实现抽象方法的实体类、
-- 继承**Chapter** 类、实现抽象方法的章节类。
+- 继承**Item** 类、实现抽象方法的章节或剧集类。
 
 在 **BrilliantSee.Services** 项目中：
 - 在**SourceService**中注册源和对应实体。
