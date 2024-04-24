@@ -12,6 +12,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using BrilliantSee.Models.Enums;
+using BrilliantSee.Models.Sources.NovelSources;
+using BrilliantSee.Models.Objs.Novels;
 
 namespace BrilliantSee.Services
 {
@@ -32,6 +34,12 @@ namespace BrilliantSee.Services
         /// </summary>
         public SourceService()
         {
+            //小说图源
+            var dingdian = new DingDianSource();
+            var dingdianNovel = new DingDianNovel() { Source = dingdian };
+            _sources.Add(dingdian.Name, dingdian);
+            _objs.Add(dingdian.Name, dingdianNovel);
+
             //漫画图源
             var baozi = new BaoziSource();
             var gufeng = new GufengSource();
@@ -74,11 +82,12 @@ namespace BrilliantSee.Services
         /// 搜索漫画
         /// </summary>
         /// <param name="keyword">搜索关键词</param>
+        /// <param name="novels">保存小说结果的集合</param>
         /// <param name="comics">保存漫画结果的集合</param>
         /// <param name="videos">保存动漫结果的集合</param>
         /// <param name="category">搜索的图源类别</param>
         /// <returns></returns>
-        public async Task SearchAsync(string keyword, ObservableCollection<Obj> comics, ObservableCollection<Obj> videos, string flag, SourceCategory category)
+        public async Task SearchAsync(string keyword, ObservableCollection<Obj>novels, ObservableCollection<Obj> comics, ObservableCollection<Obj> videos, string flag, SourceCategory category)
         {
             IEnumerable<Source> sources;
             if (flag == "Init")
@@ -103,7 +112,7 @@ namespace BrilliantSee.Services
             var tasks = new List<Task>();
             foreach (var source in sources)
             {
-                var objs = source.Category == SourceCategory.Comic ? comics : videos;
+                var objs = source.Category == SourceCategory.Comic ? comics : source.Category == SourceCategory.Video ? videos : novels;
                 tasks.Add(Task.Run(async () =>
                 {
                     var result = await source.SearchAsync(keyword)!;

@@ -45,18 +45,25 @@ namespace BrilliantSee
             services.AddSingleton<HistoryPage>();
             services.AddTransient<SettingPage>();
             services.AddTransient<SearchPage>();
+
             services.AddTransient<DetailPage>();
-            services.AddTransient<BrowsePage>();
-            services.AddTransient<AIPage>();
             services.AddTransient<VideoPage>();
+
+            services.AddTransient<BrowsePage>();
+            services.AddTransient<NovelPage>();
+
+            services.AddTransient<AIPage>();
 
             //视图模型
             services.AddSingleton<FavoriteViewModel>();
             services.AddSingleton<HistoryViewModel>();
             services.AddTransient<SettingViewModel>();
             services.AddTransient<SearchViewModel>();
+
             services.AddTransient<DetailViewModel>();
+
             services.AddTransient<BrowseViewModel>();
+
             services.AddTransient<AIViewModel>();
 
             //服务

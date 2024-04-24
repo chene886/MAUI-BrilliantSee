@@ -115,6 +115,9 @@
 	  <MauiXaml Update="Views\HistoryPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="Views\NovelPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Views\VideoPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>

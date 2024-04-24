@@ -58,6 +58,7 @@ namespace BrilliantSee.Services
 
             var defaultSettingItems = new List<SettingItem>
             {
+                new SettingItem { Name = "顶点小说", Value = "IsSelected", Category = "Source" },
                 new SettingItem { Name = "包子漫画", Value = "IsSelected", Category = "Source" },
                 new SettingItem { Name = "古风漫画", Value = "IsSelected", Category = "Source" },
                 new SettingItem { Name = "Goda漫画", Value = "IsSelected", Category = "Source" },

@@ -18,6 +18,7 @@ namespace BrilliantSee
             Routing.RegisterRoute("BrowsePage", typeof(BrowsePage));
             Routing.RegisterRoute("AIPage", typeof(AIPage));
             Routing.RegisterRoute("VideoPage", typeof(VideoPage));
+            Routing.RegisterRoute("NovelPage", typeof(NovelPage));
         }
     }
 }

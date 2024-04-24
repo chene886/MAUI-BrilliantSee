@@ -192,7 +192,8 @@ namespace BrilliantSee.ViewModels
         {
             if (chapter.Name != "暂无章节")
             {
-                await Shell.Current.GoToAsync("BrowsePage", new Dictionary<string, object> { { "Chapter", chapter } });
+                var page = chapter.Obj.SourceCategory == SourceCategory.Comic ? "BrowsePage" : "NovelPage";
+                await Shell.Current.GoToAsync(page, new Dictionary<string, object> { { "Chapter", chapter } });
             }
             else
             {

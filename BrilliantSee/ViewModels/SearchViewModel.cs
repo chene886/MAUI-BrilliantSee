@@ -54,6 +54,7 @@ namespace BrilliantSee.ViewModels
             Sources = _sourceService.GetSources();
             SourceGroups.Add(new Group<Source>("漫画", Sources.Where(s => s.Category == SourceCategory.Comic).ToList()));
             SourceGroups.Add(new Group<Source>("动漫", Sources.Where(s => s.Category == SourceCategory.Video).ToList()));
+            SourceGroups.Add(new Group<Source>("小说", Sources.Where(s => s.Category == SourceCategory.Novel).ToList()));
             _ = InitSettingsAsync();
             if (_ai.hasModel)
             {
@@ -92,9 +93,9 @@ namespace BrilliantSee.ViewModels
                 IsSourceListVisible = false;
                 Comics.Clear();
                 Videos.Clear();
-                await _sourceService.SearchAsync(keyword, Comics, Videos, "Init", SourceCategory.All);
-                if (Comics.Count == 0) { _ = Toast.Make("漫画搜索结果为空，换一个源试试吧").Show(); }
-                if (Videos.Count == 0) { _ = Toast.Make("动漫搜索结果为空，换一个源试试吧").Show(); }
+                Novels.Clear();
+                await _sourceService.SearchAsync(keyword, Novels, Comics, Videos, "Init", SourceCategory.All);
+                if (Comics.Count == 0 && Videos.Count == 0 && Novels.Count == 0) { _ = Toast.Make("搜索结果为空，换一个源试试吧").Show(); }
                 IsGettingResult = false;
             }
             else
@@ -107,12 +108,11 @@ namespace BrilliantSee.ViewModels
         public async Task GetMoreAsync(SourceCategory category)
         {
             _ = Toast.Make("正在加载更多结果").Show();
-            var count = Comics.Count;
-            var count1 = Videos.Count;
+            var count = Comics.Count + Videos.Count + Novels.Count;
             IsGettingResult = true;
             IsSourceListVisible = false;
-            await _sourceService.SearchAsync(Keyword, Comics, Videos, "More", category);
-            var message = Comics.Count + Videos.Count > count + count1 ? $"加载了{Comics.Count + Videos.Count - count - count1}个结果" : "没有更多结果了";
+            await _sourceService.SearchAsync(Keyword, Novels, Comics, Videos, "More", category);
+            var message = Comics.Count + Videos.Count + Novels.Count > count ? $"加载了{Comics.Count + Videos.Count + Novels.Count - count}个结果" : "没有更多结果了";
             _ = Toast.Make(message).Show();
             IsGettingResult = false;
         }
@@ -127,7 +127,7 @@ namespace BrilliantSee.ViewModels
         {
             IsSourceListVisible = false;
             obj.Items = new List<Item>();
-            var page = obj.SourceCategory == SourceCategory.Comic ? "DetailPage" : "VideoPage";
+            var page = obj.SourceCategory == SourceCategory.Video ? "VideoPage" : "DetailPage";
             await Shell.Current.GoToAsync(page, new Dictionary<string, object> { { "Obj", obj } });
         }
 

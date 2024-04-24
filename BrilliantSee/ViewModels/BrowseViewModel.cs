@@ -113,7 +113,7 @@ namespace BrilliantSee.ViewModels
             }
             IsLoading = true;
             _ = Chapter.Obj.ChangeLastReadedItemIndex(Chapter.Index, _db);
-            await LoadChapterPicAsync(Chapter, "Init");
+            await LoadChapterResourcesAsync(Chapter, "Init");
             OnPropertyChanged(nameof(Chapter));
             IsLoading = false;
             IsShowButton = true;
@@ -126,7 +126,7 @@ namespace BrilliantSee.ViewModels
         /// <param name="chapter">指定的章节</param>
         /// <param name="flag">加载模式</param>
         /// <returns></returns>
-        private async Task LoadChapterPicAsync(Item chapter, string flag)
+        private async Task LoadChapterResourcesAsync(Item chapter, string flag)
         {
             if (chapter.PicUrls.Count == 0)
             {
@@ -141,10 +141,13 @@ namespace BrilliantSee.ViewModels
                     throw new Exception(e.Message);
                 }
             }
-            Images.Clear();
-            foreach (var image in chapter.PicUrls)
+            if (chapter.Obj.SourceCategory == SourceCategory.Comic)
             {
-                Images.Add(image);
+                Images.Clear();
+                foreach (var image in chapter.PicUrls)
+                {
+                    Images.Add(image);
+                }
             }
             ButtonContent = chapter!.Index == chapter.Obj.ItemCount - 1 ? "已是最新一话" : "点击加载下一话";
         }
@@ -179,7 +182,7 @@ namespace BrilliantSee.ViewModels
             }
             try
             {
-                await LoadChapterPicAsync(newChapter, flag);
+                await LoadChapterResourcesAsync(newChapter, flag);
             }
             catch { }
             if (hasNew)

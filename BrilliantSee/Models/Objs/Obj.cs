@@ -30,7 +30,8 @@ namespace BrilliantSee.Models.Objs
         /// <summary>
         /// 封面链接
         /// </summary>
-        public string Cover { get; set; } = string.Empty;
+        [ObservableProperty]
+        public string _cover = string.Empty;
 
         /// <summary>
         /// 漫画名
@@ -118,7 +119,7 @@ namespace BrilliantSee.Models.Objs
         public string Director { get; set; } = string.Empty;
         public string Actors { get; set; } = string.Empty;
         public string Tag { get; set; } = string.Empty;
-        public string Score { get; set; } = string.Empty;
+        public string CharCount { get; set; } = string.Empty;
 
         /// <summary>
         /// 从存储的漫画数据创建漫画实体

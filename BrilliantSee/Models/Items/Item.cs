@@ -57,6 +57,12 @@ namespace BrilliantSee.Models.Items
         /// </summary>
         public string VideoUrl { get; set; } = string.Empty;
 
+        /// <summary>
+        /// 小说内容
+        /// </summary>
+        [ObservableProperty]
+        public string _novelContent = "\t\t\t\t\t\t";
+
         public Item(string name, string url, int index, bool isSpecial)
         {
             Name = name;

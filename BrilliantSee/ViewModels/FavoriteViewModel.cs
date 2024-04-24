@@ -84,7 +84,7 @@ namespace BrilliantSee.ViewModels
         [RelayCommand]
         private async Task OpenObjAsync(Obj obj)
         {
-            var page = obj.SourceCategory == SourceCategory.Comic ? "DetailPage" : "VideoPage";
+            var page = obj.SourceCategory == SourceCategory.Video ? "VideoPage" : "DetailPage";
             await Shell.Current.GoToAsync(page, new Dictionary<string, object> { { "Obj", obj } });
         }
 

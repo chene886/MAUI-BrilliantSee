@@ -35,7 +35,8 @@ namespace BrilliantSee.Models.Sources
         {
             HttpClient = new HttpClient(new HttpClientHandler()
             {
-                AutomaticDecompression = DecompressionMethods.GZip
+                AutomaticDecompression = DecompressionMethods.GZip,
+                ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator,
             })
             {
                 DefaultRequestHeaders =
@@ -51,15 +52,15 @@ namespace BrilliantSee.Models.Sources
             try
             {
                 var response = await HttpClient!.GetAsync(url);
-
                 if (!response.IsSuccessStatusCode)
                 {
                     return string.Empty;
                 }
                 return await response.Content.ReadAsStringAsync();
             }
-            catch
+            catch (Exception e)
             {
+                e.ToString();
                 return string.Empty;
             }
         }

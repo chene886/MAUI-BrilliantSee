@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="BrilliantSee.Views.NovelPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:behavior="clr-namespace:BrilliantSee.Behaviors"
+    Title=""
+    Shell.NavBarIsVisible="False"
+    Shell.TabBarIsVisible="False">
+    <ContentPage.Behaviors>
+        <behavior:AndroidFullscreenBehavior />
+    </ContentPage.Behaviors>
+    <Grid BackgroundColor="White">
+        <RefreshView
+            x:Name="list"
+            Command="{Binding LoadNearChapterCommand}"
+            CommandParameter="Last"
+            IsRefreshing="{Binding IsShowRefresh}">
+            <ScrollView x:Name="content">
+                <StackLayout Padding="0">
+                    <Label
+                        Margin="8,80,8,60"
+                        FontFamily=""
+                        FontSize="32"
+                        Text="{Binding Chapter.Name}"
+                        TextColor="Black" />
+                    <Label
+                        Margin="8,0,8,0"
+                        CharacterSpacing="0"
+                        FontFamily=""
+                        FontSize="20"
+                        LineHeight="1.2"
+                        Text="{Binding Chapter.NovelContent}"
+                        TextColor="Black" />
+                    <Button
+                        Padding="0,24,0,40"
+                        BackgroundColor="Transparent"
+                        Clicked="Button_Clicked"
+                        CornerRadius="0"
+                        FontFamily=""
+                        FontSize="24"
+                        IsVisible="{Binding IsShowButton}"
+                        Text="{Binding ButtonContent}"
+                        TextColor="{StaticResource Gray600}"
+                        VerticalOptions="Center" />
+                </StackLayout>
+            </ScrollView>
+        </RefreshView>
+        <BoxView BackgroundColor="{AppThemeBinding Light={StaticResource Transparent}, Dark={StaticResource BlackTransparent}}" ZIndex="1" />
+        <ActivityIndicator
+            Margin="0,0,0,100"
+            HeightRequest="55"
+            IsRunning="{Binding IsLoading}"
+            WidthRequest="55" />
+        <HorizontalStackLayout
+            Padding="5,2,10,2"
+            BackgroundColor="#95212121"
+            HorizontalOptions="End"
+            VerticalOptions="End">
+            <Label
+                Margin="0,0,5,0"
+                FontFamily=""
+                Text="{Binding Chapter.Name}"
+                TextColor="#E0FFFFFF" />
+            <Label
+                FontFamily=""
+                Text="{Binding CurrentTime}"
+                TextColor="#E0FFFFFF" />
+        </HorizontalStackLayout>
+    </Grid>
+</ContentPage>
