@@ -56,6 +56,9 @@
 ### 视频页
 <img src="img/videoPage11.jpg" width="360px" />
 
+### 小说页
+<img src="img/novelPage11.jpg" width="360px" />
+
 ### 系统设置页
 <img src="img/settingPage11.jpg" width="360px" />
 
