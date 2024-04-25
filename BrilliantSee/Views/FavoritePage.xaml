@@ -24,6 +24,14 @@
             </Grid.RowDefinitions>
             <HorizontalStackLayout Margin="2,0,0,0" Background="Transparent">
                 <Button
+                    x:Name="all"
+                    BackgroundColor="Transparent"
+                    Clicked="Button_Clicked"
+                    FontFamily=""
+                    FontSize="18"
+                    Text="全部"
+                    TextColor="#512BD4" />
+                <Button
                     x:Name="novels"
                     BackgroundColor="Transparent"
                     Clicked="Button_Clicked"
@@ -36,7 +44,7 @@
                     BackgroundColor="Transparent"
                     Clicked="Button_Clicked"
                     FontFamily=""
-                    FontSize="18"
+                    FontSize="14"
                     Text="漫画"
                     TextColor="#212121" />
                 <Button
@@ -158,7 +166,7 @@
                 Source="refresh.png"
                 WidthRequest="40" />
         </Frame>
-        <controls:AudioRecognition x:Name="audio" IsVisible="false" />
+        <!--<controls:AudioRecognition x:Name="audio" IsVisible="false" />-->
         <ActivityIndicator
             Margin="0,0,0,100"
             HeightRequest="55"

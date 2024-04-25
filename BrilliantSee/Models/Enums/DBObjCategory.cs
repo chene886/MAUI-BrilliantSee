@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace BrilliantSee.Models.Enums
+﻿namespace BrilliantSee.Models.Enums
 {
     public enum DBObjCategory
     {

@@ -1,10 +1,6 @@
 using BrilliantSee.Models;
 using BrilliantSee.ViewModels;
-using CommunityToolkit.Maui.Alerts;
 using CommunityToolkit.Maui.Core.Platform;
-using CommunityToolkit.Maui.Media;
-using CommunityToolkit.Mvvm.Input;
-using System.Globalization;
 
 namespace BrilliantSee.Views;
 
@@ -28,7 +24,7 @@ public partial class AIPage : ContentPage
         var audio = await _vm._db.GetSettingItemsAsync("Audio");
         AudioSetting = audio[0];
         _vm.AudioIcon = AudioSetting.Value == "true" ? ImageSource.FromFile("enable_audio.png") : ImageSource.FromFile("disable_audio.png");
-        this.audio.IsVisible = AudioSetting.Value == "true";
+        //this.audio.IsVisible = AudioSetting.Value == "true";
     }
 
     /// <summary>
@@ -76,30 +72,21 @@ public partial class AIPage : ContentPage
     private void UpdateModel(object sender, EventArgs e)
     {
         Button_Clicked(sender, e);
-        var message = string.Empty;
-        if (this.name.Text is null || this.key.Text is null || this.url.Text is null)
-        {
-            message = "请填写完整信息";
-        }
-        else
-        {
+
 #if ANDROID
             _ = this.name.HideKeyboardAsync(CancellationToken.None);
             _ = this.key.HideKeyboardAsync(CancellationToken.None);
             _ = this.url.HideKeyboardAsync(CancellationToken.None);
 #endif
-            _vm.UpdateModel(this.name.Text, this.key.Text, this.url.Text);
-            message = "模型导入成功";
-            this.cover.IsVisible = false;
-            this.model.IsVisible = false;
-            if (this.updateModel.IsEnabled is false)
-            {
-                this.updateModel.IsEnabled = true;
-                this.cover.IsEnabled = true;
-                //this.audioStatus.IsEnabled = true;
-            }
+        _vm.UpdateModel(this.name.Text, this.key.Text, this.url.Text);
+        this.cover.IsVisible = false;
+        this.model.IsVisible = false;
+        if (this.updateModel.IsEnabled is false)
+        {
+            this.updateModel.IsEnabled = true;
+            this.cover.IsEnabled = true;
+            //this.audioStatus.IsEnabled = true;
         }
-        _ = Toast.Make(message).Show();
     }
 
     private async void StartChat(object sender, EventArgs e)
@@ -116,10 +103,6 @@ public partial class AIPage : ContentPage
             }
 #endif
             await Chat(input);
-        }
-        else
-        {
-            _ = Toast.Make("请正确输入内容").Show();
         }
     }
 
@@ -174,7 +157,7 @@ public partial class AIPage : ContentPage
     {
         AudioSetting.Value = AudioSetting.Value == "true" ? "false" : "true";
         _vm.AudioIcon = AudioSetting.Value == "true" ? ImageSource.FromFile("enable_audio.png") : ImageSource.FromFile("disable_audio.png");
-        this.audio.IsVisible = AudioSetting.Value == "true";
+        //this.audio.IsVisible = AudioSetting.Value == "true";
         _ = _vm._db.UpdateSettingItemAsync(AudioSetting);
     }
 }

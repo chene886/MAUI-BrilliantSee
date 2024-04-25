@@ -4,29 +4,27 @@ using BrilliantSee.Models.Objs;
 using BrilliantSee.Models.Enums;
 using BrilliantSee.Models.Sources;
 using BrilliantSee.Services;
-using CommunityToolkit.Maui.Alerts;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BrilliantSee.ViewModels
 {
     public partial class SearchViewModel : ObservableObject
     {
         private readonly SourceService _sourceService;
+        private readonly MessageService _ms;
 
         public readonly DBService _db;
 
-        private readonly AIService _ai;
+        //private readonly AIService _ai;
 
+        public ObservableCollection<Obj> AllObjs { get; set; } = new();
         public ObservableCollection<Obj> Novels { get; set; } = new();
         public ObservableCollection<Obj> Comics { get; set; } = new();
         public ObservableCollection<Obj> Videos { get; set; } = new();
+
+        public Dictionary<SourceCategory, ObservableCollection<Obj>> ObjContainers { get; set; } = new();
 
         /// <summary>
         /// 是否正在获取结果
@@ -46,21 +44,27 @@ namespace BrilliantSee.ViewModels
 
         private List<SettingItem> SettingItems { get; set; } = new();
 
-        public SearchViewModel(SourceService sourceService, DBService db)
+        public SearchViewModel(SourceService sourceService, DBService db, MessageService ms)
         {
-            _sourceService = sourceService;
             _db = db;
-            _ai = MauiProgram.servicesProvider!.GetRequiredService<AIService>();
+            _sourceService = sourceService;
+            _ms = ms;
+            //_ai = MauiProgram.servicesProvider!.GetRequiredService<AIService>();
+
             Sources = _sourceService.GetSources();
+            _ = InitSettingsAsync();
+            //if (_ai.hasModel)
+            //{
+            //    _ai.RemovePlugins();
+            //    _ai.ImportPlugins(new Services.Plugins.SearchPlugins(_db, _sourceService));
+            //}
+
+            ObjContainers.Add(SourceCategory.Novel, Novels);
+            ObjContainers.Add(SourceCategory.Comic, Comics);
+            ObjContainers.Add(SourceCategory.Video, Videos);
+            SourceGroups.Add(new Group<Source>("小说", Sources.Where(s => s.Category == SourceCategory.Novel).ToList()));
             SourceGroups.Add(new Group<Source>("漫画", Sources.Where(s => s.Category == SourceCategory.Comic).ToList()));
             SourceGroups.Add(new Group<Source>("动漫", Sources.Where(s => s.Category == SourceCategory.Video).ToList()));
-            SourceGroups.Add(new Group<Source>("小说", Sources.Where(s => s.Category == SourceCategory.Novel).ToList()));
-            _ = InitSettingsAsync();
-            if (_ai.hasModel)
-            {
-                _ai.RemovePlugins();
-                _ai.ImportPlugins(new Services.Plugins.SearchPlugins(_db, _sourceService));
-            }
         }
 
         public async Task InitSettingsAsync()
@@ -82,7 +86,7 @@ namespace BrilliantSee.ViewModels
         {
             if (string.IsNullOrWhiteSpace(keyword))
             {
-                _ = Toast.Make("请输入正确的关键词").Show();
+                _ms.WriteMessage("请输入正确的关键词");
                 return;
             }
             var hasSourceSelected = Sources.Where(s => s.IsSelected == true).Count() > 0;
@@ -91,29 +95,43 @@ namespace BrilliantSee.ViewModels
                 Keyword = keyword;
                 IsGettingResult = true;
                 IsSourceListVisible = false;
-                Comics.Clear();
-                Videos.Clear();
-                Novels.Clear();
-                await _sourceService.SearchAsync(keyword, Novels, Comics, Videos, "Init", SourceCategory.All);
-                if (Comics.Count == 0 && Videos.Count == 0 && Novels.Count == 0) { _ = Toast.Make("搜索结果为空，换一个源试试吧").Show(); }
+                AllObjs.Clear();
+                List<Task> tasks = new List<Task>();
+                foreach (var key in ObjContainers.Keys)
+                {
+                    ObjContainers[key].Clear();
+                    tasks.Add(Task.Run(async () => await _sourceService.SearchAsync(keyword, AllObjs, ObjContainers[key], "Init", key)));
+                }
+                await Task.WhenAll(tasks);
+                if (Comics.Count == 0 && Videos.Count == 0 && Novels.Count == 0) { _ms.WriteMessage("搜索结果为空，换其他源试试吧"); }
+                else { _ms.WriteMessage($"搜索到{Novels.Count}部小说，{Comics.Count}部漫画，{Videos.Count}部动漫"); }
                 IsGettingResult = false;
             }
             else
             {
-                _ = Toast.Make("请选择至少一个图源").Show();
+                _ms.WriteMessage("请选择至少一个图源");
                 return;
             }
         }
 
         public async Task GetMoreAsync(SourceCategory category)
         {
-            _ = Toast.Make("正在加载更多结果").Show();
+            _ms.WriteMessage("正在加载更多结果");
             var count = Comics.Count + Videos.Count + Novels.Count;
             IsGettingResult = true;
             IsSourceListVisible = false;
-            await _sourceService.SearchAsync(Keyword, Novels, Comics, Videos, "More", category);
+            if (category == SourceCategory.All)
+            {
+                List<Task> tasks = new List<Task>();
+                foreach (var key in ObjContainers.Keys)
+                {
+                    tasks.Add(Task.Run(async () => await _sourceService.SearchAsync(Keyword, AllObjs, ObjContainers[key], "More", key)));
+                }
+                await Task.WhenAll(tasks);
+            }
+            else await _sourceService.SearchAsync(Keyword, AllObjs, ObjContainers[category], "More", category);
             var message = Comics.Count + Videos.Count + Novels.Count > count ? $"加载了{Comics.Count + Videos.Count + Novels.Count - count}个结果" : "没有更多结果了";
-            _ = Toast.Make(message).Show();
+            _ms.WriteMessage(message);
             IsGettingResult = false;
         }
 

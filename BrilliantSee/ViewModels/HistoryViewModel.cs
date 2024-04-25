@@ -1,25 +1,19 @@
 ﻿using BrilliantSee.Models.Objs;
 using BrilliantSee.Models.Enums;
 using BrilliantSee.Services;
-using CommunityToolkit.Maui.Alerts;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BrilliantSee.ViewModels
 {
     public partial class HistoryViewModel : ObservableObject
     {
         public readonly DBService _db;
-        public readonly AIService _ai;
+        private readonly MessageService _ms;
+        //public readonly AIService _ai;
 
-        public SourceCategory CurrentCategory { get; set; } = SourceCategory.Comic;
+        public SourceCategory CurrentCategory { get; set; } = SourceCategory.All;
 
         /// <summary>
         /// 是否正在获取结果
@@ -49,10 +43,11 @@ namespace BrilliantSee.ViewModels
             IsGettingResult = false;
         }
 
-        public HistoryViewModel(DBService db)
+        public HistoryViewModel(DBService db, MessageService ms)
         {
             _db = db;
-            _ai = MauiProgram.servicesProvider!.GetRequiredService<AIService>();
+            _ms = ms;
+            //_ai = MauiProgram.servicesProvider!.GetRequiredService<AIService>();
         }
 
         /// <summary>
@@ -63,7 +58,7 @@ namespace BrilliantSee.ViewModels
         {
             if (Objs.Count == 0)
             {
-                _ = Toast.Make("暂无历史记录").Show();
+                _ms.WriteMessage("暂无历史记录");
                 return;
             }
             foreach (var item in Objs)
@@ -71,7 +66,7 @@ namespace BrilliantSee.ViewModels
                 await _db.DeleteObjAsync(item, item.Category);
             }
             Objs.Clear();
-            _ = Toast.Make("历史记录已清空").Show();
+            _ms.WriteMessage("历史记录已清空");
         }
 
         /// <summary>

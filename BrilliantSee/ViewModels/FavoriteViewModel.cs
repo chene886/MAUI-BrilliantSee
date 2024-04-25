@@ -2,15 +2,9 @@
 using BrilliantSee.Models.Objs;
 using BrilliantSee.Models.Enums;
 using BrilliantSee.Services;
-using CommunityToolkit.Maui.Alerts;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BrilliantSee.ViewModels
 {
@@ -18,8 +12,9 @@ namespace BrilliantSee.ViewModels
     {
         public readonly DBService _db;
         public readonly AIService _ai;
+        private readonly MessageService _ms;
 
-        public SourceCategory CurrentCategory { get; set; } = SourceCategory.Comic;
+        public SourceCategory CurrentCategory { get; set; } = SourceCategory.All;
 
         /// <summary>
         /// 是否正在获取结果
@@ -56,9 +51,10 @@ namespace BrilliantSee.ViewModels
             }
         }
 
-        public FavoriteViewModel(DBService db)
+        public FavoriteViewModel(DBService db, MessageService ms)
         {
             _db = db;
+            _ms = ms;
             _ai = MauiProgram.servicesProvider!.GetRequiredService<AIService>();
             _ = InitKernelAsync();
         }
@@ -131,7 +127,7 @@ namespace BrilliantSee.ViewModels
                                     await Task.Delay(500);
                                     _ = MainThread.InvokeOnMainThreadAsync(() =>
                                     {
-                                        _ = Toast.Make(message1).Show();
+                                        _ms.WriteMessage(message1);
                                     });
                                     continue;
                                 }
@@ -143,7 +139,7 @@ namespace BrilliantSee.ViewModels
                     {
                         IsRefresh = false;
                         IsGettingResult = false;
-                        _ = Toast.Make(message).Show();
+                        _ms.WriteMessage(message);
                     });
                 });
 

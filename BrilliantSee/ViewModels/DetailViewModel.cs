@@ -2,14 +2,8 @@
 using BrilliantSee.Models.Objs;
 using BrilliantSee.Models.Enums;
 using BrilliantSee.Services;
-using CommunityToolkit.Maui.Alerts;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Collections.ObjectModel;
 
 namespace BrilliantSee.ViewModels
@@ -17,8 +11,9 @@ namespace BrilliantSee.ViewModels
     public partial class DetailViewModel : ObservableObject, IQueryAttributable
     {
         public readonly DBService _db;
+        private readonly MessageService _ms;
 
-        private readonly AIService _ai;
+        //private readonly AIService _ai;
 
         /// <summary>
         /// 当前漫画
@@ -56,15 +51,16 @@ namespace BrilliantSee.ViewModels
         [ObservableProperty]
         public IEnumerable<Item> _itemsOnDisPlay = new List<Item>();
 
-        public DetailViewModel(DBService db)
+        public DetailViewModel(DBService db, MessageService ms)
         {
             _db = db;
-            _ai = MauiProgram.servicesProvider!.GetRequiredService<AIService>();
-            if (_ai.hasModel)
-            {
-                _ai.RemovePlugins();
-                _ai.ImportPlugins(new Services.Plugins.DetailPlugins(_db));
-            }
+            _ms = ms;
+            //_ai = MauiProgram.servicesProvider!.GetRequiredService<AIService>();
+            //if (_ai.hasModel)
+            //{
+            //    _ai.RemovePlugins();
+            //    _ai.ImportPlugins(new Services.Plugins.DetailPlugins(_db));
+            //}
         }
 
         /// <summary>
@@ -105,7 +101,7 @@ namespace BrilliantSee.ViewModels
                 }
                 _ = AddHistoryAsync();
             }
-            else _ = Toast.Make("好像出了点小问题，用浏览器打开试试吧").Show();
+            else _ms.WriteMessage("好像出了点小问题，用浏览器打开试试吧");
         }
 
         /// <summary>
@@ -197,8 +193,7 @@ namespace BrilliantSee.ViewModels
             }
             else
             {
-                var toast = Toast.Make("章节无法显示");
-                _ = toast.Show();
+                _ms.WriteMessage("章节无法显示");
             }
         }
 
@@ -224,8 +219,7 @@ namespace BrilliantSee.ViewModels
             }
             else
             {
-                var toast = Toast.Make("暂无章节浏览记录");
-                _ = toast.Show();
+                _ms.WriteMessage("暂无章节浏览记录");
             }
         }
 

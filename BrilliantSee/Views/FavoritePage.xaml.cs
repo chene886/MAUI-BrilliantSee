@@ -1,7 +1,5 @@
 using BrilliantSee.Models.Enums;
 using BrilliantSee.ViewModels;
-using CommunityToolkit.Maui.Alerts;
-using CommunityToolkit.Maui.Core.Platform;
 using System.Text.RegularExpressions;
 
 namespace BrilliantSee.Views;
@@ -30,12 +28,12 @@ public partial class FavoritePage : ContentPage
     {
         base.OnAppearing();
         await _vm.OnLoadFavoriteObjAsync();
-        if (_vm._ai.hasModel)
-        {
-            _vm._ai.RemovePlugins();
-            _vm._ai.ImportPlugins(new Services.Plugins.FavoritePlugin(_vm._db));
-        }
-        this.audio.IsVisible = await _vm._db.GetAudioStatus();
+        //if (_vm._ai.hasModel)
+        //{
+        //    _vm._ai.RemovePlugins();
+        //    _vm._ai.ImportPlugins(new Services.Plugins.FavoritePlugin(_vm._db));
+        //}
+        //this.audio.IsVisible = await _vm._db.GetAudioStatus();
         //var status = await Permissions.CheckStatusAsync<Permissions.StorageWrite>();
         //if (status != PermissionStatus.Granted)
         //{
@@ -72,7 +70,7 @@ public partial class FavoritePage : ContentPage
         if (match.Success)
         {
             var version = match.Groups[1].Value;
-            if (version != "BrilliantSee_v2.0")
+            if (version != "BrilliantSee_v2.1.0")
             {
                 bool answer = await DisplayAlert("检测到新版本", "是否更新?", "快让朕瞧瞧", "朕不感兴趣");
                 if (answer)
@@ -87,12 +85,13 @@ public partial class FavoritePage : ContentPage
     {
         var button = sender! as Button;
         var text = button!.Text;
-        var buttons = new List<Button>() { this.comics, this.novels, this.videos };
+        var buttons = new List<Button>() { this.all, this.comics, this.novels, this.videos };
         foreach (var item in buttons)
         {
             item.FontSize = item.Text == text ? 18 : 14;
+            item.TextColor = item.Text == text ? Color.FromArgb("#512BD4") : Color.FromArgb("#212121");
         }
-        _vm.CurrentCategory = text == "漫画" ? SourceCategory.Comic : text == "小说" ? SourceCategory.Novel : SourceCategory.Video;
+        _vm.CurrentCategory = text == "全部" ? SourceCategory.All : text == "漫画" ? SourceCategory.Comic : text == "小说" ? SourceCategory.Novel : SourceCategory.Video;
         await _vm.OnLoadFavoriteObjAsync();
     }
 }

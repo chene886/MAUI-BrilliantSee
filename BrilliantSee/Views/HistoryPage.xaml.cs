@@ -1,6 +1,5 @@
 using BrilliantSee.Models.Enums;
 using BrilliantSee.ViewModels;
-using System.Diagnostics;
 
 namespace BrilliantSee.Views;
 
@@ -22,12 +21,12 @@ public partial class HistoryPage : ContentPage
     {
         base.OnAppearing();
         await _vm.OnLoadHistoryObjAsync();
-        if (_vm._ai.hasModel)
-        {
-            _vm._ai.RemovePlugins();
-            _vm._ai.ImportPlugins(new Services.Plugins.HistoryPlugins(_vm._db));
-        }
-        this.audio.IsVisible = await _vm._db.GetAudioStatus();
+        //if (_vm._ai.hasModel)
+        //{
+        //    _vm._ai.RemovePlugins();
+        //    _vm._ai.ImportPlugins(new Services.Plugins.HistoryPlugins(_vm._db));
+        //}
+        //this.audio.IsVisible = await _vm._db.GetAudioStatus();
     }
 
     private async void CleanTapped(object sender, TappedEventArgs e)
@@ -59,12 +58,13 @@ public partial class HistoryPage : ContentPage
     {
         var button = sender! as Button;
         var text = button!.Text;
-        var buttons = new List<Button>() { this.comics, this.novels, this.videos };
+        var buttons = new List<Button>() { this.all, this.comics, this.novels, this.videos };
         foreach (var item in buttons)
         {
             item.FontSize = item.Text == text ? 18 : 14;
+            item.TextColor = item.Text == text ? Color.FromArgb("#512BD4") : Color.FromArgb("#212121");
         }
-        _vm.CurrentCategory = text == "漫画" ? SourceCategory.Comic : text == "小说" ? SourceCategory.Novel : SourceCategory.Video;
+        _vm.CurrentCategory = text == "全部" ? SourceCategory.All : text == "漫画" ? SourceCategory.Comic : text == "小说" ? SourceCategory.Novel : SourceCategory.Video;
         await _vm.OnLoadHistoryObjAsync();
     }
 }

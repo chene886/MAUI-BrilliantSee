@@ -1,10 +1,5 @@
 ﻿using BrilliantSee.Models.Items.Chapters;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace BrilliantSee.Models.Objs.Novels
 {
@@ -38,7 +33,7 @@ namespace BrilliantSee.Models.Objs.Novels
                     Items = Items.Append(item);
                     index++;
                 }
-            } while (html.Contains("下一页"));
+            } while (Regex.Matches(html, "下一页").FirstOrDefault() is not null);
             Items = Items.Reverse();
             ItemCount = Items.Count();
             LastestItemName = Items.FirstOrDefault()!.Name;

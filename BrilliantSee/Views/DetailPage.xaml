@@ -165,7 +165,7 @@
                 Source="rollback.png"
                 WidthRequest="40" />
         </Frame>
-        <controls:AudioRecognition x:Name="audio" IsVisible="false" />
+        <!--<controls:AudioRecognition x:Name="audio" IsVisible="false" />-->
         <ActivityIndicator
             Margin="0,0,0,100"
             HeightRequest="55"

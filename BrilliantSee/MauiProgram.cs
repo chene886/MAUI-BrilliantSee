@@ -3,7 +3,6 @@ using Microsoft.Extensions.Logging;
 using CommunityToolkit.Maui;
 using BrilliantSee.ViewModels;
 using BrilliantSee.Services;
-using CommunityToolkit.Maui.Media;
 
 namespace BrilliantSee
 {
@@ -70,6 +69,7 @@ namespace BrilliantSee
             services.AddSingleton<DBService>();
             services.AddSingleton<SourceService>();
             services.AddSingleton<AIService>();
+            services.AddSingleton<MessageService>();
         }
     }
 }

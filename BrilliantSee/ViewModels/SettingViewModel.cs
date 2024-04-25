@@ -1,20 +1,14 @@
 ﻿using BrilliantSee.Models;
 using BrilliantSee.Services;
-using CommunityToolkit.Maui.Alerts;
 using CommunityToolkit.Mvvm.ComponentModel;
-using Microsoft.Maui.ApplicationModel.Communication;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BrilliantSee.ViewModels
 {
     public partial class SettingViewModel : ObservableObject
     {
         private readonly DBService _db;
+        private readonly MessageService _ms;
         public ObservableCollection<Group<SettingItem>> SettingGroups { get; set; } = new ObservableCollection<Group<SettingItem>>();
 
         public List<SettingItem> SettingItems_1 { get; set; } = new List<SettingItem>();
@@ -23,9 +17,10 @@ namespace BrilliantSee.ViewModels
         [ObservableProperty]
         public string _message = string.Empty;
 
-        public SettingViewModel(DBService db)
+        public SettingViewModel(DBService db, MessageService ms)
         {
             _db = db;
+            _ms = ms;
             _ = InitSettingsAsync();
         }
 
@@ -61,12 +56,12 @@ namespace BrilliantSee.ViewModels
                 case "去分享":
                     var Message = await _db.GetSettingItemMessageAsync("去分享");
                     await Clipboard.SetTextAsync(Message);
-                    _ = Toast.Make("已复制下载链接，快分享给您的小伙伴吧").Show();
+                    _ms.WriteMessage("已复制下载链接，快分享给您的小伙伴吧");
                     break;
 
                 default:
                     if (Email.Default.IsComposeSupported) await Email.Default.ComposeAsync("BrilliantSee用户反馈", "", "3256366564@qq.com");
-                    else _ = Toast.Make("未找到邮件应用").Show();
+                    else _ms.WriteMessage("未找到邮件应用");
                     break;
             };
         }

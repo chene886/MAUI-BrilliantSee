@@ -1,23 +1,15 @@
 ﻿using BrilliantSee.Models.Items;
 using BrilliantSee.Models.Enums;
 using BrilliantSee.Services;
-using CommunityToolkit.Maui.Alerts;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Microsoft.Maui.Controls;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BrilliantSee.ViewModels
 {
     public partial class BrowseViewModel : ObservableObject, IQueryAttributable
     {
-        private readonly AIService _ai;
+        //private readonly AIService _ai;
 
         /// <summary>
         /// 当前章节
@@ -73,6 +65,7 @@ namespace BrilliantSee.ViewModels
         public string CurrentTime => DateTime.Now.ToString("HH:mm");
 
         private readonly DBService _db;
+        private readonly MessageService _ms;
 
         public int CurrentChapterIndex
         {
@@ -88,15 +81,16 @@ namespace BrilliantSee.ViewModels
             }
         }
 
-        public BrowseViewModel(DBService db)
+        public BrowseViewModel(DBService db, MessageService ms)
         {
             _db = db;
-            _ai = MauiProgram.servicesProvider!.GetRequiredService<AIService>();
-            if (_ai.hasModel)
-            {
-                _ai.RemovePlugins();
-                _ai.ImportPlugins(new Services.Plugins.BrowsePlugins(_db));
-            }
+            _ms = ms;
+            //_ai = MauiProgram.servicesProvider!.GetRequiredService<AIService>();
+            //if (_ai.hasModel)
+            //{
+            //    _ai.RemovePlugins();
+            //    _ai.ImportPlugins(new Services.Plugins.BrowsePlugins(_db));
+            //}
             _timer = new Timer((o) => { OnPropertyChanged(nameof(CurrentTime)); }, null, (60 - DateTime.Now.Second) * 1000, 60000);
         }
 
@@ -136,8 +130,8 @@ namespace BrilliantSee.ViewModels
                 }
                 catch (Exception e)
                 {
-                    if (e.Message == "请求失败") _ = Toast.Make(e.Message).Show();
-                    else _ = Toast.Make("好像出了点小问题，用浏览器打开试试吧").Show();
+                    if (e.Message == "请求失败") _ms.WriteMessage(e.Message);
+                    else _ms.WriteMessage("好像出了点小问题，用浏览器打开试试吧");
                     throw new Exception(e.Message);
                 }
             }
@@ -208,15 +202,15 @@ namespace BrilliantSee.ViewModels
             var result = false;
             var unSuccess = flag == "Next" ? "已是最新一话" : "已是第一话";
             IsLoading = true;
-            _ = Toast.Make("正在加载...").Show();
+            _ms.WriteMessage("正在加载...");
             result = await UpdateChapterAsync(flag);
             if (result)
             {
-                _ = Toast.Make("加载成功").Show();
+                _ms.WriteMessage("加载成功");
             }
             else
             {
-                _ = Toast.Make(unSuccess).Show();
+                _ms.WriteMessage(unSuccess);
             }
             IsLoading = false;
             IsShowRefresh = false;

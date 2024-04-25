@@ -1,5 +1,6 @@
 ﻿using BrilliantSee.Models.Objs;
 using BrilliantSee.Models.Objs.Novels;
+using BrilliantSee.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,11 +27,11 @@ namespace BrilliantSee.Models.Sources.NovelSources
             if (html == string.Empty) { return Array.Empty<Obj>(); }
             if (html.Contains("alert(\"搜索间隔: 30 秒\")"))
             {
-                _ = MainThread.InvokeOnMainThreadAsync(() => Toast.Make("顶点小说搜索需间隔30秒").Show());
-                return Array.Empty<Obj>();
+                return Array.Empty<Obj>().Append(new DingDianNovel() { Name = "顶点源搜索需间隔30秒", Url = "https://www.ddxs.vip", Source = this });
             }
             string pattern = "s2[\\s\\S]*?href=\"(.*?)\">(.*?)<[\\s\\S]*?s4\">(.*?)<[\\s\\S]*?s5\">(.*?)<";
             var matches = Regex.Matches(html, pattern);
+            if (matches.Count == 0) { return Array.Empty<Obj>(); }
             matches.ToList().RemoveAt(0);
             var novels = new List<Obj>();
             foreach (Match match in matches)

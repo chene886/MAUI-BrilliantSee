@@ -1,15 +1,6 @@
 ﻿using BrilliantSee.Models;
 using BrilliantSee.Services;
-using CommunityToolkit.Maui.Alerts;
 using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
-using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace BrilliantSee.ViewModels
 {
@@ -17,6 +8,7 @@ namespace BrilliantSee.ViewModels
     {
         public readonly AIService _aiService;
         public readonly DBService _db;
+        public readonly MessageService _ms;
         public bool hasModel { get; set; } = false;
 
         [ObservableProperty]
@@ -29,10 +21,11 @@ namespace BrilliantSee.ViewModels
 
         public string AudioStatus { get; set; } = "false";
 
-        public AIViewModel(DBService db)
+        public AIViewModel(DBService db, MessageService ms)
         {
             _aiService = MauiProgram.servicesProvider!.GetRequiredService<AIService>();
             _db = db;
+            _ms = ms;
             hasModel = _aiService.hasModel;
             _aiService.RemovePlugins();
         }
@@ -45,29 +38,39 @@ namespace BrilliantSee.ViewModels
 
         public async void UpdateModel(string name, string key, string url)
         {
-            IsGettingResult = true;
-            _aiService.InitKernel(name, key, url);
-            modelConfigs = await _db.GetSettingItemsAsync("AIModel");
-            foreach (var item in modelConfigs)
+            var message = string.Empty;
+            if (name is null || key is null || url is null)
             {
-                switch (item.Name)
-                {
-                    case "ModelId":
-                        item.Value = name;
-                        break;
-
-                    case "ApiKey":
-                        item.Value = key;
-                        break;
-
-                    case "ApiUrl":
-                        item.Value = url;
-                        break;
-                }
-                _ = _db.UpdateSettingItemAsync(item);
+                message = "请填写完整信息";
             }
-            hasModel = true;
-            IsGettingResult = false;
+            else
+            {
+                IsGettingResult = true;
+                _aiService.InitKernel(name, key, url);
+                modelConfigs = await _db.GetSettingItemsAsync("AIModel");
+                foreach (var item in modelConfigs)
+                {
+                    switch (item.Name)
+                    {
+                        case "ModelId":
+                            item.Value = name;
+                            break;
+
+                        case "ApiKey":
+                            item.Value = key;
+                            break;
+
+                        case "ApiUrl":
+                            item.Value = url;
+                            break;
+                    }
+                    _ = _db.UpdateSettingItemAsync(item);
+                }
+                hasModel = true;
+                IsGettingResult = false;
+                message = "模型更新成功";
+            }
+            _ms.WriteMessage(message);
         }
 
         public async Task<string> Chat(string prompt)

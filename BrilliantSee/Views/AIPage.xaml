@@ -59,10 +59,10 @@
                 TextColor="White"
                 WidthRequest="64" />
         </Grid>
-        <controls:AudioRecognition
+        <!--<controls:AudioRecognition
             x:Name="audio"
             Margin="0,0,0,60"
-            IsVisible="false" />
+            IsVisible="false" />-->
         <ActivityIndicator
             Margin="0,0,0,100"
             HeightRequest="55"

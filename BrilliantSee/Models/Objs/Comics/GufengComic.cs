@@ -1,11 +1,5 @@
 ﻿using BrilliantSee.Models.Items.Chapters;
-using CommunityToolkit.Maui.Alerts;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace BrilliantSee.Models.Objs.Comics
 {

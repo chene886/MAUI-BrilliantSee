@@ -1,14 +1,5 @@
-﻿using BrilliantSee.Models.Items;
-using BrilliantSee.Models.Objs;
-using CommunityToolkit.Mvvm.ComponentModel;
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Text;
+﻿using BrilliantSee.Models.Objs;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace BrilliantSee.Models.Items.Chapters
 {

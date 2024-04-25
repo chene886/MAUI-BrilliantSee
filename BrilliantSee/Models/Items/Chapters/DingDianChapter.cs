@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
+﻿using System.Text.RegularExpressions;
 
 namespace BrilliantSee.Models.Items.Chapters
 {
@@ -29,7 +24,7 @@ namespace BrilliantSee.Models.Items.Chapters
                     NovelContent += item.Groups[1].Value + "\r\n\r\n\t\t\t\t\t\t";
                 }
                 count++;
-            } while (html.Contains("下一页"));
+            } while (Regex.Matches(html, "下一页").FirstOrDefault() is not null);
         }
     }
 }

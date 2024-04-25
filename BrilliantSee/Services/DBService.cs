@@ -61,7 +61,7 @@ namespace BrilliantSee.Services
                 new SettingItem { Name = "顶点小说", Value = "IsSelected", Category = "Source" },
                 new SettingItem { Name = "包子漫画", Value = "IsSelected", Category = "Source" },
                 new SettingItem { Name = "古风漫画", Value = "IsSelected", Category = "Source" },
-                new SettingItem { Name = "Goda漫画", Value = "IsSelected", Category = "Source" },
+                //new SettingItem { Name = "Goda漫画", Value = "IsSelected", Category = "Source" },
                 new SettingItem { Name = "Goda(英)", Value = "IsSelected", Category = "Source" },
                 new SettingItem { Name = "樱花动漫网", Value = "IsSelected", Category = "Source" },
                 //new SettingItem { Name = "OMO动漫", Value = "IsSelected", Category = "Source" },
@@ -87,9 +87,9 @@ namespace BrilliantSee.Services
         /// <exception cref="NotImplementedException"></exception>
         public async Task<List<Obj>> GetObjsAsync(DBObjCategory category, SourceCategory source)
         {
-            var dbObjs = await _db.Table<DBObj>()
-                .Where(i => i.Category == category && i.SourceCategory == source)
-                .ToListAsync();
+            List<DBObj> dbObjs;
+            dbObjs = source == SourceCategory.All ? await _db.Table<DBObj>().Where(i => i.Category == category).ToListAsync()
+                : await _db.Table<DBObj>().Where(i => i.Category == category && i.SourceCategory == source).ToListAsync();
             var ret = dbObjs
                 .Select(i => _sourceService.GetComic(i.SourceName)!.CreateObjFromDBObj(i))
                 .Where(c => c is not null)

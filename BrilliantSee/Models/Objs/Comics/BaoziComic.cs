@@ -1,16 +1,5 @@
 ﻿using BrilliantSee.Models.Items.Chapters;
-using BrilliantSee.Models.Sources;
-using CommunityToolkit.Maui.Alerts;
-using Microsoft.Maui.Controls;
-using SQLite;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Reflection.Metadata;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace BrilliantSee.Models.Objs.Comics
 {

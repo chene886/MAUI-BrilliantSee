@@ -8,7 +8,7 @@ public partial class SearchPage : ContentPage
 {
     private readonly SearchViewModel _vm;
 
-    private SourceCategory category = SourceCategory.Comic;
+    private SourceCategory category = SourceCategory.All;
 
     public SearchPage(SearchViewModel vm)
     {
@@ -28,7 +28,7 @@ public partial class SearchPage : ContentPage
         this.input.Focus();
         await Task.Delay(250);
         this.input.Focus();
-        this.audio.IsVisible = await _vm._db.GetAudioStatus();
+        //this.audio.IsVisible = await _vm._db.GetAudioStatus();
     }
 
     private void HideKeyboard(object sender, TappedEventArgs e)
@@ -44,7 +44,7 @@ public partial class SearchPage : ContentPage
     private async void CollectionView_Scrolled(object sender, ItemsViewScrolledEventArgs e)
     {
         this.floatButton.IsVisible = e.FirstVisibleItemIndex == 0 ? false : true;
-        var count = category == SourceCategory.Comic ? _vm.Comics.Count : category == SourceCategory.Novel ? _vm.Novels.Count : _vm.Videos.Count;
+        var count = category == SourceCategory.All ? _vm.AllObjs.Count : category == SourceCategory.Comic ? _vm.Comics.Count : category == SourceCategory.Novel ? _vm.Novels.Count : _vm.Videos.Count;
         if (e.LastVisibleItemIndex == count - 1 && _vm.IsGettingResult == false && count != 0)
         {
             await _vm.GetMoreAsync(category);
@@ -95,14 +95,15 @@ public partial class SearchPage : ContentPage
     {
         var button = sender! as Button;
         var text = button!.Text;
-        var buttons = new List<Button>() { this.comics, this.novels, this.videos };
+        var buttons = new List<Button>() { this.all, this.comics, this.novels, this.videos };
         foreach (var item in buttons)
         {
             item.FontSize = item.Text == text ? 18 : 14;
+            item.TextColor = item.Text == text ? Color.FromArgb("#512BD4") : Color.FromArgb("#212121");
         }
+        category = text == "全部" ? SourceCategory.All : text == "漫画" ? SourceCategory.Comic : text == "小说" ? SourceCategory.Novel : SourceCategory.Video;
         _vm.IsGettingResult = true;
-        this.comicList.ItemsSource = text == "漫画" ? _vm.Comics : text == "小说" ? _vm.Novels : _vm.Videos;
+        this.comicList.ItemsSource = text == "全部" ? _vm.AllObjs : text == "漫画" ? _vm.Comics : text == "小说" ? _vm.Novels : _vm.Videos;
         _vm.IsGettingResult = false;
-        category = text == "漫画" ? SourceCategory.Comic : text == "小说" ? SourceCategory.Novel : SourceCategory.Video;
     }
 }
