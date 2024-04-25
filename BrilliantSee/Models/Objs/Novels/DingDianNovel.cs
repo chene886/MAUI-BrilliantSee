@@ -15,6 +15,7 @@ namespace BrilliantSee.Models.Objs.Novels
             var count = 0;
             var html = string.Empty;
             var index = 0;
+            IEnumerable<DingDianChapter> items = new List<DingDianChapter>();
             do
             {
                 count++;
@@ -30,13 +31,16 @@ namespace BrilliantSee.Models.Objs.Novels
                         index,
                         index == LastReadedItemIndex)
                     { Obj = this };
-                    Items = Items.Append(item);
+                    items = items.Append(item);
                     index++;
                 }
             } while (Regex.Matches(html, "下一页").FirstOrDefault() is not null);
-            Items = Items.Reverse();
-            ItemCount = Items.Count();
-            LastestItemName = Items.FirstOrDefault()!.Name;
+            _ = MainThread.InvokeOnMainThreadAsync(() =>
+            {
+                Items = items.Reverse();
+                ItemCount = Items.Count();
+                LastestItemName = Items.FirstOrDefault()!.Name;
+            });
         }
 
         public override void LoadMoreData()

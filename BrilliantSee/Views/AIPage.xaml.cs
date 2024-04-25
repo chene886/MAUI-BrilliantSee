@@ -69,7 +69,7 @@ public partial class AIPage : ContentPage
         obj!.Shadow = shadow;
     }
 
-    private void UpdateModel(object sender, EventArgs e)
+    private async void UpdateModel(object sender, EventArgs e)
     {
         Button_Clicked(sender, e);
 
@@ -78,14 +78,17 @@ public partial class AIPage : ContentPage
             _ = this.key.HideKeyboardAsync(CancellationToken.None);
             _ = this.url.HideKeyboardAsync(CancellationToken.None);
 #endif
-        _vm.UpdateModel(this.name.Text, this.key.Text, this.url.Text);
-        this.cover.IsVisible = false;
-        this.model.IsVisible = false;
-        if (this.updateModel.IsEnabled is false)
+        var isSuccess = await _vm.UpdateModel(this.name.Text, this.key.Text, this.url.Text);
+        if (isSuccess)
         {
-            this.updateModel.IsEnabled = true;
-            this.cover.IsEnabled = true;
-            //this.audioStatus.IsEnabled = true;
+            this.cover.IsVisible = false;
+            this.model.IsVisible = false;
+            if (this.updateModel.IsEnabled is false)
+            {
+                this.updateModel.IsEnabled = true;
+                this.cover.IsEnabled = true;
+                //this.audioStatus.IsEnabled = true;
+            }
         }
     }
 

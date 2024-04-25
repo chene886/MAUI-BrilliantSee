@@ -36,12 +36,14 @@ namespace BrilliantSee.ViewModels
             AudioStatus = audio[0].Value;
         }
 
-        public async void UpdateModel(string name, string key, string url)
+        public async Task<bool> UpdateModel(string name, string key, string url)
         {
             var message = string.Empty;
             if (name is null || key is null || url is null)
             {
                 message = "请填写完整信息";
+                _ms.WriteMessage(message);
+                return false;
             }
             else
             {
@@ -69,8 +71,9 @@ namespace BrilliantSee.ViewModels
                 hasModel = true;
                 IsGettingResult = false;
                 message = "模型更新成功";
-            }
             _ms.WriteMessage(message);
+            }
+            return true;
         }
 
         public async Task<string> Chat(string prompt)

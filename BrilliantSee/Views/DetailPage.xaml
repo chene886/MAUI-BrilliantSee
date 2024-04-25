@@ -85,21 +85,24 @@
                         <Label
                             FontFamily=""
                             FontSize="13"
-                            MaxLines="1"
-                            Text="{Binding Obj.CharCount}"
-                            TextColor="{StaticResource Gray500}" />
-                        <Label
-                            FontFamily=""
-                            FontSize="13"
                             MaxLines="5"
                             Text="{Binding Obj.Description}"
                             TextColor="{StaticResource Gray500}" />
-                        <Label
-                            FontFamily=""
-                            FontSize="13"
-                            HorizontalOptions="End"
-                            Text="{Binding Obj.LastestUpdateTime}"
-                            TextColor="{StaticResource Gray500}" />
+                        <Grid>
+                            <Label
+                                FontFamily=""
+                                FontSize="13"
+                                HorizontalOptions="Start"
+                                MaxLines="1"
+                                Text="{Binding Obj.CharCount}"
+                                TextColor="{StaticResource Gray500}" />
+                            <Label
+                                FontFamily=""
+                                FontSize="13"
+                                HorizontalOptions="End"
+                                Text="{Binding Obj.LastestUpdateTime}"
+                                TextColor="{StaticResource Gray500}" />
+                        </Grid>
                     </VerticalStackLayout>
                 </Grid>
             </CollectionView.Header>
