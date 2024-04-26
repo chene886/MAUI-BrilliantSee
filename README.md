@@ -45,7 +45,8 @@
 <img src="img/detailPage11.jpg" width="360px" />
 
 ### 收藏页
-- 一键检查更新
+- 自动检测版本更新
+- 一键检查内容更新
 <img src="img/favoritePage11.jpg" width="360px" />
 
 ### 历史记录页
@@ -62,6 +63,7 @@
 <img src="img/novelPage11.jpg" width="360px" />
 
 ### 系统设置页
+- 分享应用，错误反馈，支持开源
 <img src="img/settingPage11.jpg" width="360px" />
 
 ## 适配源网站
