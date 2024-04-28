@@ -63,21 +63,28 @@ public partial class FavoritePage : ContentPage
 
     public async Task CheckUpdate()
     {
-        var httpClient = new HttpClient();
-        var response = await httpClient.GetAsync("https://www.123pan.com/s/6cnjjv-6njBv.html");
-        var html = await response.Content.ReadAsStringAsync();
-        var match = Regex.Match(html, "\"FileName\"[\\s\\S]*?\"(.*?)\"");
-        if (match.Success)
+        try
         {
-            var version = match.Groups[1].Value;
-            if (version != "BrilliantSee_v2.1.0")
+            var httpClient = new HttpClient();
+            var response = await httpClient.GetAsync("https://www.123pan.com/s/6cnjjv-6njBv.html");
+            var html = await response.Content.ReadAsStringAsync();
+            var match = Regex.Match(html, "\"FileName\"[\\s\\S]*?\"(.*?)\"");
+            if (match.Success)
             {
-                bool answer = await DisplayAlert("检测到新版本", "是否更新?", "快让朕瞧瞧", "朕不感兴趣");
-                if (answer)
+                var version = match.Groups[1].Value;
+                if (version != "BrilliantSee_v2.1.0")
                 {
-                    await Launcher.OpenAsync("https://www.123pan.com/s/6cnjjv-6njBv.html");
+                    bool answer = await DisplayAlert("检测到新版本", "是否更新?", "快让朕瞧瞧", "朕不感兴趣");
+                    if (answer)
+                    {
+                        await Launcher.OpenAsync("https://www.123pan.com/s/6cnjjv-6njBv.html");
+                    }
                 }
             }
+        }
+        catch (Exception)
+        {
+            // ignored
         }
     }
 

@@ -94,7 +94,6 @@ namespace BrilliantSee.Services
                 .Select(i => _sourceService.GetComic(i.SourceName)!.CreateObjFromDBObj(i))
                 .Where(c => c is not null)
                 .Select(c => c!).ToList();
-
             return ret;
         }
 

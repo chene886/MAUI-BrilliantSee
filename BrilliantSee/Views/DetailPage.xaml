@@ -131,7 +131,7 @@
                             x:Name="label"
                             FontFamily=""
                             FontSize="12"
-                            HorizontalOptions="Start"
+                            HorizontalOptions="Center"
                             LineBreakMode="TailTruncation"
                             Text="{Binding Name}"
                             TextColor="{StaticResource Gray500}"

@@ -153,7 +153,9 @@ public partial class AIPage : ContentPage
 
     private async Task ScrollAsync()
     {
-        await this.chatList.ScrollToAsync(this.Bottom, ScrollToPosition.MakeVisible, false);
+        var x = this.result.X;
+        var y = this.result.Y;
+        await this.chatList.ScrollToAsync(x, y, true);
     }
 
     private void ChangeAudioStatus(object sender, EventArgs e)

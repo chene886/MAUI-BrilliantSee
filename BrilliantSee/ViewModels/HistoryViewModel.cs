@@ -33,14 +33,14 @@ namespace BrilliantSee.ViewModels
         public async Task OnLoadHistoryObjAsync()
         {
             Objs.Clear();
-            IsGettingResult = true;
+            //IsGettingResult = true;
             var objs = await _db.GetObjsAsync(Models.Enums.DBObjCategory.History, CurrentCategory);
-            objs.Reverse();
+            //objs.Reverse();
             foreach (var item in objs)
             {
-                Objs.Add(item);
+                Objs.Insert(0, item);
             }
-            IsGettingResult = false;
+            //IsGettingResult = false;
         }
 
         public HistoryViewModel(DBService db, MessageService ms)

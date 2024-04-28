@@ -39,7 +39,7 @@ namespace BrilliantSee.ViewModels
         public async Task<bool> UpdateModel(string name, string key, string url)
         {
             var message = string.Empty;
-            if (name is null || key is null || url is null)
+            if (string.IsNullOrEmpty(name) || string.IsNullOrEmpty(key) || string.IsNullOrEmpty(url))
             {
                 message = "请填写完整信息";
                 _ms.WriteMessage(message);
@@ -71,7 +71,7 @@ namespace BrilliantSee.ViewModels
                 hasModel = true;
                 IsGettingResult = false;
                 message = "模型更新成功";
-            _ms.WriteMessage(message);
+                _ms.WriteMessage(message);
             }
             return true;
         }

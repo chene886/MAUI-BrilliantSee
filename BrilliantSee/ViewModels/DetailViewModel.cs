@@ -198,11 +198,24 @@ namespace BrilliantSee.ViewModels
         }
 
         [RelayCommand]
-        private async Task SetVideoAsync(Item chapter)
+        private async Task SetVideoAsync(Item video)
         {
-            _ = chapter.Obj.ChangeLastReadedItemIndex(chapter.Index, _db);
-            await chapter.GetResourcesAsync();
-            VideoUrl = chapter.VideoUrl;
+            _ = video.Obj.ChangeLastReadedItemIndex(video.Index, _db);
+            if (video.VideoUrl != string.Empty)
+            {
+                VideoUrl = video.VideoUrl;
+                return;
+            }
+            try
+            {
+                await video.GetResourcesAsync();
+            }
+            catch (Exception e)
+            {
+                if (e.Message == "请求失败") _ms.WriteMessage(e.Message);
+                else _ms.WriteMessage("好像出了点小问题，用浏览器打开试试吧");
+            }
+            VideoUrl = video.VideoUrl;
         }
 
         /// <summary>
@@ -225,9 +238,9 @@ namespace BrilliantSee.ViewModels
 
         public void SetItemsOnDisplay(string route)
         {
-            IsGettingResult = true;
+            //IsGettingResult = true;
             ItemsOnDisPlay = Obj!.Items.Where(c => c.Route == route);
-            IsGettingResult = false;
+            //IsGettingResult = false;
         }
     }
 }

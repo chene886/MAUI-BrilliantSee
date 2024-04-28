@@ -110,7 +110,10 @@ namespace BrilliantSee.ViewModels
             await LoadChapterResourcesAsync(Chapter, "Init");
             OnPropertyChanged(nameof(Chapter));
             IsLoading = false;
-            IsShowButton = true;
+            if (Chapter.PicUrls.Any())
+            {
+                IsShowButton = true;
+            }
             LoadedChapter.Add(Chapter);
         }
 
@@ -122,7 +125,7 @@ namespace BrilliantSee.ViewModels
         /// <returns></returns>
         private async Task LoadChapterResourcesAsync(Item chapter, string flag)
         {
-            if (chapter.PicUrls.Count == 0)
+            if (chapter.PicUrls.Count == 0 && chapter.NovelContent == string.Empty)
             {
                 try
                 {
@@ -132,7 +135,6 @@ namespace BrilliantSee.ViewModels
                 {
                     if (e.Message == "请求失败") _ms.WriteMessage(e.Message);
                     else _ms.WriteMessage("好像出了点小问题，用浏览器打开试试吧");
-                    throw new Exception(e.Message);
                 }
             }
             if (chapter.Obj.SourceCategory == SourceCategory.Comic)

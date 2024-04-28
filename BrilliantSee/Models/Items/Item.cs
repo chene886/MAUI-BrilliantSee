@@ -55,7 +55,7 @@ namespace BrilliantSee.Models.Items
         /// 小说内容
         /// </summary>
         [ObservableProperty]
-        public string _novelContent = "\t\t\t\t\t\t";
+        public string _novelContent = string.Empty;
 
         public Item(string name, string url, int index, bool isSpecial)
         {

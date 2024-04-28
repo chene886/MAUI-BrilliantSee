@@ -28,16 +28,18 @@ namespace BrilliantSee.Models.Items.Chapters
                     {
                         url = Url + $"_{count}";
                     }
-                    var msg = await Obj.Source.HttpClient!.GetAsync(url);
-                    if (msg.RequestMessage is null || msg.RequestMessage.RequestUri is null)
-                    {
-                        if (count == 1)
-                        {
-                            throw new Exception("请求失败");
-                        }
-                        break;
-                    }
-                    html = (await msg.Content.ReadAsStringAsync()).Replace("\n", string.Empty);
+                    //var msg = await Obj.Source.HttpClient!.GetAsync(url);
+                    //if (msg.RequestMessage is null || msg.RequestMessage.RequestUri is null)
+                    //{
+                    //    if (count == 1)
+                    //    {
+                    //        throw new Exception("请求失败");
+                    //    }
+                    //    break;
+                    //}
+                    //html = (await msg.Content.ReadAsStringAsync()).Replace("\n", string.Empty);
+                    html = (await Obj.Source.GetHtmlAsync(url)).Replace("\n", string.Empty);
+                    if (html == string.Empty) throw new Exception("请求失败");
                     match = Regex.Matches(html, "<noscript [\\s\\S]*?src=\\\"([\\s\\S]*?)\\\"[\\s\\S]*?</noscript>");
                     foreach (Match item in match)
                     {

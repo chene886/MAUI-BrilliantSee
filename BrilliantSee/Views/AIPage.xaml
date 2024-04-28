@@ -25,9 +25,12 @@
             <StackLayout>
                 <StackLayout
                     x:Name="chat"
-                    Margin="0,0,0,60"
+                    Margin="0,0,0,0"
                     Padding="10,0,10,10" />
-                <Label x:Name="Bottom" HeightRequest="1" />
+                <Label
+                    x:Name="result"
+                    HeightRequest="1"
+                    HorizontalOptions="Center" />
             </StackLayout>
         </ScrollView>
         <Grid
@@ -97,19 +100,18 @@
                 VerticalOptions="Center">
                 <Entry
                     x:Name="name"
-                    ClearButtonVisibility="WhileEditing"
                     FontFamily=""
                     Placeholder="请输入模型,如:gpt-3.5-turbo-16k"
+                    ReturnType="Next"
                     VerticalOptions="Start" />
                 <Entry
                     x:Name="key"
-                    ClearButtonVisibility="WhileEditing"
                     FontFamily=""
                     Placeholder="请输入你的Key"
+                    ReturnType="Next"
                     VerticalOptions="Start" />
                 <Entry
                     x:Name="url"
-                    ClearButtonVisibility="WhileEditing"
                     FontFamily=""
                     Placeholder="请输入你的代理地址"
                     VerticalOptions="Start" />

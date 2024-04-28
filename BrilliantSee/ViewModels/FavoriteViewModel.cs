@@ -38,17 +38,17 @@ namespace BrilliantSee.ViewModels
         public async Task OnLoadFavoriteObjAsync()
         {
             Objs.Clear();
-            IsGettingResult = true;
-            var comics = await _db.GetObjsAsync(DBObjCategory.Favorite, CurrentCategory);
-            comics.Reverse();
-            foreach (var item in comics)
+            //IsGettingResult = true;
+            var objs = await _db.GetObjsAsync(DBObjCategory.Favorite, CurrentCategory);
+            //comics.Reverse();
+            foreach (var item in objs)
             {
-                Objs.Add(item);
+                Objs.Insert(0, item);
             }
-            if (!IsRefresh)
-            {
-                IsGettingResult = false;
-            }
+            //if (!IsRefresh)
+            //{
+            //    IsGettingResult = false;
+            //}
         }
 
         public FavoriteViewModel(DBService db, MessageService ms)
@@ -102,10 +102,10 @@ namespace BrilliantSee.ViewModels
                     var hasUpdate = false;
                     var message = "暂无收藏内容";
                     _ = MainThread.InvokeOnMainThreadAsync(() => { IsGettingResult = true; IsRefresh = true; });
-                    var objs = await _db.GetObjsAsync(DBObjCategory.Favorite, CurrentCategory);
-                    if (objs.Count() != 0)
+                    //var objs = await _db.GetObjsAsync(DBObjCategory.Favorite, CurrentCategory);
+                    if (Objs.Count() != 0)
                     {
-                        foreach (var item in objs)
+                        foreach (var item in Objs)
                         {
                             if (!item.IsUpdate)
                             {

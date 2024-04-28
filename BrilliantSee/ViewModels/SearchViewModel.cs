@@ -144,7 +144,7 @@ namespace BrilliantSee.ViewModels
         private async Task OpenObjAsync(Obj obj)
         {
             IsSourceListVisible = false;
-            obj.Items = new List<Item>();
+            //obj.Items = new List<Item>();
             var page = obj.SourceCategory == SourceCategory.Video ? "VideoPage" : "DetailPage";
             await Shell.Current.GoToAsync(page, new Dictionary<string, object> { { "Obj", obj } });
         }

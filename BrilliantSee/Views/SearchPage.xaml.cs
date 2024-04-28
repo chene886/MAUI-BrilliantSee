@@ -102,8 +102,8 @@ public partial class SearchPage : ContentPage
             item.TextColor = item.Text == text ? Color.FromArgb("#512BD4") : Color.FromArgb("#212121");
         }
         category = text == "全部" ? SourceCategory.All : text == "漫画" ? SourceCategory.Comic : text == "小说" ? SourceCategory.Novel : SourceCategory.Video;
-        _vm.IsGettingResult = true;
+        //_vm.IsGettingResult = true;
         this.comicList.ItemsSource = text == "全部" ? _vm.AllObjs : text == "漫画" ? _vm.Comics : text == "小说" ? _vm.Novels : _vm.Videos;
-        _vm.IsGettingResult = false;
+        //_vm.IsGettingResult = false;
     }
 }

@@ -18,10 +18,13 @@ namespace BrilliantSee.Models.Items.Chapters
         {
             try
             {
-                var msg = await Obj.Source.HttpClient!.GetAsync(Url);
-                if (msg.RequestMessage is null || msg.RequestMessage.RequestUri is null)
-                    throw new Exception("接口异常,请等待维护");
-                var html = await msg.Content.ReadAsStringAsync();
+                //var msg = await Obj.Source.HttpClient!.GetAsync(Url);
+                //if (msg.RequestMessage is null || msg.RequestMessage.RequestUri is null)
+                //    throw new Exception("接口异常,请等待维护");
+                //var html = await msg.Content.ReadAsStringAsync();
+                var html = await Obj.Source.GetHtmlAsync(Url);
+                if (html == string.Empty)
+                    throw new Exception("请求失败");
                 var match = Regex.Matches(html, "<noscript>[\\s\\S]*?src=\"(.*?)\"[\\s\\S]*?</noscript>");
                 foreach (Match item in match)
                 {
