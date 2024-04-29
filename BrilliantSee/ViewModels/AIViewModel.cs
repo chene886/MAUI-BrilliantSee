@@ -36,44 +36,32 @@ namespace BrilliantSee.ViewModels
             AudioStatus = audio[0].Value;
         }
 
-        public async Task<bool> UpdateModel(string name, string key, string url)
+        public async Task UpdateModel(string name, string key, string url)
         {
-            var message = string.Empty;
-            if (string.IsNullOrEmpty(name) || string.IsNullOrEmpty(key) || string.IsNullOrEmpty(url))
+            IsGettingResult = true;
+            _aiService.InitKernel(name, key, url);
+            modelConfigs = await _db.GetSettingItemsAsync("AIModel");
+            foreach (var item in modelConfigs)
             {
-                message = "请填写完整信息";
-                _ms.WriteMessage(message);
-                return false;
-            }
-            else
-            {
-                IsGettingResult = true;
-                _aiService.InitKernel(name, key, url);
-                modelConfigs = await _db.GetSettingItemsAsync("AIModel");
-                foreach (var item in modelConfigs)
+                switch (item.Name)
                 {
-                    switch (item.Name)
-                    {
-                        case "ModelId":
-                            item.Value = name;
-                            break;
+                    case "ModelId":
+                        item.Value = name;
+                        break;
 
-                        case "ApiKey":
-                            item.Value = key;
-                            break;
+                    case "ApiKey":
+                        item.Value = key;
+                        break;
 
-                        case "ApiUrl":
-                            item.Value = url;
-                            break;
-                    }
-                    _ = _db.UpdateSettingItemAsync(item);
+                    case "ApiUrl":
+                        item.Value = url;
+                        break;
                 }
-                hasModel = true;
-                IsGettingResult = false;
-                message = "模型更新成功";
-                _ms.WriteMessage(message);
+                _ = _db.UpdateSettingItemAsync(item);
             }
-            return true;
+            hasModel = true;
+            IsGettingResult = false;
+            _ms.WriteMessage("模型更新成功");
         }
 
         public async Task<string> Chat(string prompt)
@@ -83,6 +71,22 @@ namespace BrilliantSee.ViewModels
             result = await Task.Run(async Task<string>? () => { return await _aiService.SolvePromptAsync(prompt); });
             IsGettingResult = false;
             return result;
+        }
+
+        public bool IsAcceptableString(string[] strs)
+        {
+            var acceptable = true;
+            foreach (var str in strs)
+            {
+                if (string.IsNullOrEmpty(str) || string.IsNullOrWhiteSpace(str))
+                {
+                    acceptable = false;
+                    break;
+                }
+            }
+            if (!acceptable)
+                _ms.WriteMessage("请填写合理的内容");
+            return acceptable;
         }
     }
 }

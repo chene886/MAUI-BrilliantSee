@@ -76,6 +76,7 @@ namespace BrilliantSee.ViewModels
             Obj = query["Obj"] as Obj;
 
             IsGettingResult = true;
+            IsReverseListEnabled = false;
             var isExist = await _db.IsComicExistAsync(Obj!, DBObjCategory.Favorite);
             if (isExist)
             {
@@ -83,25 +84,27 @@ namespace BrilliantSee.ViewModels
                 Obj!.Category = DBObjCategory.Favorite;
             }
             else FavoriteImage = ImageSource.FromFile("not_favorite.png");
-            var isSuccess = await Obj!.GetHtmlAsync();
-            if (isSuccess)
+            var isSuccess = true;
+            if (!Obj!.Items.Any())
             {
-                Obj!.LoadMoreData();
-                OnPropertyChanged(nameof(Obj));
-                IsReverseListEnabled = false;
-                await Task.Run(() => Obj!.LoadItemsAsync());
-                ItemsOnDisPlay = new ObservableCollection<Item>(Obj!.Items.Where(c => c.Route == "线路一"));
-                IsReverseListEnabled = true;
-                IsGettingResult = false;
-
-                if (isExist && Obj!.IsUpdate)
+                isSuccess = await Obj!.GetHtmlAsync();
+                if (isSuccess)
                 {
-                    Obj!.IsUpdate = false;
-                    _ = _db.UpdateComicAsync(Obj!);
+                    Obj!.LoadMoreData();
+                    //OnPropertyChanged(nameof(Obj));
+                    await Task.Run(() => Obj!.LoadItemsAsync());
+                    if (isExist && Obj!.IsUpdate)
+                    {
+                        Obj!.IsUpdate = false;
+                        _ = _db.UpdateComicAsync(Obj!);
+                    }
                 }
-                _ = AddHistoryAsync();
+                else _ms.WriteMessage("好像出了点小问题，用浏览器打开试试吧");
             }
-            else _ms.WriteMessage("好像出了点小问题，用浏览器打开试试吧");
+            ItemsOnDisPlay = new ObservableCollection<Item>(Obj!.Items.Where(c => c.Route == "线路一"));
+            IsReverseListEnabled = true;
+            IsGettingResult = false;
+            if (isSuccess) _ = AddHistoryAsync();
         }
 
         /// <summary>

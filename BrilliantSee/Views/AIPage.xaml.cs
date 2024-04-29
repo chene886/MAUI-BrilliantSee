@@ -72,15 +72,15 @@ public partial class AIPage : ContentPage
     private async void UpdateModel(object sender, EventArgs e)
     {
         Button_Clicked(sender, e);
-
+        var isAccept = _vm.IsAcceptableString(new string[] { this.name.Text, this.key.Text, this.url.Text });
+        if (isAccept)
+        {
 #if ANDROID
             _ = this.name.HideKeyboardAsync(CancellationToken.None);
             _ = this.key.HideKeyboardAsync(CancellationToken.None);
             _ = this.url.HideKeyboardAsync(CancellationToken.None);
 #endif
-        var isSuccess = await _vm.UpdateModel(this.name.Text, this.key.Text, this.url.Text);
-        if (isSuccess)
-        {
+            await _vm.UpdateModel(this.name.Text, this.key.Text, this.url.Text);
             this.cover.IsVisible = false;
             this.model.IsVisible = false;
             if (this.updateModel.IsEnabled is false)
@@ -95,9 +95,10 @@ public partial class AIPage : ContentPage
     private async void StartChat(object sender, EventArgs e)
     {
         Button_Clicked(sender, e);
-        var input = this.prompt.Text;
-        if (!string.IsNullOrEmpty(input))
+        var IsAccept = _vm.IsAcceptableString(new string[] { this.prompt.Text });
+        if (IsAccept)
         {
+            var input = this.prompt.Text;
             this.prompt.Text = string.Empty;
 #if ANDROID
             if (prompt.IsSoftKeyboardShowing())

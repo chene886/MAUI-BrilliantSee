@@ -27,7 +27,7 @@ namespace BrilliantSee.Models.Sources.NovelSources
             if (html == string.Empty) { return Array.Empty<Obj>(); }
             if (html.Contains("alert(\"搜索间隔: 30 秒\")"))
             {
-                return Array.Empty<Obj>().Append(new DingDianNovel() { Name = "顶点源搜索需间隔30秒", Url = "https://www.ddxs.vip", Source = this });
+                return Array.Empty<Obj>().Append(new DingDianNovel() { Cover = "https://i.postimg.cc/xTMSDvYK/nocover.jpg", Name = "顶点源搜索需间隔30秒", Url = "https://www.ddxs.vip", Source = this });
             }
             string pattern = "s2[\\s\\S]*?href=\"(.*?)\">(.*?)<[\\s\\S]*?s4\">(.*?)<[\\s\\S]*?s5\">(.*?)<";
             var matches = Regex.Matches(html, pattern);
@@ -40,7 +40,7 @@ namespace BrilliantSee.Models.Sources.NovelSources
                 {
                     Url = "https://www.ddxs.vip" + match.Groups[1].Value,
                     Name = match.Groups[2].Value,
-                    Cover = "https://z1.wzznft.com/i/2024/04/24/h3oadc.jpg",
+                    Cover = "https://i.postimg.cc/xTMSDvYK/nocover.jpg",
                     Author = match.Groups[3].Value,
                     LastestUpdateTime = match.Groups[4].Value,
                     Source = this,
