@@ -47,7 +47,8 @@ namespace BrilliantSee.Models.Objs
         /// <summary>
         /// 漫画简介
         /// </summary>
-        public string Description { get; set; } = string.Empty;
+        [ObservableProperty]
+        public string _description = string.Empty;
 
         /// <summary>
         /// 漫画链接
@@ -88,7 +89,8 @@ namespace BrilliantSee.Models.Objs
         /// <summary>
         /// 漫画状态
         /// </summary>
-        public string Status { get; set; } = string.Empty;
+        [ObservableProperty]
+        public string _status = string.Empty;
 
         /// <summary>
         /// 漫画章节

@@ -91,7 +91,6 @@ namespace BrilliantSee.ViewModels
                 if (isSuccess)
                 {
                     Obj!.LoadMoreData();
-                    //OnPropertyChanged(nameof(Obj));
                     await Task.Run(() => Obj!.LoadItemsAsync());
                     if (isExist && Obj!.IsUpdate)
                     {
