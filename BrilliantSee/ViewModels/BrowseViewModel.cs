@@ -4,6 +4,7 @@ using BrilliantSee.Services;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System.Collections.ObjectModel;
+using BrilliantSee.Models;
 
 namespace BrilliantSee.ViewModels
 {
@@ -31,7 +32,7 @@ namespace BrilliantSee.ViewModels
         /// <summary>
         /// 已加载章节图片集合
         /// </summary>
-        public ObservableCollection<string> Images { get; set; } = new();
+        public ObservableCollection<ComicImageItem> Images { get; set; } = new();
 
         /// <summary>
         /// 是否正在加载
@@ -66,6 +67,7 @@ namespace BrilliantSee.ViewModels
 
         private readonly DBService _db;
         private readonly MessageService _ms;
+        private readonly ComicImageManageService _imageManageService;
 
         public int CurrentChapterIndex
         {
@@ -81,10 +83,11 @@ namespace BrilliantSee.ViewModels
             }
         }
 
-        public BrowseViewModel(DBService db, MessageService ms)
+        public BrowseViewModel(DBService db, MessageService ms, ComicImageManageService imageManageService)
         {
             _db = db;
             _ms = ms;
+            _imageManageService = imageManageService;
             //_ai = MauiProgram.servicesProvider!.GetRequiredService<AIService>();
             //if (_ai.hasModel)
             //{
@@ -140,9 +143,9 @@ namespace BrilliantSee.ViewModels
             if (chapter.Obj.SourceCategory == SourceCategory.Comic)
             {
                 Images.Clear();
-                foreach (var image in chapter.PicUrls)
+                foreach (var url in chapter.PicUrls)
                 {
-                    Images.Add(image);
+                    Images.Add(_imageManageService.GetComicImageItem(url));
                 }
             }
             ButtonContent = chapter!.Index == chapter.Obj.ItemCount - 1 ? "已是最新一话" : "点击加载下一话";
