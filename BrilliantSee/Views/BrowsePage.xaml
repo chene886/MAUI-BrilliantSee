@@ -49,20 +49,24 @@
 
                                 <Image IsVisible="{Binding State, Converter={StaticResource PlatformConverter}, ConverterParameter={x:Static enum:ComicImageItemState.Success}}" Source="{Binding Source}" />
 
-                                <StackLayout VerticalOptions="Center">
+                                <StackLayout
+                                    HorizontalOptions="Center"
+                                    IsVisible="{Binding State, Converter={StaticResource PlatformConverter}, ConverterParameter={x:Static enum:ComicImageItemState.Failed}}"
+                                    VerticalOptions="Center">
                                     <Label
                                         FontFamily=""
                                         HeightRequest="600"
                                         HorizontalOptions="Center"
                                         HorizontalTextAlignment="Center"
-                                        IsVisible="{Binding State, Converter={StaticResource PlatformConverter}, ConverterParameter={x:Static enum:ComicImageItemState.Failed}}"
                                         Text="加载失败"
                                         TextColor="Black" />
 
                                     <Button
+                                        Margin="0,20,0,0"
                                         Command="{Binding BindingContext.ReLoadImageCommand, Source={x:Reference listView}}"
                                         CommandParameter="{Binding}"
                                         FontSize="24"
+                                        HorizontalOptions="Center"
                                         Text="重新加载"
                                         VerticalOptions="Center" />
                                 </StackLayout>

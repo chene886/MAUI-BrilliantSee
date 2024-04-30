@@ -11,9 +11,7 @@ namespace BrilliantSee.Services
 {
     public class ComicImageManageService
     {
-        public ComicImageManageService()
-        {
-        }
+        private readonly SemaphoreSlim _semaphore = new SemaphoreSlim(3, 3);
 
         /// <summary>
         /// 获取漫画图片项
@@ -43,7 +41,10 @@ namespace BrilliantSee.Services
         /// <param name="item"></param>
         public void CancelLoadImage(ComicImageItem item)
         {
-            item.Cts.Cancel();
+            if (item.State != ComicImageItemState.Success)
+            {
+                item.Cts.Cancel();
+            }
         }
 
         /// <summary>
@@ -58,26 +59,34 @@ namespace BrilliantSee.Services
 
             item.State = ComicImageItemState.Loading;
 
-            //判断是否存在缓存
-            var basePath = Path.Combine(FileSystem.AppDataDirectory, "imagesCache");
-            var key = GenerateCacheKey(item.Url);
-            var cachePath = Path.Combine(basePath, key + ".jpg");
-
-            if (!File.Exists(cachePath))
+            await _semaphore.WaitAsync(item.Cts.Token);
+            try
             {
-                //加载图片
-                using var client = new HttpClient();
-                var bytes = await client.GetByteArrayAsync(item.Url);
+                //判断是否存在缓存
+                var basePath = Path.Combine(FileSystem.AppDataDirectory, "imagesCache");
+                var key = GenerateCacheKey(item.Url);
+                var cachePath = Path.Combine(basePath, key + ".jpg");
 
-                //保存缓存
-                if (!Directory.Exists(basePath))
-                    Directory.CreateDirectory(basePath);
-                await File.WriteAllBytesAsync(cachePath, bytes);
+                if (!File.Exists(cachePath))
+                {
+                    //加载图片
+                    using var client = new HttpClient();
+                    var bytes = await client.GetByteArrayAsync(item.Url, item.Cts.Token);
+
+                    //保存缓存
+                    if (!Directory.Exists(basePath))
+                        Directory.CreateDirectory(basePath);
+                    await File.WriteAllBytesAsync(cachePath, bytes);
+                }
+
+                var source = ImageSource.FromFile(cachePath);
+                item.Source = source;
+                item.State = ComicImageItemState.Success;
             }
-
-            var source = ImageSource.FromFile(cachePath);
-            item.Source = source;
-            item.State = ComicImageItemState.Success;
+            finally
+            {
+                _semaphore.Release();
+            }
         })
             .ContinueWith(t =>
             {

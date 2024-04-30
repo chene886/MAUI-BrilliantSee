@@ -146,6 +146,7 @@ namespace BrilliantSee.ViewModels
                 foreach (var url in chapter.PicUrls)
                 {
                     Images.Add(_imageManageService.GetComicImageItem(url));
+                    await Task.Delay(100);
                 }
             }
             ButtonContent = chapter!.Index == chapter.Obj.ItemCount - 1 ? "已是最新一话" : "点击加载下一话";
@@ -181,6 +182,9 @@ namespace BrilliantSee.ViewModels
             }
             try
             {
+                //取消加载当前章节图片
+                CancelLoadCurrentChapterImage();
+
                 await LoadChapterResourcesAsync(newChapter, flag);
             }
             catch { }
@@ -229,6 +233,17 @@ namespace BrilliantSee.ViewModels
             }
             IsLoading = false;
             IsShowRefresh = false;
+        }
+
+        /// <summary>
+        /// 取消加载当前章节图片
+        /// </summary>
+        public void CancelLoadCurrentChapterImage()
+        {
+            foreach (var item in Images)
+            {
+                _imageManageService.CancelLoadImage(item);
+            }
         }
     }
 }
