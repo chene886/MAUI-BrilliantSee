@@ -110,7 +110,7 @@ namespace BrilliantSee.ViewModels
             await LoadChapterResourcesAsync(Chapter, "Init");
             OnPropertyChanged(nameof(Chapter));
             IsLoading = false;
-            if (Chapter.PicUrls.Any())
+            if (Chapter.PicUrls.Any() || Chapter.NovelContent != string.Empty)
             {
                 IsShowButton = true;
             }

@@ -12,6 +12,7 @@ namespace BrilliantSee
 
             MainPage = new AppShell();
 
+            //注册页面路由
             Routing.RegisterRoute("SettingPage", typeof(SettingPage));
             Routing.RegisterRoute("SearchPage", typeof(SearchPage));
             Routing.RegisterRoute("DetailPage", typeof(DetailPage));

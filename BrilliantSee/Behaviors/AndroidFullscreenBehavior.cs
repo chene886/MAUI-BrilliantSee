@@ -24,12 +24,16 @@ namespace BrilliantSee.Behaviors
                 window.SetStatusBarColor(Android.Graphics.Color.ParseColor("#FAFAFA"));
                 window!.DecorView.SystemUiFlags |= Android.Views.SystemUiFlags.LightNavigationBar;
                 window.SetNavigationBarColor(Android.Graphics.Color.ParseColor("#FAFAFA"));
+                //开启硬件加速
+                activity.RunOnUiThread(() => activity.Window.DecorView.SetLayerType(Android.Views.LayerType.Hardware, null));
 #endif
             }
             else
             {
 #if ANDROID
                 window!.DecorView.SystemUiFlags = (Android.Views.SystemUiFlags.Fullscreen | Android.Views.SystemUiFlags.HideNavigation | Android.Views.SystemUiFlags.ImmersiveSticky | Android.Views.SystemUiFlags.LayoutFullscreen | Android.Views.SystemUiFlags.LayoutHideNavigation);
+                //关闭硬件加速
+                activity.RunOnUiThread(() => activity.Window.DecorView.SetLayerType(Android.Views.LayerType.Software, null));
 #endif
             }
         }

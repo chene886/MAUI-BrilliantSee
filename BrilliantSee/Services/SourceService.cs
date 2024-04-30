@@ -25,22 +25,22 @@ namespace BrilliantSee.Services
         private Dictionary<string, Source> _sources = new();
 
         /// <summary>
-        /// 储存漫画的字典
+        /// 储存实体的字典
         /// </summary>
         private Dictionary<string, Obj> _objs = new();
 
         /// <summary>
-        /// 注册图源
+        /// 注册源
         /// </summary>
         public SourceService()
         {
-            //小说图源
+            //小说源
             var dingdian = new DingDianSource();
             var dingdianNovel = new DingDianNovel() { Source = dingdian };
             _sources.Add(dingdian.Name, dingdian);
             _objs.Add(dingdian.Name, dingdianNovel);
 
-            //漫画图源
+            //漫画源
             var baozi = new BaoziSource();
             var gufeng = new GufengSource();
             //var goda = new GodaSource();
@@ -58,7 +58,7 @@ namespace BrilliantSee.Services
             //_objs.Add(goda.Name, godaComic);
             _objs.Add(godaEn.Name, godaEnComic);
 
-            //动漫图源
+            //动漫源
             var yhwang = new YHWangSource();
             //var omofun = new OmoFunSource();
             var yhwangVideo = new YHWangVideo() { Source = yhwang };
@@ -70,7 +70,7 @@ namespace BrilliantSee.Services
         }
 
         /// <summary>
-        /// 获取所有图源
+        /// 获取所有源
         /// </summary>
         /// <returns></returns>
         public List<Source> GetSources()
@@ -79,11 +79,12 @@ namespace BrilliantSee.Services
         }
 
         /// <summary>
-        /// 搜索漫画
+        /// 搜索
         /// </summary>
         /// <param name="keyword">搜索关键词</param>
         /// <param name="allObjs">保存全部结果的集合</param>
         /// <param name="cateObjs">保存具体类型结果的集合</param>
+        /// <param name="flag">搜索模式:初始搜索和追加搜索</param>
         /// <param name="category">搜索的源类别</param>
         /// <returns></returns>
         public async Task SearchAsync(string keyword, ObservableCollection<Obj> allObjs, ObservableCollection<Obj> cateObjs, string flag, SourceCategory category)
@@ -107,7 +108,7 @@ namespace BrilliantSee.Services
                     source.ResultNum++;
                 }
             }
-            //并发使用所有图源去搜索
+            //并发使用所有源去搜索
             var tasks = new List<Task>();
             foreach (var source in sources)
             {
@@ -118,6 +119,7 @@ namespace BrilliantSee.Services
                     {
                         foreach (var item in result)
                         {
+                            //初始搜索时，将第一个源除外的每个源的第一个结果插入到集合的第二个位置
                             if (item == result.First() && flag == "Init")
                             {
                                 await MainThread.InvokeOnMainThreadAsync(() =>
@@ -144,9 +146,9 @@ namespace BrilliantSee.Services
         }
 
         /// <summary>
-        /// 根据图源名获取图源实体
+        /// 根据源名获取源
         /// </summary>
-        /// <param name="name">图源名</param>
+        /// <param name="name">源名</param>
         /// <returns></returns>
         public Source? GetSource(string name)
         {
@@ -155,9 +157,9 @@ namespace BrilliantSee.Services
         }
 
         /// <summary>
-        /// 根据图源名获取图源漫画实体
+        /// 根据源名获取实体
         /// </summary>
-        /// <param name="name">图源名</param>
+        /// <param name="name">源名</param>
         /// <returns></returns>
         public Obj? GetComic(string name)
         {
