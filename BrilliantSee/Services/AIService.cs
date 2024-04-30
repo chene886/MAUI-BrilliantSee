@@ -1,27 +1,23 @@
-﻿using Azure.AI.OpenAI;
-using BrilliantSee.Models;
-using Microsoft.SemanticKernel;
+﻿using Microsoft.SemanticKernel;
 using Microsoft.SemanticKernel.Connectors.OpenAI;
-using BrilliantSee.Models.Objs;
-using BrilliantSee.Models.Enums;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.ComponentModel;
-using System.Runtime.Intrinsics.Arm;
-using Microsoft.SemanticKernel.Services;
-using System.Threading.Channels;
-using System.Reflection;
 
 namespace BrilliantSee.Services
 {
     public class AIService
     {
         public Kernel kernel { get; set; } = new Kernel();
+
+        /// <summary>
+        /// 是否已经初始化模型
+        /// </summary>
         public bool hasModel { get; set; } = false;
 
+        /// <summary>
+        /// 初始化模型
+        /// </summary>
+        /// <param name="model">模型名</param>
+        /// <param name="key">模型key</param>
+        /// <param name="url">模型代理地址</param>
         public void InitKernel(string model, string key, string url)
         {
             var handler = new OpenAIHttpClentHandler();
@@ -35,17 +31,29 @@ namespace BrilliantSee.Services
             hasModel = true;
         }
 
+        /// <summary>
+        /// 导入插件
+        /// </summary>
+        /// <param name="plugin"></param>
         public void ImportPlugins(Object plugin)
         {
             kernel.ImportPluginFromObject(plugin);
         }
 
+        /// <summary>
+        /// 移除插件
+        /// </summary>
         public void RemovePlugins()
         {
             if (kernel.Plugins.Any())
                 kernel.Plugins.Remove(kernel.Plugins.First());
         }
 
+        /// <summary>
+        /// 对输入的问题进行求解做出动作和回答
+        /// </summary>
+        /// <param name="msg"></param>
+        /// <returns></returns>
         public async Task<string> SolvePromptAsync(string msg)
         {
             OpenAIPromptExecutionSettings settings = new()
