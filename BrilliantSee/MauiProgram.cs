@@ -70,6 +70,7 @@ namespace BrilliantSee
             services.AddSingleton<SourceService>();
             services.AddSingleton<AIService>();
             services.AddSingleton<MessageService>();
+            services.AddSingleton<ComicImageManageService>();
         }
     }
 }

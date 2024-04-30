@@ -22,4 +22,14 @@ public partial class BrowsePage : ContentPage
             if (_vm.Images.Count > 0) this.listView.ScrollTo(_vm.Images.First(), ScrollToPosition.Start, false);
         }
     }
+
+    /// <summary>
+    /// 退出页面时，取消加载当前章节图片
+    /// </summary>
+    protected override void OnDisappearing()
+    {
+        _vm.CancelLoadCurrentChapterImage();
+
+        base.OnDisappearing();
+    }
 }
