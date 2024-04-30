@@ -201,6 +201,16 @@ namespace BrilliantSee.ViewModels
             return true;
         }
 
+        /// <summary>
+        /// 重新加载图片
+        /// </summary>
+        /// <param name="item"></param>
+        [RelayCommand]
+        private void ReLoadImage(ComicImageItem item)
+        {
+            _imageManageService.RetryLoadImage(item);
+        }
+
         [RelayCommand]
         public async Task LoadNearChapterAsync(string flag)
         {

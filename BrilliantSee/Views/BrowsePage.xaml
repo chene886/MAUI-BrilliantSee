@@ -4,7 +4,8 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:behavior="clr-namespace:BrilliantSee.Behaviors"
-    xmlns:exts="clr-namespace:BrilliantSee.Expansions"
+    xmlns:enum="clr-namespace:BrilliantSee.Models.Enums"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
     Title=""
     Shell.NavBarIsVisible="False"
     Shell.TabBarIsVisible="False">
@@ -17,41 +18,7 @@
             <Setter Property="TextColor" Value="#E0FFFFFF" />
         </Style>
 
-        <DataTemplate x:Key="LoadingTemplate">
-            <ViewCell>
-                <Grid>
-                    <Label
-                        FontFamily=""
-                        HeightRequest="600"
-                        HorizontalOptions="Center"
-                        HorizontalTextAlignment="Center"
-                        Text="加载中..."
-                        TextColor="Black"
-                        VerticalTextAlignment="Center" />
-                </Grid>
-            </ViewCell>
-        </DataTemplate>
-
-        <DataTemplate x:Key="SuccessTemplate">
-            <ViewCell>
-                <Image Source="{Binding Source}" />
-            </ViewCell>
-        </DataTemplate>
-
-        <DataTemplate x:Key="FailedTemplate">
-            <ViewCell>
-                <Grid>
-                    <Label
-                        FontFamily=""
-                        HeightRequest="600"
-                        HorizontalOptions="Center"
-                        HorizontalTextAlignment="Center"
-                        Text="加载失败"
-                        TextColor="Black"
-                        VerticalTextAlignment="Center" />
-                </Grid>
-            </ViewCell>
-        </DataTemplate>
+        <toolkit:EnumToBoolConverter x:Key="PlatformConverter" />
     </ContentPage.Resources>
     <Grid IgnoreSafeArea="True">
         <RefreshView
@@ -67,10 +34,41 @@
                 SelectionMode="None"
                 SeparatorVisibility="None">
                 <ListView.ItemTemplate>
-                    <exts:ComicImageItemTemplateSelector
-                        FailedTemplate="{StaticResource FailedTemplate}"
-                        LoadingTemplate="{StaticResource LoadingTemplate}"
-                        SuccessTemplate="{StaticResource SuccessTemplate}" />
+                    <DataTemplate>
+                        <ViewCell>
+                            <Grid>
+                                <Label
+                                    FontFamily=""
+                                    HeightRequest="600"
+                                    HorizontalOptions="Center"
+                                    HorizontalTextAlignment="Center"
+                                    IsVisible="{Binding State, Converter={StaticResource PlatformConverter}, ConverterParameter={x:Static enum:ComicImageItemState.Loading}}"
+                                    Text="加载中..."
+                                    TextColor="Black"
+                                    VerticalTextAlignment="Center" />
+
+                                <Image IsVisible="{Binding State, Converter={StaticResource PlatformConverter}, ConverterParameter={x:Static enum:ComicImageItemState.Success}}" Source="{Binding Source}" />
+
+                                <StackLayout VerticalOptions="Center">
+                                    <Label
+                                        FontFamily=""
+                                        HeightRequest="600"
+                                        HorizontalOptions="Center"
+                                        HorizontalTextAlignment="Center"
+                                        IsVisible="{Binding State, Converter={StaticResource PlatformConverter}, ConverterParameter={x:Static enum:ComicImageItemState.Failed}}"
+                                        Text="加载失败"
+                                        TextColor="Black" />
+
+                                    <Button
+                                        Command="{Binding BindingContext.ReLoadImageCommand, Source={x:Reference listView}}"
+                                        CommandParameter="{Binding}"
+                                        FontSize="24"
+                                        Text="重新加载"
+                                        VerticalOptions="Center" />
+                                </StackLayout>
+                            </Grid>
+                        </ViewCell>
+                    </DataTemplate>
                 </ListView.ItemTemplate>
                 <ListView.Footer>
                     <Button

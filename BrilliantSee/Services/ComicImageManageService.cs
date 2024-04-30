@@ -3,6 +3,7 @@ using BrilliantSee.Models.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -57,13 +58,24 @@ namespace BrilliantSee.Services
 
             item.State = ComicImageItemState.Loading;
 
-            //这里可以做一下缓存机制
+            //判断是否存在缓存
+            var basePath = Path.Combine(FileSystem.AppDataDirectory, "imagesCache");
+            var key = GenerateCacheKey(item.Url);
+            var cachePath = Path.Combine(basePath, key + ".jpg");
 
-            //加载图片
-            using var client = new HttpClient();
-            var bytes = await client.GetByteArrayAsync(item.Url);
-            var source = ImageSource.FromStream(() => new MemoryStream(bytes));
+            if (!File.Exists(cachePath))
+            {
+                //加载图片
+                using var client = new HttpClient();
+                var bytes = await client.GetByteArrayAsync(item.Url);
 
+                //保存缓存
+                if (!Directory.Exists(basePath))
+                    Directory.CreateDirectory(basePath);
+                await File.WriteAllBytesAsync(cachePath, bytes);
+            }
+
+            var source = ImageSource.FromFile(cachePath);
             item.Source = source;
             item.State = ComicImageItemState.Success;
         })
@@ -74,5 +86,16 @@ namespace BrilliantSee.Services
                     item.State = ComicImageItemState.Failed;
                 }
             });
+
+        /// <summary>
+        /// 生成缓存键
+        /// </summary>
+        /// <param name="url"></param>
+        /// <returns></returns>
+        private static string GenerateCacheKey(string url)
+        {
+            var bytes = MD5.HashData(Encoding.UTF8.GetBytes(url));
+            return BitConverter.ToString(bytes).Replace("-", "");
+        }
     }
 }
