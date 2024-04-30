@@ -72,7 +72,7 @@ public partial class FavoritePage : ContentPage
             if (match.Success)
             {
                 var version = match.Groups[1].Value;
-                if (version != "BrilliantSee_v2.1.0")
+                if (version != "BrilliantSee_v2.1.7")
                 {
                     bool answer = await DisplayAlert("检测到新版本", "是否更新?", "快让朕瞧瞧", "朕不感兴趣");
                     if (answer)
