@@ -23,7 +23,7 @@
     <Grid IgnoreSafeArea="True">
         <RefreshView
             x:Name="list"
-            Command="{Binding LoadNearChapterCommand}"
+            Command="{Binding LoadNewChapterCommand}"
             CommandParameter="Last"
             IsRefreshing="{Binding IsShowRefresh}">
             <ListView
@@ -75,17 +75,20 @@
                     </DataTemplate>
                 </ListView.ItemTemplate>
                 <ListView.Footer>
-                    <Button
+                    <Label
                         Padding="0,24,0,40"
-                        BackgroundColor="White"
-                        Clicked="Button_Clicked"
-                        CornerRadius="0"
+                        BackgroundColor="Transparent"
                         FontFamily=""
                         FontSize="24"
+                        HorizontalTextAlignment="Center"
                         IsVisible="{Binding IsShowButton}"
                         Text="{Binding ButtonContent}"
                         TextColor="{StaticResource Gray600}"
-                        VerticalOptions="Center" />
+                        VerticalOptions="Center">
+                        <Label.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding LoadNewChapterCommand}" CommandParameter="Next" />
+                        </Label.GestureRecognizers>
+                    </Label>
                 </ListView.Footer>
             </ListView>
         </RefreshView>

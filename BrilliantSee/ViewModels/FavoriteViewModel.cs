@@ -115,9 +115,10 @@ namespace BrilliantSee.ViewModels
                     var hasUpdate = false;
                     var message = "暂无收藏内容";
                     _ = MainThread.InvokeOnMainThreadAsync(() => { IsCheckingUpdate = true; });
-                    if (Objs.Count() != 0)
+                    var objs = await _db.GetObjsAsync(DBObjCategory.Favorite, CurrentCategory);
+                    if (objs.Count() != 0)
                     {
-                        foreach (var item in Objs)
+                        foreach (var item in objs)
                         {
                             if (!item.IsUpdate)
                             {

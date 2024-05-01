@@ -11,16 +11,15 @@ public partial class BrowsePage : ContentPage
         _vm = vm;
         this.BindingContext = _vm;
         InitializeComponent();
+        _vm.ScrollToTop += OnScrollToTop;
     }
 
-    private void Button_Clicked(object sender, EventArgs e)
+    /// <summary>
+    /// 滚动到顶部
+    /// </summary>
+    private void OnScrollToTop()
     {
-        var button = sender as Button;
-        if (button!.Text == "点击加载下一话")
-        {
-            this.list.Command.Execute("Next");
-            if (_vm.Images.Count > 0) this.listView.ScrollTo(_vm.Images.First(), ScrollToPosition.Start, false);
-        }
+        this.listView.ScrollTo(_vm.Images.First(), position: ScrollToPosition.Start,  false);
     }
 
     /// <summary>

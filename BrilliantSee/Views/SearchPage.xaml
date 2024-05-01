@@ -197,7 +197,7 @@
                                             FontFamily=""
                                             FontSize="18"
                                             HorizontalOptions="Start"
-                                            LineBreakMode="NoWrap"
+                                            LineBreakMode="TailTruncation"
                                             MaximumWidthRequest="180"
                                             Text="{Binding Name}" />
                                         <Label

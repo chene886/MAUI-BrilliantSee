@@ -95,7 +95,7 @@ namespace BrilliantSee.Models.Objs.Comics
             var match = Regex.Match(chaptershtml, "manga-chapter\"[\\s\\S]*?>([\\s\\S]*?)<");
             if (match is not null)
             {
-                return match.Groups[1].Value;
+                return match.Groups[1].Value.Replace("\\n", "").Replace(" ", "");
             }
             else { return null; }
         }

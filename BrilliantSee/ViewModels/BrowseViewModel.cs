@@ -10,6 +10,9 @@ namespace BrilliantSee.ViewModels
 {
     public partial class BrowseViewModel : ObservableObject, IQueryAttributable
     {
+        private readonly DBService _db;
+        private readonly MessageService _ms;
+        private readonly ComicImageManageService _imageManageService;
         //private readonly AIService _ai;
 
         /// <summary>
@@ -30,7 +33,7 @@ namespace BrilliantSee.ViewModels
         public List<Item> _loadedChapter = new List<Item>();
 
         /// <summary>
-        /// 已加载章节图片集合
+        /// 当前章节图片集合
         /// </summary>
         public ObservableCollection<ComicImageItem> Images { get; set; } = new();
 
@@ -40,22 +43,34 @@ namespace BrilliantSee.ViewModels
         [ObservableProperty]
         public bool _isLoading = false;
 
+        /// <summary>
+        /// 是否显示刷新按钮
+        /// </summary>
         [ObservableProperty]
         public bool _isShowRefresh = false;
 
+        /// <summary>
+        /// 是否显示加载下一章节按钮
+        /// </summary>
         [ObservableProperty]
         public bool _isShowButton = false;
 
+        /// <summary>
+        /// 加载下一章节按钮内容
+        /// </summary>
         [ObservableProperty]
         public string _buttonContent = "点击加载下一话";
 
+        /// <summary>
+        /// 滚动到顶部事件
+        /// </summary>
         public event Action ScrollToTop = delegate { };
 
-        /// <summary>
-        /// 当前页码
-        /// </summary>
-        [ObservableProperty]
-        public int _currentPageNum = 1;
+        ///// <summary>
+        ///// 当前页码
+        ///// </summary>
+        //[ObservableProperty]
+        //public int _currentPageNum = 1;
 
         /// <summary>
         /// 定时器
@@ -67,9 +82,6 @@ namespace BrilliantSee.ViewModels
         /// </summary>
         public string CurrentTime => DateTime.Now.ToString("HH:mm");
 
-        private readonly DBService _db;
-        private readonly MessageService _ms;
-        private readonly ComicImageManageService _imageManageService;
 
         public int CurrentChapterIndex
         {
@@ -112,10 +124,10 @@ namespace BrilliantSee.ViewModels
             }
             IsLoading = true;
             _ = Chapter.Obj.ChangeLastReadedItemIndex(Chapter.Index, _db);
-            await LoadChapterResourcesAsync(Chapter, "Init");
+            await LoadChapterResourcesAsync(Chapter);
             OnPropertyChanged(nameof(Chapter));
             IsLoading = false;
-            if (Chapter.PicUrls.Any() || Chapter.NovelContent != string.Empty)
+            if (Images.Any() || Chapter.NovelContent != string.Empty)
             {
                 IsShowButton = true;
             }
@@ -123,12 +135,11 @@ namespace BrilliantSee.ViewModels
         }
 
         /// <summary>
-        /// 加载章节图片
+        /// 加载章节图片或小说内容
         /// </summary>
         /// <param name="chapter">指定的章节</param>
-        /// <param name="flag">加载模式</param>
         /// <returns></returns>
-        private async Task LoadChapterResourcesAsync(Item chapter, string flag)
+        private async Task LoadChapterResourcesAsync(Item chapter)
         {
             if (chapter.PicUrls.Count == 0 && chapter.NovelContent == string.Empty)
             {
@@ -155,7 +166,7 @@ namespace BrilliantSee.ViewModels
         }
 
         /// <summary>
-        /// 获取新章节并加载图片
+        /// 更新章节，加载资源
         /// </summary>
         /// <param name="flag">指定上一话或下一话</param>
         /// <returns></returns>
@@ -176,7 +187,7 @@ namespace BrilliantSee.ViewModels
             else
             {
                 hasNew = true;
-                newChapter = Chapter!.Obj.GetNearItem(Chapter, flag);
+                newChapter = Chapter!.Obj.GetNewItem(Chapter, flag);
                 if (newChapter is null)
                 {
                     return false;
@@ -187,7 +198,7 @@ namespace BrilliantSee.ViewModels
                 //取消加载当前章节图片
                 CancelLoadCurrentChapterImage();
 
-                await LoadChapterResourcesAsync(newChapter, flag);
+                await LoadChapterResourcesAsync(newChapter);
             }
             catch { }
             if (hasNew)
@@ -217,12 +228,18 @@ namespace BrilliantSee.ViewModels
             _imageManageService.RetryLoadImage(item);
         }
 
+        /// <summary>
+        /// 加载新章节
+        /// </summary>
+        /// <param name="flag">上一章或下一章</param>
+        /// <returns></returns>
         [RelayCommand]
-        public async Task LoadNearChapterAsync(string flag)
+        public async Task LoadNewChapterAsync(string flag)
         {
             var result = false;
-            var unSuccess = flag == "Next" ? "已是最新一话" : "已是第一话";
-            IsLoading = true;
+
+            var isNext = flag == "Next";
+            if(isNext)IsLoading = true;
             _ms.WriteMessage("正在加载...");
             result = await UpdateChapterAsync(flag);
             if (result)
@@ -232,9 +249,10 @@ namespace BrilliantSee.ViewModels
             }
             else
             {
+                var unSuccess = flag == "Next" ? "已是最新一话" : "已是第一话";
                 _ms.WriteMessage(unSuccess);
             }
-            IsLoading = false;
+            if(isNext)IsLoading = false;
             IsShowRefresh = false;
         }
 

@@ -19,18 +19,15 @@ public partial class DetailPage : ContentPage
     //    this.audio.IsVisible = await _vm._db.GetAudioStatus();
     //}
 
+    /// <summary>
+    /// 按钮点击效果
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
     private async void TapGestureRecognizer_Tapped(object sender, TappedEventArgs e)
     {
         var obj = sender! as Frame;
-        var shadow = obj!.Shadow;
-        obj!.Shadow = new Shadow()
-        {
-            Offset = new Point(0, 8),
-            Opacity = (float)0.3,
-            Radius = 14,
-        };
         await obj!.ScaleTo(1.05, 100);
         await obj!.ScaleTo(1, 100);
-        obj!.Shadow = shadow;
     }
 }

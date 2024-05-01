@@ -48,11 +48,10 @@
                         Padding="0"
                         BorderColor="White"
                         CornerRadius="5"
-                        HeightRequest="170">
+                        HeightRequest="176">
                         <Grid>
                             <Image
                                 Aspect="AspectFill"
-                                HeightRequest="170"
                                 Source="{Binding Obj.Cover}"
                                 WidthRequest="120" />
                             <Label
@@ -69,6 +68,7 @@
                     <VerticalStackLayout
                         Grid.Row="1"
                         Grid.Column="1"
+                        Margin="0,-4,0,0"
                         Spacing="6">
                         <Label
                             FontFamily=""
@@ -85,6 +85,7 @@
                         <Label
                             FontFamily=""
                             FontSize="13"
+                            LineBreakMode="TailTruncation"
                             MaxLines="5"
                             Text="{Binding Obj.Description}"
                             TextColor="{StaticResource Gray500}" />

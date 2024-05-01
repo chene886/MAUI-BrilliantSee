@@ -186,7 +186,7 @@ namespace BrilliantSee.Models.Objs
         /// <param name="chapter">当前章节</param>
         /// <param name="flag">获取上一章节或下一章节的标志</param>
         /// <returns></returns>
-        public Item? GetNearItem(Item chapter, string flag)
+        public Item? GetNewItem(Item chapter, string flag)
         {
             var tempItems = Items.ToList();
             int index = tempItems.IndexOf(chapter);

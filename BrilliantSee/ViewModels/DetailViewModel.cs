@@ -12,15 +12,17 @@ namespace BrilliantSee.ViewModels
     {
         public readonly DBService _db;
         private readonly MessageService _ms;
-
         //private readonly AIService _ai;
 
         /// <summary>
-        /// 当前漫画
+        /// 当前实体
         /// </summary>
         [ObservableProperty]
         private Obj? _obj;
 
+        /// <summary>
+        /// 视频url
+        /// </summary>
         [ObservableProperty]
         public string _videoUrl = string.Empty;
 
@@ -48,6 +50,9 @@ namespace BrilliantSee.ViewModels
         [ObservableProperty]
         private bool _isGettingResult;
 
+        /// <summary>
+        /// 当前显示的剧集(视频页)
+        /// </summary>
         [ObservableProperty]
         public IEnumerable<Item> _itemsOnDisPlay = new List<Item>();
 
@@ -64,7 +69,7 @@ namespace BrilliantSee.ViewModels
         }
 
         /// <summary>
-        /// 设置当前漫画，加载更多漫画数据，储存漫画到历史记录
+        /// 设置当前实体，加载更多实体数据，储存为历史记录
         /// </summary>
         /// <param name="query">储存导航传递数据的字典</param>
         public async void ApplyQueryAttributes(IDictionary<string, object> query)
@@ -77,6 +82,7 @@ namespace BrilliantSee.ViewModels
 
             IsGettingResult = true;
             IsReverseListEnabled = false;
+            //判断是否已收藏，设置收藏图标
             var isExist = await _db.IsComicExistAsync(Obj!, DBObjCategory.Favorite);
             if (isExist)
             {
@@ -84,6 +90,7 @@ namespace BrilliantSee.ViewModels
                 Obj!.Category = DBObjCategory.Favorite;
             }
             else FavoriteImage = ImageSource.FromFile("not_favorite.png");
+            //如果数据未加载，加载更多数据和章节或剧集
             var isSuccess = true;
             if (!Obj!.Items.Any())
             {
@@ -108,7 +115,7 @@ namespace BrilliantSee.ViewModels
         }
 
         /// <summary>
-        /// 储存漫画到历史记录
+        /// 添加当前实体历史记录
         /// </summary>
         private async Task AddHistoryAsync()
         {
@@ -116,7 +123,7 @@ namespace BrilliantSee.ViewModels
         }
 
         /// <summary>
-        /// 切换收藏状态并储存漫画或删除漫画
+        /// 切换收藏状态并储存实体或删除实体
         /// </summary>
         /// <returns></returns>
         [RelayCommand]
@@ -142,7 +149,7 @@ namespace BrilliantSee.ViewModels
         }
 
         /// <summary>
-        /// 跳转到浏览器浏览漫画
+        /// 跳转到浏览器浏览
         /// </summary>
         /// <returns></returns>
         [RelayCommand]
@@ -152,7 +159,7 @@ namespace BrilliantSee.ViewModels
         }
 
         /// <summary>
-        /// 章节列表倒序
+        /// 章节或剧集列表倒序
         /// </summary>
         /// <returns></returns>
         [RelayCommand]
@@ -161,6 +168,7 @@ namespace BrilliantSee.ViewModels
             IsGettingResult = true;
             IsReverseListEnabled = false;
             Obj!.IsReverseList = !Obj.IsReverseList;
+            //切换排序图标
             if (!Obj!.IsReverseList)
             {
                 OrderImage = ImageSource.FromFile("positive.png");
@@ -182,7 +190,7 @@ namespace BrilliantSee.ViewModels
         }
 
         /// <summary>
-        /// 跳转到章节浏览页
+        /// 跳转到漫画浏览页或小说页
         /// </summary>
         /// <param name="chapter">导航传递章节</param>
         /// <returns></returns>
@@ -200,6 +208,11 @@ namespace BrilliantSee.ViewModels
             }
         }
 
+        /// <summary>
+        /// 设置媒体播放器播放指定视频url，若未获取视频url则获取
+        /// </summary>
+        /// <param name="video">指定的视频</param>
+        /// <returns></returns>
         [RelayCommand]
         private async Task SetVideoAsync(Item video)
         {
@@ -222,7 +235,7 @@ namespace BrilliantSee.ViewModels
         }
 
         /// <summary>
-        /// 跳转到最后浏览章节
+        /// 打开最后浏览记录（若有）
         /// </summary>
         [RelayCommand]
         private async Task OpenHistoryAsync()
@@ -239,11 +252,13 @@ namespace BrilliantSee.ViewModels
             }
         }
 
+        /// <summary>
+        /// 设置当前线路的剧集集合
+        /// </summary>
+        /// <param name="route">指定的线路</param>
         public void SetItemsOnDisplay(string route)
         {
-            //IsGettingResult = true;
             ItemsOnDisPlay = Obj!.Items.Where(c => c.Route == route);
-            //IsGettingResult = false;
         }
     }
 }
