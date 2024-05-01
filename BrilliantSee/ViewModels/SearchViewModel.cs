@@ -14,17 +14,39 @@ namespace BrilliantSee.ViewModels
     {
         private readonly SourceService _sourceService;
         private readonly MessageService _ms;
-
-        public readonly DBService _db;
-
+        private readonly DBService _db;
         //private readonly AIService _ai;
 
-        public ObservableCollection<Obj> AllObjs { get; set; } = new();
-        public ObservableCollection<Obj> Novels { get; set; } = new();
-        public ObservableCollection<Obj> Comics { get; set; } = new();
-        public ObservableCollection<Obj> Videos { get; set; } = new();
+        /// <summary>
+        /// 当前选中的类别
+        /// </summary>
+        public SourceCategory CurrentCategory { get; set; } = SourceCategory.All;
+        /// <summary>
+        /// 当前类别的对象数量
+        /// </summary>
+        public int CurrentObjsCount { get; set; } = 0;
 
-        public Dictionary<SourceCategory, ObservableCollection<Obj>> ObjContainers { get; set; } = new();
+        /// <summary>
+        /// 所有类别的对象集合
+        /// </summary>
+        public ObservableCollection<Obj> AllObjs { get; set; } = new();
+        /// <summary>
+        /// 小说类别的对象集合
+        /// </summary>
+        private ObservableCollection<Obj> Novels { get; set; } = new();
+        /// <summary>
+        /// 漫画类别的对象集合
+        /// </summary>
+        private ObservableCollection<Obj> Comics { get; set; } = new();
+        /// <summary>
+        /// 动漫类别的对象集合
+        /// </summary>
+        private ObservableCollection<Obj> Videos { get; set; } = new();
+
+        /// <summary>
+        /// 类别与类别对象集合的映射
+        /// </summary>
+        private Dictionary<SourceCategory, ObservableCollection<Obj>> ObjContainers { get; set; } = new();
 
         /// <summary>
         /// 是否正在获取结果
@@ -32,17 +54,28 @@ namespace BrilliantSee.ViewModels
         [ObservableProperty]
         private bool _isGettingResult;
 
+        /// <summary>
+        /// 是否显示源列表
+        /// </summary>
         [ObservableProperty]
         private bool _isSourceListVisible = false;
 
-        private string Keyword = string.Empty;
-
+        /// <summary>
+        /// 源列表
+        /// </summary>
         [ObservableProperty]
         private List<Source> _sources = new();
-
+        /// <summary>
+        /// 源列表组
+        /// </summary>
         public ObservableCollection<Group<Source>> SourceGroups { get; set; } = new ObservableCollection<Group<Source>>();
 
+        /// <summary>
+        /// 数据库源设置项
+        /// </summary>
         private List<SettingItem> SettingItems { get; set; } = new();
+
+        private string Keyword = string.Empty;
 
         public SearchViewModel(SourceService sourceService, DBService db, MessageService ms)
         {
@@ -59,6 +92,7 @@ namespace BrilliantSee.ViewModels
             //    _ai.ImportPlugins(new Services.Plugins.SearchPlugins(_db, _sourceService));
             //}
 
+            ObjContainers.Add(SourceCategory.All, AllObjs);
             ObjContainers.Add(SourceCategory.Novel, Novels);
             ObjContainers.Add(SourceCategory.Comic, Comics);
             ObjContainers.Add(SourceCategory.Video, Videos);
@@ -67,7 +101,11 @@ namespace BrilliantSee.ViewModels
             SourceGroups.Add(new Group<Source>("动漫", Sources.Where(s => s.Category == SourceCategory.Video).ToList()));
         }
 
-        public async Task InitSettingsAsync()
+        /// <summary>
+        /// 初始化源设置项
+        /// </summary>
+        /// <returns></returns>
+        private async Task InitSettingsAsync()
         {
             SettingItems = await _db.GetSettingItemsAsync("Source");
             foreach (var source in Sources)
@@ -79,7 +117,7 @@ namespace BrilliantSee.ViewModels
         /// <summary>
         /// 搜索漫画
         /// </summary>
-        /// <param name="keyword"></param>
+        /// <param name="keyword">搜索关键词</param>
         /// <returns></returns>
         [RelayCommand]
         private async Task SearchAsync(string keyword)
@@ -114,13 +152,17 @@ namespace BrilliantSee.ViewModels
             }
         }
 
-        public async Task GetMoreAsync(SourceCategory category)
+        /// <summary>
+        /// 获取更多结果
+        /// </summary>
+        /// <returns></returns>
+        public async Task GetMoreAsync()
         {
             _ms.WriteMessage("正在加载更多结果");
             var count = Comics.Count + Videos.Count + Novels.Count;
             IsGettingResult = true;
             IsSourceListVisible = false;
-            if (category == SourceCategory.All)
+            if (CurrentCategory == SourceCategory.All)
             {
                 List<Task> tasks = new List<Task>();
                 foreach (var key in ObjContainers.Keys)
@@ -129,14 +171,14 @@ namespace BrilliantSee.ViewModels
                 }
                 await Task.WhenAll(tasks);
             }
-            else await _sourceService.SearchAsync(Keyword, AllObjs, ObjContainers[category], "More", category);
+            else await _sourceService.SearchAsync(Keyword, AllObjs, ObjContainers[CurrentCategory], "More", CurrentCategory);
             var message = Comics.Count + Videos.Count + Novels.Count > count ? $"加载了{Comics.Count + Videos.Count + Novels.Count - count}个结果" : "没有更多结果了";
             _ms.WriteMessage(message);
             IsGettingResult = false;
         }
 
         /// <summary>
-        /// 打开漫画详情页并传递漫画对象
+        /// 打开详情页或视频页并传递实体
         /// </summary>
         /// <param name="obj">指定打开的实体</param>
         /// <returns></returns>
@@ -144,11 +186,15 @@ namespace BrilliantSee.ViewModels
         private async Task OpenObjAsync(Obj obj)
         {
             IsSourceListVisible = false;
-            //obj.Items = new List<Item>();
             var page = obj.SourceCategory == SourceCategory.Video ? "VideoPage" : "DetailPage";
             await Shell.Current.GoToAsync(page, new Dictionary<string, object> { { "Obj", obj } });
         }
 
+        /// <summary>
+        /// 更改源选择状态并更新数据库
+        /// </summary>
+        /// <param name="source"></param>
+        /// <returns></returns>
         [RelayCommand]
         private async Task ChangeIsSelectedAsync(Source source)
         {
@@ -158,10 +204,32 @@ namespace BrilliantSee.ViewModels
             await _db.UpdateSettingItemAsync(item);
         }
 
+        /// <summary>
+        /// 更改源列表可见性
+        /// </summary>
         [RelayCommand]
         private void ChangeSourceListVisible()
         {
             IsSourceListVisible = !IsSourceListVisible;
+        }
+
+        /// <summary>
+        /// 更改当前类别
+        /// </summary>
+        /// <param name="category"></param>
+        public void ChangeCurrentCategory(SourceCategory category)
+        {
+            CurrentCategory = category;
+            CurrentObjsCount = ObjContainers[category].Count;
+        }
+
+        /// <summary>
+        /// 获取当前类别的对象集合
+        /// </summary>
+        /// <returns></returns>
+        public ObservableCollection<Obj> GetObjsOnDisplay()
+        {
+            return ObjContainers[CurrentCategory];
         }
     }
 }

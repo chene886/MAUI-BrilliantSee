@@ -8,21 +8,40 @@ public partial class FavoritePage : ContentPage
 {
     private readonly FavoriteViewModel _vm;
 
+    /// <summary>
+    /// 按钮文本对应的类别
+    /// </summary>
+    private Dictionary<string, SourceCategory> Categories;
+
+    /// <summary>
+    /// 类别对应的按钮
+    /// </summary>
+    private Dictionary<SourceCategory, Button> Buttons;
+
     public FavoritePage(FavoriteViewModel vm)
     {
         _vm = vm;
         this.BindingContext = _vm;
         InitializeComponent();
+        Categories = new Dictionary<string, SourceCategory>()
+        {
+            { "全部", SourceCategory.All },
+            { "小说", SourceCategory.Novel },
+            { "漫画", SourceCategory.Comic },
+            { "动漫", SourceCategory.Video }
+        };
+        Buttons = new Dictionary<SourceCategory, Button>()
+        {
+            { SourceCategory.All, all },
+            { SourceCategory.Novel, novels },
+            { SourceCategory.Comic, comics },
+            { SourceCategory.Video, videos }
+        };
         _ = CheckUpdate();
     }
 
-    private void JumpToSearchPage(object sender, EventArgs e)
-    {
-        Shell.Current.GoToAsync("SearchPage");
-    }
-
     /// <summary>
-    /// 页面出现时加载收藏的漫画
+    /// 页面出现时加载收藏的实体
     /// </summary>
     protected override async void OnAppearing()
     {
@@ -46,26 +65,32 @@ public partial class FavoritePage : ContentPage
         //}
     }
 
-    private async void TapGestureRecognizer_Tapped(object sender, TappedEventArgs e)
+    /// <summary>
+    /// 按钮点击效果
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="type"></param>
+    private async Task ButtonTapped(object sender, Type type)
     {
-        var obj = sender! as Frame;
-        var shadow = obj!.Shadow;
-        obj!.Shadow = new Shadow()
-        {
-            Offset = new Point(0, 0),
-            Opacity = (float)0.3,
-            Radius = 14,
-        };
-        await obj!.ScaleTo(1.05, 100);
+        View obj = type == typeof(Frame) ? (Frame)sender! : (Button)sender!;
+        await obj!.ScaleTo(1.15, 100);
         await obj!.ScaleTo(1, 100);
-        obj!.Shadow = shadow;
     }
 
+    private void TapGestureRecognizer_Tapped(object sender, TappedEventArgs e)
+    {
+        _ = ButtonTapped(sender, typeof(Frame));
+    }
+
+    /// <summary>
+    /// 检测是否有新版本
+    /// </summary>
+    /// <returns></returns>
     public async Task CheckUpdate()
     {
         try
         {
-            var httpClient = new HttpClient();
+            using var httpClient = new HttpClient();
             var response = await httpClient.GetAsync("https://www.123pan.com/s/6cnjjv-6njBv.html");
             var html = await response.Content.ReadAsStringAsync();
             var match = Regex.Match(html, "\"FileName\"[\\s\\S]*?\"(.*?)\"");
@@ -82,23 +107,20 @@ public partial class FavoritePage : ContentPage
                 }
             }
         }
-        catch (Exception)
-        {
-            // ignored
-        }
+        catch { }
     }
 
     private async void Button_Clicked(object sender, EventArgs e)
     {
         var button = sender! as Button;
-        var text = button!.Text;
-        var buttons = new List<Button>() { this.all, this.comics, this.novels, this.videos };
-        foreach (var item in buttons)
-        {
-            item.FontSize = item.Text == text ? 18 : 14;
-            item.TextColor = item.Text == text ? Color.FromArgb("#512BD4") : Color.FromArgb("#212121");
-        }
-        _vm.CurrentCategory = text == "全部" ? SourceCategory.All : text == "漫画" ? SourceCategory.Comic : text == "小说" ? SourceCategory.Novel : SourceCategory.Video;
+        var selectedCategory = Categories[button!.Text];
+
+        if (selectedCategory == _vm.CurrentCategory) return;
+        Buttons[_vm.CurrentCategory].TextColor = Color.FromArgb("#212121");
+        button.TextColor = Color.FromArgb("#512BD4");
+        _ = ButtonTapped(sender, typeof(Button));
+
+        _vm.ChangeCurrentCategory(selectedCategory);
         await _vm.OnLoadFavoriteObjAsync();
     }
 }

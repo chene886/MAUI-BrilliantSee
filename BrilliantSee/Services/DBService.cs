@@ -65,12 +65,12 @@ namespace BrilliantSee.Services
                 new SettingItem { Name = "Goda(英)", Value = "IsSelected", Category = "Source" },
                 new SettingItem { Name = "樱花动漫网", Value = "IsSelected", Category = "Source" },
                 //new SettingItem { Name = "OMO动漫", Value = "IsSelected", Category = "Source" },
-                new SettingItem { Name = "分享应用", Value = "去分享", Category = "通用" ,Description = Share},
+                new SettingItem { Name = "分享应用", Value = "去分享", Category = "通用" ,Content = Share},
                 new SettingItem { Name = "错误反馈", Value = "去反馈", Category = "通用" },
                 new SettingItem { Name = "支持开源", Value = "去支持", Category = "通用" },
-                new SettingItem { Name = "免责声明", Value = "查看声明", Category = "关于" ,Description = Disclaimer},
-                new SettingItem { Name = "隐私政策", Value = "查看政策", Category = "关于" ,Description = Policy},
-                new SettingItem { Name = "用户协议", Value = "查看协议", Category = "关于" ,Description = Agreement},
+                new SettingItem { Name = "免责声明", Value = "查看声明", Category = "关于" ,Content = Disclaimer},
+                new SettingItem { Name = "隐私政策", Value = "查看政策", Category = "关于" ,Content = Policy},
+                new SettingItem { Name = "用户协议", Value = "查看协议", Category = "关于" ,Content = Agreement},
                 new SettingItem { Name = "ModelId", Value = "", Category = "AIModel" },
                 new SettingItem { Name = "ApiKey", Value ="", Category = "AIModel" },
                 new SettingItem { Name = "ApiUrl", Value = "", Category = "AIModel" },
@@ -162,10 +162,10 @@ namespace BrilliantSee.Services
             return await _db.Table<SettingItem>().Where(i => i.Category == category).ToListAsync();
         }
 
-        public async Task<string> GetSettingItemMessageAsync(string value)
+        public async Task<string> GetSettingItemContentAsync(string value)
         {
             var item = await _db.Table<SettingItem>().Where(i => i.Value == value).FirstOrDefaultAsync();
-            return item.Description;
+            return item.Content;
         }
 
         /// <summary>

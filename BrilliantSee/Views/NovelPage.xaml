@@ -32,17 +32,20 @@
                         LineHeight="1.2"
                         Text="{Binding Chapter.NovelContent}"
                         TextColor="Black" />
-                    <Button
+                    <Label
                         Padding="0,24,0,40"
                         BackgroundColor="Transparent"
-                        Clicked="Button_Clicked"
-                        CornerRadius="0"
                         FontFamily=""
                         FontSize="24"
+                        HorizontalTextAlignment="Center"
                         IsVisible="{Binding IsShowButton}"
                         Text="{Binding ButtonContent}"
                         TextColor="{StaticResource Gray600}"
-                        VerticalOptions="Center" />
+                        VerticalOptions="Center">
+                        <Label.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding LoadNearChapterCommand}" CommandParameter="Next" />
+                        </Label.GestureRecognizers>
+                    </Label>
                 </StackLayout>
             </ScrollView>
         </RefreshView>

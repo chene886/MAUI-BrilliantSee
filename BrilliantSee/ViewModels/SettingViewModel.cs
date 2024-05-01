@@ -9,13 +9,17 @@ namespace BrilliantSee.ViewModels
     {
         private readonly DBService _db;
         private readonly MessageService _ms;
+
+        /// <summary>
+        /// 设置项组
+        /// </summary>
         public ObservableCollection<Group<SettingItem>> SettingGroups { get; set; } = new ObservableCollection<Group<SettingItem>>();
 
-        public List<SettingItem> SettingItems_1 { get; set; } = new List<SettingItem>();
-        public List<SettingItem> SettingItems_2 { get; set; } = new List<SettingItem>();
-
+        /// <summary>
+        /// 窗口显示内容
+        /// </summary>
         [ObservableProperty]
-        public string _message = string.Empty;
+        public string _content = string.Empty;
 
         public SettingViewModel(DBService db, MessageService ms)
         {
@@ -24,27 +28,33 @@ namespace BrilliantSee.ViewModels
             _ = InitSettingsAsync();
         }
 
+        /// <summary>
+        /// 初始化设置项
+        /// </summary>
+        /// <returns></returns>
         public async Task InitSettingsAsync()
         {
-            var settingItems = await _db.GetSettingItemsAsync("通用");
-            foreach (var item in settingItems)
-            {
-                SettingItems_1.Add(item);
-            }
-            settingItems = await _db.GetSettingItemsAsync("关于");
-            foreach (var item in settingItems)
-            {
-                SettingItems_2.Add(item);
-            }
-            SettingGroups.Add(new Group<SettingItem>("通用", SettingItems_1));
-            SettingGroups.Add(new Group<SettingItem>("关于", SettingItems_2));
+            var General = await _db.GetSettingItemsAsync("通用");
+            var About = await _db.GetSettingItemsAsync("关于");
+            SettingGroups.Add(new Group<SettingItem>("通用", General));
+            SettingGroups.Add(new Group<SettingItem>("关于", About));
         }
 
-        public async Task SetMessageAsync(string value)
+        /// <summary>
+        /// 设置窗口内容
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public async Task SetContentAsync(string value)
         {
-            Message = await _db.GetSettingItemMessageAsync(value);
+            Content = await _db.GetSettingItemContentAsync(value);
         }
 
+        /// <summary>
+        /// 根据value执行不同操作（复制分享内容/打开链接/发送邮件）
+        /// </summary>
+        /// <param name="value">按钮内容</param>
+        /// <returns></returns>
         public async Task GoToAsync(string value)
         {
             switch (value)
@@ -54,8 +64,8 @@ namespace BrilliantSee.ViewModels
                     break;
 
                 case "去分享":
-                    var Message = await _db.GetSettingItemMessageAsync("去分享");
-                    await Clipboard.SetTextAsync(Message);
+                    var content = await _db.GetSettingItemContentAsync("去分享");
+                    await Clipboard.SetTextAsync(content);
                     _ms.WriteMessage("已复制下载链接，快分享给您的小伙伴吧");
                     break;
 

@@ -73,7 +73,7 @@
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
                 <ScrollView x:Name="message">
-                    <Label FontSize="Small" Text="{Binding Message}" />
+                    <Label FontSize="Small" Text="{Binding Content}" />
                 </ScrollView>
                 <Button
                     Grid.Row="1"

@@ -11,15 +11,14 @@ public partial class NovelPage : ContentPage
         _vm = vm;
         this.BindingContext = _vm;
         InitializeComponent();
+        _vm.ScrollToTop += OnScrollToTopAsync;
     }
 
-    private async void Button_Clicked(object sender, EventArgs e)
+    /// <summary>
+    /// 滚动到顶部
+    /// </summary>
+    private async void OnScrollToTopAsync()
     {
-        var button = sender as Button;
-        if (button!.Text == "点击加载下一话")
-        {
-            this.list.Command.Execute("Next");
-            await this.content.ScrollToAsync(0, 0, false);
-        }
+        await this.content.ScrollToAsync(0, 0, false);
     }
 }

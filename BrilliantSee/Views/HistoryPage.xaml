@@ -24,7 +24,6 @@
                     BackgroundColor="Transparent"
                     Clicked="Button_Clicked"
                     FontFamily=""
-                    FontSize="18"
                     Text="全部"
                     TextColor="#512BD4" />
                 <Button
@@ -32,7 +31,6 @@
                     BackgroundColor="Transparent"
                     Clicked="Button_Clicked"
                     FontFamily=""
-                    FontSize="14"
                     Text="小说"
                     TextColor="#212121" />
                 <Button
@@ -40,7 +38,6 @@
                     BackgroundColor="Transparent"
                     Clicked="Button_Clicked"
                     FontFamily=""
-                    FontSize="14"
                     Text="漫画"
                     TextColor="#212121" />
                 <Button
@@ -48,7 +45,6 @@
                     BackgroundColor="Transparent"
                     Clicked="Button_Clicked"
                     FontFamily=""
-                    FontSize="14"
                     Text="动漫"
                     TextColor="#212121" />
             </HorizontalStackLayout>
@@ -130,11 +126,11 @@
                 WidthRequest="40" />
         </Frame>
         <!--<controls:AudioRecognition x:Name="audio" IsVisible="false" />-->
-        <ActivityIndicator
+        <!--<ActivityIndicator
             Margin="0,0,0,100"
             HeightRequest="55"
             IsRunning="True"
             IsVisible="{Binding IsGettingResult}"
-            WidthRequest="55" />
+            WidthRequest="55" />-->
     </Grid>
 </ContentPage>

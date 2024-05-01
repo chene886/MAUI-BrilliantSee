@@ -20,6 +20,6 @@ namespace BrilliantSee.Models
 
         public string Category { get; set; } = string.Empty;
 
-        public string Description { get; set; } = string.Empty;
+        public string Content { get; set; } = string.Empty;
     }
 }

@@ -7,11 +7,34 @@ public partial class HistoryPage : ContentPage
 {
     private readonly HistoryViewModel _vm;
 
+    /// <summary>
+    /// 按钮文本对应的类别
+    /// </summary>
+    private Dictionary<string, SourceCategory> Categories;
+    /// <summary>
+    /// 类别对应的按钮
+    /// </summary>
+    private Dictionary<SourceCategory, Button> Buttons;
+
     public HistoryPage(HistoryViewModel vm)
     {
         _vm = vm;
         this.BindingContext = _vm;
         InitializeComponent();
+        Categories = new Dictionary<string, SourceCategory>()
+        {
+            { "全部", SourceCategory.All },
+            { "小说", SourceCategory.Novel },
+            { "漫画", SourceCategory.Comic },
+            { "动漫", SourceCategory.Video }
+        };
+        Buttons = new Dictionary<SourceCategory, Button>()
+        {
+            { SourceCategory.All, all },
+            { SourceCategory.Novel, novels },
+            { SourceCategory.Comic, comics },
+            { SourceCategory.Video, videos }
+        };
     }
 
     /// <summary>
@@ -29,19 +52,27 @@ public partial class HistoryPage : ContentPage
         //this.audio.IsVisible = await _vm._db.GetAudioStatus();
     }
 
+
+    /// <summary>
+    /// 按钮点击效果
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="type"></param>
+    private async Task ButtonTapped(object sender, Type type)
+    {
+        View obj = type == typeof(Frame) ? (Frame)sender! : (Button)sender!;
+        await obj!.ScaleTo(1.15, 100);
+        await obj!.ScaleTo(1, 100);
+    }
+
+    /// <summary>
+    /// 清空历史记录提示
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
     private async void CleanTapped(object sender, TappedEventArgs e)
     {
-        var obj = sender! as Frame;
-        var shadow = obj!.Shadow;
-        obj!.Shadow = new Shadow()
-        {
-            Offset = new Point(0, 8),
-            Opacity = (float)0.3,
-            Radius = 14,
-        };
-        await obj!.ScaleTo(1.05, 100);
-        await obj!.ScaleTo(1, 100);
-        obj!.Shadow = shadow;
+        _ = ButtonTapped(sender, typeof(Frame));
         bool answer = await DisplayAlert("清空历史记录", "历史记录清空后无法恢复，是否继续?", "确定", "取消");
         if (answer)
         {
@@ -49,22 +80,32 @@ public partial class HistoryPage : ContentPage
         }
     }
 
+    /// <summary>
+    /// 跳转到设置页面
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
     private void JumpToSettingPage(object sender, EventArgs e)
     {
         Shell.Current.GoToAsync("SettingPage");
     }
 
+    /// <summary>
+    /// 切换类别，加载不同类别的历史记录，更新UI
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
     private async void Button_Clicked(object sender, EventArgs e)
     {
         var button = sender! as Button;
-        var text = button!.Text;
-        var buttons = new List<Button>() { this.all, this.comics, this.novels, this.videos };
-        foreach (var item in buttons)
-        {
-            item.FontSize = item.Text == text ? 18 : 14;
-            item.TextColor = item.Text == text ? Color.FromArgb("#512BD4") : Color.FromArgb("#212121");
-        }
-        _vm.CurrentCategory = text == "全部" ? SourceCategory.All : text == "漫画" ? SourceCategory.Comic : text == "小说" ? SourceCategory.Novel : SourceCategory.Video;
+        var selectedCategory = Categories[button!.Text];
+
+        if (selectedCategory == _vm.CurrentCategory) return;
+        Buttons[_vm.CurrentCategory].TextColor = Color.FromArgb("#212121");
+        button.TextColor = Color.FromArgb("#512BD4");
+        _ = ButtonTapped(sender, typeof(Button));
+
+        _vm.ChangeCurrentCategory(selectedCategory);
         await _vm.OnLoadHistoryObjAsync();
     }
 }

@@ -12,7 +12,8 @@
     </ContentPage.Behaviors>
     <ContentPage.ToolbarItems>
         <ToolbarItem
-            Clicked="JumpToSearchPage"
+            Command="{Binding JumpPageCommand}"
+            CommandParameter="SearchPage"
             IconImageSource="search.svg"
             Text="搜索" />
     </ContentPage.ToolbarItems>
@@ -28,7 +29,6 @@
                     BackgroundColor="Transparent"
                     Clicked="Button_Clicked"
                     FontFamily=""
-                    FontSize="18"
                     Text="全部"
                     TextColor="#512BD4" />
                 <Button
@@ -36,7 +36,6 @@
                     BackgroundColor="Transparent"
                     Clicked="Button_Clicked"
                     FontFamily=""
-                    FontSize="14"
                     Text="小说"
                     TextColor="#212121" />
                 <Button
@@ -44,7 +43,6 @@
                     BackgroundColor="Transparent"
                     Clicked="Button_Clicked"
                     FontFamily=""
-                    FontSize="14"
                     Text="漫画"
                     TextColor="#212121" />
                 <Button
@@ -52,7 +50,6 @@
                     BackgroundColor="Transparent"
                     Clicked="Button_Clicked"
                     FontFamily=""
-                    FontSize="14"
                     Text="动漫"
                     TextColor="#212121" />
             </HorizontalStackLayout>
@@ -139,7 +136,10 @@
             WidthRequest="48"
             ZIndex="0">
             <Frame.GestureRecognizers>
-                <TapGestureRecognizer Command="{Binding JumpToAIPageCommand}" Tapped="TapGestureRecognizer_Tapped" />
+                <TapGestureRecognizer
+                    Command="{Binding JumpPageCommand}"
+                    CommandParameter="AIPage"
+                    Tapped="TapGestureRecognizer_Tapped" />
             </Frame.GestureRecognizers>
             <Image
                 HeightRequest="40"
@@ -171,7 +171,7 @@
             Margin="0,0,0,100"
             HeightRequest="55"
             IsRunning="True"
-            IsVisible="{Binding IsGettingResult}"
+            IsVisible="{Binding IsCheckingUpdate}"
             WidthRequest="55"
             ZIndex="1" />
     </Grid>

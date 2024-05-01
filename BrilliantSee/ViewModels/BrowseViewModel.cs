@@ -49,6 +49,8 @@ namespace BrilliantSee.ViewModels
         [ObservableProperty]
         public string _buttonContent = "点击加载下一话";
 
+        public event Action ScrollToTop = delegate { };
+
         /// <summary>
         /// 当前页码
         /// </summary>
@@ -226,6 +228,7 @@ namespace BrilliantSee.ViewModels
             if (result)
             {
                 _ms.WriteMessage("加载成功");
+                ScrollToTop.Invoke();
             }
             else
             {

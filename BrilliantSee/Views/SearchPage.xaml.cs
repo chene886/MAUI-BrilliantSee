@@ -1,6 +1,8 @@
 using BrilliantSee.Models.Enums;
+using BrilliantSee.Models.Objs;
 using BrilliantSee.ViewModels;
 using CommunityToolkit.Maui.Core.Platform;
+using System.Collections.ObjectModel;
 
 namespace BrilliantSee.Views;
 
@@ -8,13 +10,34 @@ public partial class SearchPage : ContentPage
 {
     private readonly SearchViewModel _vm;
 
-    private SourceCategory category = SourceCategory.All;
+    /// <summary>
+    /// 按钮文本对应的类别
+    /// </summary>
+    private Dictionary<string, SourceCategory> Categories;
+    /// <summary>
+    /// 类别对应的按钮
+    /// </summary>
+    private Dictionary<SourceCategory, Button> Buttons;
 
     public SearchPage(SearchViewModel vm)
     {
         _vm = vm;
         this.BindingContext = _vm;
         InitializeComponent();
+        Categories = new Dictionary<string, SourceCategory>()
+        {
+            { "全部", SourceCategory.All },
+            { "小说", SourceCategory.Novel },
+            { "漫画", SourceCategory.Comic },
+            { "动漫", SourceCategory.Video }
+        };
+        Buttons = new Dictionary<SourceCategory, Button>()
+        {
+            { SourceCategory.All, all },
+            { SourceCategory.Novel, novels },
+            { SourceCategory.Comic, comics },
+            { SourceCategory.Video, videos }
+        };
         this.Loaded += SearchPage_Loaded;
     }
 
@@ -31,6 +54,11 @@ public partial class SearchPage : ContentPage
         //this.audio.IsVisible = await _vm._db.GetAudioStatus();
     }
 
+    /// <summary>
+    /// 收起键盘
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
     private void HideKeyboard(object sender, TappedEventArgs e)
     {
 #if ANDROID
@@ -41,69 +69,68 @@ public partial class SearchPage : ContentPage
 #endif
     }
 
+    /// <summary>
+    /// 监听滚动事件，实现返回顶部按钮的显示与隐藏以及到底触发加载更多
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
     private async void CollectionView_Scrolled(object sender, ItemsViewScrolledEventArgs e)
     {
         this.floatButton.IsVisible = e.FirstVisibleItemIndex == 0 ? false : true;
-        var count = category == SourceCategory.All ? _vm.AllObjs.Count : category == SourceCategory.Comic ? _vm.Comics.Count : category == SourceCategory.Novel ? _vm.Novels.Count : _vm.Videos.Count;
-        if (e.LastVisibleItemIndex == count - 1 && _vm.IsGettingResult == false && count != 0)
+        if (e.LastVisibleItemIndex == _vm.CurrentObjsCount - 1 && _vm.IsGettingResult == false && _vm.CurrentObjsCount != 0)
         {
-            await _vm.GetMoreAsync(category);
+            await _vm.GetMoreAsync();
         }
     }
 
+    /// <summary>
+    /// 返回顶部
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
     private void BacktoTop(object sender, EventArgs e)
     {
         this.comicList.ScrollTo(0, position: ScrollToPosition.Start);
     }
 
-    private async void ButtonTapped(object sender, Type type)
+    /// <summary>
+    /// 按钮点击效果
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="type"></param>
+    private async Task ButtonTapped(object sender, Type type)
     {
-        var obj = sender! as View;
-        if (typeof(HorizontalStackLayout) == type)
-        {
-            obj = sender! as HorizontalStackLayout;
-        }
-        else if (typeof(Button) == type)
-        {
-            obj = sender! as Button;
-        }
-        obj!.Shadow = new Shadow()
-        {
-            Offset = new Point(0, 8),
-            Opacity = (float)0.3,
-            Radius = 14,
-        };
-        await obj!.ScaleTo(1.15, 200);
-        obj!.Shadow = new Shadow()
-        {
-            Radius = 0,
-        };
-        await obj!.ScaleTo(1, 200);
+        View obj = type == typeof(HorizontalStackLayout) ? (HorizontalStackLayout)sender! : type == typeof(Button) ? (Button)sender! : (Grid)sender!;
+        await obj!.ScaleTo(1.15, 100);
+        await obj!.ScaleTo(1, 100);
     }
 
     private void TapGestureRecognizer_Tapped(object sender, TappedEventArgs e)
     {
-        ButtonTapped(sender, sender.GetType());
+        _ = ButtonTapped(sender, sender.GetType());
     }
 
     private void floatButton_Pressed(object sender, EventArgs e)
     {
-        ButtonTapped(sender, sender.GetType());
+        _ = ButtonTapped(sender, sender.GetType());
     }
 
+    /// <summary>
+    /// 切换类别，更新UI,刷新列表
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
     private void Button_Clicked(object sender, EventArgs e)
     {
         var button = sender! as Button;
-        var text = button!.Text;
-        var buttons = new List<Button>() { this.all, this.comics, this.novels, this.videos };
-        foreach (var item in buttons)
-        {
-            item.FontSize = item.Text == text ? 18 : 14;
-            item.TextColor = item.Text == text ? Color.FromArgb("#512BD4") : Color.FromArgb("#212121");
-        }
-        category = text == "全部" ? SourceCategory.All : text == "漫画" ? SourceCategory.Comic : text == "小说" ? SourceCategory.Novel : SourceCategory.Video;
-        //_vm.IsGettingResult = true;
-        this.comicList.ItemsSource = text == "全部" ? _vm.AllObjs : text == "漫画" ? _vm.Comics : text == "小说" ? _vm.Novels : _vm.Videos;
-        //_vm.IsGettingResult = false;
+        var selectedCategory = Categories[button!.Text];
+
+        if (selectedCategory == _vm.CurrentCategory) return;
+        Buttons[_vm.CurrentCategory].TextColor = Color.FromArgb("#212121");
+        button.TextColor = Color.FromArgb("#512BD4");
+        _ = ButtonTapped(sender, typeof(Button));
+
+        _vm.ChangeCurrentCategory(selectedCategory);
+        this.comicList.ItemsSource = _vm.GetObjsOnDisplay();
     }
 }

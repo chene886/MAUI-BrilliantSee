@@ -82,6 +82,11 @@ namespace BrilliantSee.ViewModels
             }
         }
 
+        /// <summary>
+        /// 处理用户输入的字符串
+        /// </summary>
+        /// <param name="prompt"></param>
+        /// <returns></returns>
         public async Task<string> Chat(string prompt)
         {
             IsWaiting = true;
