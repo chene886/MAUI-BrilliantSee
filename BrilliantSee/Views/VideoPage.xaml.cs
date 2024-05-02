@@ -1,4 +1,5 @@
 using BrilliantSee.ViewModels;
+using CommunityToolkit.Maui.Core.Handlers;
 using CommunityToolkit.Maui.Views;
 
 namespace BrilliantSee.Views;
@@ -71,5 +72,10 @@ public partial class VideoPage : ContentPage
             _ = ButtonTapped(sender, typeof(Button));
             _vm.SetItemsOnDisplay(CurrentRoute);
         }
+    }
+
+    protected override bool OnBackButtonPressed()
+    {
+        return base.OnBackButtonPressed();
     }
 }

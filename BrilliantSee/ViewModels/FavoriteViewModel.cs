@@ -218,6 +218,7 @@ namespace BrilliantSee.ViewModels
         private async Task ShowHideObjAsync()
         {
             await OnLoadFavoriteObjAsync(true);
+            _ms.WriteMessage("已显示隐藏内容");
         }
     }
 }

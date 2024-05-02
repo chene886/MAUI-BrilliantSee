@@ -64,30 +64,35 @@
                         <SwipeView>
                             <SwipeView.RightItems>
                                 <SwipeItemView>
-                                    <Grid WidthRequest="60">
+                                    <Grid WidthRequest="56">
                                         <Grid.RowDefinitions>
                                             <RowDefinition Height="*" />
                                             <RowDefinition Height="*" />
                                         </Grid.RowDefinitions>
                                         <ImageButton
-                                            Padding="1,4,1,0"
-                                            BackgroundColor="{StaticResource Primary}"
                                             Command="{Binding CancelFavoriteCommand, Source={RelativeSource AncestorType={x:Type vm:FavoriteViewModel}}}"
                                             CommandParameter="{Binding}"
                                             CornerRadius="20"
                                             HeightRequest="40"
-                                            Source="broken_heart.png"
+                                            Source="broken_love.png"
                                             WidthRequest="40" />
                                         <ImageButton
                                             Grid.Row="1"
-                                            Padding="0,4,0,0"
-                                            BackgroundColor="{StaticResource PrimaryDark}"
                                             Command="{Binding HideObjCommand, Source={RelativeSource AncestorType={x:Type vm:FavoriteViewModel}}}"
                                             CommandParameter="{Binding}"
                                             CornerRadius="20"
                                             HeightRequest="40"
                                             Source="hide.png"
-                                            WidthRequest="40" />
+                                            WidthRequest="40">
+                                            <ImageButton.Triggers>
+                                                <DataTrigger
+                                                    Binding="{Binding IsHide}"
+                                                    TargetType="ImageButton"
+                                                    Value="True">
+                                                    <Setter Property="Source" Value="show.png" />
+                                                </DataTrigger>
+                                            </ImageButton.Triggers>
+                                        </ImageButton>
                                     </Grid>
                                 </SwipeItemView>
                             </SwipeView.RightItems>

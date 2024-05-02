@@ -22,7 +22,7 @@
     <Grid BackgroundColor="Black">
         <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition Height="228" />
+                <RowDefinition Height="216" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
             <toolkit:MediaElement
@@ -34,6 +34,30 @@
                 Source="{Binding VideoUrl}"
                 VerticalOptions="Center"
                 ZIndex="1" />
+            <ActivityIndicator
+                BindingContext="{x:Reference media}"
+                HeightRequest="55"
+                HorizontalOptions="Center"
+                IsRunning="True"
+                IsVisible="False"
+                VerticalOptions="Center"
+                WidthRequest="55"
+                ZIndex="2">
+                <ActivityIndicator.Triggers>
+                    <DataTrigger
+                        Binding="{Binding CurrentState}"
+                        TargetType="ActivityIndicator"
+                        Value="Buffering">
+                        <Setter Property="IsVisible" Value="True" />
+                    </DataTrigger>
+                    <DataTrigger
+                        Binding="{Binding CurrentState}"
+                        TargetType="ActivityIndicator"
+                        Value="Playing">
+                        <Setter Property="IsVisible" Value="False" />
+                    </DataTrigger>
+                </ActivityIndicator.Triggers>
+            </ActivityIndicator>
             <CollectionView
                 x:Name="list"
                 Grid.Row="1"

@@ -58,13 +58,12 @@
                         <SwipeView>
                             <SwipeView.RightItems>
                                 <SwipeItemView>
-                                    <Grid WidthRequest="60">
+                                    <Grid WidthRequest="56">
                                         <Grid.RowDefinitions>
                                             <RowDefinition Height="*" />
                                             <RowDefinition Height="*" />
                                         </Grid.RowDefinitions>
                                         <ImageButton
-                                            BackgroundColor="{StaticResource Primary}"
                                             Command="{Binding AddFavoriteCommand, Source={RelativeSource AncestorType={x:Type vm:HistoryViewModel}}}"
                                             CommandParameter="{Binding}"
                                             CornerRadius="20"
@@ -73,13 +72,11 @@
                                             WidthRequest="40" />
                                         <ImageButton
                                             Grid.Row="1"
-                                            Margin="2,8"
-                                            BackgroundColor="{StaticResource PrimaryDark}"
                                             Command="{Binding ClearObjCommand, Source={RelativeSource AncestorType={x:Type vm:HistoryViewModel}}}"
                                             CommandParameter="{Binding}"
                                             CornerRadius="20"
                                             HeightRequest="40"
-                                            Source="close.png"
+                                            Source="clean.png"
                                             WidthRequest="40" />
                                     </Grid>
                                 </SwipeItemView>
