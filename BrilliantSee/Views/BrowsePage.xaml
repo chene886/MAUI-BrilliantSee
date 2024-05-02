@@ -7,6 +7,7 @@
     xmlns:enum="clr-namespace:BrilliantSee.Models.Enums"
     xmlns:ffimageloading="clr-namespace:FFImageLoading.Maui;assembly=FFImageLoading.Maui"
     xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    xmlns:vm="clr-namespace:BrilliantSee.ViewModels"
     Title=""
     Shell.NavBarIsVisible="False"
     Shell.TabBarIsVisible="False">
@@ -35,15 +36,13 @@
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <ViewCell>
-                            <Grid>
-                                <ffimageloading:CachedImage
-                                    CacheDuration="30"
-                                    DownsampleToViewSize="True"
-                                    ErrorPlaceholder="load_fail.png"
-                                    FadeAnimationForCachedImages="True"
-                                    LoadingPlaceholder="loading.png"
-                                    Source="{Binding}" />
-                            </Grid>
+                            <ffimageloading:CachedImage
+                                CacheDuration="30"
+                                ErrorPlaceholder="load_fail.png"
+                                FadeAnimationForCachedImages="True"
+                                LoadingPlaceholder="loading.png"
+                                Source="{Binding}"
+                                WidthRequest="{Binding ScreenWidth, Source={RelativeSource AncestorType={x:Type vm:BrowseViewModel}}}" />
                         </ViewCell>
                     </DataTemplate>
                 </ListView.ItemTemplate>

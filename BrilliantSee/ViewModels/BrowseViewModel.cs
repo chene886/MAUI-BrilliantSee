@@ -81,6 +81,11 @@ namespace BrilliantSee.ViewModels
         /// </summary>
         public string CurrentTime => DateTime.Now.ToString("HH:mm");
 
+        /// <summary>
+        /// 屏幕宽度
+        /// </summary>
+        public double ScreenWidth { get; set; } = DeviceDisplay.MainDisplayInfo.Width / DeviceDisplay.MainDisplayInfo.Density;
+
         public int CurrentChapterIndex
         {
             get => _currentChapterIndex;

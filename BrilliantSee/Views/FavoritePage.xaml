@@ -109,7 +109,6 @@
                                     <ffimageloading:CachedImage
                                         Aspect="AspectFill"
                                         CacheDuration="30"
-                                        DownsampleToViewSize="True"
                                         ErrorPlaceholder="load_fail.png"
                                         FadeAnimationForCachedImages="True"
                                         LoadingPlaceholder="loading.png"

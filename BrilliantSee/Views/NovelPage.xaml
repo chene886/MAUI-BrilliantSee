@@ -13,7 +13,7 @@
     <Grid BackgroundColor="White">
         <RefreshView
             x:Name="list"
-            Command="{Binding LoadNearChapterCommand}"
+            Command="{Binding LoadNewChapterCommand}"
             CommandParameter="Last"
             IsRefreshing="{Binding IsShowRefresh}">
             <ScrollView x:Name="content">
@@ -43,7 +43,7 @@
                         TextColor="{StaticResource Gray600}"
                         VerticalOptions="Center">
                         <Label.GestureRecognizers>
-                            <TapGestureRecognizer Command="{Binding LoadNearChapterCommand}" CommandParameter="Next" />
+                            <TapGestureRecognizer Command="{Binding LoadNewChapterCommand}" CommandParameter="Next" />
                         </Label.GestureRecognizers>
                     </Label>
                 </StackLayout>
