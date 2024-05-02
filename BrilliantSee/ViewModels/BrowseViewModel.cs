@@ -12,7 +12,6 @@ namespace BrilliantSee.ViewModels
     {
         private readonly DBService _db;
         private readonly MessageService _ms;
-        private readonly ComicImageManageService _imageManageService;
         //private readonly AIService _ai;
 
         /// <summary>
@@ -35,7 +34,7 @@ namespace BrilliantSee.ViewModels
         /// <summary>
         /// 当前章节图片集合
         /// </summary>
-        public ObservableCollection<ComicImageItem> Images { get; set; } = new();
+        public ObservableCollection<string> Images { get; set; } = new();
 
         /// <summary>
         /// 是否正在加载
@@ -82,7 +81,6 @@ namespace BrilliantSee.ViewModels
         /// </summary>
         public string CurrentTime => DateTime.Now.ToString("HH:mm");
 
-
         public int CurrentChapterIndex
         {
             get => _currentChapterIndex;
@@ -97,11 +95,10 @@ namespace BrilliantSee.ViewModels
             }
         }
 
-        public BrowseViewModel(DBService db, MessageService ms, ComicImageManageService imageManageService)
+        public BrowseViewModel(DBService db, MessageService ms)
         {
             _db = db;
             _ms = ms;
-            _imageManageService = imageManageService;
             //_ai = MauiProgram.servicesProvider!.GetRequiredService<AIService>();
             //if (_ai.hasModel)
             //{
@@ -158,8 +155,7 @@ namespace BrilliantSee.ViewModels
                 Images.Clear();
                 foreach (var url in chapter.PicUrls)
                 {
-                    Images.Add(_imageManageService.GetComicImageItem(url));
-                    await Task.Delay(100);
+                    Images.Add(url);
                 }
             }
             ButtonContent = chapter!.Index == chapter.Obj.ItemCount - 1 ? "已是最新一话" : "点击加载下一话";
@@ -195,9 +191,6 @@ namespace BrilliantSee.ViewModels
             }
             try
             {
-                //取消加载当前章节图片
-                CancelLoadCurrentChapterImage();
-
                 await LoadChapterResourcesAsync(newChapter);
             }
             catch { }
@@ -219,16 +212,6 @@ namespace BrilliantSee.ViewModels
         }
 
         /// <summary>
-        /// 重新加载图片
-        /// </summary>
-        /// <param name="item"></param>
-        [RelayCommand]
-        private void ReLoadImage(ComicImageItem item)
-        {
-            _imageManageService.RetryLoadImage(item);
-        }
-
-        /// <summary>
         /// 加载新章节
         /// </summary>
         /// <param name="flag">上一章或下一章</param>
@@ -239,7 +222,7 @@ namespace BrilliantSee.ViewModels
             var result = false;
 
             var isNext = flag == "Next";
-            if(isNext)IsLoading = true;
+            if (isNext) IsLoading = true;
             _ms.WriteMessage("正在加载...");
             result = await UpdateChapterAsync(flag);
             if (result)
@@ -252,19 +235,8 @@ namespace BrilliantSee.ViewModels
                 var unSuccess = flag == "Next" ? "已是最新一话" : "已是第一话";
                 _ms.WriteMessage(unSuccess);
             }
-            if(isNext)IsLoading = false;
+            if (isNext) IsLoading = false;
             IsShowRefresh = false;
-        }
-
-        /// <summary>
-        /// 取消加载当前章节图片
-        /// </summary>
-        public void CancelLoadCurrentChapterImage()
-        {
-            foreach (var item in Images)
-            {
-                _imageManageService.CancelLoadImage(item);
-            }
         }
     }
 }

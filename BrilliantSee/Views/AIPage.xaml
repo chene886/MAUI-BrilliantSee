@@ -6,7 +6,6 @@
     xmlns:controls="clr-namespace:BrilliantSee.Controls"
     Title="AI助手"
     Shell.ForegroundColor="Black"
-    Shell.NavBarHasShadow="True"
     Shell.TabBarIsVisible="False">
     <ContentPage.ToolbarItems>
         <!--<ToolbarItem
@@ -35,7 +34,7 @@
         </ScrollView>
         <Grid
             Padding="8,4,8,4"
-            BackgroundColor="White"
+            BackgroundColor="Transparent"
             ColumnSpacing="8"
             HeightRequest="60"
             VerticalOptions="EndAndExpand"

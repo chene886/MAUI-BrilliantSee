@@ -4,6 +4,7 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:controls="clr-namespace:BrilliantSee.Controls"
+    xmlns:ffimageloading="clr-namespace:FFImageLoading.Maui;assembly=FFImageLoading.Maui"
     xmlns:vm="clr-namespace:BrilliantSee.ViewModels"
     Title="搜索"
     Shell.ForegroundColor="Black"
@@ -167,20 +168,14 @@
                                             CommandParameter="{Binding}"
                                             Tapped="HideKeyboard" />
                                     </Frame.GestureRecognizers>
-                                    <Grid>
-                                        <Image
-                                            x:Name="img"
-                                            Aspect="AspectFill"
-                                            Source="{Binding Cover}" />
-                                        <Label
-                                            FontFamily=""
-                                            FontSize="Micro"
-                                            HorizontalOptions="Center"
-                                            IsVisible="{Binding IsLoading, Source={x:Reference img}}"
-                                            Text="加载中..."
-                                            TextColor="{StaticResource Gray300}"
-                                            VerticalOptions="Center" />
-                                    </Grid>
+                                    <ffimageloading:CachedImage
+                                        Aspect="AspectFill"
+                                        CacheDuration="30"
+                                        DownsampleToViewSize="True"
+                                        ErrorPlaceholder="load_fail.png"
+                                        FadeAnimationForCachedImages="True"
+                                        LoadingPlaceholder="loading.png"
+                                        Source="{Binding Cover}" />
                                 </Frame>
                                 <Grid
                                     Grid.Column="1"

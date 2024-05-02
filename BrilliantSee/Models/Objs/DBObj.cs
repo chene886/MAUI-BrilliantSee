@@ -42,6 +42,11 @@ namespace BrilliantSee.Models.Objs
         public bool IsUpdate { get; set; } = false;
 
         /// <summary>
+        /// 是否隐藏
+        /// </summary>
+        public bool IsHide { get; set; } = false;
+
+        /// <summary>
         /// 最新章节名
         /// </summary>
         public string LastestItemName { get; set; } = string.Empty;

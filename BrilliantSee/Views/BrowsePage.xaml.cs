@@ -19,16 +19,6 @@ public partial class BrowsePage : ContentPage
     /// </summary>
     private void OnScrollToTop()
     {
-        this.listView.ScrollTo(_vm.Images.First(), position: ScrollToPosition.Start,  false);
-    }
-
-    /// <summary>
-    /// 退出页面时，取消加载当前章节图片
-    /// </summary>
-    protected override void OnDisappearing()
-    {
-        _vm.CancelLoadCurrentChapterImage();
-
-        base.OnDisappearing();
+        this.listView.ScrollTo(_vm.Images.First(), position: ScrollToPosition.Start, false);
     }
 }

@@ -37,7 +37,7 @@ namespace BrilliantSee.ViewModels
         {
             Objs.Clear();
             var objs = await _db.GetObjsAsync(Models.Enums.DBObjCategory.History, CurrentCategory);
-            foreach (var item in objs)
+            foreach (var item in objs.Where(i => i.IsHide == false))
             {
                 Objs.Insert(0, item);
             }
@@ -84,13 +84,36 @@ namespace BrilliantSee.ViewModels
         /// <summary>
         /// 清除指定的历史记录
         /// </summary>
-        /// <param name="comic"></param>
+        /// <param name="obj">实体</param>
         /// <returns></returns>
         [RelayCommand]
-        private async Task ClearObjAsync(Obj comic)
+        private async Task ClearObjAsync(Obj obj)
         {
-            await _db.DeleteObjAsync(comic, comic.Category);
-            Objs.Remove(comic);
+            await _db.DeleteObjAsync(obj, obj.Category);
+            Objs.Remove(obj);
+            _ms.WriteMessage("已删除历史记录");
+        }
+
+        /// <summary>
+        /// 收藏指定的实体
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        [RelayCommand]
+        private async Task AddFavoriteAsync(Obj obj)
+        {
+            var isExist = await _db.IsComicExistAsync(obj, DBObjCategory.Favorite);
+            if (isExist)
+            {
+                _ms.WriteMessage("已是收藏");
+            }
+            else
+            {
+                obj.Category = DBObjCategory.Favorite;
+                await _db.SaveObjAsync(obj, obj.Category);
+                obj.Category = DBObjCategory.History;
+                _ms.WriteMessage("收藏成功");
+            }
         }
 
         /// <summary>

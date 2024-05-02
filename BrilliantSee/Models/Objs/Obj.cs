@@ -102,9 +102,14 @@ namespace BrilliantSee.Models.Objs
         public int ItemCount { get; set; } = 0;
 
         /// <summary>
-        /// 漫画章节是否倒序
+        /// 章节是否倒序
         /// </summary>
         public bool IsReverseList { get; set; } = true;
+
+        /// <summary>
+        /// 是否隐藏
+        /// </summary>
+        public bool IsHide { get; set; } = false;
 
         /// <summary>
         /// 实体分类
@@ -137,6 +142,7 @@ namespace BrilliantSee.Models.Objs
             SourceCategory = dbObj.SourceCategory;
             LastReadedItemIndex = dbObj.LastReadedItemIndex;
             IsUpdate = dbObj.IsUpdate;
+            IsHide = dbObj.IsHide;
             LastestItemName = dbObj.LastestItemName;
             SourceName = dbObj.SourceName;
             return (Obj)this.MemberwiseClone();
@@ -161,6 +167,7 @@ namespace BrilliantSee.Models.Objs
                 SourceCategory = obj.SourceCategory,
                 LastReadedItemIndex = obj.LastReadedItemIndex,
                 IsUpdate = obj.IsUpdate,
+                IsHide = obj.IsHide,
                 LastestItemName = obj.LastestItemName,
                 SourceName = obj.SourceName
             };

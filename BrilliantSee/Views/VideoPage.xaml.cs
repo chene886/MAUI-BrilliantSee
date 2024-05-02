@@ -49,16 +49,8 @@ public partial class VideoPage : ContentPage
     private async Task ButtonTapped(object sender, Type type)
     {
         View obj = type == typeof(Frame) ? (Frame)sender! : (Button)sender!;
-        var shadow = obj!.Shadow;
-        obj!.Shadow = new Shadow()
-        {
-            Offset = new Point(0, 0),
-            Opacity = (float)0.3,
-            Radius = 14,
-        };
         await obj!.ScaleTo(1.05, 100);
         await obj!.ScaleTo(1, 100);
-        obj!.Shadow = shadow;
     }
 
     private void TapGestureRecognizer_Tapped(object sender, TappedEventArgs e)

@@ -3,6 +3,7 @@ using Microsoft.Extensions.Logging;
 using CommunityToolkit.Maui;
 using BrilliantSee.ViewModels;
 using BrilliantSee.Services;
+using FFImageLoading.Maui;
 
 namespace BrilliantSee
 {
@@ -16,6 +17,7 @@ namespace BrilliantSee
             builder.UseMauiApp<App>()
                 .UseMauiCommunityToolkitMediaElement()
                 .UseMauiCommunityToolkit()
+                .UseFFImageLoading()
                 .ConfigureFonts(fonts =>
                 {
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
@@ -70,7 +72,6 @@ namespace BrilliantSee
             services.AddSingleton<SourceService>();
             services.AddSingleton<AIService>();
             services.AddSingleton<MessageService>();
-            services.AddSingleton<ComicImageManageService>();
         }
     }
 }

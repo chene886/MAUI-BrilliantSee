@@ -5,10 +5,11 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:behaviors="clr-namespace:BrilliantSee.Behaviors"
     xmlns:controls="clr-namespace:BrilliantSee.Controls"
+    xmlns:ffimageloading="clr-namespace:FFImageLoading.Maui;assembly=FFImageLoading.Maui"
     xmlns:vm="clr-namespace:BrilliantSee.ViewModels"
     Title="收藏">
     <ContentPage.Behaviors>
-        <behaviors:AndroidBarColorBehavior />
+        <behaviors:AndroidInitBehavior />
     </ContentPage.Behaviors>
     <ContentPage.ToolbarItems>
         <ToolbarItem
@@ -63,12 +64,31 @@
                         <SwipeView>
                             <SwipeView.RightItems>
                                 <SwipeItemView>
-                                    <ImageButton
-                                        BackgroundColor="Transparent"
-                                        Command="{Binding CancelFavoriteCommand, Source={RelativeSource AncestorType={x:Type vm:FavoriteViewModel}}}"
-                                        CommandParameter="{Binding}"
-                                        Source="broken_heart.png"
-                                        WidthRequest="40" />
+                                    <Grid WidthRequest="60">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="*" />
+                                            <RowDefinition Height="*" />
+                                        </Grid.RowDefinitions>
+                                        <ImageButton
+                                            Padding="1,4,1,0"
+                                            BackgroundColor="{StaticResource Primary}"
+                                            Command="{Binding CancelFavoriteCommand, Source={RelativeSource AncestorType={x:Type vm:FavoriteViewModel}}}"
+                                            CommandParameter="{Binding}"
+                                            CornerRadius="20"
+                                            HeightRequest="40"
+                                            Source="broken_heart.png"
+                                            WidthRequest="40" />
+                                        <ImageButton
+                                            Grid.Row="1"
+                                            Padding="0,4,0,0"
+                                            BackgroundColor="{StaticResource PrimaryDark}"
+                                            Command="{Binding HideObjCommand, Source={RelativeSource AncestorType={x:Type vm:FavoriteViewModel}}}"
+                                            CommandParameter="{Binding}"
+                                            CornerRadius="20"
+                                            HeightRequest="40"
+                                            Source="hide.png"
+                                            WidthRequest="40" />
+                                    </Grid>
                                 </SwipeItemView>
                             </SwipeView.RightItems>
                             <Frame
@@ -86,9 +106,13 @@
                                         <RowDefinition Height="Auto" />
                                         <RowDefinition Height="Auto" />
                                     </Grid.RowDefinitions>
-                                    <Image
+                                    <ffimageloading:CachedImage
                                         Aspect="AspectFill"
-                                        HeightRequest="160"
+                                        CacheDuration="30"
+                                        DownsampleToViewSize="True"
+                                        ErrorPlaceholder="load_fail.png"
+                                        FadeAnimationForCachedImages="True"
+                                        LoadingPlaceholder="loading.png"
                                         Source="{Binding Cover}" />
                                     <Frame
                                         BackgroundColor="{StaticResource Primary}"
@@ -140,6 +164,7 @@
                     Command="{Binding JumpPageCommand}"
                     CommandParameter="AIPage"
                     Tapped="TapGestureRecognizer_Tapped" />
+                <SwipeGestureRecognizer Command="{Binding ShowHideObjCommand}" Direction="Left" />
             </Frame.GestureRecognizers>
             <Image
                 HeightRequest="40"

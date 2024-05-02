@@ -42,14 +42,19 @@ namespace BrilliantSee.ViewModels
         public ObservableCollection<Obj> Objs { get; set; } = new();
 
         /// <summary>
+        /// 触发隐藏弹窗提示
+        /// </summary>
+        public event Action ShowHideTip = delegate { };
+
+        /// <summary>
         /// 加载收藏实体
         /// </summary>
         /// <returns></returns>
-        public async Task OnLoadFavoriteObjAsync()
+        public async Task OnLoadFavoriteObjAsync(bool IsShowHide)
         {
             Objs.Clear();
             var objs = await _db.GetObjsAsync(DBObjCategory.Favorite, CurrentCategory);
-            foreach (var item in objs)
+            foreach (var item in objs.Where(i => i.IsHide == IsShowHide))
             {
                 Objs.Insert(0, item);
             }
@@ -100,8 +105,43 @@ namespace BrilliantSee.ViewModels
         [RelayCommand]
         private async Task CancelFavoriteAsync(Obj comic)
         {
-            await _db.DeleteObjAsync(comic, comic.Category);
             Objs.Remove(comic);
+            await _db.DeleteObjAsync(comic, comic.Category);
+            if (comic.IsHide) await _db.DeleteObjAsync(comic, DBObjCategory.History);
+            _ms.WriteMessage("已取消收藏");
+        }
+
+        /// <summary>
+        /// 隐藏或取消隐藏指定的实体，判断是否显示隐藏提示
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        [RelayCommand]
+        private async Task HideObjAsync(Obj obj)
+        {
+            var message = obj.IsHide ? "已取消隐藏" : "已隐藏";
+            obj.IsHide = !obj.IsHide;
+            await _db.SaveObjAsync(obj, DBObjCategory.Favorite);
+            await _db.SaveObjAsync(obj, DBObjCategory.History);
+            var HideTip = await _db.GetSettingItemsAsync("Tip");
+            if (HideTip.Any() && HideTip.First().Value == "true")
+            {
+                ShowHideTip.Invoke();
+            }
+            Objs.Remove(obj);
+            _ms.WriteMessage(message);
+        }
+
+        /// <summary>
+        /// 不再显示隐藏提示
+        /// </summary>
+        /// <returns></returns>
+        public async Task DontShowAgain()
+        {
+            var HideTip = await _db.GetSettingItemsAsync("Tip");
+            var Tip = HideTip.First();
+            Tip.Value = "false";
+            await _db.UpdateSettingItemAsync(Tip);
         }
 
         /// <summary>
@@ -131,7 +171,7 @@ namespace BrilliantSee.ViewModels
                                         item.IsUpdate = true;
                                         hasUpdate = true;
                                         await _db.SaveObjAsync(item, DBObjCategory.Favorite);
-                                        _ = MainThread.InvokeOnMainThreadAsync(() => _ = OnLoadFavoriteObjAsync());
+                                        _ = MainThread.InvokeOnMainThreadAsync(() => _ = OnLoadFavoriteObjAsync(false));
                                     }
                                 }
                                 else
@@ -172,6 +212,12 @@ namespace BrilliantSee.ViewModels
         public void ChangeCurrentCategory(SourceCategory category)
         {
             CurrentCategory = category;
+        }
+
+        [RelayCommand]
+        private async Task ShowHideObjAsync()
+        {
+            await OnLoadFavoriteObjAsync(true);
         }
     }
 }

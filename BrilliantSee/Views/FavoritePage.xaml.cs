@@ -38,6 +38,7 @@ public partial class FavoritePage : ContentPage
             { SourceCategory.Video, videos }
         };
         _ = CheckUpdate();
+        _vm.ShowHideTip += OnShowHideTip;
     }
 
     /// <summary>
@@ -46,7 +47,7 @@ public partial class FavoritePage : ContentPage
     protected override async void OnAppearing()
     {
         base.OnAppearing();
-        await _vm.OnLoadFavoriteObjAsync();
+        await _vm.OnLoadFavoriteObjAsync(false);
         //if (_vm._ai.hasModel)
         //{
         //    _vm._ai.RemovePlugins();
@@ -63,6 +64,18 @@ public partial class FavoritePage : ContentPage
         //{
         //    status = await Permissions.RequestAsync<Permissions.Microphone>();
         //}
+    }
+
+    /// <summary>
+    /// 隐藏提示
+    /// </summary>
+    private async void OnShowHideTip()
+    {
+        var answer = await DisplayAlert("操作提示", "隐藏的收藏内容可通过右下角AI按钮左滑来显示，切换任意视图即可退出隐藏视图", "不再提示", "下次提醒我");
+        if (answer)
+        {
+            await _vm.DontShowAgain();
+        }
     }
 
     /// <summary>
@@ -121,6 +134,6 @@ public partial class FavoritePage : ContentPage
         _ = ButtonTapped(sender, typeof(Button));
 
         _vm.ChangeCurrentCategory(selectedCategory);
-        await _vm.OnLoadFavoriteObjAsync();
+        await _vm.OnLoadFavoriteObjAsync(false);
     }
 }

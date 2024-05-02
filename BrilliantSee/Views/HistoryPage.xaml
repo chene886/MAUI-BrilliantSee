@@ -4,6 +4,7 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:controls="clr-namespace:BrilliantSee.Controls"
+    xmlns:ffimageloading="clr-namespace:FFImageLoading.Maui;assembly=FFImageLoading.Maui"
     xmlns:vm="clr-namespace:BrilliantSee.ViewModels"
     Title="历史">
     <ContentPage.ToolbarItems>
@@ -57,12 +58,30 @@
                         <SwipeView>
                             <SwipeView.RightItems>
                                 <SwipeItemView>
-                                    <ImageButton
-                                        BackgroundColor="Transparent"
-                                        Command="{Binding ClearObjCommand, Source={RelativeSource AncestorType={x:Type vm:HistoryViewModel}}}"
-                                        CommandParameter="{Binding}"
-                                        Source="clean.png"
-                                        WidthRequest="40" />
+                                    <Grid WidthRequest="60">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="*" />
+                                            <RowDefinition Height="*" />
+                                        </Grid.RowDefinitions>
+                                        <ImageButton
+                                            BackgroundColor="{StaticResource Primary}"
+                                            Command="{Binding AddFavoriteCommand, Source={RelativeSource AncestorType={x:Type vm:HistoryViewModel}}}"
+                                            CommandParameter="{Binding}"
+                                            CornerRadius="20"
+                                            HeightRequest="40"
+                                            Source="add_favorite.png"
+                                            WidthRequest="40" />
+                                        <ImageButton
+                                            Grid.Row="1"
+                                            Margin="2,8"
+                                            BackgroundColor="{StaticResource PrimaryDark}"
+                                            Command="{Binding ClearObjCommand, Source={RelativeSource AncestorType={x:Type vm:HistoryViewModel}}}"
+                                            CommandParameter="{Binding}"
+                                            CornerRadius="20"
+                                            HeightRequest="40"
+                                            Source="close.png"
+                                            WidthRequest="40" />
+                                    </Grid>
                                 </SwipeItemView>
                             </SwipeView.RightItems>
                             <Frame
@@ -80,9 +99,13 @@
                                         <RowDefinition Height="Auto" />
                                         <RowDefinition Height="Auto" />
                                     </Grid.RowDefinitions>
-                                    <Image
+                                    <ffimageloading:CachedImage
                                         Aspect="AspectFill"
-                                        HeightRequest="160"
+                                        CacheDuration="30"
+                                        DownsampleToViewSize="True"
+                                        ErrorPlaceholder="load_fail.png"
+                                        FadeAnimationForCachedImages="True"
+                                        LoadingPlaceholder="loading.png"
                                         Source="{Binding Cover}" />
                                     <Label
                                         Grid.Row="1"

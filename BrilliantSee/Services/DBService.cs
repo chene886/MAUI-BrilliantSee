@@ -75,6 +75,7 @@ namespace BrilliantSee.Services
                 new SettingItem { Name = "ApiKey", Value ="", Category = "AIModel" },
                 new SettingItem { Name = "ApiUrl", Value = "", Category = "AIModel" },
                 new SettingItem { Name = "AudioStatus", Value = "false", Category = "Audio" },
+                new SettingItem { Name = "隐藏提示", Value = "true", Category = "Tip" },
             };
             await _db.InsertAllAsync(defaultSettingItems);
         }
@@ -187,5 +188,11 @@ namespace BrilliantSee.Services
             var Item = await _db.Table<SettingItem>().Where(i => i.Category == "Audio").FirstOrDefaultAsync();
             return Item is null ? false : Item.Value == "true";
         }
+
+        //public async Task<bool> GetHideTipStatus()
+        //{
+        //    var Item = await _db.Table<SettingItem>().Where(i => i.Category == "Tip").FirstOrDefaultAsync();
+        //    return Item is null ? true : Item.Value == "Again";
+        //}
     }
 }

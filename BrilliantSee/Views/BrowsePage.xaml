@@ -5,6 +5,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:behavior="clr-namespace:BrilliantSee.Behaviors"
     xmlns:enum="clr-namespace:BrilliantSee.Models.Enums"
+    xmlns:ffimageloading="clr-namespace:FFImageLoading.Maui;assembly=FFImageLoading.Maui"
     xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
     Title=""
     Shell.NavBarIsVisible="False"
@@ -17,8 +18,6 @@
             <Setter Property="FontSize" Value="12" />
             <Setter Property="TextColor" Value="#E0FFFFFF" />
         </Style>
-
-        <toolkit:EnumToBoolConverter x:Key="PlatformConverter" />
     </ContentPage.Resources>
     <Grid IgnoreSafeArea="True">
         <RefreshView
@@ -37,39 +36,13 @@
                     <DataTemplate>
                         <ViewCell>
                             <Grid>
-                                <Label
-                                    FontFamily=""
-                                    HeightRequest="600"
-                                    HorizontalOptions="Center"
-                                    HorizontalTextAlignment="Center"
-                                    IsVisible="{Binding State, Converter={StaticResource PlatformConverter}, ConverterParameter={x:Static enum:ComicImageItemState.Loading}}"
-                                    Text="加载中..."
-                                    TextColor="Black"
-                                    VerticalTextAlignment="Center" />
-
-                                <Image IsVisible="{Binding State, Converter={StaticResource PlatformConverter}, ConverterParameter={x:Static enum:ComicImageItemState.Success}}" Source="{Binding Source}" />
-
-                                <StackLayout
-                                    HorizontalOptions="Center"
-                                    IsVisible="{Binding State, Converter={StaticResource PlatformConverter}, ConverterParameter={x:Static enum:ComicImageItemState.Failed}}"
-                                    VerticalOptions="Center">
-                                    <Label
-                                        FontFamily=""
-                                        HeightRequest="600"
-                                        HorizontalOptions="Center"
-                                        HorizontalTextAlignment="Center"
-                                        Text="加载失败"
-                                        TextColor="Black" />
-
-                                    <Button
-                                        Margin="0,20,0,0"
-                                        Command="{Binding BindingContext.ReLoadImageCommand, Source={x:Reference listView}}"
-                                        CommandParameter="{Binding}"
-                                        FontSize="24"
-                                        HorizontalOptions="Center"
-                                        Text="重新加载"
-                                        VerticalOptions="Center" />
-                                </StackLayout>
+                                <ffimageloading:CachedImage
+                                    CacheDuration="30"
+                                    DownsampleToViewSize="True"
+                                    ErrorPlaceholder="load_fail.png"
+                                    FadeAnimationForCachedImages="True"
+                                    LoadingPlaceholder="loading.png"
+                                    Source="{Binding}" />
                             </Grid>
                         </ViewCell>
                     </DataTemplate>
