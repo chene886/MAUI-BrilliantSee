@@ -76,21 +76,24 @@
                                 TextColor="{StaticResource Gray500}"
                                 VerticalOptions="Center"
                                 WidthRequest="90" />
-                            <RoundRectangle
+                            <Border
                                 Grid.Column="1"
-                                CornerRadius="20"
-                                Fill="Transparent"
+                                BackgroundColor="Transparent"
                                 HeightRequest="20"
                                 Stroke="{StaticResource Primary}"
                                 StrokeThickness="2"
-                                WidthRequest="20" />
+                                WidthRequest="20">
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="20" />
+                                </Border.StrokeShape>
+                            </Border>
                             <RoundRectangle
                                 Grid.Column="1"
-                                BackgroundColor="{StaticResource Primary}"
                                 CornerRadius="20"
-                                HeightRequest="14"
+                                Fill="{StaticResource Primary}"
+                                HeightRequest="13"
                                 IsVisible="{Binding IsSelected}"
-                                WidthRequest="14" />
+                                WidthRequest="13" />
                         </Grid>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>

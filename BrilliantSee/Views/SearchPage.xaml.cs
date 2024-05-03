@@ -1,8 +1,6 @@
 using BrilliantSee.Models.Enums;
-using BrilliantSee.Models.Objs;
 using BrilliantSee.ViewModels;
 using CommunityToolkit.Maui.Core.Platform;
-using System.Collections.ObjectModel;
 
 namespace BrilliantSee.Views;
 
@@ -14,6 +12,7 @@ public partial class SearchPage : ContentPage
     /// 按钮文本对应的类别
     /// </summary>
     private Dictionary<string, SourceCategory> Categories;
+
     /// <summary>
     /// 类别对应的按钮
     /// </summary>
@@ -100,7 +99,7 @@ public partial class SearchPage : ContentPage
     /// <param name="type"></param>
     private async Task ButtonTapped(object sender, Type type)
     {
-        View obj = type == typeof(HorizontalStackLayout) ? (HorizontalStackLayout)sender! : type == typeof(Button) ? (Button)sender! : (Grid)sender!;
+        View obj = (View)sender;
         await obj!.ScaleTo(1.15, 100);
         await obj!.ScaleTo(1, 100);
     }
