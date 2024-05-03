@@ -70,14 +70,6 @@
                                             <RowDefinition Height="*" />
                                         </Grid.RowDefinitions>
                                         <ImageButton
-                                            Command="{Binding CancelFavoriteCommand, Source={RelativeSource AncestorType={x:Type vm:FavoriteViewModel}}}"
-                                            CommandParameter="{Binding}"
-                                            CornerRadius="20"
-                                            HeightRequest="40"
-                                            Source="broken_love.png"
-                                            WidthRequest="40" />
-                                        <ImageButton
-                                            Grid.Row="1"
                                             Command="{Binding HideObjCommand, Source={RelativeSource AncestorType={x:Type vm:FavoriteViewModel}}}"
                                             CommandParameter="{Binding}"
                                             CornerRadius="20"
@@ -93,6 +85,14 @@
                                                 </DataTrigger>
                                             </ImageButton.Triggers>
                                         </ImageButton>
+                                        <ImageButton
+                                            Grid.Row="1"
+                                            Command="{Binding CancelFavoriteCommand, Source={RelativeSource AncestorType={x:Type vm:FavoriteViewModel}}}"
+                                            CommandParameter="{Binding}"
+                                            CornerRadius="20"
+                                            HeightRequest="40"
+                                            Source="broken_love.png"
+                                            WidthRequest="40" />
                                     </Grid>
                                 </SwipeItemView>
                             </SwipeView.RightItems>

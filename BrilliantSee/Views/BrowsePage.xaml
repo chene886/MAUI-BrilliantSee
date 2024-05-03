@@ -36,13 +36,14 @@
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <ViewCell>
-                            <ffimageloading:CachedImage
-                                CacheDuration="30"
-                                ErrorPlaceholder="load_fail.png"
-                                FadeAnimationForCachedImages="True"
-                                LoadingPlaceholder="loading.png"
-                                Source="{Binding}"
-                                WidthRequest="{Binding ScreenWidth, Source={RelativeSource AncestorType={x:Type vm:BrowseViewModel}}}" />
+                            <Grid>
+                                <ffimageloading:CachedImage
+                                    CacheDuration="30"
+                                    ErrorPlaceholder="load_fail.png"
+                                    LoadingPlaceholder="loading.png"
+                                    Source="{Binding}"
+                                    WidthRequest="{Binding ScreenWidth, Source={RelativeSource AncestorType={x:Type vm:BrowseViewModel}}}" />
+                            </Grid>
                         </ViewCell>
                     </DataTemplate>
                 </ListView.ItemTemplate>

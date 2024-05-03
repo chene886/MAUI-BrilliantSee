@@ -46,15 +46,18 @@ namespace BrilliantSee.ViewModels
         /// </summary>
         public event Action ShowHideTip = delegate { };
 
+        [ObservableProperty]
+        public bool _isShowHideObj = false;
+
         /// <summary>
         /// 加载收藏实体
         /// </summary>
         /// <returns></returns>
-        public async Task OnLoadFavoriteObjAsync(bool IsShowHide)
+        public async Task OnLoadFavoriteObjAsync()
         {
             Objs.Clear();
             var objs = await _db.GetObjsAsync(DBObjCategory.Favorite, CurrentCategory);
-            foreach (var item in objs.Where(i => i.IsHide == IsShowHide))
+            foreach (var item in objs.Where(i => i.IsHide == IsShowHideObj))
             {
                 Objs.Insert(0, item);
             }
@@ -171,7 +174,7 @@ namespace BrilliantSee.ViewModels
                                         item.IsUpdate = true;
                                         hasUpdate = true;
                                         await _db.SaveObjAsync(item, DBObjCategory.Favorite);
-                                        _ = MainThread.InvokeOnMainThreadAsync(() => _ = OnLoadFavoriteObjAsync(false));
+                                        _ = MainThread.InvokeOnMainThreadAsync(() => _ = OnLoadFavoriteObjAsync());
                                     }
                                 }
                                 else
@@ -217,8 +220,10 @@ namespace BrilliantSee.ViewModels
         [RelayCommand]
         private async Task ShowHideObjAsync()
         {
-            await OnLoadFavoriteObjAsync(true);
-            _ms.WriteMessage("已显示隐藏内容");
+            IsShowHideObj = !IsShowHideObj;
+            var message = IsShowHideObj ? "已进入隐藏视图" : "已退出隐藏视图";
+            await OnLoadFavoriteObjAsync();
+            _ms.WriteMessage(message);
         }
     }
 }

@@ -47,7 +47,7 @@ public partial class FavoritePage : ContentPage
     protected override async void OnAppearing()
     {
         base.OnAppearing();
-        await _vm.OnLoadFavoriteObjAsync(false);
+        await _vm.OnLoadFavoriteObjAsync();
         //if (_vm._ai.hasModel)
         //{
         //    _vm._ai.RemovePlugins();
@@ -71,7 +71,7 @@ public partial class FavoritePage : ContentPage
     /// </summary>
     private async void OnShowHideTip()
     {
-        var answer = await DisplayAlert("操作提示", "隐藏的收藏内容可通过右下角AI按钮左滑来显示，切换任意视图即可退出隐藏视图", "不再提示", "下次提醒我");
+        var answer = await DisplayAlert("操作提示", "隐藏视图和正常视图可通过右下角AI助手按钮左滑来切换，隐藏内容不会出现在历史记录，隐藏状态下取消收藏会一并取消隐藏状态", "不再提示", "下次提醒我");
         if (answer)
         {
             await _vm.DontShowAgain();
@@ -110,7 +110,7 @@ public partial class FavoritePage : ContentPage
             if (match.Success)
             {
                 var version = match.Groups[1].Value;
-                if (version != "BrilliantSee_v2.1.7")
+                if (version != "BrilliantSee_v2.2.5")
                 {
                     bool answer = await DisplayAlert("检测到新版本", "是否更新?", "快让朕瞧瞧", "朕不感兴趣");
                     if (answer)
@@ -134,6 +134,6 @@ public partial class FavoritePage : ContentPage
         _ = ButtonTapped(sender, typeof(Button));
 
         _vm.ChangeCurrentCategory(selectedCategory);
-        await _vm.OnLoadFavoriteObjAsync(false);
+        await _vm.OnLoadFavoriteObjAsync();
     }
 }

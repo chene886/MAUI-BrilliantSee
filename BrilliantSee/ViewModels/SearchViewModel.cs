@@ -21,6 +21,7 @@ namespace BrilliantSee.ViewModels
         /// 当前选中的类别
         /// </summary>
         public SourceCategory CurrentCategory { get; set; } = SourceCategory.All;
+
         /// <summary>
         /// 当前类别的对象数量
         /// </summary>
@@ -30,14 +31,17 @@ namespace BrilliantSee.ViewModels
         /// 所有类别的对象集合
         /// </summary>
         public ObservableCollection<Obj> AllObjs { get; set; } = new();
+
         /// <summary>
         /// 小说类别的对象集合
         /// </summary>
         private ObservableCollection<Obj> Novels { get; set; } = new();
+
         /// <summary>
         /// 漫画类别的对象集合
         /// </summary>
         private ObservableCollection<Obj> Comics { get; set; } = new();
+
         /// <summary>
         /// 动漫类别的对象集合
         /// </summary>
@@ -65,6 +69,7 @@ namespace BrilliantSee.ViewModels
         /// </summary>
         [ObservableProperty]
         private List<Source> _sources = new();
+
         /// <summary>
         /// 源列表组
         /// </summary>
@@ -141,8 +146,10 @@ namespace BrilliantSee.ViewModels
                     tasks.Add(Task.Run(async () => await _sourceService.SearchAsync(keyword, AllObjs, ObjContainers[key], "Init", key)));
                 }
                 await Task.WhenAll(tasks);
-                if (Comics.Count == 0 && Videos.Count == 0 && Novels.Count == 0) { _ms.WriteMessage("搜索结果为空，换其他源试试吧"); }
+                var count = Comics.Count + Videos.Count + Novels.Count;
+                if (count == 0) { _ms.WriteMessage("搜索结果为空，换其他源试试吧"); }
                 else { _ms.WriteMessage($"搜索到{Novels.Count}部小说，{Comics.Count}部漫画，{Videos.Count}部动漫"); }
+                CurrentObjsCount = count;
                 IsGettingResult = false;
             }
             else
