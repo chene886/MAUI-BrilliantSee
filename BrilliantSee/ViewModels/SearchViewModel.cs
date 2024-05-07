@@ -20,7 +20,8 @@ namespace BrilliantSee.ViewModels
         /// <summary>
         /// 当前选中的类别
         /// </summary>
-        public SourceCategory CurrentCategory { get; set; } = SourceCategory.All;
+        [ObservableProperty]
+        public SourceCategory _currentCategory = SourceCategory.All;
 
         /// <summary>
         /// 当前类别的对象数量
@@ -180,6 +181,7 @@ namespace BrilliantSee.ViewModels
             }
             else await _sourceService.SearchAsync(Keyword, AllObjs, ObjContainers[CurrentCategory], "More", CurrentCategory);
             var message = Comics.Count + Videos.Count + Novels.Count > count ? $"加载了{Comics.Count + Videos.Count + Novels.Count - count}个结果" : "没有更多结果了";
+            CurrentObjsCount = ObjContainers[CurrentCategory].Count;
             _ms.WriteMessage(message);
             IsGettingResult = false;
         }

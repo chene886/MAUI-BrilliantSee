@@ -6,7 +6,6 @@
     xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
     xmlns:vm="clr-namespace:BrilliantSee.ViewModels"
     Title="{Binding Obj.Name}"
-    Shell.ForegroundColor="Black"
     Shell.TabBarIsVisible="False"
     Unloaded="ContentPage_Unloaded">
     <ContentPage.ToolbarItems>
@@ -19,49 +18,56 @@
             IconImageSource="browser.png"
             Text="浏览器打开" />
     </ContentPage.ToolbarItems>
-    <Grid BackgroundColor="Black">
+    <Grid>
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="216" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
-            <toolkit:MediaElement
-                x:Name="media"
-                HorizontalOptions="Center"
-                ShouldAutoPlay="True"
-                ShouldKeepScreenOn="True"
-                ShouldShowPlaybackControls="True"
-                Source="{Binding VideoUrl}"
-                VerticalOptions="Center"
-                ZIndex="1" />
-            <ActivityIndicator
-                BindingContext="{x:Reference media}"
-                HeightRequest="55"
-                HorizontalOptions="Center"
-                IsRunning="True"
-                IsVisible="False"
-                VerticalOptions="Center"
-                WidthRequest="55"
-                ZIndex="2">
-                <ActivityIndicator.Triggers>
-                    <DataTrigger
-                        Binding="{Binding CurrentState}"
-                        TargetType="ActivityIndicator"
-                        Value="Buffering">
-                        <Setter Property="IsVisible" Value="True" />
-                    </DataTrigger>
-                    <DataTrigger
-                        Binding="{Binding CurrentState}"
-                        TargetType="ActivityIndicator"
-                        Value="Playing">
-                        <Setter Property="IsVisible" Value="False" />
-                    </DataTrigger>
-                </ActivityIndicator.Triggers>
-            </ActivityIndicator>
+            <Grid BackgroundColor="Black">
+                <toolkit:MediaElement
+                    x:Name="media"
+                    HorizontalOptions="Center"
+                    ShouldAutoPlay="True"
+                    ShouldKeepScreenOn="True"
+                    ShouldShowPlaybackControls="True"
+                    Source="{Binding VideoUrl}"
+                    VerticalOptions="Center"
+                    ZIndex="-1" />
+                <ActivityIndicator
+                    BindingContext="{x:Reference media}"
+                    HeightRequest="55"
+                    HorizontalOptions="Center"
+                    IsRunning="True"
+                    IsVisible="False"
+                    VerticalOptions="Center"
+                    WidthRequest="55"
+                    ZIndex="0">
+                    <ActivityIndicator.Triggers>
+                        <DataTrigger
+                            Binding="{Binding IsSettingVideo, Source={RelativeSource AncestorType={x:Type vm:DetailViewModel}}}"
+                            TargetType="ActivityIndicator"
+                            Value="True">
+                            <Setter Property="IsVisible" Value="True" />
+                        </DataTrigger>
+                        <DataTrigger
+                            Binding="{Binding CurrentState}"
+                            TargetType="ActivityIndicator"
+                            Value="Buffering">
+                            <Setter Property="IsVisible" Value="True" />
+                        </DataTrigger>
+                        <DataTrigger
+                            Binding="{Binding CurrentState}"
+                            TargetType="ActivityIndicator"
+                            Value="Playing">
+                            <Setter Property="IsVisible" Value="False" />
+                        </DataTrigger>
+                    </ActivityIndicator.Triggers>
+                </ActivityIndicator>
+            </Grid>
             <CollectionView
                 x:Name="list"
                 Grid.Row="1"
-                BackgroundColor="{StaticResource Backcolor}"
                 ItemsLayout="VerticalGrid, 3"
                 ItemsSource="{Binding ItemsOnDisPlay}">
                 <CollectionView.Header>
@@ -118,8 +124,16 @@
                                     FontFamily=""
                                     FontSize="16"
                                     Text="线路一"
-                                    TextColor="#512BD4"
-                                    VerticalOptions="Center" />
+                                    VerticalOptions="Center">
+                                    <Button.Triggers>
+                                        <DataTrigger
+                                            Binding="{Binding CurrentRoute, Source={RelativeSource AncestorType={x:Type vm:DetailViewModel}}}"
+                                            TargetType="Button"
+                                            Value="线路一">
+                                            <Setter Property="TextColor" Value="#512BD4" />
+                                        </DataTrigger>
+                                    </Button.Triggers>
+                                </Button>
                                 <Button
                                     x:Name="route2"
                                     Padding="4"
@@ -128,8 +142,16 @@
                                     FontFamily=""
                                     FontSize="16"
                                     Text="线路二"
-                                    TextColor="Black"
-                                    VerticalOptions="Center" />
+                                    VerticalOptions="Center">
+                                    <Button.Triggers>
+                                        <DataTrigger
+                                            Binding="{Binding CurrentRoute, Source={RelativeSource AncestorType={x:Type vm:DetailViewModel}}}"
+                                            TargetType="Button"
+                                            Value="线路二">
+                                            <Setter Property="TextColor" Value="#512BD4" />
+                                        </DataTrigger>
+                                    </Button.Triggers>
+                                </Button>
                                 <Button
                                     x:Name="route3"
                                     Padding="4"
@@ -169,8 +191,6 @@
                         <Frame
                             Margin="6"
                             Padding="10,0"
-                            BackgroundColor="White"
-                            BorderColor="{StaticResource Gray500}"
                             CornerRadius="45"
                             HeightRequest="32">
                             <Frame.GestureRecognizers>

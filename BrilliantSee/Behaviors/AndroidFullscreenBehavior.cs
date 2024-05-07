@@ -29,7 +29,7 @@ namespace BrilliantSee.Behaviors
             else
             {
 #if ANDROID
-                window!.DecorView.SystemUiFlags = (Android.Views.SystemUiFlags.Fullscreen | Android.Views.SystemUiFlags.HideNavigation | Android.Views.SystemUiFlags.ImmersiveSticky | Android.Views.SystemUiFlags.LayoutFullscreen | Android.Views.SystemUiFlags.LayoutHideNavigation);
+                window!.DecorView.SystemUiFlags = (Android.Views.SystemUiFlags.Fullscreen | Android.Views.SystemUiFlags.HideNavigation | Android.Views.SystemUiFlags.ImmersiveSticky);
 #endif
             }
         }

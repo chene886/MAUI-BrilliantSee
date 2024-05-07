@@ -25,29 +25,61 @@
                     BackgroundColor="Transparent"
                     Clicked="Button_Clicked"
                     FontFamily=""
-                    Text="全部"
-                    TextColor="#512BD4" />
+                    Text="全部">
+                    <Button.Triggers>
+                        <DataTrigger
+                            Binding="{Binding CurrentCategory, Source={RelativeSource AncestorType={x:Type vm:HistoryViewModel}}}"
+                            TargetType="Button"
+                            Value="All">
+                            <Setter Property="TextColor" Value="#512BD4" />
+                        </DataTrigger>
+                    </Button.Triggers>
+                </Button>
                 <Button
                     x:Name="novels"
                     BackgroundColor="Transparent"
                     Clicked="Button_Clicked"
                     FontFamily=""
-                    Text="小说"
-                    TextColor="#212121" />
+                    Text="小说">
+                    <Button.Triggers>
+                        <DataTrigger
+                            Binding="{Binding CurrentCategory, Source={RelativeSource AncestorType={x:Type vm:HistoryViewModel}}}"
+                            TargetType="Button"
+                            Value="Novel">
+                            <Setter Property="TextColor" Value="#512BD4" />
+                        </DataTrigger>
+                    </Button.Triggers>
+                </Button>
                 <Button
                     x:Name="comics"
                     BackgroundColor="Transparent"
                     Clicked="Button_Clicked"
                     FontFamily=""
-                    Text="漫画"
-                    TextColor="#212121" />
+                    Text="漫画">
+                    <Button.Triggers>
+                        <DataTrigger
+                            Binding="{Binding CurrentCategory, Source={RelativeSource AncestorType={x:Type vm:HistoryViewModel}}}"
+                            TargetType="Button"
+                            Value="Comic">
+                            <Setter Property="TextColor" Value="#512BD4" />
+                        </DataTrigger>
+                    </Button.Triggers>
+                </Button>
                 <Button
                     x:Name="videos"
                     BackgroundColor="Transparent"
                     Clicked="Button_Clicked"
                     FontFamily=""
-                    Text="动漫"
-                    TextColor="#212121" />
+                    Text="动漫">
+                    <Button.Triggers>
+                        <DataTrigger
+                            Binding="{Binding CurrentCategory, Source={RelativeSource AncestorType={x:Type vm:HistoryViewModel}}}"
+                            TargetType="Button"
+                            Value="Video">
+                            <Setter Property="TextColor" Value="#512BD4" />
+                        </DataTrigger>
+                    </Button.Triggers>
+                </Button>
             </HorizontalStackLayout>
             <CollectionView
                 Grid.Row="1"
@@ -84,13 +116,12 @@
                             <Frame
                                 Margin="5,0,5,20"
                                 Padding="0"
-                                BackgroundColor="White"
                                 CornerRadius="8"
                                 HasShadow="True">
                                 <Frame.GestureRecognizers>
                                     <TapGestureRecognizer Command="{Binding OpenObjCommand, Source={RelativeSource AncestorType={x:Type vm:HistoryViewModel}}}" CommandParameter="{Binding}" />
                                 </Frame.GestureRecognizers>
-                                <Grid RowSpacing="1">
+                                <Grid BackgroundColor="Transparent" RowSpacing="1">
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="160" />
                                         <RowDefinition Height="Auto" />

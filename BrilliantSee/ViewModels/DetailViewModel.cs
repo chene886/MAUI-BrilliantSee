@@ -11,7 +11,7 @@ namespace BrilliantSee.ViewModels
     public partial class DetailViewModel : ObservableObject, IQueryAttributable
     {
         public readonly DBService _db;
-        private readonly MessageService _ms;
+        public readonly MessageService _ms;
         //private readonly AIService _ai;
 
         /// <summary>
@@ -25,6 +25,18 @@ namespace BrilliantSee.ViewModels
         /// </summary>
         [ObservableProperty]
         public string _videoUrl = string.Empty;
+
+        /// <summary>
+        /// 是否正在设置视频
+        /// </summary>
+        [ObservableProperty]
+        public bool _isSettingVideo = false;
+
+        /// <summary>
+        /// 当前线路
+        /// </summary>
+        [ObservableProperty]
+        public string _currentRoute = "线路一";
 
         /// <summary>
         /// 收藏图标
@@ -216,22 +228,25 @@ namespace BrilliantSee.ViewModels
         [RelayCommand]
         private async Task SetVideoAsync(Item video)
         {
-            _ = video.Obj.ChangeLastReadedItemIndex(video.Index, _db);
-            if (video.VideoUrl != string.Empty)
+            IsSettingVideo = true;
+            if (video.Index != Obj!.LastReadedItemIndex)
             {
-                VideoUrl = video.VideoUrl;
-                return;
+                _ = video.Obj.ChangeLastReadedItemIndex(video.Index, _db);
             }
-            try
+            if (video.VideoUrl == string.Empty)
             {
-                await video.GetResourcesAsync();
-            }
-            catch (Exception e)
-            {
-                if (e.Message == "请求失败") _ms.WriteMessage(e.Message);
-                else _ms.WriteMessage("好像出了点小问题，用浏览器打开试试吧");
+                try
+                {
+                    await video.GetResourcesAsync();
+                }
+                catch (Exception e)
+                {
+                    if (e.Message == "请求失败") _ms.WriteMessage(e.Message);
+                    else _ms.WriteMessage("好像出了点小问题，用浏览器打开试试吧");
+                }
             }
             VideoUrl = video.VideoUrl;
+            IsSettingVideo = false;
         }
 
         /// <summary>
@@ -255,10 +270,9 @@ namespace BrilliantSee.ViewModels
         /// <summary>
         /// 设置当前线路的剧集集合
         /// </summary>
-        /// <param name="route">指定的线路</param>
-        public void SetItemsOnDisplay(string route)
+        public void SetItemsOnDisplay()
         {
-            ItemsOnDisPlay = Obj!.Items.Where(c => c.Route == route);
+            ItemsOnDisPlay = Obj!.Items.Where(c => c.Route == CurrentRoute);
         }
     }
 }

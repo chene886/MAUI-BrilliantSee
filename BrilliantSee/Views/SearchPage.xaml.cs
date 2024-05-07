@@ -13,11 +13,6 @@ public partial class SearchPage : ContentPage
     /// </summary>
     private Dictionary<string, SourceCategory> Categories;
 
-    /// <summary>
-    /// 类别对应的按钮
-    /// </summary>
-    private Dictionary<SourceCategory, Button> Buttons;
-
     public SearchPage(SearchViewModel vm)
     {
         _vm = vm;
@@ -29,13 +24,6 @@ public partial class SearchPage : ContentPage
             { "小说", SourceCategory.Novel },
             { "漫画", SourceCategory.Comic },
             { "动漫", SourceCategory.Video }
-        };
-        Buttons = new Dictionary<SourceCategory, Button>()
-        {
-            { SourceCategory.All, all },
-            { SourceCategory.Novel, novels },
-            { SourceCategory.Comic, comics },
-            { SourceCategory.Video, videos }
         };
         this.Loaded += SearchPage_Loaded;
     }
@@ -125,11 +113,9 @@ public partial class SearchPage : ContentPage
         var selectedCategory = Categories[button!.Text];
 
         if (selectedCategory == _vm.CurrentCategory) return;
-        Buttons[_vm.CurrentCategory].TextColor = Color.FromArgb("#212121");
-        button.TextColor = Color.FromArgb("#512BD4");
+        _vm.ChangeCurrentCategory(selectedCategory);
         _ = ButtonTapped(sender, typeof(Button));
 
-        _vm.ChangeCurrentCategory(selectedCategory);
         this.comicList.ItemsSource = _vm.GetObjsOnDisplay();
     }
 }

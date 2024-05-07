@@ -7,8 +7,7 @@
     xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
     xmlns:views="clr-namespace:BrilliantSee.Views"
     Title="BrilliantSee"
-    FlyoutBehavior="Disabled"
-    TitleColor="Black">
+    FlyoutBehavior="Disabled">
     <Shell.Behaviors>
         <toolkit:StatusBarBehavior StatusBarColor="{StaticResource Backcolor}" StatusBarStyle="DarkContent" />
     </Shell.Behaviors>

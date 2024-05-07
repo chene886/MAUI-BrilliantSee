@@ -8,28 +8,15 @@ public partial class VideoPage : ContentPage
 {
     private readonly DetailViewModel _vm;
 
-    /// <summary>
-    /// 线路选择按钮
-    /// </summary>
-    private readonly Dictionary<string, Button> Buttons;
-
-    /// <summary>
-    /// 当前线路
-    /// </summary>
-    private string CurrentRoute { get; set; } = "线路一";
-
     public VideoPage(DetailViewModel vm)
     {
         _vm = vm;
         this.BindingContext = _vm;
         InitializeComponent();
-        Buttons = new Dictionary<string, Button>()
-        {
-            { "线路一", route1 },
-            { "线路二", route2 },
-            { "线路三", route3 },
-            { "线路四", route4 }
-        };
+#if ANDROID
+            var activity = Platform.CurrentActivity ?? throw new InvalidOperationException("Android Activity can't be null.");
+            activity.RequestedOrientation = Android.Content.PM.ScreenOrientation.User;
+#endif
     }
 
     /// <summary>
@@ -40,6 +27,10 @@ public partial class VideoPage : ContentPage
     private void ContentPage_Unloaded(object sender, EventArgs e)
     {
         media.Handler?.DisconnectHandler();
+#if ANDROID
+            var activity = Platform.CurrentActivity ?? throw new InvalidOperationException("Android Activity can't be null.");
+            activity.RequestedOrientation = Android.Content.PM.ScreenOrientation.Portrait;
+#endif
     }
 
     /// <summary>
@@ -64,18 +55,24 @@ public partial class VideoPage : ContentPage
     {
         var btn = sender! as Button;
         var SelectedRoute = btn!.Text;
-        if (CurrentRoute != SelectedRoute)
+        if (_vm.CurrentRoute != SelectedRoute)
         {
-            Buttons[CurrentRoute].TextColor = Color.FromArgb("#000000");
-            CurrentRoute = SelectedRoute;
-            btn.TextColor = Color.FromArgb("#512BD4");
+            _vm.CurrentRoute = SelectedRoute;
             _ = ButtonTapped(sender, typeof(Button));
-            _vm.SetItemsOnDisplay(CurrentRoute);
+            _vm.SetItemsOnDisplay();
         }
     }
 
     protected override bool OnBackButtonPressed()
     {
-        return base.OnBackButtonPressed();
+        if (media.Height == 0)
+        {
+            _vm._ms.WriteMessage("请先退出全屏再返回");
+            return true;
+        }
+        else
+        {
+            return base.OnBackButtonPressed();
+        }
     }
 }

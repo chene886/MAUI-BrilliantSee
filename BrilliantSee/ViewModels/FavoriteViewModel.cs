@@ -17,7 +17,8 @@ namespace BrilliantSee.ViewModels
         /// <summary>
         /// 当前选中的类别
         /// </summary>
-        public SourceCategory CurrentCategory { get; set; } = SourceCategory.All;
+        [ObservableProperty]
+        public SourceCategory _currentCategory = SourceCategory.All;
 
         ///// <summary>
         ///// 是否正在获取结果

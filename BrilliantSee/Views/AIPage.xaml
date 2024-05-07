@@ -5,7 +5,6 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:controls="clr-namespace:BrilliantSee.Controls"
     Title="AI助手"
-    Shell.ForegroundColor="Black"
     Shell.TabBarIsVisible="False">
     <ContentPage.ToolbarItems>
         <!--<ToolbarItem
@@ -85,8 +84,6 @@
             x:Name="model"
             Margin="0,0,0,240"
             Padding="12"
-            BackgroundColor="White"
-            BorderColor="White"
             CornerRadius="8"
             HasShadow="False"
             HeightRequest="240"

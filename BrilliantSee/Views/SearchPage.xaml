@@ -7,7 +7,6 @@
     xmlns:ffimageloading="clr-namespace:FFImageLoading.Maui;assembly=FFImageLoading.Maui"
     xmlns:vm="clr-namespace:BrilliantSee.ViewModels"
     Title="搜索"
-    Shell.ForegroundColor="Black"
     Shell.TabBarIsVisible="False">
     <Shell.TitleView>
         <Entry
@@ -27,78 +26,83 @@
             Text="选择图源" />
     </ContentPage.ToolbarItems>
     <Grid>
-        <Frame
+        <Border
             x:Name="sourceList"
             Margin="0,0,1,0"
-            Padding="2"
-            BackgroundColor="{StaticResource Backcolor}"
-            HasShadow="True"
             HeightRequest="220"
             HorizontalOptions="End"
             IsVisible="{Binding IsSourceListVisible}"
+            StrokeThickness="2"
             VerticalOptions="Start"
             WidthRequest="140"
             ZIndex="3">
-            <CollectionView
-                HorizontalOptions="Center"
-                IsGrouped="True"
-                ItemsSource="{Binding SourceGroups}">
-                <CollectionView.GroupHeaderTemplate>
-                    <DataTemplate>
-                        <Label
-                            Margin="0,4"
-                            FontFamily=""
-                            FontSize="16"
-                            HorizontalOptions="Center"
-                            Text="{Binding Name}" />
-                    </DataTemplate>
-                </CollectionView.GroupHeaderTemplate>
-                <CollectionView.ItemTemplate>
-                    <DataTemplate>
-                        <Grid
-                            Margin="4,2"
-                            Padding="8,0"
-                            BackgroundColor="{StaticResource White}"
-                            HeightRequest="40">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto" />
-                                <ColumnDefinition Width="*" />
-                            </Grid.ColumnDefinitions>
-                            <Grid.GestureRecognizers>
-                                <TapGestureRecognizer
-                                    Command="{Binding ChangeIsSelectedCommand, Source={RelativeSource AncestorType={x:Type vm:SearchViewModel}}}"
-                                    CommandParameter="{Binding}"
-                                    Tapped="TapGestureRecognizer_Tapped" />
-                            </Grid.GestureRecognizers>
+            <Border.StrokeShape>
+                <RoundRectangle CornerRadius="10" />
+            </Border.StrokeShape>
+            <Grid>
+                <CollectionView
+                    HorizontalOptions="Center"
+                    IsGrouped="True"
+                    ItemsSource="{Binding SourceGroups}">
+                    <CollectionView.GroupHeaderTemplate>
+                        <DataTemplate>
                             <Label
+                                Margin="0,4"
                                 FontFamily=""
-                                Text="{Binding Name}"
-                                TextColor="{StaticResource Gray500}"
-                                VerticalOptions="Center"
-                                WidthRequest="90" />
-                            <Border
-                                Grid.Column="1"
-                                BackgroundColor="Transparent"
-                                HeightRequest="20"
-                                Stroke="{StaticResource Primary}"
-                                StrokeThickness="2"
-                                WidthRequest="20">
-                                <Border.StrokeShape>
-                                    <RoundRectangle CornerRadius="20" />
-                                </Border.StrokeShape>
-                            </Border>
-                            <RoundRectangle
-                                Grid.Column="1"
-                                CornerRadius="20"
-                                Fill="{StaticResource Primary}"
-                                HeightRequest="13"
-                                IsVisible="{Binding IsSelected}"
-                                WidthRequest="13" />
-                        </Grid>
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
-            </CollectionView>
-        </Frame>
+                                FontSize="16"
+                                HorizontalOptions="Center"
+                                Text="{Binding Name}" />
+                        </DataTemplate>
+                    </CollectionView.GroupHeaderTemplate>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Frame
+                                Margin="4,2"
+                                Padding="0"
+                                BorderColor="Transparent"
+                                HeightRequest="40">
+                                <Frame.GestureRecognizers>
+                                    <TapGestureRecognizer
+                                        Command="{Binding ChangeIsSelectedCommand, Source={RelativeSource AncestorType={x:Type vm:SearchViewModel}}}"
+                                        CommandParameter="{Binding}"
+                                        Tapped="TapGestureRecognizer_Tapped" />
+                                </Frame.GestureRecognizers>
+                                <Grid Padding="8,0" BackgroundColor="Transparent">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <Label
+                                        FontFamily=""
+                                        Text="{Binding Name}"
+                                        TextColor="{StaticResource Gray500}"
+                                        VerticalOptions="Center"
+                                        WidthRequest="90" />
+                                    <Border
+                                        Grid.Column="1"
+                                        BackgroundColor="Transparent"
+                                        HeightRequest="20"
+                                        Stroke="{StaticResource Primary}"
+                                        StrokeThickness="2"
+                                        WidthRequest="20">
+                                        <Border.StrokeShape>
+                                            <RoundRectangle CornerRadius="20" />
+                                        </Border.StrokeShape>
+                                    </Border>
+                                    <RoundRectangle
+                                        Grid.Column="1"
+                                        CornerRadius="20"
+                                        Fill="{StaticResource Primary}"
+                                        HeightRequest="13"
+                                        IsVisible="{Binding IsSelected}"
+                                        WidthRequest="13" />
+                                </Grid>
+                            </Frame>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </Grid>
+        </Border>
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
@@ -110,29 +114,61 @@
                     BackgroundColor="Transparent"
                     Clicked="Button_Clicked"
                     FontFamily=""
-                    Text="全部"
-                    TextColor="#512BD4" />
+                    Text="全部">
+                    <Button.Triggers>
+                        <DataTrigger
+                            Binding="{Binding CurrentCategory, Source={RelativeSource AncestorType={x:Type vm:SearchViewModel}}}"
+                            TargetType="Button"
+                            Value="All">
+                            <Setter Property="TextColor" Value="#512BD4" />
+                        </DataTrigger>
+                    </Button.Triggers>
+                </Button>
                 <Button
                     x:Name="novels"
                     BackgroundColor="Transparent"
                     Clicked="Button_Clicked"
                     FontFamily=""
-                    Text="小说"
-                    TextColor="#212121" />
+                    Text="小说">
+                    <Button.Triggers>
+                        <DataTrigger
+                            Binding="{Binding CurrentCategory, Source={RelativeSource AncestorType={x:Type vm:SearchViewModel}}}"
+                            TargetType="Button"
+                            Value="Novel">
+                            <Setter Property="TextColor" Value="#512BD4" />
+                        </DataTrigger>
+                    </Button.Triggers>
+                </Button>
                 <Button
                     x:Name="comics"
                     BackgroundColor="Transparent"
                     Clicked="Button_Clicked"
                     FontFamily=""
-                    Text="漫画"
-                    TextColor="#212121" />
+                    Text="漫画">
+                    <Button.Triggers>
+                        <DataTrigger
+                            Binding="{Binding CurrentCategory, Source={RelativeSource AncestorType={x:Type vm:SearchViewModel}}}"
+                            TargetType="Button"
+                            Value="Comic">
+                            <Setter Property="TextColor" Value="#512BD4" />
+                        </DataTrigger>
+                    </Button.Triggers>
+                </Button>
                 <Button
                     x:Name="videos"
                     BackgroundColor="Transparent"
                     Clicked="Button_Clicked"
                     FontFamily=""
-                    Text="动漫"
-                    TextColor="#212121" />
+                    Text="动漫">
+                    <Button.Triggers>
+                        <DataTrigger
+                            Binding="{Binding CurrentCategory, Source={RelativeSource AncestorType={x:Type vm:SearchViewModel}}}"
+                            TargetType="Button"
+                            Value="Video">
+                            <Setter Property="TextColor" Value="#512BD4" />
+                        </DataTrigger>
+                    </Button.Triggers>
+                </Button>
             </HorizontalStackLayout>
             <CollectionView
                 x:Name="comicList"
@@ -145,7 +181,6 @@
                         <Frame
                             Margin="10,0,10,10"
                             Padding="10"
-                            BackgroundColor="White"
                             CornerRadius="10"
                             HasShadow="True">
                             <Frame.GestureRecognizers>
@@ -154,7 +189,7 @@
                                     CommandParameter="{Binding}"
                                     Tapped="HideKeyboard" />
                             </Frame.GestureRecognizers>
-                            <Grid>
+                            <Grid BackgroundColor="Transparent">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="Auto" />
                                     <ColumnDefinition Width="*" />
@@ -182,6 +217,7 @@
                                 <Grid
                                     Grid.Column="1"
                                     Margin="10,0,0,0"
+                                    BackgroundColor="Transparent"
                                     RowSpacing="10">
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="Auto" />
@@ -189,7 +225,7 @@
                                         <RowDefinition Height="Auto" />
                                         <RowDefinition Height="*" />
                                     </Grid.RowDefinitions>
-                                    <Grid>
+                                    <Grid BackgroundColor="Transparent">
                                         <Label
                                             FontFamily=""
                                             FontSize="18"
