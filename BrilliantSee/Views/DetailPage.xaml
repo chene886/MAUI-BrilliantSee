@@ -72,7 +72,6 @@
                     <VerticalStackLayout
                         Grid.Row="1"
                         Grid.Column="1"
-                        Margin="0,-4,0,0"
                         Spacing="6">
                         <Label
                             FontFamily=""

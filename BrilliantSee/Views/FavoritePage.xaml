@@ -24,7 +24,10 @@
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
-            <HorizontalStackLayout Margin="2,0,0,0" Background="Transparent">
+            <HorizontalStackLayout
+                Margin="2,0,0,0"
+                Background="Transparent"
+                Spacing="10">
                 <Button
                     x:Name="all"
                     BackgroundColor="Transparent"
@@ -37,6 +40,7 @@
                             TargetType="Button"
                             Value="All">
                             <Setter Property="TextColor" Value="#512BD4" />
+                            <Setter Property="FontSize" Value="Subtitle" />
                         </DataTrigger>
                     </Button.Triggers>
                 </Button>
@@ -52,6 +56,7 @@
                             TargetType="Button"
                             Value="Novel">
                             <Setter Property="TextColor" Value="#512BD4" />
+                            <Setter Property="FontSize" Value="Subtitle" />
                         </DataTrigger>
                     </Button.Triggers>
                 </Button>
@@ -67,6 +72,7 @@
                             TargetType="Button"
                             Value="Comic">
                             <Setter Property="TextColor" Value="#512BD4" />
+                            <Setter Property="FontSize" Value="Subtitle" />
                         </DataTrigger>
                     </Button.Triggers>
                 </Button>
@@ -82,26 +88,55 @@
                             TargetType="Button"
                             Value="Video">
                             <Setter Property="TextColor" Value="#512BD4" />
+                            <Setter Property="FontSize" Value="Subtitle" />
                         </DataTrigger>
                     </Button.Triggers>
                 </Button>
             </HorizontalStackLayout>
-            <CollectionView
+            <SwipeView
+                x:Name="swipeView"
                 Grid.Row="1"
-                ItemsLayout="VerticalGrid, 3"
-                ItemsSource="{Binding Objs}"
-                ZIndex="-1">
-                <CollectionView.ItemTemplate>
-                    <DataTemplate>
-                        <SwipeView>
-                            <SwipeView.RightItems>
-                                <SwipeItemView>
-                                    <Grid WidthRequest="56">
+                SwipeChanging="SwipeView_SwipeChanging"
+                SwipeEnded="SwipeView_SwipeEnded"
+                Threshold="400">
+                <SwipeView.RightItems>
+                    <SwipeItems Mode="Execute" SwipeBehaviorOnInvoked="Close">
+                        <SwipeItem />
+                    </SwipeItems>
+                </SwipeView.RightItems>
+                <SwipeView.LeftItems>
+                    <SwipeItems Mode="Execute" SwipeBehaviorOnInvoked="Close">
+                        <SwipeItem />
+                    </SwipeItems>
+                </SwipeView.LeftItems>
+                <CollectionView
+                    ItemsLayout="VerticalGrid, 3"
+                    ItemsSource="{Binding Objs}"
+                    ZIndex="-1">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Frame
+                                Margin="5,0,5,20"
+                                Padding="1"
+                                CornerRadius="8"
+                                HasShadow="True">
+                                <Frame.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding OpenObjCommand, Source={RelativeSource AncestorType={x:Type vm:FavoriteViewModel}}}" CommandParameter="{Binding}" />
+                                    <DragGestureRecognizer CanDrag="True" DragStarting="DragGestureRecognizer_DragStarting" />
+                                </Frame.GestureRecognizers>
+                                <Grid>
+                                    <Grid
+                                        x:Name="buttons"
+                                        BackgroundColor="{StaticResource BlackTransparent}"
+                                        IsVisible="False"
+                                        ZIndex="1">
                                         <Grid.RowDefinitions>
+                                            <RowDefinition Height="*" />
                                             <RowDefinition Height="*" />
                                             <RowDefinition Height="*" />
                                         </Grid.RowDefinitions>
                                         <ImageButton
+                                            Clicked="ImageButton_Clicked"
                                             Command="{Binding HideObjCommand, Source={RelativeSource AncestorType={x:Type vm:FavoriteViewModel}}}"
                                             CommandParameter="{Binding}"
                                             CornerRadius="20"
@@ -119,68 +154,71 @@
                                         </ImageButton>
                                         <ImageButton
                                             Grid.Row="1"
+                                            Clicked="ImageButton_Clicked"
                                             Command="{Binding CancelFavoriteCommand, Source={RelativeSource AncestorType={x:Type vm:FavoriteViewModel}}}"
                                             CommandParameter="{Binding}"
                                             CornerRadius="20"
                                             HeightRequest="40"
-                                            Source="broken_love.png"
+                                            Source="broken_heart.png"
+                                            WidthRequest="40" />
+                                        <ImageButton
+                                            Grid.Row="2"
+                                            Clicked="ImageButton_Clicked"
+                                            CornerRadius="20"
+                                            HeightRequest="40"
+                                            Source="back.png"
                                             WidthRequest="40" />
                                     </Grid>
-                                </SwipeItemView>
-                            </SwipeView.RightItems>
-                            <Frame
-                                Margin="5,0,5,20"
-                                Padding="0"
-                                CornerRadius="8"
-                                HasShadow="True">
-                                <Frame.GestureRecognizers>
-                                    <TapGestureRecognizer Command="{Binding OpenObjCommand, Source={RelativeSource AncestorType={x:Type vm:FavoriteViewModel}}}" CommandParameter="{Binding}" />
-                                </Frame.GestureRecognizers>
-                                <Grid BackgroundColor="Transparent" RowSpacing="1">
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="160" />
-                                        <RowDefinition Height="Auto" />
-                                        <RowDefinition Height="Auto" />
-                                    </Grid.RowDefinitions>
-                                    <ffimageloading:CachedImage
-                                        Aspect="AspectFill"
-                                        CacheDuration="30"
-                                        ErrorPlaceholder="load_fail.png"
-                                        FadeAnimationForCachedImages="True"
-                                        LoadingPlaceholder="loading.png"
-                                        Source="{Binding Cover}" />
-                                    <Frame
-                                        BackgroundColor="{StaticResource Primary}"
-                                        BorderColor="#88512BD4"
-                                        CornerRadius="100"
-                                        HasShadow="True"
-                                        IsVisible="{Binding IsUpdate}"
-                                        MaximumHeightRequest="16"
-                                        MaximumWidthRequest="16"
-                                        TranslationX="48"
-                                        TranslationY="-70" />
-                                    <Label
-                                        Grid.Row="1"
-                                        Padding="2,0"
-                                        FontFamily=""
-                                        FontSize="16"
-                                        HorizontalOptions="Start"
-                                        LineBreakMode="TailTruncation"
-                                        Text="{Binding Name}" />
-                                    <Label
-                                        Grid.Row="2"
-                                        Padding="2,0"
-                                        FontFamily=""
-                                        FontSize="13"
-                                        HorizontalOptions="Start"
-                                        Text="{Binding SourceName}"
-                                        TextColor="{StaticResource Gray500}" />
+                                    <Grid
+                                        BackgroundColor="Transparent"
+                                        RowSpacing="1"
+                                        ZIndex="0">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="160" />
+                                            <RowDefinition Height="Auto" />
+                                            <RowDefinition Height="Auto" />
+                                        </Grid.RowDefinitions>
+                                        <ffimageloading:CachedImage
+                                            Aspect="AspectFill"
+                                            CacheDuration="30"
+                                            ErrorPlaceholder="load_fail.png"
+                                            FadeAnimationForCachedImages="True"
+                                            LoadingPlaceholder="loading.png"
+                                            Source="{Binding Cover}"
+                                            ZIndex="0" />
+                                        <Frame
+                                            BackgroundColor="{StaticResource Primary}"
+                                            BorderColor="#88512BD4"
+                                            CornerRadius="100"
+                                            HasShadow="True"
+                                            IsVisible="{Binding IsUpdate}"
+                                            MaximumHeightRequest="16"
+                                            MaximumWidthRequest="16"
+                                            TranslationX="48"
+                                            TranslationY="-70" />
+                                        <Label
+                                            Grid.Row="1"
+                                            Padding="2,0"
+                                            FontFamily=""
+                                            FontSize="16"
+                                            HorizontalOptions="Start"
+                                            LineBreakMode="TailTruncation"
+                                            Text="{Binding Name}" />
+                                        <Label
+                                            Grid.Row="2"
+                                            Padding="2,0"
+                                            FontFamily=""
+                                            FontSize="13"
+                                            HorizontalOptions="Start"
+                                            Text="{Binding SourceName}"
+                                            TextColor="{StaticResource Gray500}" />
+                                    </Grid>
                                 </Grid>
                             </Frame>
-                        </SwipeView>
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
-            </CollectionView>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </SwipeView>
         </Grid>
         <Frame
             Margin="0,0,30,100"
@@ -194,6 +232,14 @@
             VerticalOptions="End"
             WidthRequest="48"
             ZIndex="0">
+            <Frame.Triggers>
+                <DataTrigger
+                    Binding="{Binding IsShowHideObj}"
+                    TargetType="Frame"
+                    Value="True">
+                    <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource Black}}" />
+                </DataTrigger>
+            </Frame.Triggers>
             <Frame.GestureRecognizers>
                 <TapGestureRecognizer
                     Command="{Binding JumpPageCommand}"
@@ -204,7 +250,16 @@
             <Image
                 HeightRequest="40"
                 Source="ai.png"
-                WidthRequest="40" />
+                WidthRequest="40">
+                <Image.Triggers>
+                    <DataTrigger
+                        Binding="{Binding IsShowHideObj}"
+                        TargetType="Image"
+                        Value="True">
+                        <Setter Property="Source" Value="ai_hide.png" />
+                    </DataTrigger>
+                </Image.Triggers>
+            </Image>
         </Frame>
         <Frame
             Margin="0,0,30,40"

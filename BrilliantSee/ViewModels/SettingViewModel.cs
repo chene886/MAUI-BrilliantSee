@@ -1,4 +1,5 @@
 ﻿using BrilliantSee.Models;
+using BrilliantSee.Models.Enums;
 using BrilliantSee.Services;
 using CommunityToolkit.Mvvm.ComponentModel;
 using System.Collections.ObjectModel;
@@ -34,8 +35,8 @@ namespace BrilliantSee.ViewModels
         /// <returns></returns>
         public async Task InitSettingsAsync()
         {
-            var General = await _db.GetSettingItemsAsync("通用");
-            var About = await _db.GetSettingItemsAsync("关于");
+            var General = await _db.GetSettingItemsAsync((int)SettingItemCategory.General);
+            var About = await _db.GetSettingItemsAsync((int)SettingItemCategory.About);
             SettingGroups.Add(new Group<SettingItem>("通用", General));
             SettingGroups.Add(new Group<SettingItem>("关于", About));
         }

@@ -14,8 +14,8 @@ public partial class VideoPage : ContentPage
         this.BindingContext = _vm;
         InitializeComponent();
 #if ANDROID
-            var activity = Platform.CurrentActivity ?? throw new InvalidOperationException("Android Activity can't be null.");
-            activity.RequestedOrientation = Android.Content.PM.ScreenOrientation.User;
+        var activity = Platform.CurrentActivity ?? throw new InvalidOperationException("Android Activity can't be null.");
+        activity.RequestedOrientation = Android.Content.PM.ScreenOrientation.User;
 #endif
     }
 
@@ -28,8 +28,8 @@ public partial class VideoPage : ContentPage
     {
         media.Handler?.DisconnectHandler();
 #if ANDROID
-            var activity = Platform.CurrentActivity ?? throw new InvalidOperationException("Android Activity can't be null.");
-            activity.RequestedOrientation = Android.Content.PM.ScreenOrientation.Portrait;
+        var activity = Platform.CurrentActivity ?? throw new InvalidOperationException("Android Activity can't be null.");
+        activity.RequestedOrientation = Android.Content.PM.ScreenOrientation.Portrait;
 #endif
     }
 

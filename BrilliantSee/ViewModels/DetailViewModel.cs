@@ -247,6 +247,7 @@ namespace BrilliantSee.ViewModels
             }
             VideoUrl = video.VideoUrl;
             IsSettingVideo = false;
+            _ = Task.Run(() => Obj!.PreLoadAsync(video, _db));
         }
 
         /// <summary>

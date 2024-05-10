@@ -35,7 +35,6 @@
                     VerticalOptions="Center"
                     ZIndex="-1" />
                 <ActivityIndicator
-                    BindingContext="{x:Reference media}"
                     HeightRequest="55"
                     HorizontalOptions="Center"
                     IsRunning="True"
@@ -45,22 +44,16 @@
                     ZIndex="0">
                     <ActivityIndicator.Triggers>
                         <DataTrigger
-                            Binding="{Binding IsSettingVideo, Source={RelativeSource AncestorType={x:Type vm:DetailViewModel}}}"
+                            Binding="{Binding IsSettingVideo}"
                             TargetType="ActivityIndicator"
                             Value="True">
                             <Setter Property="IsVisible" Value="True" />
                         </DataTrigger>
                         <DataTrigger
-                            Binding="{Binding CurrentState}"
+                            Binding="{Binding CurrentState, Source={x:Reference media}}"
                             TargetType="ActivityIndicator"
                             Value="Buffering">
                             <Setter Property="IsVisible" Value="True" />
-                        </DataTrigger>
-                        <DataTrigger
-                            Binding="{Binding CurrentState}"
-                            TargetType="ActivityIndicator"
-                            Value="Playing">
-                            <Setter Property="IsVisible" Value="False" />
                         </DataTrigger>
                     </ActivityIndicator.Triggers>
                 </ActivityIndicator>

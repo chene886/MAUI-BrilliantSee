@@ -20,16 +20,16 @@ namespace BrilliantSee.ViewModels
         [ObservableProperty]
         private Item? _chapter;
 
-        /// <summary>
-        /// 当前章节在已加载章节集合中的索引
-        /// </summary>
-        public int _currentChapterIndex = 0;
+        ///// <summary>
+        ///// 当前章节在已加载章节集合中的索引
+        ///// </summary>
+        //public int _currentChapterIndex = 0;
 
-        /// <summary>
-        /// 已加载章节集合
-        /// </summary>
-        [ObservableProperty]
-        public List<Item> _loadedChapter = new List<Item>();
+        ///// <summary>
+        ///// 已加载章节集合
+        ///// </summary>
+        //[ObservableProperty]
+        //public List<Item> _loadedChapter = new List<Item>();
 
         /// <summary>
         /// 当前章节图片集合
@@ -86,19 +86,19 @@ namespace BrilliantSee.ViewModels
         /// </summary>
         public double ScreenWidth { get; set; } = DeviceDisplay.MainDisplayInfo.Width / DeviceDisplay.MainDisplayInfo.Density;
 
-        public int CurrentChapterIndex
-        {
-            get => _currentChapterIndex;
-            set
-            {
-                if (_currentChapterIndex != value)
-                {
-                    _currentChapterIndex = value;
-                    OnPropertyChanged(nameof(CurrentChapterIndex));
-                }
-                Chapter = LoadedChapter[value];
-            }
-        }
+        //public int CurrentChapterIndex
+        //{
+        //    get => _currentChapterIndex;
+        //    set
+        //    {
+        //        if (_currentChapterIndex != value)
+        //        {
+        //            _currentChapterIndex = value;
+        //            OnPropertyChanged(nameof(CurrentChapterIndex));
+        //        }
+        //        Chapter = LoadedChapter[value];
+        //    }
+        //}
 
         public BrowseViewModel(DBService db, MessageService ms)
         {
@@ -133,7 +133,6 @@ namespace BrilliantSee.ViewModels
             {
                 IsShowButton = true;
             }
-            LoadedChapter.Add(Chapter);
         }
 
         /// <summary>
@@ -164,6 +163,7 @@ namespace BrilliantSee.ViewModels
                 }
             }
             ButtonContent = chapter!.Index == chapter.Obj.ItemCount - 1 ? "已是最新一话" : "点击加载下一话";
+            _ = Task.Run(() => chapter.Obj.PreLoadAsync(chapter, _db));
         }
 
         /// <summary>
@@ -173,46 +173,18 @@ namespace BrilliantSee.ViewModels
         /// <returns></returns>
         public async Task<bool> UpdateChapterAsync(string flag)
         {
-            Item? newChapter;
-            var hasNew = false;
-            if (CurrentChapterIndex > 0 && flag == "Last")
+            var newChapter = Chapter!.Obj.GetNewItem(Chapter, flag);
+            if (newChapter is null)
             {
-                newChapter = LoadedChapter[CurrentChapterIndex - 1];
-                CurrentChapterIndex--;
-            }
-            else if (CurrentChapterIndex < LoadedChapter.Count - 1 && flag == "Next")
-            {
-                newChapter = LoadedChapter[CurrentChapterIndex + 1];
-                CurrentChapterIndex++;
-            }
-            else
-            {
-                hasNew = true;
-                newChapter = Chapter!.Obj.GetNewItem(Chapter, flag);
-                if (newChapter is null)
-                {
-                    return false;
-                }
+                return false;
             }
             try
             {
                 await LoadChapterResourcesAsync(newChapter);
             }
             catch { }
-            if (hasNew)
-            {
-                if (flag == "Next")
-                {
-                    LoadedChapter.Add(newChapter);
-                    CurrentChapterIndex++;
-                }
-                else
-                {
-                    LoadedChapter.Insert(0, newChapter);
-                    CurrentChapterIndex = 0;
-                }
-            }
-            _ = Chapter!.Obj.ChangeLastReadedItemIndex(newChapter!.Index, _db);
+            Chapter = newChapter;
+            _ = Chapter.Obj.ChangeLastReadedItemIndex(Chapter.Index, _db);
             return true;
         }
 

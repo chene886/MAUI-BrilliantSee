@@ -1,6 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <resources>
 	<style name="MainTheme" parent="@style/Maui.SplashTheme">
-		<item name="android:statusBarColor">@android:color/transparent</item>
 	</style>
 </resources>

@@ -58,24 +58,23 @@ namespace BrilliantSee.Services
 
             var defaultSettingItems = new List<SettingItem>
             {
-                new SettingItem { Name = "顶点小说", Value = "IsSelected", Category = "Source" },
-                new SettingItem { Name = "包子漫画", Value = "IsSelected", Category = "Source" },
-                new SettingItem { Name = "古风漫画", Value = "IsSelected", Category = "Source" },
-                //new SettingItem { Name = "Goda漫画", Value = "IsSelected", Category = "Source" },
-                new SettingItem { Name = "Goda(英)", Value = "IsSelected", Category = "Source" },
-                new SettingItem { Name = "樱花动漫网", Value = "IsSelected", Category = "Source" },
-                //new SettingItem { Name = "OMO动漫", Value = "IsSelected", Category = "Source" },
-                new SettingItem { Name = "分享应用", Value = "去分享", Category = "通用" ,Content = Share},
-                new SettingItem { Name = "错误反馈", Value = "去反馈", Category = "通用" },
-                new SettingItem { Name = "支持开源", Value = "去支持", Category = "通用" },
-                new SettingItem { Name = "免责声明", Value = "查看声明", Category = "关于" ,Content = Disclaimer},
-                new SettingItem { Name = "隐私政策", Value = "查看政策", Category = "关于" ,Content = Policy},
-                new SettingItem { Name = "用户协议", Value = "查看协议", Category = "关于" ,Content = Agreement},
-                new SettingItem { Name = "ModelId", Value = "", Category = "AIModel" },
-                new SettingItem { Name = "ApiKey", Value ="", Category = "AIModel" },
-                new SettingItem { Name = "ApiUrl", Value = "", Category = "AIModel" },
-                new SettingItem { Name = "AudioStatus", Value = "false", Category = "Audio" },
-                new SettingItem { Name = "隐藏提示", Value = "true", Category = "Tip" },
+                new SettingItem { Name = "顶点小说", ValueInt = 1, Category = (int)SettingItemCategory.Source },
+                new SettingItem { Name = "包子漫画", ValueInt = 1, Category = (int)SettingItemCategory.Source },
+                new SettingItem { Name = "古风漫画", ValueInt = 1, Category = (int)SettingItemCategory.Source },
+                new SettingItem { Name = "Goda(英)", ValueInt = 1, Category = (int)SettingItemCategory.Source },
+                new SettingItem { Name = "樱花动漫网", ValueInt = 1, Category = (int)SettingItemCategory.Source },
+                new SettingItem { Name = "提前加载策略", ValueInt = (int)PreLoadMode.Next, Category = (int)SettingItemCategory.Custom },
+                new SettingItem { Name = "分享应用", ValueString = "去分享", Category = (int)SettingItemCategory.General ,Content = Share},
+                new SettingItem { Name = "错误反馈", ValueString = "去反馈", Category = (int)SettingItemCategory.General },
+                new SettingItem { Name = "支持开源", ValueString = "去支持", Category = (int)SettingItemCategory.General },
+                new SettingItem { Name = "免责声明", ValueString = "查看声明", Category = (int)SettingItemCategory.About, Content = Disclaimer},
+                new SettingItem { Name = "隐私政策", ValueString = "查看政策", Category = (int)SettingItemCategory.About ,Content = Policy},
+                new SettingItem { Name = "用户协议", ValueString = "查看协议", Category = (int)SettingItemCategory.About ,Content = Agreement},
+                new SettingItem { Name = "ModelId", ValueString = "", Category = (int)SettingItemCategory.AIModel },
+                new SettingItem { Name = "ApiKey", ValueString ="", Category = (int)SettingItemCategory.AIModel },
+                new SettingItem { Name = "ApiUrl", ValueString = "", Category = (int)SettingItemCategory.AIModel },
+                new SettingItem { Name = "AudioStatus", ValueInt = 0, Category = (int)SettingItemCategory.Audio },
+                new SettingItem { Name = "\"隐藏模式\"提示", ValueInt = 1, Category = (int)SettingItemCategory.Tip},
             };
             await _db.InsertAllAsync(defaultSettingItems);
         }
@@ -158,14 +157,14 @@ namespace BrilliantSee.Services
         /// </summary>
         /// <param name="category">类别</param>
         /// <returns></returns>
-        public async Task<List<SettingItem>> GetSettingItemsAsync(string category)
+        public async Task<List<SettingItem>> GetSettingItemsAsync(int category)
         {
             return await _db.Table<SettingItem>().Where(i => i.Category == category).ToListAsync();
         }
 
         public async Task<string> GetSettingItemContentAsync(string value)
         {
-            var item = await _db.Table<SettingItem>().Where(i => i.Value == value).FirstOrDefaultAsync();
+            var item = await _db.Table<SettingItem>().Where(i => i.ValueString == value).FirstOrDefaultAsync();
             return item.Content;
         }
 
@@ -185,8 +184,8 @@ namespace BrilliantSee.Services
         /// <returns></returns>
         public async Task<bool> GetAudioStatus()
         {
-            var Item = await _db.Table<SettingItem>().Where(i => i.Category == "Audio").FirstOrDefaultAsync();
-            return Item is null ? false : Item.Value == "true";
+            var Item = await _db.Table<SettingItem>().Where(i => i.Category == (int)SettingItemCategory.Audio).FirstOrDefaultAsync();
+            return Item is null ? false : Item.ValueInt == 1;
         }
 
         //public async Task<bool> GetHideTipStatus()

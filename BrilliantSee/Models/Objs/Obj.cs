@@ -227,6 +227,32 @@ namespace BrilliantSee.Models.Objs
             }
         }
 
+        public async Task PreLoadAsync(Item item, DBService _db)
+        {
+            var mode = await _db.GetSettingItemsAsync((int)SettingItemCategory.Custom);
+            if (mode.Any())
+            {
+                try
+                {
+                    if (mode.First().ValueInt == (int)PreLoadMode.None) return;
+                    var nextItem = GetNewItem(item, "Next");
+                    if (nextItem is not null && !nextItem.PicUrls.Any() && nextItem.NovelContent == string.Empty && nextItem.VideoUrl == string.Empty)
+                    {
+                        _ = nextItem.GetResourcesAsync();
+                    }
+                    if (mode.First().ValueInt == (int)PreLoadMode.Both)
+                    {
+                        var lastItem = GetNewItem(item, "Last");
+                        if (lastItem is not null && !lastItem.PicUrls.Any() && lastItem.NovelContent == string.Empty && lastItem.VideoUrl == string.Empty)
+                        {
+                            _ = lastItem.GetResourcesAsync();
+                        }
+                    }
+                }
+                catch { }
+            }
+        }
+
         /// <summary>
         /// 获取更多漫画数据
         /// </summary>

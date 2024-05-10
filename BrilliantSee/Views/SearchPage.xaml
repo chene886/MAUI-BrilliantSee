@@ -26,89 +26,92 @@
             Text="选择图源" />
     </ContentPage.ToolbarItems>
     <Grid>
-        <Border
+        <Frame
             x:Name="sourceList"
             Margin="0,0,1,0"
+            Padding="2"
+            BackgroundColor="{AppThemeBinding Light={StaticResource Backcolor},
+                                              Dark={StaticResource OffBlack}}"
+            CornerRadius="10"
             HeightRequest="220"
             HorizontalOptions="End"
             IsVisible="{Binding IsSourceListVisible}"
-            StrokeThickness="2"
             VerticalOptions="Start"
             WidthRequest="140"
             ZIndex="3">
-            <Border.StrokeShape>
-                <RoundRectangle CornerRadius="10" />
-            </Border.StrokeShape>
-            <Grid>
-                <CollectionView
-                    HorizontalOptions="Center"
-                    IsGrouped="True"
-                    ItemsSource="{Binding SourceGroups}">
-                    <CollectionView.GroupHeaderTemplate>
-                        <DataTemplate>
-                            <Label
-                                Margin="0,4"
-                                FontFamily=""
-                                FontSize="16"
-                                HorizontalOptions="Center"
-                                Text="{Binding Name}" />
-                        </DataTemplate>
-                    </CollectionView.GroupHeaderTemplate>
-                    <CollectionView.ItemTemplate>
-                        <DataTemplate>
-                            <Frame
-                                Margin="4,2"
-                                Padding="0"
-                                BorderColor="Transparent"
-                                HeightRequest="40">
-                                <Frame.GestureRecognizers>
-                                    <TapGestureRecognizer
-                                        Command="{Binding ChangeIsSelectedCommand, Source={RelativeSource AncestorType={x:Type vm:SearchViewModel}}}"
-                                        CommandParameter="{Binding}"
-                                        Tapped="TapGestureRecognizer_Tapped" />
-                                </Frame.GestureRecognizers>
-                                <Grid Padding="8,0" BackgroundColor="Transparent">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="Auto" />
-                                        <ColumnDefinition Width="*" />
-                                    </Grid.ColumnDefinitions>
-                                    <Label
-                                        FontFamily=""
-                                        Text="{Binding Name}"
-                                        TextColor="{StaticResource Gray500}"
-                                        VerticalOptions="Center"
-                                        WidthRequest="90" />
-                                    <Border
-                                        Grid.Column="1"
-                                        BackgroundColor="Transparent"
-                                        HeightRequest="20"
-                                        Stroke="{StaticResource Primary}"
-                                        StrokeThickness="2"
-                                        WidthRequest="20">
-                                        <Border.StrokeShape>
-                                            <RoundRectangle CornerRadius="20" />
-                                        </Border.StrokeShape>
-                                    </Border>
-                                    <RoundRectangle
-                                        Grid.Column="1"
-                                        CornerRadius="20"
-                                        Fill="{StaticResource Primary}"
-                                        HeightRequest="13"
-                                        IsVisible="{Binding IsSelected}"
-                                        WidthRequest="13" />
-                                </Grid>
-                            </Frame>
-                        </DataTemplate>
-                    </CollectionView.ItemTemplate>
-                </CollectionView>
-            </Grid>
-        </Border>
+            <CollectionView
+                HorizontalOptions="Center"
+                IsGrouped="True"
+                ItemsSource="{Binding SourceGroups}">
+                <CollectionView.GroupHeaderTemplate>
+                    <DataTemplate>
+                        <Label
+                            Margin="0,4"
+                            FontFamily=""
+                            FontSize="16"
+                            HorizontalOptions="Center"
+                            Text="{Binding Name}" />
+                    </DataTemplate>
+                </CollectionView.GroupHeaderTemplate>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Frame
+                            Margin="4,2"
+                            Padding="0"
+                            BackgroundColor="{AppThemeBinding Light={StaticResource White},
+                                                              Dark={StaticResource Black}}"
+                            BorderColor="Transparent"
+                            HeightRequest="40">
+                            <Frame.GestureRecognizers>
+                                <TapGestureRecognizer
+                                    Command="{Binding ChangeIsSelectedCommand, Source={RelativeSource AncestorType={x:Type vm:SearchViewModel}}}"
+                                    CommandParameter="{Binding}"
+                                    Tapped="TapGestureRecognizer_Tapped" />
+                            </Frame.GestureRecognizers>
+                            <Grid Padding="8,0" BackgroundColor="Transparent">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <Label
+                                    FontFamily=""
+                                    Text="{Binding Name}"
+                                    TextColor="{StaticResource Gray500}"
+                                    VerticalOptions="Center"
+                                    WidthRequest="90" />
+                                <Border
+                                    Grid.Column="1"
+                                    BackgroundColor="Transparent"
+                                    HeightRequest="20"
+                                    Stroke="{StaticResource Primary}"
+                                    StrokeThickness="2"
+                                    WidthRequest="20">
+                                    <Border.StrokeShape>
+                                        <RoundRectangle CornerRadius="20" />
+                                    </Border.StrokeShape>
+                                </Border>
+                                <RoundRectangle
+                                    Grid.Column="1"
+                                    CornerRadius="20"
+                                    Fill="{StaticResource Primary}"
+                                    HeightRequest="13"
+                                    IsVisible="{Binding IsSelected}"
+                                    WidthRequest="13" />
+                            </Grid>
+                        </Frame>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </Frame>
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
-            <HorizontalStackLayout x:Name="select" Margin="2,0">
+            <HorizontalStackLayout
+                x:Name="select"
+                Margin="2,0"
+                Spacing="10">
                 <Button
                     x:Name="all"
                     BackgroundColor="Transparent"
@@ -121,6 +124,7 @@
                             TargetType="Button"
                             Value="All">
                             <Setter Property="TextColor" Value="#512BD4" />
+                            <Setter Property="FontSize" Value="Subtitle" />
                         </DataTrigger>
                     </Button.Triggers>
                 </Button>
@@ -136,6 +140,7 @@
                             TargetType="Button"
                             Value="Novel">
                             <Setter Property="TextColor" Value="#512BD4" />
+                            <Setter Property="FontSize" Value="Subtitle" />
                         </DataTrigger>
                     </Button.Triggers>
                 </Button>
@@ -151,6 +156,7 @@
                             TargetType="Button"
                             Value="Comic">
                             <Setter Property="TextColor" Value="#512BD4" />
+                            <Setter Property="FontSize" Value="Subtitle" />
                         </DataTrigger>
                     </Button.Triggers>
                 </Button>
@@ -166,108 +172,125 @@
                             TargetType="Button"
                             Value="Video">
                             <Setter Property="TextColor" Value="#512BD4" />
+                            <Setter Property="FontSize" Value="Subtitle" />
                         </DataTrigger>
                     </Button.Triggers>
                 </Button>
             </HorizontalStackLayout>
-            <CollectionView
-                x:Name="comicList"
+            <SwipeView
+                x:Name="swipeView"
                 Grid.Row="1"
-                Margin="0,5,0,0"
-                ItemsSource="{Binding AllObjs}"
-                Scrolled="CollectionView_Scrolled">
-                <CollectionView.ItemTemplate>
-                    <DataTemplate>
-                        <Frame
-                            Margin="10,0,10,10"
-                            Padding="10"
-                            CornerRadius="10"
-                            HasShadow="True">
-                            <Frame.GestureRecognizers>
-                                <TapGestureRecognizer
-                                    Command="{Binding OpenObjCommand, Source={RelativeSource AncestorType={x:Type vm:SearchViewModel}}}"
-                                    CommandParameter="{Binding}"
-                                    Tapped="HideKeyboard" />
-                            </Frame.GestureRecognizers>
-                            <Grid BackgroundColor="Transparent">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="Auto" />
-                                    <ColumnDefinition Width="*" />
-                                </Grid.ColumnDefinitions>
-                                <Frame
-                                    Grid.Column="0"
-                                    Padding="0"
-                                    CornerRadius="10"
-                                    HeightRequest="112"
-                                    WidthRequest="80">
-                                    <Frame.GestureRecognizers>
-                                        <TapGestureRecognizer
-                                            Command="{Binding OpenObjCommand, Source={RelativeSource AncestorType={x:Type vm:SearchViewModel}}}"
-                                            CommandParameter="{Binding}"
-                                            Tapped="HideKeyboard" />
-                                    </Frame.GestureRecognizers>
-                                    <ffimageloading:CachedImage
-                                        Aspect="AspectFill"
-                                        CacheDuration="30"
-                                        ErrorPlaceholder="load_fail.png"
-                                        FadeAnimationForCachedImages="True"
-                                        LoadingPlaceholder="loading.png"
-                                        Source="{Binding Cover}" />
-                                </Frame>
-                                <Grid
-                                    Grid.Column="1"
-                                    Margin="10,0,0,0"
-                                    BackgroundColor="Transparent"
-                                    RowSpacing="10">
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="Auto" />
-                                        <RowDefinition Height="Auto" />
-                                        <RowDefinition Height="Auto" />
-                                        <RowDefinition Height="*" />
-                                    </Grid.RowDefinitions>
-                                    <Grid BackgroundColor="Transparent">
+                SwipeChanging="SwipeView_SwipeChanging"
+                SwipeEnded="SwipeView_SwipeEnded"
+                Threshold="400">
+                <SwipeView.RightItems>
+                    <SwipeItems Mode="Execute" SwipeBehaviorOnInvoked="Close">
+                        <SwipeItem />
+                    </SwipeItems>
+                </SwipeView.RightItems>
+                <SwipeView.LeftItems>
+                    <SwipeItems Mode="Execute" SwipeBehaviorOnInvoked="Close">
+                        <SwipeItem />
+                    </SwipeItems>
+                </SwipeView.LeftItems>
+                <CollectionView
+                    x:Name="comicList"
+                    Grid.Row="1"
+                    ItemsSource="{Binding AllObjs}"
+                    Scrolled="CollectionView_Scrolled">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Frame
+                                Margin="10,0,10,10"
+                                Padding="10"
+                                CornerRadius="10"
+                                HasShadow="True">
+                                <Frame.GestureRecognizers>
+                                    <TapGestureRecognizer
+                                        Command="{Binding OpenObjCommand, Source={RelativeSource AncestorType={x:Type vm:SearchViewModel}}}"
+                                        CommandParameter="{Binding}"
+                                        Tapped="HideKeyboard" />
+                                </Frame.GestureRecognizers>
+                                <Grid BackgroundColor="Transparent">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <Frame
+                                        Grid.Column="0"
+                                        Padding="1"
+                                        CornerRadius="10"
+                                        HeightRequest="112"
+                                        WidthRequest="80">
+                                        <Frame.GestureRecognizers>
+                                            <TapGestureRecognizer
+                                                Command="{Binding OpenObjCommand, Source={RelativeSource AncestorType={x:Type vm:SearchViewModel}}}"
+                                                CommandParameter="{Binding}"
+                                                Tapped="HideKeyboard" />
+                                        </Frame.GestureRecognizers>
+                                        <ffimageloading:CachedImage
+                                            Aspect="AspectFill"
+                                            CacheDuration="30"
+                                            ErrorPlaceholder="load_fail.png"
+                                            FadeAnimationForCachedImages="True"
+                                            LoadingPlaceholder="loading.png"
+                                            Source="{Binding Cover}" />
+                                    </Frame>
+                                    <Grid
+                                        Grid.Column="1"
+                                        Margin="10,0,0,0"
+                                        BackgroundColor="Transparent"
+                                        RowSpacing="10">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto" />
+                                            <RowDefinition Height="Auto" />
+                                            <RowDefinition Height="Auto" />
+                                            <RowDefinition Height="*" />
+                                        </Grid.RowDefinitions>
+                                        <Grid BackgroundColor="Transparent">
+                                            <Label
+                                                FontFamily=""
+                                                FontSize="18"
+                                                HorizontalOptions="Start"
+                                                LineBreakMode="TailTruncation"
+                                                MaximumWidthRequest="180"
+                                                Text="{Binding Name}" />
+                                            <Label
+                                                FontFamily=""
+                                                FontSize="13"
+                                                HorizontalOptions="End"
+                                                Text="{Binding SourceName}"
+                                                TextColor="{StaticResource Gray300}" />
+                                        </Grid>
                                         <Label
+                                            Grid.Row="1"
                                             FontFamily=""
-                                            FontSize="18"
-                                            HorizontalOptions="Start"
-                                            LineBreakMode="TailTruncation"
-                                            MaximumWidthRequest="180"
-                                            Text="{Binding Name}" />
+                                            FontSize="15"
+                                            MaxLines="1"
+                                            Text="{Binding Author}"
+                                            TextColor="{StaticResource Gray300}" />
                                         <Label
+                                            Grid.Row="2"
+                                            FontFamily=""
+                                            FontSize="12"
+                                            LineBreakMode="TailTruncation"
+                                            Text="{Binding Url}"
+                                            TextColor="{StaticResource Gray300}" />
+                                        <Label
+                                            Grid.Row="3"
                                             FontFamily=""
                                             FontSize="13"
                                             HorizontalOptions="End"
-                                            Text="{Binding SourceName}"
-                                            TextColor="{StaticResource Gray300}" />
+                                            Text="{Binding LastestUpdateTime}"
+                                            TextColor="{StaticResource Gray300}"
+                                            VerticalOptions="End" />
                                     </Grid>
-                                    <Label
-                                        Grid.Row="1"
-                                        FontFamily=""
-                                        FontSize="15"
-                                        MaxLines="1"
-                                        Text="{Binding Author}"
-                                        TextColor="{StaticResource Gray300}" />
-                                    <Label
-                                        Grid.Row="2"
-                                        FontFamily=""
-                                        FontSize="12"
-                                        LineBreakMode="TailTruncation"
-                                        Text="{Binding Url}"
-                                        TextColor="{StaticResource Gray300}" />
-                                    <Label
-                                        Grid.Row="3"
-                                        FontFamily=""
-                                        FontSize="13"
-                                        HorizontalOptions="End"
-                                        Text="{Binding LastestUpdateTime}"
-                                        TextColor="{StaticResource Gray300}"
-                                        VerticalOptions="End" />
                                 </Grid>
-                            </Grid>
-                        </Frame>
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
-            </CollectionView>
+                            </Frame>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </SwipeView>
         </Grid>
         <ActivityIndicator
             Margin="0,0,0,100"

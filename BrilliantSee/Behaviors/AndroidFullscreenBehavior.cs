@@ -20,16 +20,23 @@ namespace BrilliantSee.Behaviors
             if (isVisible)
             {
 #if ANDROID
-                window!.DecorView.SystemUiFlags = Android.Views.SystemUiFlags.LightStatusBar;
-                window.SetStatusBarColor(Android.Graphics.Color.ParseColor("#FAFAFA"));
-                window!.DecorView.SystemUiFlags |= Android.Views.SystemUiFlags.LightNavigationBar;
-                window.SetNavigationBarColor(Android.Graphics.Color.ParseColor("#FAFAFA"));
+                window!.DecorView.SystemUiFlags = 0;
+                var uiModeManager = (Android.App.UiModeManager)activity.GetSystemService(Android.Content.Context.UiModeService)!;
+                var isDarkTheme = uiModeManager!.NightMode is Android.App.UiNightMode.Yes;
+                var BarColor = isDarkTheme ? "#000000" : "#FAFAFA";
+                if (!isDarkTheme) window.DecorView.SystemUiFlags = Android.Views.SystemUiFlags.LightNavigationBar | Android.Views.SystemUiFlags.LightStatusBar;
+                window.SetNavigationBarColor(Android.Graphics.Color.ParseColor(BarColor));
+                window.SetStatusBarColor(Android.Graphics.Color.ParseColor(BarColor));
+                window.ClearFlags(Android.Views.WindowManagerFlags.Fullscreen);
+                window.ClearFlags(Android.Views.WindowManagerFlags.LayoutNoLimits);
 #endif
             }
             else
             {
 #if ANDROID
-                window!.DecorView.SystemUiFlags = (Android.Views.SystemUiFlags.Fullscreen | Android.Views.SystemUiFlags.HideNavigation | Android.Views.SystemUiFlags.ImmersiveSticky);
+                window!.DecorView.SystemUiFlags = Android.Views.SystemUiFlags.ImmersiveSticky | Android.Views.SystemUiFlags.HideNavigation;
+                window.AddFlags(Android.Views.WindowManagerFlags.Fullscreen);
+                window.AddFlags(Android.Views.WindowManagerFlags.LayoutNoLimits);
 #endif
             }
         }

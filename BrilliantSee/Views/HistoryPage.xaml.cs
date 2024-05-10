@@ -12,6 +12,12 @@ public partial class HistoryPage : ContentPage
     /// </summary>
     private Dictionary<string, SourceCategory> Categories;
 
+    private Button[] Buttons;
+
+    private int CurrentButtonIndex = 0;
+    private SwipeDirection _direction { get; set; }
+    private double _offset { get; set; } = 0;
+
     public HistoryPage(HistoryViewModel vm)
     {
         _vm = vm;
@@ -24,6 +30,7 @@ public partial class HistoryPage : ContentPage
             { "Âþ»­", SourceCategory.Comic },
             { "¶¯Âþ", SourceCategory.Video }
         };
+        Buttons = new Button[] { all, novels, comics, videos };
     }
 
     /// <summary>
@@ -94,5 +101,41 @@ public partial class HistoryPage : ContentPage
         _ = ButtonTapped(sender, typeof(Button));
 
         await _vm.OnLoadHistoryObjAsync();
+    }
+
+    private void SwipeView_SwipeChanging(object sender, SwipeChangingEventArgs e)
+    {
+        _direction = e.SwipeDirection;
+        _offset = e.Offset;
+    }
+
+    private void SwipeView_SwipeEnded(object sender, SwipeEndedEventArgs e)
+    {
+        var value = _direction == SwipeDirection.Left ? 1 : -1;
+        if (Math.Abs(_offset) > 24)
+        {
+            swipeView.Close();
+            var index = CurrentButtonIndex + value;
+            if (index < 0 || index > 3)
+            {
+                return;
+            }
+            CurrentButtonIndex = index;
+            Button_Clicked(Buttons[CurrentButtonIndex], e);
+        }
+    }
+
+    private void ImageButton_Clicked(object sender, EventArgs e)
+    {
+        var imgbtn = sender! as ImageButton;
+        var grid = imgbtn!.Parent as Grid;
+        grid!.IsVisible = false;
+    }
+
+    private void DragGestureRecognizer_DragStarting(object sender, DragStartingEventArgs e)
+    {
+        e.Cancel = true;
+        var drag = (DragGestureRecognizer)sender!;
+        drag.FindByName<Grid>("buttons").IsVisible = true;
     }
 }

@@ -13,6 +13,12 @@ public partial class FavoritePage : ContentPage
     /// </summary>
     private Dictionary<string, SourceCategory> Categories;
 
+    private Button[] Buttons;
+
+    private int CurrentButtonIndex = 0;
+    private SwipeDirection _direction { get; set; }
+    private double _offset { get; set; } = 0;
+
     public FavoritePage(FavoriteViewModel vm)
     {
         _vm = vm;
@@ -25,6 +31,7 @@ public partial class FavoritePage : ContentPage
             { "漫画", SourceCategory.Comic },
             { "动漫", SourceCategory.Video }
         };
+        Buttons = new Button[] { all, novels, comics, videos };
         _ = CheckUpdate();
         _vm.ShowHideTip += OnShowHideTip;
     }
@@ -70,17 +77,16 @@ public partial class FavoritePage : ContentPage
     /// 按钮点击效果
     /// </summary>
     /// <param name="sender"></param>
-    /// <param name="type"></param>
-    private async Task ButtonTapped(object sender, Type type)
+    private async Task ButtonTapped(object sender)
     {
-        View obj = type == typeof(Frame) ? (Frame)sender! : (Button)sender!;
+        View? obj = sender as View;
         await obj!.ScaleTo(1.15, 100);
         await obj!.ScaleTo(1, 100);
     }
 
     private void TapGestureRecognizer_Tapped(object sender, TappedEventArgs e)
     {
-        _ = ButtonTapped(sender, typeof(Frame));
+        _ = ButtonTapped(sender);
     }
 
     /// <summary>
@@ -98,7 +104,7 @@ public partial class FavoritePage : ContentPage
             if (match.Success)
             {
                 var version = match.Groups[1].Value;
-                if (version != "BrilliantSee_v2.2.5")
+                if (version != "BrilliantSee_v2.3.0")
                 {
                     bool answer = await DisplayAlert("检测到新版本", "是否更新?", "快让朕瞧瞧", "朕不感兴趣");
                     if (answer)
@@ -118,8 +124,44 @@ public partial class FavoritePage : ContentPage
 
         if (selectedCategory == _vm.CurrentCategory) return;
         _vm.ChangeCurrentCategory(selectedCategory);
-        _ = ButtonTapped(sender, typeof(Button));
+        _ = ButtonTapped(sender);
 
         await _vm.OnLoadFavoriteObjAsync();
+    }
+
+    private void SwipeView_SwipeChanging(object sender, SwipeChangingEventArgs e)
+    {
+        _direction = e.SwipeDirection;
+        _offset = e.Offset;
+    }
+
+    private void SwipeView_SwipeEnded(object sender, SwipeEndedEventArgs e)
+    {
+        var value = _direction == SwipeDirection.Left ? 1 : -1;
+        if (Math.Abs(_offset) > 24)
+        {
+            swipeView.Close();
+            var index = CurrentButtonIndex + value;
+            if (index < 0 || index > 3)
+            {
+                return;
+            }
+            CurrentButtonIndex = index;
+            Button_Clicked(Buttons[CurrentButtonIndex], e);
+        }
+    }
+
+    private void DragGestureRecognizer_DragStarting(object sender, DragStartingEventArgs e)
+    {
+        e.Cancel = true;
+        var drag = (DragGestureRecognizer)sender!;
+        drag.FindByName<Grid>("buttons").IsVisible = true;
+    }
+
+    private void ImageButton_Clicked(object sender, EventArgs e)
+    {
+        var imgbtn = sender! as ImageButton;
+        var grid = imgbtn!.Parent as Grid;
+        grid!.IsVisible = false;
     }
 }

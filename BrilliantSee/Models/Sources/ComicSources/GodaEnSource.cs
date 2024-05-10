@@ -16,7 +16,7 @@ namespace BrilliantSee.Models.Sources.ComicSources
     {
         public GodaEnSource()
         {
-            SetHttpClient("https://godamanga.art/");
+            SetHttpClient("https://manhuascans.org/");
             Name = "Goda(英)";
             HasMore = 1;
         }
@@ -28,13 +28,13 @@ namespace BrilliantSee.Models.Sources.ComicSources
         /// <returns></returns>
         public override async Task<IEnumerable<Obj>> SearchAsync(string keyword)
         {
-            var url = $"https://godamanga.art/page/{ResultNum}/?s={keyword}";
+            var url = $"https://manhuascans.org/s/{keyword}?page={ResultNum}";
             var html = await GetHtmlAsync(url);
             if (html == string.Empty) { return Array.Empty<Obj>(); }
 
-            string pattern = "media-container[\\s\\S]*?href=\"(.*?)\"[\\s\\S]*?src=\"(.*?)\"[\\s\\S]*?alt=\"(.*?)\"";
+            string pattern = "pb-2[\\s\\S]*?href=\"(.*?)\"[\\s\\S]*?alt=\"(.*?)\"[\\s\\S]*?src=\"(.*?)\"";
             var matches = Regex.Matches(html, pattern);
-            if (matches.Count < 12) { HasMore = 0; }
+            if (matches.Count < 30) { HasMore = 0; }
 
             var comics = new List<Obj>();
             foreach (Match match in matches)
@@ -42,8 +42,8 @@ namespace BrilliantSee.Models.Sources.ComicSources
                 var comic = new GodaEnComic()
                 {
                     Url = match.Groups[1].Value.Replace(" ", ""),
-                    Name = match.Groups[3].Value,
-                    Cover = match.Groups[2].Value.Replace("%3A", ":").Replace("%2F", "/"),
+                    Name = match.Groups[2].Value,
+                    Cover = match.Groups[3].Value.Replace("%3A", ":").Replace("%2F", "/"),
                     Source = this,
                     SourceName = Name,
                     SourceCategory = Category,

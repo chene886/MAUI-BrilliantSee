@@ -113,10 +113,10 @@ namespace BrilliantSee.ViewModels
         /// <returns></returns>
         private async Task InitSettingsAsync()
         {
-            SettingItems = await _db.GetSettingItemsAsync("Source");
+            SettingItems = await _db.GetSettingItemsAsync((int)SettingItemCategory.Source);
             foreach (var source in Sources)
             {
-                source.IsSelected = SettingItems.First(s => s.Name == source.Name).Value == "IsSelected";
+                source.IsSelected = SettingItems.First(s => s.Name == source.Name).ValueInt == 1;
             }
         }
 
@@ -209,7 +209,7 @@ namespace BrilliantSee.ViewModels
         {
             source.IsSelected = !source.IsSelected;
             var item = SettingItems.First(s => s.Name == source.Name);
-            item!.Value = source.IsSelected ? "IsSelected" : "NotSelected";
+            item!.ValueInt = source.IsSelected ? 1 : 0;
             await _db.UpdateSettingItemAsync(item);
         }
 

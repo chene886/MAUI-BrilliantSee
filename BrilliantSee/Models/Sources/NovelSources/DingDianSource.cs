@@ -40,7 +40,7 @@ namespace BrilliantSee.Models.Sources.NovelSources
                 {
                     Url = "https://www.ddxs.vip" + match.Groups[1].Value,
                     Name = match.Groups[2].Value,
-                    Cover = "https://i.postimg.cc/xTMSDvYK/nocover.jpg",
+                    Cover = "https://i.postimg.cc/K8tdvsSZ/image.png",
                     Author = match.Groups[3].Value,
                     LastestUpdateTime = match.Groups[4].Value,
                     Source = this,

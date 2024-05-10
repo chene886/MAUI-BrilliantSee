@@ -10,7 +10,7 @@
     <ContentPage.Behaviors>
         <behavior:AndroidFullscreenBehavior />
     </ContentPage.Behaviors>
-    <Grid BackgroundColor="White">
+    <Grid>
         <RefreshView
             x:Name="list"
             Command="{Binding LoadNewChapterCommand}"
@@ -22,25 +22,24 @@
                         Margin="8,80,8,60"
                         FontFamily=""
                         FontSize="32"
-                        Text="{Binding Chapter.Name}"
-                        TextColor="Black" />
+                        Text="{Binding Chapter.Name}" />
                     <Label
                         Margin="8,0,8,0"
                         CharacterSpacing="0"
                         FontFamily=""
                         FontSize="20"
                         LineHeight="1.2"
-                        Text="{Binding Chapter.NovelContent}"
-                        TextColor="Black" />
+                        Text="{Binding Chapter.NovelContent}" />
                     <Label
-                        Padding="0,24,0,40"
+                        Padding="0,24"
                         BackgroundColor="Transparent"
                         FontFamily=""
                         FontSize="24"
                         HorizontalTextAlignment="Center"
                         IsVisible="{Binding IsShowButton}"
                         Text="{Binding ButtonContent}"
-                        TextColor="{StaticResource Gray600}"
+                        TextColor="{AppThemeBinding Light={StaticResource Black},
+                                                    Dark={StaticResource White}}"
                         VerticalOptions="Center">
                         <Label.GestureRecognizers>
                             <TapGestureRecognizer Command="{Binding LoadNewChapterCommand}" CommandParameter="Next" />

@@ -1,4 +1,5 @@
 ﻿using BrilliantSee.Models;
+using BrilliantSee.Models.Enums;
 using BrilliantSee.Services;
 using CommunityToolkit.Mvvm.ComponentModel;
 
@@ -8,7 +9,7 @@ namespace BrilliantSee.ViewModels
     {
         private readonly AIService _aiService;
         private readonly DBService _db;
-        private readonly MessageService _ms;
+        public readonly MessageService _ms;
 
         /// <summary>
         /// 是否有模型
@@ -61,21 +62,21 @@ namespace BrilliantSee.ViewModels
             _ms.WriteMessage("模型更新成功");
 
             //保存到数据库
-            modelConfigs = await _db.GetSettingItemsAsync("AIModel");
+            modelConfigs = await _db.GetSettingItemsAsync((int)SettingItemCategory.AIModel);
             foreach (var item in modelConfigs)
             {
                 switch (item.Name)
                 {
                     case "ModelId":
-                        item.Value = name;
+                        item.ValueString = name;
                         break;
 
                     case "ApiKey":
-                        item.Value = key;
+                        item.ValueString = key;
                         break;
 
                     case "ApiUrl":
-                        item.Value = url;
+                        item.ValueString = url;
                         break;
                 }
                 _ = _db.UpdateSettingItemAsync(item);

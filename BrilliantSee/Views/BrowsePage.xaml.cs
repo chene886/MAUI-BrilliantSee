@@ -21,4 +21,9 @@ public partial class BrowsePage : ContentPage
     {
         this.listView.ScrollTo(_vm.Images.First(), position: ScrollToPosition.Start, false);
     }
+
+    private void CachedImage_Error(object sender, FFImageLoading.Maui.CachedImageEvents.ErrorEventArgs e)
+    {
+        
+    }
 }

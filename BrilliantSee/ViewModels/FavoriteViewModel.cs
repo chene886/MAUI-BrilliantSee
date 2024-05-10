@@ -78,10 +78,10 @@ namespace BrilliantSee.ViewModels
         /// <returns></returns>
         private async Task InitKernelAsync()
         {
-            modelConfigs = await _db.GetSettingItemsAsync("AIModel");
-            var modelId = modelConfigs.Where(s => s.Name == "ModelId").First().Value;
-            var apiKey = modelConfigs.Where(s => s.Name == "ApiKey").First().Value;
-            var apiUrl = modelConfigs.Where(s => s.Name == "ApiUrl").First().Value;
+            modelConfigs = await _db.GetSettingItemsAsync((int)SettingItemCategory.AIModel);
+            var modelId = modelConfigs.Where(s => s.Name == "ModelId").First().ValueString;
+            var apiKey = modelConfigs.Where(s => s.Name == "ApiKey").First().ValueString;
+            var apiUrl = modelConfigs.Where(s => s.Name == "ApiUrl").First().ValueString;
             if (modelId != "" && apiKey != "" && apiUrl != "")
             {
                 _ai.InitKernel(modelId, apiKey, apiUrl);
@@ -127,8 +127,8 @@ namespace BrilliantSee.ViewModels
             obj.IsHide = !obj.IsHide;
             await _db.SaveObjAsync(obj, DBObjCategory.Favorite);
             await _db.SaveObjAsync(obj, DBObjCategory.History);
-            var HideTip = await _db.GetSettingItemsAsync("Tip");
-            if (HideTip.Any() && HideTip.First().Value == "true")
+            var HideTip = await _db.GetSettingItemsAsync((int)SettingItemCategory.Tip);
+            if (HideTip.Any() && HideTip.First().ValueInt == 1)
             {
                 ShowHideTip.Invoke();
             }
@@ -142,9 +142,9 @@ namespace BrilliantSee.ViewModels
         /// <returns></returns>
         public async Task DontShowAgain()
         {
-            var HideTip = await _db.GetSettingItemsAsync("Tip");
+            var HideTip = await _db.GetSettingItemsAsync((int)SettingItemCategory.Tip);
             var Tip = HideTip.First();
-            Tip.Value = "false";
+            Tip.ValueInt = 0;
             await _db.UpdateSettingItemAsync(Tip);
         }
 

@@ -42,7 +42,7 @@
                                 FontFamily=""
                                 HeightRequest="36"
                                 HorizontalOptions="End"
-                                Text="{Binding Value}"
+                                Text="{Binding ValueString}"
                                 TextColor="White" />
                         </Grid>
                     </Frame>
@@ -75,7 +75,10 @@
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
                 <ScrollView x:Name="message">
-                    <Label FontSize="Small" Text="{Binding Content}" />
+                    <Label
+                        FontFamily=""
+                        FontSize="Small"
+                        Text="{Binding Content}" />
                 </ScrollView>
                 <Button
                     Grid.Row="1"

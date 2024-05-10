@@ -19,7 +19,7 @@
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
-            <HorizontalStackLayout Margin="2,0">
+            <HorizontalStackLayout Margin="2,0" Spacing="10">
                 <Button
                     x:Name="all"
                     BackgroundColor="Transparent"
@@ -32,6 +32,7 @@
                             TargetType="Button"
                             Value="All">
                             <Setter Property="TextColor" Value="#512BD4" />
+                            <Setter Property="FontSize" Value="Subtitle" />
                         </DataTrigger>
                     </Button.Triggers>
                 </Button>
@@ -47,6 +48,7 @@
                             TargetType="Button"
                             Value="Novel">
                             <Setter Property="TextColor" Value="#512BD4" />
+                            <Setter Property="FontSize" Value="Subtitle" />
                         </DataTrigger>
                     </Button.Triggers>
                 </Button>
@@ -62,6 +64,7 @@
                             TargetType="Button"
                             Value="Comic">
                             <Setter Property="TextColor" Value="#512BD4" />
+                            <Setter Property="FontSize" Value="Subtitle" />
                         </DataTrigger>
                     </Button.Triggers>
                 </Button>
@@ -77,25 +80,55 @@
                             TargetType="Button"
                             Value="Video">
                             <Setter Property="TextColor" Value="#512BD4" />
+                            <Setter Property="FontSize" Value="Subtitle" />
                         </DataTrigger>
                     </Button.Triggers>
                 </Button>
             </HorizontalStackLayout>
-            <CollectionView
+            <SwipeView
+                x:Name="swipeView"
                 Grid.Row="1"
-                ItemsLayout="VerticalGrid, 3"
-                ItemsSource="{Binding Objs}">
-                <CollectionView.ItemTemplate>
-                    <DataTemplate>
-                        <SwipeView>
-                            <SwipeView.RightItems>
-                                <SwipeItemView>
-                                    <Grid WidthRequest="56">
+                SwipeChanging="SwipeView_SwipeChanging"
+                SwipeEnded="SwipeView_SwipeEnded"
+                Threshold="400">
+                <SwipeView.RightItems>
+                    <SwipeItems Mode="Execute" SwipeBehaviorOnInvoked="Close">
+                        <SwipeItem />
+                    </SwipeItems>
+                </SwipeView.RightItems>
+                <SwipeView.LeftItems>
+                    <SwipeItems Mode="Execute" SwipeBehaviorOnInvoked="Close">
+                        <SwipeItem />
+                    </SwipeItems>
+                </SwipeView.LeftItems>
+                <CollectionView
+                    Grid.Row="1"
+                    ItemsLayout="VerticalGrid, 3"
+                    ItemsSource="{Binding Objs}">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Frame
+                                Margin="5,0,5,20"
+                                Padding="1"
+                                CornerRadius="8"
+                                HasShadow="True">
+                                <Frame.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding OpenObjCommand, Source={RelativeSource AncestorType={x:Type vm:HistoryViewModel}}}" CommandParameter="{Binding}" />
+                                    <DragGestureRecognizer CanDrag="True" DragStarting="DragGestureRecognizer_DragStarting" />
+                                </Frame.GestureRecognizers>
+                                <Grid>
+                                    <Grid
+                                        x:Name="buttons"
+                                        BackgroundColor="{StaticResource BlackTransparent}"
+                                        IsVisible="False"
+                                        ZIndex="1">
                                         <Grid.RowDefinitions>
+                                            <RowDefinition Height="*" />
                                             <RowDefinition Height="*" />
                                             <RowDefinition Height="*" />
                                         </Grid.RowDefinitions>
                                         <ImageButton
+                                            Clicked="ImageButton_Clicked"
                                             Command="{Binding AddFavoriteCommand, Source={RelativeSource AncestorType={x:Type vm:HistoryViewModel}}}"
                                             CommandParameter="{Binding}"
                                             CornerRadius="20"
@@ -104,58 +137,57 @@
                                             WidthRequest="40" />
                                         <ImageButton
                                             Grid.Row="1"
+                                            Clicked="ImageButton_Clicked"
                                             Command="{Binding ClearObjCommand, Source={RelativeSource AncestorType={x:Type vm:HistoryViewModel}}}"
                                             CommandParameter="{Binding}"
                                             CornerRadius="20"
                                             HeightRequest="40"
                                             Source="clean.png"
                                             WidthRequest="40" />
+                                        <ImageButton
+                                            Grid.Row="2"
+                                            Clicked="ImageButton_Clicked"
+                                            CornerRadius="20"
+                                            HeightRequest="40"
+                                            Source="back.png"
+                                            WidthRequest="40" />
                                     </Grid>
-                                </SwipeItemView>
-                            </SwipeView.RightItems>
-                            <Frame
-                                Margin="5,0,5,20"
-                                Padding="0"
-                                CornerRadius="8"
-                                HasShadow="True">
-                                <Frame.GestureRecognizers>
-                                    <TapGestureRecognizer Command="{Binding OpenObjCommand, Source={RelativeSource AncestorType={x:Type vm:HistoryViewModel}}}" CommandParameter="{Binding}" />
-                                </Frame.GestureRecognizers>
-                                <Grid BackgroundColor="Transparent" RowSpacing="1">
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="160" />
-                                        <RowDefinition Height="Auto" />
-                                        <RowDefinition Height="Auto" />
-                                    </Grid.RowDefinitions>
-                                    <ffimageloading:CachedImage
-                                        Aspect="AspectFill"
-                                        CacheDuration="30"
-                                        ErrorPlaceholder="load_fail.png"
-                                        FadeAnimationForCachedImages="True"
-                                        LoadingPlaceholder="loading.png"
-                                        Source="{Binding Cover}" />
-                                    <Label
-                                        Grid.Row="1"
-                                        Padding="2,0"
-                                        FontFamily=""
-                                        FontSize="16"
-                                        HorizontalOptions="Start"
-                                        LineBreakMode="TailTruncation"
-                                        Text="{Binding Name}" />
-                                    <Label
-                                        Grid.Row="2"
-                                        Padding="2,0"
-                                        FontFamily=""
-                                        FontSize="13"
-                                        HorizontalOptions="Start"
-                                        Text="{Binding SourceName}"
-                                        TextColor="{StaticResource Gray500}" />
+                                    <Grid BackgroundColor="Transparent" RowSpacing="1">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="160" />
+                                            <RowDefinition Height="Auto" />
+                                            <RowDefinition Height="Auto" />
+                                        </Grid.RowDefinitions>
+                                        <ffimageloading:CachedImage
+                                            Aspect="AspectFill"
+                                            CacheDuration="30"
+                                            ErrorPlaceholder="load_fail.png"
+                                            FadeAnimationForCachedImages="True"
+                                            LoadingPlaceholder="loading.png"
+                                            Source="{Binding Cover}" />
+                                        <Label
+                                            Grid.Row="1"
+                                            Padding="2,0"
+                                            FontFamily=""
+                                            FontSize="16"
+                                            HorizontalOptions="Start"
+                                            LineBreakMode="TailTruncation"
+                                            Text="{Binding Name}" />
+                                        <Label
+                                            Grid.Row="2"
+                                            Padding="2,0"
+                                            FontFamily=""
+                                            FontSize="13"
+                                            HorizontalOptions="Start"
+                                            Text="{Binding SourceName}"
+                                            TextColor="{StaticResource Gray500}" />
+                                    </Grid>
                                 </Grid>
                             </Frame>
-                        </SwipeView>
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
-            </CollectionView>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </SwipeView>
         </Grid>
         <Frame
             Margin="0,0,30,40"

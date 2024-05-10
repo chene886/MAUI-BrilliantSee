@@ -11,7 +11,7 @@ namespace BrilliantSee.Models.Objs.Comics
         public override void LoadMoreData()
         {
             //截取两个字符串之间的内容
-            var start = Html.IndexOf("Author");
+            var start = Html.IndexOf("info");
             if (start < 0)
             {
                 Status = "连载中";
@@ -23,12 +23,12 @@ namespace BrilliantSee.Models.Objs.Comics
             var moreDataHtml = Html.Substring(start);
             if (!string.IsNullOrEmpty(Html))
             {
-                var result = Regex.Match(moreDataHtml, "Author[\\s\\S]*?>(.*?)<[\\s\\S]*?Status:\\s(.*?)<[\\s\\S]*?<p[\\s\\S]*?>(.*?)<");
-                Author = result.Groups[1].Value;
-                Status = result.Groups[2].Value;
-                Description = result.Groups[3].Value.Replace("\\n", "").Replace("amp;", "");
-                var result1 = Regex.Match(moreDataHtml, "<i>(.*?)<");
-                LastestUpdateTime = result1.Groups[1].Value;
+                var result = Regex.Match(moreDataHtml, "info[\\s\\S]*?<span[\\s\\S]*?>(.*?)<[\\s\\S]*?Author[\\s\\S]*?<span>(.*?)<[\\s\\S]*?<p[\\s\\S]*?>(.*?)<");
+                Author = result.Groups[2].Value;
+                Status = result.Groups[1].Value;
+                Description = result.Groups[3].Value.Replace("\\n", "").Replace("amp;", "").Replace("&quot;", "");
+                //var result1 = Regex.Match(moreDataHtml, "<i>(.*?)<");
+                //LastestUpdateTime = result1.Groups[1].Value;
             }
         }
 

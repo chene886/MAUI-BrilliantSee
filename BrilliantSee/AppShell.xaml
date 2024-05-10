@@ -8,9 +8,6 @@
     xmlns:views="clr-namespace:BrilliantSee.Views"
     Title="BrilliantSee"
     FlyoutBehavior="Disabled">
-    <Shell.Behaviors>
-        <toolkit:StatusBarBehavior StatusBarColor="{StaticResource Backcolor}" StatusBarStyle="DarkContent" />
-    </Shell.Behaviors>
     <TabBar>
         <Tab Title="收藏" Icon="favorite.png">
             <ShellContent ContentTemplate="{DataTemplate views:FavoritePage}" Route="FavoritePage" />

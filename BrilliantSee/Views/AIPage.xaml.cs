@@ -148,15 +148,37 @@ public partial class AIPage : ContentPage
     private async Task AddChatBubble(string text, bool isUser)
     {
         string backgroundColor = isUser ? "#FFFFFF" : "#512BD4";
-        string textColor = isUser ? "#512BD4" : "#FFFFFF";
+        string textColor = isUser ? "#000000" : "#FFFFFF";
         var horizontalOptions = isUser ? LayoutOptions.End : LayoutOptions.Start;
         this.chat.Children.Add(new Frame()
         {
-            Content = new Label()
+            Content = new VerticalStackLayout()
             {
-                Text = text,
-                TextColor = Color.FromArgb(textColor),
-                FontFamily = "",
+                Children =
+                {
+                    new Label()
+                    {
+                        Text = text,
+                        TextColor = Color.FromArgb(textColor),
+                        FontFamily = "",
+                    },
+                    new Button()
+                    {
+                        IsVisible = !isUser,
+                        ImageSource = ImageSource.FromFile("copy.png"),
+                        BackgroundColor = Color.FromArgb("#00000000"),
+                        HeightRequest = 28,
+                        WidthRequest = 28,
+                        Padding = new Thickness(0),
+                        HorizontalOptions = LayoutOptions.End,
+                        Command = new Command(() =>
+                        {
+                            Clipboard.SetTextAsync(text);
+                            _vm._ms.WriteMessage("ÒÑ¸´ÖÆµ½¼ôÌù°å");
+                        }),
+                    },
+                },
+
             },
             CornerRadius = 10,
             Padding = new Thickness(8),
