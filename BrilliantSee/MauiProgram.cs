@@ -24,9 +24,7 @@ namespace BrilliantSee
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
                 });
 
-            // 添加服务
             AddServices(builder.Services);
-
 #if DEBUG
             builder.Logging.AddDebug();
 #endif

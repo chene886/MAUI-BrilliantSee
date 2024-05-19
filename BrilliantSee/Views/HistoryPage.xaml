@@ -92,12 +92,12 @@
                 SwipeEnded="SwipeView_SwipeEnded"
                 Threshold="400">
                 <SwipeView.RightItems>
-                    <SwipeItems Mode="Execute" SwipeBehaviorOnInvoked="Close">
+                    <SwipeItems>
                         <SwipeItem />
                     </SwipeItems>
                 </SwipeView.RightItems>
                 <SwipeView.LeftItems>
-                    <SwipeItems Mode="Execute" SwipeBehaviorOnInvoked="Close">
+                    <SwipeItems>
                         <SwipeItem />
                     </SwipeItems>
                 </SwipeView.LeftItems>
@@ -116,7 +116,7 @@
                                     <TapGestureRecognizer Command="{Binding OpenObjCommand, Source={RelativeSource AncestorType={x:Type vm:HistoryViewModel}}}" CommandParameter="{Binding}" />
                                     <DragGestureRecognizer CanDrag="True" DragStarting="DragGestureRecognizer_DragStarting" />
                                 </Frame.GestureRecognizers>
-                                <Grid>
+                                <Grid BackgroundColor="Transparent">
                                     <Grid
                                         x:Name="buttons"
                                         BackgroundColor="{StaticResource BlackTransparent}"
@@ -131,26 +131,20 @@
                                             Clicked="ImageButton_Clicked"
                                             Command="{Binding AddFavoriteCommand, Source={RelativeSource AncestorType={x:Type vm:HistoryViewModel}}}"
                                             CommandParameter="{Binding}"
-                                            CornerRadius="20"
                                             HeightRequest="40"
-                                            Source="add_favorite.png"
-                                            WidthRequest="40" />
+                                            Source="add_favorite.png" />
                                         <ImageButton
                                             Grid.Row="1"
                                             Clicked="ImageButton_Clicked"
                                             Command="{Binding ClearObjCommand, Source={RelativeSource AncestorType={x:Type vm:HistoryViewModel}}}"
                                             CommandParameter="{Binding}"
-                                            CornerRadius="20"
                                             HeightRequest="40"
-                                            Source="clean.png"
-                                            WidthRequest="40" />
+                                            Source="clean.png" />
                                         <ImageButton
                                             Grid.Row="2"
                                             Clicked="ImageButton_Clicked"
-                                            CornerRadius="20"
                                             HeightRequest="40"
-                                            Source="back.png"
-                                            WidthRequest="40" />
+                                            Source="back.png" />
                                     </Grid>
                                     <Grid BackgroundColor="Transparent" RowSpacing="1">
                                         <Grid.RowDefinitions>
@@ -160,7 +154,7 @@
                                         </Grid.RowDefinitions>
                                         <ffimageloading:CachedImage
                                             Aspect="AspectFill"
-                                            CacheDuration="30"
+                                            CacheDuration="3"
                                             ErrorPlaceholder="load_fail.png"
                                             FadeAnimationForCachedImages="True"
                                             LoadingPlaceholder="loading.png"

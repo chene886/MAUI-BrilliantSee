@@ -13,10 +13,7 @@ namespace BrilliantSee.Models.Items.Chapters
         {
             try
             {
-                //var msg = await Obj.Source.HttpClient!.GetAsync(Url);
-                //if (msg.RequestMessage is null || msg.RequestMessage.RequestUri is null)
-                //    throw new Exception("接口异常,请等待维护");
-                //var html = await msg.Content.ReadAsStringAsync();
+                var picUrls = new List<string>();
                 var html = await Obj.Source.GetHtmlAsync(Url);
                 if (html == string.Empty)
                     throw new Exception("请求失败");
@@ -31,9 +28,9 @@ namespace BrilliantSee.Models.Items.Chapters
                 var pathHead = "https://res.xiaoqinre.com/" + Regex.Match(html, "chapterPath = \"(.*?)\"").Groups[1].Value;
                 foreach (Match item in match)
                 {
-                    PicUrls.Add(pathHead + item.Groups[1].Value);
+                    picUrls.Add(pathHead + item.Groups[1].Value);
                 }
-                if (PicUrls.Count == 1) PicUrls.Add(PicUrls[0]);
+                PicUrls = picUrls;
                 PageCount = PicUrls.Count;
             }
             catch (Exception e)

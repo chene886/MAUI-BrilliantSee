@@ -230,7 +230,7 @@
                                         </Frame.GestureRecognizers>
                                         <ffimageloading:CachedImage
                                             Aspect="AspectFill"
-                                            CacheDuration="30"
+                                            CacheDuration="1"
                                             ErrorPlaceholder="load_fail.png"
                                             FadeAnimationForCachedImages="True"
                                             LoadingPlaceholder="loading.png"

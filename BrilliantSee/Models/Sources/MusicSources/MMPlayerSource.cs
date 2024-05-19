@@ -1,7 +1,5 @@
 ﻿using BrilliantSee.Models.Objs;
-using BrilliantSee.Models.Objs.Comics;
-using BrilliantSee.Services;
-using CommunityToolkit.Mvvm.ComponentModel;
+using BrilliantSee.Models.Objs.Musics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,49 +8,44 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace BrilliantSee.Models.Sources.ComicSources
+namespace BrilliantSee.Models.Sources.MusicSources
 {
-    public partial class GodaEnSource : Source
+    public class MMPlayerSource : Source
     {
-        public GodaEnSource()
+        public MMPlayerSource()
         {
-            SetHttpClient("https://manhuascans.org/");
-            Name = "Goda(英)";
+            SetHttpClient("https://mu-api.yuk0.com/");
+            Name = "MMPlayer";
             HasMore = 1;
         }
 
-        /// <summary>
-        /// 搜索匹配关键词的漫画
-        /// </summary>
-        /// <param name="keyword">搜索关键词</param>
-        /// <returns></returns>
         public override async Task<IEnumerable<Obj>> SearchAsync(string keyword)
         {
-            var url = $"https://manhuascans.org/s/{keyword}?page={ResultNum}";
+            var url = $"https://mu-api.yuk0.com/search?offset={ResultNum}&limit=30&keywords={keyword}";
             var html = await GetHtmlAsync(url);
             if (html == string.Empty) { return Array.Empty<Obj>(); }
 
-            var comics = new List<Obj>();
+            var musics = new List<Obj>();
 
             try
             {
-                string pattern = "pb-2[\\s\\S]*?href=\"(.*?)\"[\\s\\S]*?alt=\"(.*?)\"[\\s\\S]*?src=\"(.*?)\"";
+                string pattern = "\"id\":\\s*(.*?),[\\s\\S]*?\"name\":\\s*\"(.*?)\"[\\s\\S]*?artists[\\s\\S]*?name\":\\s*\"(.*?)\"[\\s\\S]*?album\"[\\s\\S]*?mark";
                 var matches = Regex.Matches(html, pattern);
                 if (matches.Count < 30) { HasMore = 0; }
                 foreach (Match match in matches)
                 {
-                    var comic = new GodaEnComic()
+                    var music = new MMPlayerMusic()
                     {
-                        Url = match.Groups[1].Value.Replace(" ", ""),
+                        Url = $"https://music.163.com/song/media/outer/url?id={match.Groups[1].Value}.mp3",
                         Name = match.Groups[2].Value,
-                        Cover = match.Groups[3].Value.Replace("%3A", ":").Replace("%2F", "/"),
+                        //Singer = match.Groups[3].Value,
                         Source = this,
                         SourceName = Name,
                         SourceCategory = Category,
                     };
-                    comics.Add(comic);
+                    musics.Add(music);
                 }
-                return comics;
+                return musics;
             }
             catch
             {

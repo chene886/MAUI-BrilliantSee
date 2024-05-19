@@ -13,6 +13,7 @@ namespace BrilliantSee.Models.Items.Chapters
             var url = string.Empty;
             var count = 1;
             var html = string.Empty;
+            var content = string.Empty;
             try
             {
                 do
@@ -24,11 +25,11 @@ namespace BrilliantSee.Models.Items.Chapters
                     var match = Regex.Matches(html, "<p>([\\s\\S]*?)</p>");
                     foreach (Match item in match)
                     {
-                        NovelContent += "\t\t\t\t\t\t" + item.Groups[1].Value + "\r\n\r\n";
+                        content += "\t\t\t\t\t\t" + item.Groups[1].Value + "\r\n\r\n";
                     }
                     count++;
                 } while (Regex.Matches(html, "下一页").FirstOrDefault() is not null);
-                NovelContent = NovelContent.Replace("&lt;/p&gt;", "").Replace("\t\t\t\t\t\tdengbi.netdmxsw.comqqxsw.comyifan.net\r\r\n\r\n\t\t\t\t\t\tshuyue.netepzw.netqqwxw.comxsguan.com\r\r\n\r\n\t\t\t\t\t\txs007.comzhuike.netreadw.com23zw.cc\r\n\r\n", "").Replace("\t\t\t\t\t\tepzww3366xs80wxxsxs\r\r\n\r\n\t\t\t\t\t\tyjxs3jwx8pzwxiaohongshu\r\r\n\r\n\t\t\t\t\t\tkanshubahxsw7tbiquhe\r\n\r\n", "").Replace("\t\t\t\t\t\tepzww.com3366xs.com80wx.comxsxs.cc\r\r\n\r\n\t\t\t\t\t\tyjxs.cc3jwx.com8pzw.comxiaohongshu.cc\r\r\n\r\n\t\t\t\t\t\tkanshuba.cchmxsw.com7cct.combiquhe.com\r\n\r\n","").Replace("\t\t\t\t\t\tdengbidxswqqxswyifan\r\r\n\r\n\t\t\t\t\t\tshuyueepzwqqwxwxsguan\r\r\n\r\n\t\t\t\t\t\txs007zhuikereadw23zw\r\n\r\n", "");
+                NovelContent = content.Replace("&lt;/p&gt;", "").Replace("\t\t\t\t\t\tdengbi.netdmxsw.comqqxsw.comyifan.net\r\r\n\r\n\t\t\t\t\t\tshuyue.netepzw.netqqwxw.comxsguan.com\r\r\n\r\n\t\t\t\t\t\txs007.comzhuike.netreadw.com23zw.cc\r\n\r\n", "").Replace("\t\t\t\t\t\tepzww3366xs80wxxsxs\r\r\n\r\n\t\t\t\t\t\tyjxs3jwx8pzwxiaohongshu\r\r\n\r\n\t\t\t\t\t\tkanshubahxsw7tbiquhe\r\n\r\n", "").Replace("\t\t\t\t\t\tepzww.com3366xs.com80wx.comxsxs.cc\r\r\n\r\n\t\t\t\t\t\tyjxs.cc3jwx.com8pzw.comxiaohongshu.cc\r\r\n\r\n\t\t\t\t\t\tkanshuba.cchmxsw.com7cct.combiquhe.com\r\n\r\n", "").Replace("\t\t\t\t\t\tdengbidxswqqxswyifan\r\r\n\r\n\t\t\t\t\t\tshuyueepzwqqwxwxsguan\r\r\n\r\n\t\t\t\t\t\txs007zhuikereadw23zw\r\n\r\n", "");
             }
             catch (Exception e)
             {

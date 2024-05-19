@@ -32,27 +32,34 @@ namespace BrilliantSee.Models.Sources.ComicSources
             var html = await GetHtmlAsync(url);
             if (html == string.Empty) { return Array.Empty<Obj>(); }
 
-            string pattern = "itemBox\"[\\s\\S]*?href=\"(.*?)\"[\\s\\S]*?alt=\"(.*?)\"[\\s\\S]*?src=\"(.*?)\"[\\s\\S]*?me\">(.*?)<[\\s\\S]*?date\">(.*?)<";
-            var matches = Regex.Matches(html, pattern);
-            if (matches.Count < 36) { HasMore = 0; }
-
             var comics = new List<Obj>();
-            foreach (Match match in matches)
+
+            try
             {
-                var comic = new GufengComic()
+                string pattern = "itemBox\"[\\s\\S]*?href=\"(.*?)\"[\\s\\S]*?alt=\"(.*?)\"[\\s\\S]*?src=\"(.*?)\"[\\s\\S]*?me\">(.*?)<[\\s\\S]*?date\">(.*?)<";
+                var matches = Regex.Matches(html, pattern);
+                if (matches.Count < 36) { HasMore = 0; }
+                foreach (Match match in matches)
                 {
-                    Url = match.Groups[1].Value,
-                    Name = match.Groups[2].Value,
-                    Cover = match.Groups[3].Value,
-                    Author = match.Groups[4].Value,
-                    LastestUpdateTime = "(更新时间：" + match.Groups[5].Value + ")",
-                    Source = this,
-                    SourceName = Name,
-                    SourceCategory = Category
-                };
-                comics.Add(comic);
+                    var comic = new GufengComic()
+                    {
+                        Url = match.Groups[1].Value,
+                        Name = match.Groups[2].Value,
+                        Cover = match.Groups[3].Value,
+                        Author = match.Groups[4].Value,
+                        LastestUpdateTime = "(更新时间：" + match.Groups[5].Value + ")",
+                        Source = this,
+                        SourceName = Name,
+                        SourceCategory = Category
+                    };
+                    comics.Add(comic);
+                }
+                return comics;
             }
-            return comics;
+            catch
+            {
+                return Array.Empty<Obj>();
+            }
         }
     }
 }

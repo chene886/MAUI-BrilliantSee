@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using FFImageLoading;
 
 namespace BrilliantSee.Services
 {
@@ -38,7 +39,8 @@ namespace BrilliantSee.Services
             var dbPath = Path.Combine(FileSystem.AppDataDirectory, _dbFile);
             _db = new SQLiteAsyncConnection(dbPath, _flags);
 
-            _ = InitAsync();
+            var task = Task.Run(async () => await InitAsync());
+            task.Wait();
         }
 
         /// <summary>
@@ -49,7 +51,16 @@ namespace BrilliantSee.Services
         {
             await _db.CreateTableAsync<DBObj>();
             await _db.CreateTableAsync<SettingItem>();
-            if (await _db.Table<SettingItem>().CountAsync() > 0) { return; }
+            if (await _db.Table<SettingItem>().CountAsync() > 0)
+            {
+                var version = await _db.Table<SettingItem>().Where(x => x.Category == (int)SettingItemCategory.Version).FirstOrDefaultAsync();
+                if (version == null || version.ValueString != "BrilliantSee_v2.4.0")
+                {
+                    if (version == null) await _db.InsertAsync(new SettingItem() { Name = "版本号", ValueString = "BrilliantSee_v2.4.0", Category = (int)SettingItemCategory.Version });
+                    await UpdateFixAsync();
+                }
+                return;
+            }
 
             var Share = "我正在使用BrilliantSee，不仅有小说、漫画、动漫一站式服务，更有便捷的AI助手，资源丰富、功能强大，快来下载体验吧！下载地址：https://www.123pan.com/s/6cnjjv-6njBv.html";
             var Disclaimer = "免责声明（Disclaimer）\r\n\r\nBrilliantSee（下称为：本软件）提醒您：在使用本软件前，请您务必仔细阅读并透彻理解本声明。您可以选择不使用本软件，但如果您使用本软件，您的使用行为将被视为对本声明全部内容的认可:\r\n\r\n一、本软件是一款解析指定规则并获取内容的工具，为广大资源爱好者提供一种方便、快捷舒适的搜索体验。当您搜索想要的资源时，本软件会根据您所使用的规则将该搜索词以关键词的形式提交到各个第三方资源网站。各第三方网站返回的内容与本软件无关，本软件作者对其概不负责，亦不承担任何法律责任。\r\n\r\n二、任何通过使用本软件而链接到的第三方网页均系他人制作或提供，您可能从第三方网页上获得其他服务，本软件作者对其合法性概不负责，亦不承担任何法律责任。\r\n\r\n三、本软件尊重并保护所有使用本软件的用户的个人隐私权，我们不储存用户的任何个人信息和浏览信息。用户产生的所有数据均缓存到本地，卸载即消失，请妥善管理您的数据。\r\n\r\n四、本软件致力于最大程度地减少资源爱好者在自行搜寻过程中的无意义的时间浪费，通过专业搜索展示不同网站中资源情况。本软件在为广大资源爱好者提供方便、快捷舒适的试看体验的同时，也使优秀的互联网作品得以迅速、更广泛的传播，从而达到了在一定程度促进互联网作品充分繁荣发展之目的。本软件鼓励广大资源爱好者通过本软件发现优秀的互联网作品及其提供商，并建议观看正版资源。任何单位或个人认为通过本软件搜索链接到的第三方网页内容可能涉嫌侵犯其信息网络传播权，应该及时向本软件作者提出书面权力通知，并提供身份证明、权属证明及详细侵权情况证明。本软件作者在收到上述法律文件后，将会及时联系，并依法尽快断开相关链接内容。\r\n\r\n五、鉴于本软件以非人工检索方式、根据您键入的关键字自动生成到第三方资源的链接，除本软件注明之服务条款外，其他一切因使用本软件而可能遭致的意外、疏忽、侵权及其造成的损失（包括因下载被搜索链接到的第三方网站内容而感染电脑病毒），本软件作者对其概不负责，亦不承担任何法律责任。\r\n\r\n六、本软件搜索结果根据您键入的关键字自动搜索获得并生成，不代表本软件作者赞成被搜索链接到的第三方资源上的内容或立场。\r\n\r\n七、任何网站如果不想被本软件收录（即不被搜索到），应该及时向本软件作者反映，或者在其网站页面中根据拒绝蜘蛛协议（Robots Exclusion Protocol）加注拒绝收录的标记，否则，本软件将依照惯例视其为可收录网站。\r\n\r\n八、本软件没有任何的破解功能，只是个资源浏览器，对网页做搬运处理，使每一个网页都以同样的界面显示，优化网页浏览的体验，只能观看网络上第三方网站提供的免费资源。\r\n\r\n九、本软件无法观看第三方网页收费资源，只能对可以免费获取免费观看部分做搬运，软件没有任何破解功能，也不会提供任何破解服务，收费资源请支持正版。本软件不存储任何资源资源，资源资源均由第三方网站提供。\r\n\r\n十、请不要使用本软件浏览当地国家法律所禁止的内容，如用户在使用过程中发现第三方网站内容违法了当地国家法律，请立即联系作者，会第一时间删除并断开相关链接和相关资源源。\r\n\r\n十一、有问题可与本软件开发作者联系修改，本开发作者遵循避风港原则。\r\n\r\n十二、您访问的有些网站或其上的广告如果存在您不喜欢的内容或有其他问题，您可自行离开那些网站，本浏览器及本作者与这些网站无关、也不负任何责任。\r\n\r\n十三、本软件只是一个阅读漫画的工具，您浏览的资源网页由其域名所有者提供、制作，网页的内容及广告也是由域名所有者负责，与本软件无关，本作者不负任何责任。\r\n\r\n十四、本软件基于HttpClient进行资源内容请求，机器无法识别资源内容是否合规，如您发现任何低俗、色情、盗版的内容请通知我们联系我们进行搜索屏蔽。为此给您带来的不便，敬请谅解！本软件始终如一的支持维护著作版权，也愿意为优秀资源的宣传推广做出应有的贡献！为广大漫迷和作者提供一个绿色健康的资源搜索平台。";
@@ -58,6 +69,7 @@ namespace BrilliantSee.Services
 
             var defaultSettingItems = new List<SettingItem>
             {
+                new SettingItem() { Name = "版本号", ValueString = "BrilliantSee_v2.4.0", Category = (int)SettingItemCategory.Version },
                 new SettingItem { Name = "顶点小说", ValueInt = 1, Category = (int)SettingItemCategory.Source },
                 new SettingItem { Name = "包子漫画", ValueInt = 1, Category = (int)SettingItemCategory.Source },
                 new SettingItem { Name = "古风漫画", ValueInt = 1, Category = (int)SettingItemCategory.Source },
@@ -77,6 +89,20 @@ namespace BrilliantSee.Services
                 new SettingItem { Name = "\"隐藏模式\"提示", ValueInt = 1, Category = (int)SettingItemCategory.Tip},
             };
             await _db.InsertAllAsync(defaultSettingItems);
+        }
+
+        /// <summary>
+        /// 每次更新后的修复
+        /// </summary>
+        /// <returns></returns>
+        private async Task UpdateFixAsync()
+        {
+            //清除FFimageLoading缓存
+            await ImageService.Instance.InvalidateCacheAsync(FFImageLoading.Cache.CacheType.All);
+
+            var version = await _db.Table<SettingItem>().Where(i => i.Category == (int)SettingItemCategory.Version).FirstOrDefaultAsync();
+            version!.ValueString = "BrilliantSee_v2.4.0";
+            await _db.UpdateAsync(version);
         }
 
         /// <summary>

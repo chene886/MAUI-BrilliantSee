@@ -121,10 +121,20 @@ namespace BrilliantSee.Models.Objs
         /// </summary>
         public SourceCategory SourceCategory { get; set; }
 
+        //影视
         public string Director { get; set; } = string.Empty;
+
         public string Actors { get; set; } = string.Empty;
         public string Tag { get; set; } = string.Empty;
+
+        //小说
         public string CharCount { get; set; } = string.Empty;
+
+        //音乐
+        //public string Album { get; set; } = string.Empty;
+
+        //public string Singer { get; set; } = string.Empty;
+        //public Dictionary<string, string> Lyrics { get; set; } = new Dictionary<string, string>();
 
         /// <summary>
         /// 从存储的漫画数据创建漫画实体
@@ -169,7 +179,7 @@ namespace BrilliantSee.Models.Objs
                 IsUpdate = obj.IsUpdate,
                 IsHide = obj.IsHide,
                 LastestItemName = obj.LastestItemName,
-                SourceName = obj.SourceName
+                SourceName = obj.SourceName,
             };
         }
 

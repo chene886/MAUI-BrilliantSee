@@ -109,13 +109,20 @@ namespace BrilliantSee.ViewModels
                 isSuccess = await Obj!.GetHtmlAsync();
                 if (isSuccess)
                 {
-                    Obj!.LoadMoreData();
-                    OnPropertyChanged(nameof(Obj));
-                    await Task.Run(() => Obj!.LoadItemsAsync());
-                    if (isExist && Obj!.IsUpdate)
+                    try
                     {
-                        Obj!.IsUpdate = false;
-                        _ = _db.UpdateComicAsync(Obj!);
+                        Obj!.LoadMoreData();
+                        OnPropertyChanged(nameof(Obj));
+                        await Task.Run(() => Obj!.LoadItemsAsync());
+                        if (isExist && Obj!.IsUpdate)
+                        {
+                            Obj!.IsUpdate = false;
+                            _ = _db.UpdateComicAsync(Obj!);
+                        }
+                    }
+                    catch
+                    {
+                        _ms.WriteMessage("好像出了点小问题，用浏览器打开试试吧");
                     }
                 }
                 else _ms.WriteMessage("好像出了点小问题，用浏览器打开试试吧");
@@ -256,9 +263,14 @@ namespace BrilliantSee.ViewModels
         [RelayCommand]
         private async Task OpenHistoryAsync()
         {
-            if (Obj!.LastReadedItemIndex != -1 && Obj.Items.Any())
+            if (Obj!.Items.Any())
             {
-                var historyItem = Obj.Items.ToList().Find(c => c.Index == Obj.LastReadedItemIndex);
+                Item? historyItem;
+                if(Obj.LastReadedItemIndex == -1)
+                {
+                    historyItem = Obj.IsReverseList ? Obj.Items.Last() : Obj.Items.First();
+                }
+                else historyItem = Obj.Items.ToList().Find(c => c.Index == Obj.LastReadedItemIndex);
                 if (Obj.SourceCategory == SourceCategory.Video) await SetVideoAsync(historyItem!);
                 else await OpenChapterAsync(historyItem!);
             }

@@ -26,27 +26,34 @@ namespace BrilliantSee.Models.Sources.VideoSources
             var html = await GetHtmlAsync(url);
             if (html == string.Empty) { return Array.Empty<Obj>(); }
 
-            string pattern = "vodlist__box[\\s\\S]*?href=\"(.*?)\"\\s*title=\"(.*?)\"\\s*data-original=\"(.*?)\"[\\s\\S]*?text\\s[\\s\\S]*?b>(.*?)<[\\s\\S]*?<p[\\s\\S]*?>(.*?)</p>";
-            var matches = Regex.Matches(html, pattern);
-            if (matches.Count < 24) { HasMore = 0; }
-
             var objs = new List<Obj>();
-            foreach (Match match in matches)
+
+            try
             {
-                var obj = new YHWangVideo()
+                string pattern = "vodlist__box[\\s\\S]*?href=\"(.*?)\"\\s*title=\"(.*?)\"\\s*data-original=\"(.*?)\"[\\s\\S]*?text\\s[\\s\\S]*?b>(.*?)<[\\s\\S]*?<p[\\s\\S]*?>(.*?)</p>";
+                var matches = Regex.Matches(html, pattern);
+                if (matches.Count < 24) { HasMore = 0; }
+                foreach (Match match in matches)
                 {
-                    Url = "https://www.yhdmwang.com" + match.Groups[1].Value,
-                    Name = match.Groups[2].Value,
-                    Cover = "https://www.yhdmwang.com" + match.Groups[3].Value,
-                    LastestUpdateTime = match.Groups[4].Value,
-                    Author = string.Join("，", Regex.Replace(match.Groups[5].Value, "<[^>]+>", "").Split("&nbsp;", StringSplitOptions.RemoveEmptyEntries)),
-                    Source = this,
-                    SourceName = Name,
-                    SourceCategory = Category,
-                };
-                objs.Add(obj);
+                    var obj = new YHWangVideo()
+                    {
+                        Url = "https://www.yhdmwang.com" + match.Groups[1].Value,
+                        Name = match.Groups[2].Value,
+                        Cover = "https://www.yhdmwang.com" + match.Groups[3].Value,
+                        LastestUpdateTime = match.Groups[4].Value,
+                        Author = string.Join("，", Regex.Replace(match.Groups[5].Value, "<[^>]+>", "").Split("&nbsp;", StringSplitOptions.RemoveEmptyEntries)),
+                        Source = this,
+                        SourceName = Name,
+                        SourceCategory = Category,
+                    };
+                    objs.Add(obj);
+                }
+                return objs;
             }
-            return objs;
+            catch
+            {
+                return Array.Empty<Obj>();
+            }
         }
     }
 }

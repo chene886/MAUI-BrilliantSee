@@ -133,31 +133,25 @@ namespace BrilliantSee.ViewModels
                 _ms.WriteMessage("请输入正确的关键词");
                 return;
             }
-            var hasSourceSelected = Sources.Where(s => s.IsSelected == true).Count() > 0;
-            if (hasSourceSelected)
+            _ms.WriteMessage("正在搜索...");
+            IsGettingResult = true;
+            IsSourceListVisible = false;
+
+            Keyword = keyword;
+            AllObjs.Clear();
+
+            List<Task> tasks = new List<Task>();
+            foreach (var key in ObjContainers.Keys)
             {
-                Keyword = keyword;
-                IsGettingResult = true;
-                IsSourceListVisible = false;
-                AllObjs.Clear();
-                List<Task> tasks = new List<Task>();
-                foreach (var key in ObjContainers.Keys)
-                {
-                    ObjContainers[key].Clear();
-                    tasks.Add(Task.Run(async () => await _sourceService.SearchAsync(keyword, AllObjs, ObjContainers[key], "Init", key)));
-                }
-                await Task.WhenAll(tasks);
-                var count = Comics.Count + Videos.Count + Novels.Count;
-                if (count == 0) { _ms.WriteMessage("搜索结果为空，换其他源试试吧"); }
-                else { _ms.WriteMessage($"搜索到{Novels.Count}部小说，{Comics.Count}部漫画，{Videos.Count}部动漫"); }
-                CurrentObjsCount = count;
-                IsGettingResult = false;
+                ObjContainers[key].Clear();
+                tasks.Add(Task.Run(async () => await _sourceService.SearchAsync(keyword, AllObjs, ObjContainers[key], "Init", key)));
             }
-            else
-            {
-                _ms.WriteMessage("请选择至少一个图源");
-                return;
-            }
+            await Task.WhenAll(tasks);
+
+            CurrentObjsCount = ObjContainers[CurrentCategory].Count;
+            IsGettingResult = false;
+            var message = Comics.Count + Videos.Count + Novels.Count == 0 ? "搜索结果为空，换其他源试试吧" : $"搜索到{Novels.Count}部小说，{Comics.Count}部漫画，{Videos.Count}部动漫";
+            _ms.WriteMessage(message);
         }
 
         /// <summary>
@@ -167,9 +161,11 @@ namespace BrilliantSee.ViewModels
         public async Task GetMoreAsync()
         {
             _ms.WriteMessage("正在加载更多结果");
-            var count = Comics.Count + Videos.Count + Novels.Count;
             IsGettingResult = true;
             IsSourceListVisible = false;
+
+            var count = Comics.Count + Videos.Count + Novels.Count;
+
             if (CurrentCategory == SourceCategory.All)
             {
                 List<Task> tasks = new List<Task>();
@@ -180,10 +176,11 @@ namespace BrilliantSee.ViewModels
                 await Task.WhenAll(tasks);
             }
             else await _sourceService.SearchAsync(Keyword, AllObjs, ObjContainers[CurrentCategory], "More", CurrentCategory);
-            var message = Comics.Count + Videos.Count + Novels.Count > count ? $"加载了{Comics.Count + Videos.Count + Novels.Count - count}个结果" : "没有更多结果了";
-            CurrentObjsCount = ObjContainers[CurrentCategory].Count;
-            _ms.WriteMessage(message);
+
             IsGettingResult = false;
+            CurrentObjsCount = ObjContainers[CurrentCategory].Count;
+            var message = Comics.Count + Videos.Count + Novels.Count > count ? $"加载了{Comics.Count + Videos.Count + Novels.Count - count}个结果" : "没有更多结果了";
+            _ms.WriteMessage(message);
         }
 
         /// <summary>

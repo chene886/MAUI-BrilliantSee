@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView
+    x:Class="BrilliantSee.Controls.BottomSheet"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit">
+    <Frame
+        x:Name="frame"
+        Margin="-2,0,-2,-50"
+        Padding="16,0"
+        BackgroundColor="{StaticResource Backcolor}"
+        CornerRadius="50"
+        HasShadow="True"
+        HeightRequest="400"
+        HorizontalOptions="FillAndExpand"
+        IsClippedToBounds="True"
+        VerticalOptions="End">
+        <Grid BackgroundColor="Transparent">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <Frame
+                Padding="0"
+                BackgroundColor="Transparent"
+                BorderColor="Transparent"
+                CornerRadius="50"
+                HeightRequest="30"
+                HorizontalOptions="Center"
+                VerticalOptions="Start"
+                WidthRequest="60">
+                <Frame.GestureRecognizers>
+                    <PanGestureRecognizer PanUpdated="PanGestureRecognizer_PanUpdated" />
+                </Frame.GestureRecognizers>
+                <RoundRectangle
+                    BackgroundColor="{StaticResource Gray500}"
+                    CornerRadius="50"
+                    HeightRequest="5"
+                    WidthRequest="60" />
+            </Frame>
+            <Entry
+                x:Name="Entry"
+                Grid.Row="1"
+                Margin="0,0,0,10"
+                BackgroundColor="Transparent"
+                HeightRequest="50"
+                Placeholder="搜索歌曲或歌手"
+                ReturnCommand="{Binding SearchCommand}"
+                ReturnCommandParameter="{Binding Text, Source={RelativeSource Mode=Self}}"
+                ReturnType="Search"
+                TextColor="Black" />
+            <CollectionView
+                x:Name="CollectionView"
+                Grid.Row="2"
+                Margin="0,0,0,50"
+                BackgroundColor="Transparent"
+                ItemsSource="{Binding Musics}"
+                SelectionMode="None">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid
+                            Margin="0,0,0,4"
+                            Padding="6,4"
+                            BackgroundColor="White"
+                            ColumnSpacing="10">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <Border Grid.Column="0" BackgroundColor="{StaticResource Gray500}">
+                                <Border.StrokeShape>
+                                    <RoundRectangle BackgroundColor="{StaticResource Gray500}" CornerRadius="50" />
+                                </Border.StrokeShape>
+                                <Image
+                                    Aspect="AspectFill"
+                                    HeightRequest="50"
+                                    Source="{Binding Cover}"
+                                    WidthRequest="50" />
+                            </Border>
+                            <VerticalStackLayout
+                                Grid.Column="1"
+                                Spacing="8"
+                                VerticalOptions="Center">
+                                <Label
+                                    FontSize="16"
+                                    LineBreakMode="TailTruncation"
+                                    MaxLines="1"
+                                    Text="{Binding Name}"
+                                    TextColor="Black" />
+                                <Label
+                                    FontSize="12"
+                                    Text="{Binding Singer}"
+                                    TextColor="{StaticResource Gray500}" />
+                            </VerticalStackLayout>
+                            <ImageButton
+                                Grid.Column="2"
+                                Command="{Binding BindingContext.PlayCommand, Source={x:Reference Name=CollectionView}}"
+                                CommandParameter="{Binding .}"
+                                HeightRequest="48"
+                                Source="favorite.png"
+                                WidthRequest="48" />
+                        </Grid>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </Grid>
+    </Frame>
+</ContentView>

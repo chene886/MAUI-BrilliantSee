@@ -22,32 +22,23 @@ namespace BrilliantSee.Models.Items.Chapters
                 var count = 1;
                 var html = string.Empty;
                 MatchCollection match;
+                var picUrls = new List<string>();
                 do
                 {
                     if (count != 1)
                     {
                         url = Url + $"_{count}";
                     }
-                    //var msg = await Obj.Source.HttpClient!.GetAsync(url);
-                    //if (msg.RequestMessage is null || msg.RequestMessage.RequestUri is null)
-                    //{
-                    //    if (count == 1)
-                    //    {
-                    //        throw new Exception("请求失败");
-                    //    }
-                    //    break;
-                    //}
-                    //html = (await msg.Content.ReadAsStringAsync()).Replace("\n", string.Empty);
                     html = (await Obj.Source.GetHtmlAsync(url)).Replace("\n", string.Empty);
                     if (html == string.Empty) throw new Exception("请求失败");
                     match = Regex.Matches(html, "<noscript [\\s\\S]*?src=\\\"([\\s\\S]*?)\\\"[\\s\\S]*?</noscript>");
                     foreach (Match item in match)
                     {
-                        PicUrls.Add(item.Groups[1].Value);
+                        picUrls.Add(item.Groups[1].Value);
                     }
                     count++;
                 } while (Regex.Matches(html, "点击进入下一页").FirstOrDefault() is not null || Regex.Matches(html, "點擊進入下一頁").FirstOrDefault() is not null);
-                if (PicUrls.Count == 1) PicUrls.Add(PicUrls[0]);
+                PicUrls = picUrls;
                 PageCount = PicUrls.Count;
             }
             catch (Exception e)

@@ -26,29 +26,37 @@
             Command="{Binding LoadNewChapterCommand}"
             CommandParameter="Last"
             IsRefreshing="{Binding IsShowRefresh}">
-            <ListView
-                x:Name="listView"
-                HasUnevenRows="True"
-                IsPullToRefreshEnabled="False"
+            <CollectionView
+                x:Name="collectionView"
                 ItemsSource="{Binding Images}"
-                SelectionMode="None"
-                SeparatorVisibility="None">
-                <ListView.ItemTemplate>
+                Scrolled="collectionView_Scrolled"
+                SelectionMode="None">
+                <CollectionView.ItemTemplate>
                     <DataTemplate>
-                        <ViewCell>
-                            <Grid>
-                                <ffimageloading:CachedImage
-                                    CacheDuration="30"
-                                    ErrorPlaceholder="load_fail.png"
-                                    LoadingPlaceholder="loading.png"
-                                    Source="{Binding}"
-                                    Error="CachedImage_Error"
-                                    WidthRequest="{Binding ScreenWidth, Source={RelativeSource AncestorType={x:Type vm:BrowseViewModel}}}" />
-                            </Grid>
-                        </ViewCell>
+                        <Grid>
+                            <ffimageloading:CachedImage
+                                x:Name="img"
+                                CacheDuration="1"
+                                Error="img_Error"
+                                ErrorPlaceholder="load_fail.png"
+                                Loaded="img_Loaded"
+                                LoadingPlaceholder="loading.png"
+                                Source="{Binding}"
+                                WidthRequest="{Binding ScreenWidth, Source={RelativeSource AncestorType={x:Type vm:BrowseViewModel}}}" />
+                            <Button
+                                x:Name="btn"
+                                Padding="0"
+                                BackgroundColor="Transparent"
+                                Clicked="btn_Clicked"
+                                HeightRequest="64"
+                                HorizontalOptions="Center"
+                                ImageSource="reload.png"
+                                IsVisible="False"
+                                VerticalOptions="Center" />
+                        </Grid>
                     </DataTemplate>
-                </ListView.ItemTemplate>
-                <ListView.Footer>
+                </CollectionView.ItemTemplate>
+                <CollectionView.Footer>
                     <Label
                         Padding="0,24"
                         BackgroundColor="Transparent"
@@ -64,8 +72,8 @@
                             <TapGestureRecognizer Command="{Binding LoadNewChapterCommand}" CommandParameter="Next" />
                         </Label.GestureRecognizers>
                     </Label>
-                </ListView.Footer>
-            </ListView>
+                </CollectionView.Footer>
+            </CollectionView>
         </RefreshView>
         <BoxView BackgroundColor="{AppThemeBinding Light={StaticResource Transparent}, Dark={StaticResource BlackTransparent}}" ZIndex="1" />
         <ActivityIndicator
@@ -80,8 +88,9 @@
             VerticalOptions="End">
             <Label Margin="0,0,5,0" FontFamily="">
                 <Label.Text>
-                    <MultiBinding StringFormat="{}{0} 共 {1} 页">
+                    <MultiBinding StringFormat="{}{0} 第 {1}/{2} 页">
                         <Binding Path="Chapter.Name" />
+                        <Binding Path="CurrentPageNum" />
                         <Binding Path="Chapter.PageCount" />
                     </MultiBinding>
                 </Label.Text>

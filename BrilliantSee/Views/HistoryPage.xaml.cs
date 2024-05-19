@@ -99,6 +99,7 @@ public partial class HistoryPage : ContentPage
         if (selectedCategory == _vm.CurrentCategory) return;
         _vm.ChangeCurrentCategory(selectedCategory);
         _ = ButtonTapped(sender, typeof(Button));
+        CurrentButtonIndex = Array.IndexOf(Buttons, button);
 
         await _vm.OnLoadHistoryObjAsync();
     }

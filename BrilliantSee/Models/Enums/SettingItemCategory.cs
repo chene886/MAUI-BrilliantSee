@@ -47,5 +47,10 @@ namespace BrilliantSee.Models.Enums
         /// 提示
         /// </summary>
         Tip = 7,
+
+        /// <summary>
+        /// 版本
+        /// </summary>
+        Version = 8
     }
 }

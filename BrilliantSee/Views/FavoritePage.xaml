@@ -6,7 +6,9 @@
     xmlns:behaviors="clr-namespace:BrilliantSee.Behaviors"
     xmlns:controls="clr-namespace:BrilliantSee.Controls"
     xmlns:ffimageloading="clr-namespace:FFImageLoading.Maui;assembly=FFImageLoading.Maui"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
     xmlns:vm="clr-namespace:BrilliantSee.ViewModels"
+    x:Name="Page"
     Title="收藏">
     <ContentPage.Behaviors>
         <behaviors:AndroidInitBehavior />
@@ -100,12 +102,12 @@
                 SwipeEnded="SwipeView_SwipeEnded"
                 Threshold="400">
                 <SwipeView.RightItems>
-                    <SwipeItems Mode="Execute" SwipeBehaviorOnInvoked="Close">
+                    <SwipeItems>
                         <SwipeItem />
                     </SwipeItems>
                 </SwipeView.RightItems>
                 <SwipeView.LeftItems>
-                    <SwipeItems Mode="Execute" SwipeBehaviorOnInvoked="Close">
+                    <SwipeItems>
                         <SwipeItem />
                     </SwipeItems>
                 </SwipeView.LeftItems>
@@ -124,7 +126,7 @@
                                     <TapGestureRecognizer Command="{Binding OpenObjCommand, Source={RelativeSource AncestorType={x:Type vm:FavoriteViewModel}}}" CommandParameter="{Binding}" />
                                     <DragGestureRecognizer CanDrag="True" DragStarting="DragGestureRecognizer_DragStarting" />
                                 </Frame.GestureRecognizers>
-                                <Grid>
+                                <Grid BackgroundColor="Transparent">
                                     <Grid
                                         x:Name="buttons"
                                         BackgroundColor="{StaticResource BlackTransparent}"
@@ -139,10 +141,8 @@
                                             Clicked="ImageButton_Clicked"
                                             Command="{Binding HideObjCommand, Source={RelativeSource AncestorType={x:Type vm:FavoriteViewModel}}}"
                                             CommandParameter="{Binding}"
-                                            CornerRadius="20"
                                             HeightRequest="40"
-                                            Source="hide.png"
-                                            WidthRequest="40">
+                                            Source="hide.png">
                                             <ImageButton.Triggers>
                                                 <DataTrigger
                                                     Binding="{Binding IsHide}"
@@ -157,17 +157,13 @@
                                             Clicked="ImageButton_Clicked"
                                             Command="{Binding CancelFavoriteCommand, Source={RelativeSource AncestorType={x:Type vm:FavoriteViewModel}}}"
                                             CommandParameter="{Binding}"
-                                            CornerRadius="20"
                                             HeightRequest="40"
-                                            Source="broken_heart.png"
-                                            WidthRequest="40" />
+                                            Source="broken_heart.png" />
                                         <ImageButton
                                             Grid.Row="2"
                                             Clicked="ImageButton_Clicked"
-                                            CornerRadius="20"
                                             HeightRequest="40"
-                                            Source="back.png"
-                                            WidthRequest="40" />
+                                            Source="back.png" />
                                     </Grid>
                                     <Grid
                                         BackgroundColor="Transparent"
@@ -220,6 +216,8 @@
                 </CollectionView>
             </SwipeView>
         </Grid>
+        <!--<controls:BottomSheet />-->
+        <!--<controls:AudioRecognition x:Name="audio" IsVisible="false" />-->
         <Frame
             Margin="0,0,30,100"
             Padding="0"
@@ -245,7 +243,10 @@
                     Command="{Binding JumpPageCommand}"
                     CommandParameter="AIPage"
                     Tapped="TapGestureRecognizer_Tapped" />
-                <SwipeGestureRecognizer Command="{Binding ShowHideObjCommand}" Direction="Left" />
+                <SwipeGestureRecognizer
+                    Command="{Binding ShowHideObjCommand}"
+                    Direction="Left"
+                    Threshold="24" />
             </Frame.GestureRecognizers>
             <Image
                 HeightRequest="40"
@@ -281,7 +282,6 @@
                 Source="refresh.png"
                 WidthRequest="40" />
         </Frame>
-        <!--<controls:AudioRecognition x:Name="audio" IsVisible="false" />-->
         <ActivityIndicator
             Margin="0,0,0,100"
             HeightRequest="55"

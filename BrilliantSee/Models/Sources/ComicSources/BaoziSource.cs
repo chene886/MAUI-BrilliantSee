@@ -33,25 +33,32 @@ namespace BrilliantSee.Models.Sources.ComicSources
             var html = await GetHtmlAsync(url);
             if (html == string.Empty) { return Array.Empty<Obj>(); }
 
-            string pattern = "comics-card.*?href=\\\"(.*?)\\\".*?title=\\\"(.*?)\\\"[\\s\\S]*?src=\"(.*?)\"[\\s\\S]*?small.*?>[\\s\\r\\n]*([\\s\\S]*?)</small>";
-            var matches = Regex.Matches(html, pattern);
-
             var comics = new List<Obj>();
-            foreach (Match match in matches)
+
+            try
             {
-                var comic = new BaoziComic()
+                string pattern = "comics-card.*?href=\\\"(.*?)\\\".*?title=\\\"(.*?)\\\"[\\s\\S]*?src=\"(.*?)\"[\\s\\S]*?small.*?>[\\s\\r\\n]*([\\s\\S]*?)</small>";
+                var matches = Regex.Matches(html, pattern);
+                foreach (Match match in matches)
                 {
-                    Url = "https://cn.baozimh.com" + match.Groups[1].Value,
-                    Name = match.Groups[2].Value,
-                    Cover = match.Groups[3].Value,
-                    Author = match.Groups[4].Value,
-                    Source = this,
-                    SourceName = Name,
-                    SourceCategory = Category,
-                };
-                comics.Add(comic);
+                    var comic = new BaoziComic()
+                    {
+                        Url = "https://cn.baozimh.com" + match.Groups[1].Value,
+                        Name = match.Groups[2].Value,
+                        Cover = match.Groups[3].Value,
+                        Author = match.Groups[4].Value,
+                        Source = this,
+                        SourceName = Name,
+                        SourceCategory = Category,
+                    };
+                    comics.Add(comic);
+                }
+                return comics;
             }
-            return comics;
+            catch
+            {
+                return Array.Empty<Obj>();
+            }
         }
     }
 }

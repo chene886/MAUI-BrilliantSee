@@ -19,11 +19,39 @@ public partial class BrowsePage : ContentPage
     /// </summary>
     private void OnScrollToTop()
     {
-        this.listView.ScrollTo(_vm.Images.First(), position: ScrollToPosition.Start, false);
+        this.collectionView.ScrollTo(_vm.Images.First(), -1, ScrollToPosition.Start, false);
     }
 
-    private void CachedImage_Error(object sender, FFImageLoading.Maui.CachedImageEvents.ErrorEventArgs e)
+    private void collectionView_Scrolled(object sender, ItemsViewScrolledEventArgs e)
     {
-        
+        _vm.CurrentPageNum = e.CenterItemIndex + 1;
+    }
+
+    private async void img_Error(object sender, FFImageLoading.Maui.CachedImageEvents.ErrorEventArgs e)
+    {
+        await MainThread.InvokeOnMainThreadAsync( () =>
+        {
+            var img = (View)sender;
+            img.FindByName<Button>("btn").IsVisible = true;
+        });
+    }
+
+    private async void btn_Clicked(object sender, EventArgs e)
+    {
+        await MainThread.InvokeOnMainThreadAsync(() =>
+        {
+            var btn = (Button)sender;
+            btn.IsVisible = false;
+            btn.FindByName<FFImageLoading.Maui.CachedImage>("img").ReloadImage();
+        });
+    }
+
+    private async void img_Loaded(object sender, EventArgs e)
+    {
+        await MainThread.InvokeOnMainThreadAsync(() =>
+        {
+            var img = (View)sender;
+            img.FindByName<Button>("btn").IsVisible = false;
+        });
     }
 }

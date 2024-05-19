@@ -20,6 +20,8 @@ namespace BrilliantSee.ViewModels
         [ObservableProperty]
         private Item? _chapter;
 
+        public double offset { get; set; } = 0;
+
         ///// <summary>
         ///// 当前章节在已加载章节集合中的索引
         ///// </summary>
@@ -65,11 +67,11 @@ namespace BrilliantSee.ViewModels
         /// </summary>
         public event Action ScrollToTop = delegate { };
 
-        ///// <summary>
-        ///// 当前页码
-        ///// </summary>
-        //[ObservableProperty]
-        //public int _currentPageNum = 1;
+        /// <summary>
+        /// 当前页码
+        /// </summary>
+        [ObservableProperty]
+        public int _currentPageNum = 0;
 
         /// <summary>
         /// 定时器
@@ -79,7 +81,7 @@ namespace BrilliantSee.ViewModels
         /// <summary>
         /// 当前时间
         /// </summary>
-        public string CurrentTime => DateTime.Now.ToString("HH:mm");
+        public string CurrentTime => DateTime.Now.ToString("HH:mm") + " ";
 
         /// <summary>
         /// 屏幕宽度
@@ -142,27 +144,27 @@ namespace BrilliantSee.ViewModels
         /// <returns></returns>
         private async Task LoadChapterResourcesAsync(Item chapter)
         {
-            if (chapter.PicUrls.Count == 0 && chapter.NovelContent == string.Empty)
+            try
             {
-                try
+                if (chapter.PicUrls.Count == 0 && chapter.NovelContent == string.Empty)
                 {
                     await chapter.GetResourcesAsync();
                 }
-                catch (Exception e)
+                if (chapter.Obj.SourceCategory == SourceCategory.Comic)
                 {
-                    if (e.Message == "请求失败") _ms.WriteMessage(e.Message);
-                    else _ms.WriteMessage("好像出了点小问题，用浏览器打开试试吧");
+                    Images.Clear();
+                    foreach (var url in chapter.PicUrls)
+                    {
+                        Images.Add(url);
+                    }
                 }
+                ButtonContent = chapter!.Index == chapter.Obj.ItemCount - 1 ? "已是最新一话" : "点击加载下一话";
             }
-            if (chapter.Obj.SourceCategory == SourceCategory.Comic)
+            catch (Exception e)
             {
-                Images.Clear();
-                foreach (var url in chapter.PicUrls)
-                {
-                    Images.Add(url);
-                }
+                if (e.Message == "请求失败") _ms.WriteMessage(e.Message);
+                else _ms.WriteMessage("好像出了点小问题，用浏览器打开试试吧");
             }
-            ButtonContent = chapter!.Index == chapter.Obj.ItemCount - 1 ? "已是最新一话" : "点击加载下一话";
             _ = Task.Run(() => chapter.Obj.PreLoadAsync(chapter, _db));
         }
 

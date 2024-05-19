@@ -89,10 +89,17 @@ namespace BrilliantSee.Services
         /// <returns></returns>
         public async Task SearchAsync(string keyword, ObservableCollection<Obj> allObjs, ObservableCollection<Obj> cateObjs, string flag, SourceCategory category)
         {
+            var hasSourceSelected = _sources.Values.Where(s => s.IsSelected == true).Count() > 0;
+            if (!hasSourceSelected)
+            {
+                return;
+            }
             IEnumerable<Source> sources;
+            sources = _sources.Values.Where(s => s.IsSelected == true && s.Category == category);
+            if (flag != "Init") sources = sources.Where(s => s.HasMore == 1);
+            if (!sources.Any()) return;
             if (flag == "Init")
             {
-                sources = _sources.Values.Where(s => s.IsSelected == true && s.Category == category);
                 foreach (var source in sources)
                 {
                     source.HasMore = source.HasMore == -1 ? -1 : 1;
@@ -101,8 +108,6 @@ namespace BrilliantSee.Services
             }
             else
             {
-                sources = _sources.Values.Where(s => s.IsSelected == true && s.HasMore == 1 && s.Category == category);
-                if (!sources.Any()) return;
                 foreach (var source in sources)
                 {
                     source.ResultNum++;
@@ -115,32 +120,29 @@ namespace BrilliantSee.Services
                 tasks.Add(Task.Run(async () =>
                 {
                     var result = await source.SearchAsync(keyword)!;
-                    if (result.Any())
+                    if (!result.Any()) return;
+                    foreach (var item in result)
                     {
-                        foreach (var item in result)
+                        //初始搜索时，将第一个源除外的每个源的第一个结果插入到集合的第二个位置
+                        if (item == result.First() && flag == "Init")
                         {
-                            //初始搜索时，将第一个源除外的每个源的第一个结果插入到集合的第二个位置
-                            if (item == result.First() && flag == "Init")
-                            {
-                                await MainThread.InvokeOnMainThreadAsync(() =>
-                                {
-                                    if (cateObjs.Any()) cateObjs.Insert(1, item);
-                                    else cateObjs.Add(item);
-                                    if (allObjs.Any()) allObjs.Insert(1, item);
-                                    else allObjs.Add(item);
-                                });
-                                continue;
-                            }
                             await MainThread.InvokeOnMainThreadAsync(() =>
                             {
-                                cateObjs.Add(item);
-                                allObjs.Add(item);
+                                if (cateObjs.Any()) cateObjs.Insert(1, item);
+                                else cateObjs.Add(item);
+                                if (allObjs.Any()) allObjs.Insert(1, item);
+                                else allObjs.Add(item);
                             });
+                            continue;
                         }
+                        await MainThread.InvokeOnMainThreadAsync(() =>
+                        {
+                            cateObjs.Add(item);
+                            allObjs.Add(item);
+                        });
                     }
                 }));
             }
-
             //等待所有图源搜索完成
             await Task.WhenAll(tasks);
         }

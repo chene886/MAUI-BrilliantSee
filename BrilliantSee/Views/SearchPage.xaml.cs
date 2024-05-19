@@ -122,6 +122,7 @@ public partial class SearchPage : ContentPage
         if (selectedCategory == _vm.CurrentCategory) return;
         _vm.ChangeCurrentCategory(selectedCategory);
         _ = ButtonTapped(sender, typeof(Button));
+        CurrentButtonIndex = Array.IndexOf(Buttons, button);
 
         this.comicList.ItemsSource = _vm.GetObjsOnDisplay();
     }
