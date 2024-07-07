@@ -31,7 +31,6 @@ namespace BrilliantSee.Models.Items.Chapters
                 {
                     PicUrls.Add(item.Groups[1].Value);
                 }
-                if (PicUrls.Count == 1) PicUrls.Add(PicUrls[0]);
                 PageCount = PicUrls.Count;
             }
             catch (Exception e)

@@ -30,7 +30,7 @@ namespace BrilliantSee.Models.Items.Chapters
                 {
                     picUrls.Add(pathHead + item.Groups[1].Value);
                 }
-                PicUrls = picUrls;
+                PicUrls = picUrls.Distinct().ToList();
                 PageCount = PicUrls.Count;
             }
             catch (Exception e)

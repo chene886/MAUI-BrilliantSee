@@ -38,7 +38,8 @@ namespace BrilliantSee.Models.Items.Chapters
                     }
                     count++;
                 } while (Regex.Matches(html, "点击进入下一页").FirstOrDefault() is not null || Regex.Matches(html, "點擊進入下一頁").FirstOrDefault() is not null);
-                PicUrls = picUrls;
+                //去除重复的图片
+                PicUrls = picUrls.Distinct().ToList();
                 PageCount = PicUrls.Count;
             }
             catch (Exception e)

@@ -15,12 +15,12 @@ public partial class BottomSheet : ContentView, INotifyPropertyChanged
 
     private MMPlayerSource _source = new();
 
-    public event PropertyChangedEventHandler PropertyChanged = delegate { };
+    //public event PropertyChangedEventHandler PropertyChanged = delegate { };
 
-    protected override void OnPropertyChanged(string propertyName)
-    {
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-    }
+    //protected override void OnPropertyChanged(string propertyName)
+    //{
+    //    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+    //}
 
     public BottomSheet()
     {
