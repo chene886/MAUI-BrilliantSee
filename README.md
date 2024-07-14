@@ -19,7 +19,7 @@
 <img src="img/AIPage_1.jpg" width="360px" />
 
 ### 搜索页
-<img src="img/SearchPage_1.jpg" width="360px" />
+<img src="img/SearchPage_1.png" width="360px" />
 <img src="img/SearchPage_2.jpg" width="360px" />
 
 ### 详情页
