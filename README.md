@@ -2,71 +2,46 @@
 ## 项目介绍
 .NET平台下MAUI跨平台框架小说，漫画，影视集成浏览软件，旨在为已适配的源网站提供更好的观看体验。
 
-- 项目当前属于开发阶段，目前适配了五个源网站（包含一个小说源，三个漫画源(一个英文网站)，一个动漫源）、部分功能待完善...
+- 项目当前属于开发阶段，目前适配了四个源网站（包含一个小说源，两个漫画源，一个动漫源）、部分功能待完善...
 - 主打安卓平台，可能存在异常，请谅解...
-- 软件的大致框架已完成，后续发展方向也已履行，剩下的主要是提高软件的稳定性和丰富度以及更多私人定制的ui显示(主要是自用的，这方面没太深入优化，能用就行)，接下来的更新会比较少，本人也要专注于学业了，关于如何下载，考虑到软件的资源来源可能会有一些版权问题，我就不直接放下载地址了，可以在代码里面找找，或者克隆下来自己打包。(20240425)
 
 克隆仓库后若出现多处报错可尝试链接方法[Link](https://learn.microsoft.com/zh-cn/nuget/reference/errors-and-warnings/nu1105?f1url=%3FappId%3DDev17IDEF1%26l%3DZH-CN%26k%3Dk(NU1105)%26rd%3Dtrue)
   
 ## 待解决问题
-- CollectionView复用回收机制下向上翻阅卡顿，闪退问题
-  - 目前换成了ListView，卡顿、闪退问题已改善(20240315)
-- 部分源网站适配困难问题，如需要cookies，以及部分采用js动态加载的页面
-- 安卓部分版本（API：24< 、>30)无法正常调整状态栏和导航栏样式
-  - 破案了，其实样式是能正常调整的，只是maui安卓没办法忽略安全区，无法解决只能等官方api(20240407)
-- 减少适配网站冗余重复代码，提高代码质量，提升适配效率
-  - 减少了Source类和Comic类及对应实体的冗余代码，减少了适配网站时多做的重复工作(20240328)
-- Image控件加载图片像素太大时闪退，加载超时时仍触发loaded事件
+
 
 ## 后续发展方向：
-- 适配更多图源网站以覆盖全网资源（包含国外作品）
-  - 本来有一个英文网站，因为性能问题关掉了，后续考虑适配其他外文网站 (20240315)
-  - 适配了一个新英文漫画网站，极少的作品存在缺少较新章节的问题，可以选择浏览器打开观看(20240402)
-- 拓宽领域至小说、动漫甚至影视作品
-  - 新增了小说、动漫模块，目前有两个动漫源雏形，项目更名为BrilliantSee(20240420)
-  - 完成了第一个动漫源(20240423)
-  - 完成了第一个小说源(20240425)
-- 顺应当下潮流，开发基于semantic-kernel的AI交互助手，便利用户操作
-  - 目前ai助手基础代码已完成，但在调用时不太顺利，比如往kernel导入plugins(20240315)
-  - ai助手插件已正常导入，但由于sk的planner似乎不见了的原因，且其他替代方案不顺利，目前只能进行部分单步操作(20240318)
-  - 现在设置语音识别功能让每个页面执行手动能执行的单步操作，除了全新的体验以外比较鸡肋，考虑后面实现多步动作(20240327)
-  - 目前语音功能几乎是不可用的，语音解码慢和识别准确率低，大部分功能无法正常运行(20240402)
-  - 已关闭语音识别功能，原因是占用储存空间大，识别时间长，识别准确率低，以后再找别的方案(20240411)
+- 适配更多源网站以覆盖全网资源（包含国外作品）
+- 深入开发基于semantic-kernel的AI交互助手，便利用户操作
 
 ## 项目部分界面截图
 ### AI助手页
-<img src="img/aiPage11.jpg" width="360px" />
+<img src="img/AIPage_1.jpg" width="360px" />
 
 ### 搜索页
-- 搜索漫画、选择图源
-<img src="img/searchPage11.jpg" width="360px" />
+<img src="img/SearchPage_1.jpg" width="360px" />
+<img src="img/SearchPage_2.jpg" width="360px" />
 
 ### 详情页
-- 收藏、浏览器打开、漫画倒序
-- 一键跳转最后浏览章节
-<img src="img/detailPage11.jpg" width="360px" />
+<img src="img/DetailPage_1.jpg" width="360px" />
 
 ### 收藏页
-- 自动检测版本更新
-- 一键检查内容更新
-<img src="img/favoritePage11.jpg" width="360px" />
+<img src="img/FavoritePage_1.jpg" width="360px" />
 
 ### 历史记录页
-- 清空历史记录
-<img src="img/historyPage11.jpg" width="360px" />
+<img src="img/HistoryPage_1.jpg" width="360px" />
 
-### 漫画浏览页
-<img src="img/browsePage11.png" width="360px" />
+### 漫画页
+<img src="img/ComicPage_1.png" width="360px" />
 
 ### 视频页
-<img src="img/videoPage11.jpg" width="360px" />
+<img src="img/VideoPage_1.jpg" width="360px" />
 
 ### 小说页
-<img src="img/novelPage11.jpg" width="360px" />
+<img src="img/NovelPage_1.jpg" width="360px" />
 
-### 系统设置页
-- 分享应用，错误反馈，支持开源
-<img src="img/settingPage11.jpg" width="360px" />
+### 设置页
+<img src="img/SettingPage_1.jpg" width="360px" />
 
 ## 适配源网站
 添加适配网站仅需在 **BrilliantSee.Models** 项目中添加：
