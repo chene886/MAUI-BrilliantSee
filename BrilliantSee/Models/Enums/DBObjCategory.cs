@@ -16,5 +16,10 @@
         /// 默认
         /// </summary>
         Default = 3,
+
+        /// <summary>
+        /// 推荐
+        /// </summary>
+        Recommend = 4
     }
 }

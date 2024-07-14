@@ -109,7 +109,7 @@
                         <DataTemplate>
                             <Frame
                                 Margin="5,0,5,20"
-                                Padding="1"
+                                Padding="0"
                                 CornerRadius="8"
                                 HasShadow="True">
                                 <Frame.GestureRecognizers>

@@ -7,6 +7,8 @@ using BrilliantSee.Services;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System.Collections.ObjectModel;
+using BrilliantSee.Models.Sources.ComicSources;
+using CommunityToolkit.Maui.Core.Extensions;
 
 namespace BrilliantSee.ViewModels
 {
@@ -81,6 +83,21 @@ namespace BrilliantSee.ViewModels
         /// </summary>
         private List<SettingItem> SettingItems { get; set; } = new();
 
+        public ObservableCollection<string> HotWord { get; set; } = new();
+
+        public ObservableCollection<string> SearchRecord { get; set; } = new();
+
+        [ObservableProperty]
+        public bool _isShowSearchResult = false;
+
+        [ObservableProperty]
+        public bool _isShowSearchMessage = true;
+
+        [ObservableProperty]
+        public bool _isShowRecord = false;
+
+        public ObservableCollection<Obj> Recommand { get; set; } = new();
+
         private string Keyword = string.Empty;
 
         public SearchViewModel(SourceService sourceService, DBService db, MessageService ms)
@@ -92,6 +109,8 @@ namespace BrilliantSee.ViewModels
 
             Sources = _sourceService.GetSources();
             _ = InitSettingsAsync();
+            _ = GetHotWordAsync();
+            _ = GetRecommandObjsAsync();
             //if (_ai.hasModel)
             //{
             //    _ai.RemovePlugins();
@@ -118,6 +137,41 @@ namespace BrilliantSee.ViewModels
             {
                 source.IsSelected = SettingItems.First(s => s.Name == source.Name).ValueInt == 1;
             }
+            var searchItems = await _db.GetSettingItemsAsync((int)SettingItemCategory.SearchRecord);
+            var item = searchItems.First();
+            SettingItems.Add(item);
+            if (string.IsNullOrWhiteSpace(item.ValueString) || string.IsNullOrEmpty(item.ValueString)) return;
+            foreach (var record in item.ValueString.Split("$$$"))
+            {
+                SearchRecord.Add(record);
+            }
+            IsShowRecord = true;
+        }
+
+        private async Task UpdateSearchRecordAsync(String newRecord)
+        {
+            IsShowRecord = true;
+            var newRecordIndex = SearchRecord.IndexOf(newRecord);
+            if (newRecordIndex != -1)
+            {
+                SearchRecord.Move(newRecordIndex, 0);
+            }
+            else
+            {
+                SearchRecord.Insert(0, newRecord);
+            }
+
+            var item = SettingItems.First(s => s.Category == (int)SettingItemCategory.SearchRecord);
+            item.ValueString = string.Join("$$$", SearchRecord);
+            await _db.UpdateSettingItemAsync(item);
+        }
+
+        public async Task ClearSearchRecordAsync()
+        {
+            SearchRecord.Clear();
+            var item = SettingItems.First(s => s.Category == (int)SettingItemCategory.SearchRecord);
+            item.ValueString = string.Empty;
+            await _db.UpdateSettingItemAsync(item);
         }
 
         /// <summary>
@@ -133,7 +187,10 @@ namespace BrilliantSee.ViewModels
                 _ms.WriteMessage("请输入正确的关键词");
                 return;
             }
+            await UpdateSearchRecordAsync(keyword);
             _ms.WriteMessage("正在搜索...");
+            IsShowSearchMessage = false;
+            IsShowSearchResult = true;
             IsGettingResult = true;
             IsSourceListVisible = false;
 
@@ -236,6 +293,64 @@ namespace BrilliantSee.ViewModels
         public ObservableCollection<Obj> GetObjsOnDisplay()
         {
             return ObjContainers[CurrentCategory];
+        }
+
+        [RelayCommand]
+        private async Task GetRecommandObjsAsync()
+        {
+            var objs = await _db.GetObjsAsync(DBObjCategory.Recommend, SourceCategory.Comic);
+            if (objs.Count == 0)
+            {
+                var Objs = await new BaoziSource().GetRecommandAsync();
+                foreach (var obj in Objs)
+                {
+                    obj.Category = DBObjCategory.Recommend;
+                    obj.SourceCategory = SourceCategory.Comic;
+                    objs.Add(obj);
+                    await _db.SaveObjAsync(obj, DBObjCategory.Recommend);
+                }
+            }
+            //随机获取六个不重复推荐漫画
+            Recommand.Clear();
+            var random = new Random();
+            var indexs = new List<int>();
+            while (indexs.Count < 6)
+            {
+                var index = random.Next(0, objs.Count);
+                if (!indexs.Contains(index))
+                {
+                    indexs.Add(index);
+                    Recommand.Add(objs[index]);
+                }
+            }
+        }
+
+        /// <summary>
+        /// 获取热词
+        /// </summary>
+        private async Task GetHotWordAsync()
+        {
+            //设置为每天获取一次
+            var items = await _db.GetSettingItemsAsync((int)SettingItemCategory.HotSearch);
+            var item = items.First();
+            if (string.IsNullOrEmpty(item.ValueString) || string.IsNullOrWhiteSpace(item.ValueString) || item.ValueString.Split("$$$$")[0] != DateTime.Now.ToString("yyyy-MM-dd"))
+            {
+                //获取热词
+                var words = await new BaoziSource().GetHotWordAsync();
+                foreach (var word in words)
+                {
+                    HotWord.Add(word);
+                }
+                item.ValueString = DateTime.Now.ToString("yyyy-MM-dd") + "$$$$" + string.Join("$$$", HotWord);
+                await _db.UpdateSettingItemAsync(item);
+            }
+            else
+            {
+                foreach (var word in item.ValueString.Split("$$$$")[1].Split("$$$"))
+                {
+                    HotWord.Add(word);
+                }
+            }
         }
     }
 }

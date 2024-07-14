@@ -12,7 +12,10 @@
         <Entry
             x:Name="input"
             ClearButtonVisibility="WhileEditing"
+            Completed="input_Completed"
+            Focused="input_Focused"
             FontFamily=""
+            IsTextPredictionEnabled="True"
             Placeholder="点击输入关键词"
             ReturnCommand="{Binding SearchCommand}"
             ReturnCommandParameter="{Binding Text, Source={RelativeSource Mode=Self}}"
@@ -103,7 +106,168 @@
                 </CollectionView.ItemTemplate>
             </CollectionView>
         </Frame>
-        <Grid>
+        <ScrollView>
+            <VerticalStackLayout
+                Padding="18,16"
+                IsVisible="{Binding IsShowSearchMessage}"
+                Spacing="20">
+                <Grid RowSpacing="8">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <Label
+                        Grid.Row="0"
+                        FontAttributes="Bold"
+                        FontFamily=""
+                        FontSize="Subtitle"
+                        Text="热门更新" />
+                    <CollectionView
+                        Grid.Row="1"
+                        Margin="0,0,0,0"
+                        ItemsLayout="VerticalGrid, 2"
+                        ItemsSource="{Binding HotWord}">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Button
+                                    Padding="0"
+                                    BackgroundColor="Transparent"
+                                    Clicked="Button_Clicked_1"
+                                    Command="{Binding SearchCommand, Source={RelativeSource AncestorType={x:Type vm:SearchViewModel}}}"
+                                    CommandParameter="{Binding}"
+                                    FontFamily=""
+                                    FontSize="Default"
+                                    HeightRequest="30"
+                                    HorizontalOptions="Start"
+                                    LineBreakMode="TailTruncation"
+                                    MinimumWidthRequest="0"
+                                    Text="{Binding}" />
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                </Grid>
+                <Grid IsVisible="{Binding IsShowRecord}" RowSpacing="8">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <Label
+                        Grid.Row="0"
+                        FontAttributes="Bold"
+                        FontFamily=""
+                        FontSize="Subtitle"
+                        Text="搜索历史" />
+                    <Button
+                        Grid.Row="0"
+                        Padding="0"
+                        BackgroundColor="Transparent"
+                        Clicked="CleanRecord"
+                        FontFamily=""
+                        FontSize="Small"
+                        HeightRequest="20"
+                        HorizontalOptions="End"
+                        Text="清空搜索历史"
+                        VerticalOptions="Center" />
+                    <FlexLayout
+                        x:Name="history"
+                        Grid.Row="1"
+                        Margin="-2,0,0,0"
+                        AlignItems="Start"
+                        BindableLayout.ItemsSource="{Binding SearchRecord}"
+                        Wrap="Wrap">
+                        <BindableLayout.ItemTemplate>
+                            <DataTemplate>
+                                <Button
+                                    Margin="0,0,6,6"
+                                    Padding="8,0"
+                                    BackgroundColor="Transparent"
+                                    BorderColor="Black"
+                                    BorderWidth="1"
+                                    Clicked="Button_Clicked_1"
+                                    Command="{Binding SearchCommand, Source={RelativeSource AncestorType={x:Type vm:SearchViewModel}}}"
+                                    CommandParameter="{Binding}"
+                                    CornerRadius="20"
+                                    FontFamily=""
+                                    FontSize="12"
+                                    HeightRequest="30"
+                                    LineBreakMode="TailTruncation"
+                                    MaximumWidthRequest="160"
+                                    Text="{Binding}" />
+                            </DataTemplate>
+                        </BindableLayout.ItemTemplate>
+                    </FlexLayout>
+                </Grid>
+                <Grid RowSpacing="8">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <Label
+                        Grid.Row="0"
+                        FontAttributes="Bold"
+                        FontFamily=""
+                        FontSize="Subtitle"
+                        Text="相关推荐" />
+                    <Button
+                        Grid.Row="0"
+                        Padding="3,0"
+                        BackgroundColor="Transparent"
+                        Command="{Binding GetRecommandObjsCommand}"
+                        FontFamily=""
+                        FontSize="Small"
+                        HeightRequest="20"
+                        HorizontalOptions="End"
+                        Text="换一批"
+                        VerticalOptions="Center" />
+                    <CollectionView
+                        Grid.Row="1"
+                        Margin="0,0,0,0"
+                        ItemsLayout="HorizontalGrid, 2"
+                        ItemsSource="{Binding Recommand}">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Frame
+                                    Margin="0,0,5,10"
+                                    Padding="0"
+                                    CornerRadius="8"
+                                    HasShadow="True"
+                                    WidthRequest="110">
+                                    <Frame.GestureRecognizers>
+                                        <TapGestureRecognizer
+                                            Command="{Binding OpenObjCommand, Source={RelativeSource AncestorType={x:Type vm:SearchViewModel}}}"
+                                            CommandParameter="{Binding}"
+                                            Tapped="TapGestureRecognizer_Tapped_1" />
+                                    </Frame.GestureRecognizers>
+                                    <Grid BackgroundColor="Transparent" RowSpacing="1">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="140" />
+                                            <RowDefinition Height="Auto" />
+                                            <RowDefinition Height="Auto" />
+                                        </Grid.RowDefinitions>
+                                        <ffimageloading:CachedImage
+                                            Aspect="AspectFill"
+                                            CacheDuration="3"
+                                            ErrorPlaceholder="load_fail.png"
+                                            FadeAnimationForCachedImages="True"
+                                            LoadingPlaceholder="loading.png"
+                                            Source="{Binding Cover}" />
+                                        <Label
+                                            Grid.Row="1"
+                                            Padding="2,0"
+                                            FontFamily=""
+                                            FontSize="16"
+                                            HorizontalOptions="Start"
+                                            LineBreakMode="TailTruncation"
+                                            Text="{Binding Name}" />
+                                    </Grid>
+                                </Frame>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                </Grid>
+            </VerticalStackLayout>
+        </ScrollView>
+        <Grid IsVisible="{Binding IsShowSearchResult}">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
@@ -209,7 +373,7 @@
                                     <TapGestureRecognizer
                                         Command="{Binding OpenObjCommand, Source={RelativeSource AncestorType={x:Type vm:SearchViewModel}}}"
                                         CommandParameter="{Binding}"
-                                        Tapped="HideKeyboard" />
+                                        Tapped="TapGestureRecognizer_Tapped_1" />
                                 </Frame.GestureRecognizers>
                                 <Grid BackgroundColor="Transparent">
                                     <Grid.ColumnDefinitions>
@@ -218,7 +382,7 @@
                                     </Grid.ColumnDefinitions>
                                     <Frame
                                         Grid.Column="0"
-                                        Padding="1"
+                                        Padding="0"
                                         CornerRadius="10"
                                         HeightRequest="112"
                                         WidthRequest="80">
@@ -226,7 +390,7 @@
                                             <TapGestureRecognizer
                                                 Command="{Binding OpenObjCommand, Source={RelativeSource AncestorType={x:Type vm:SearchViewModel}}}"
                                                 CommandParameter="{Binding}"
-                                                Tapped="HideKeyboard" />
+                                                Tapped="TapGestureRecognizer_Tapped_1" />
                                         </Frame.GestureRecognizers>
                                         <ffimageloading:CachedImage
                                             Aspect="AspectFill"

@@ -51,6 +51,16 @@ namespace BrilliantSee.Models.Enums
         /// <summary>
         /// 版本
         /// </summary>
-        Version = 8
+        Version = 8,
+
+        /// <summary>
+        /// 搜索记录
+        /// </summary>
+        SearchRecord=9,
+
+        /// <summary>
+        /// 热门搜索
+        /// </summary>
+        HotSearch=10
     }
 }

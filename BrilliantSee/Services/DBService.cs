@@ -54,9 +54,14 @@ namespace BrilliantSee.Services
             if (await _db.Table<SettingItem>().CountAsync() > 0)
             {
                 var version = await _db.Table<SettingItem>().Where(x => x.Category == (int)SettingItemCategory.Version).FirstOrDefaultAsync();
-                if (version == null || version.ValueString != "BrilliantSee_v2.4.0")
+                if (version == null || version.ValueString != "BrilliantSee_v2.5.0")
                 {
-                    if (version == null) await _db.InsertAsync(new SettingItem() { Name = "版本号", ValueString = "BrilliantSee_v2.4.0", Category = (int)SettingItemCategory.Version });
+                    if (version == null) await _db.InsertAsync(new SettingItem() { Name = "版本号", ValueString = "BrilliantSee_v2.5.0", Category = (int)SettingItemCategory.Version });
+                    else
+                    {
+                        version.ValueString = "BrilliantSee_v2.5.0";
+                        await _db.UpdateAsync(version);
+                    }
                     await UpdateFixAsync();
                 }
                 return;
@@ -69,11 +74,11 @@ namespace BrilliantSee.Services
 
             var defaultSettingItems = new List<SettingItem>
             {
-                new SettingItem() { Name = "版本号", ValueString = "BrilliantSee_v2.4.0", Category = (int)SettingItemCategory.Version },
+                new SettingItem() { Name = "版本号", ValueString = "BrilliantSee_v2.5.0", Category = (int)SettingItemCategory.Version },
                 new SettingItem { Name = "顶点小说", ValueInt = 1, Category = (int)SettingItemCategory.Source },
                 new SettingItem { Name = "包子漫画", ValueInt = 1, Category = (int)SettingItemCategory.Source },
                 new SettingItem { Name = "古风漫画", ValueInt = 1, Category = (int)SettingItemCategory.Source },
-                new SettingItem { Name = "Goda(英)", ValueInt = 1, Category = (int)SettingItemCategory.Source },
+                //new SettingItem { Name = "Goda(英)", ValueInt = 1, Category = (int)SettingItemCategory.Source },
                 new SettingItem { Name = "樱花动漫网", ValueInt = 1, Category = (int)SettingItemCategory.Source },
                 new SettingItem { Name = "提前加载策略", ValueInt = (int)PreLoadMode.Next, Category = (int)SettingItemCategory.Custom },
                 new SettingItem { Name = "分享应用", ValueString = "去分享", Category = (int)SettingItemCategory.General ,Content = Share},
@@ -87,6 +92,8 @@ namespace BrilliantSee.Services
                 new SettingItem { Name = "ApiUrl", ValueString = "", Category = (int)SettingItemCategory.AIModel },
                 new SettingItem { Name = "AudioStatus", ValueInt = 0, Category = (int)SettingItemCategory.Audio },
                 new SettingItem { Name = "\"隐藏模式\"提示", ValueInt = 1, Category = (int)SettingItemCategory.Tip},
+                new SettingItem { Name = "搜索历史", ValueString = "", Category = (int)SettingItemCategory.SearchRecord },
+                new SettingItem { Name = "热门搜索", ValueString = "", Category = (int)SettingItemCategory.HotSearch }
             };
             await _db.InsertAllAsync(defaultSettingItems);
         }
@@ -99,10 +106,8 @@ namespace BrilliantSee.Services
         {
             //清除FFimageLoading缓存
             await ImageService.Instance.InvalidateCacheAsync(FFImageLoading.Cache.CacheType.All);
-
-            var version = await _db.Table<SettingItem>().Where(i => i.Category == (int)SettingItemCategory.Version).FirstOrDefaultAsync();
-            version!.ValueString = "BrilliantSee_v2.4.0";
-            await _db.UpdateAsync(version);
+            await _db.InsertAllAsync(new List<SettingItem> { new SettingItem { Name = "搜索历史", ValueString = "", Category = (int)SettingItemCategory.SearchRecord },
+                new SettingItem { Name = "热门搜索", ValueString = "", Category = (int)SettingItemCategory.HotSearch } });
         }
 
         /// <summary>

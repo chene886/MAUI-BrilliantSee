@@ -156,6 +156,7 @@ namespace BrilliantSee.ViewModels
         private async Task CheckForUpdatedAsync() =>
             await Task.Run(async () =>
                 {
+                    _ms.WriteMessage("正在更新收藏内容...");
                     var hasUpdate = false;
                     var message = "暂无收藏内容";
                     _ = MainThread.InvokeOnMainThreadAsync(() => { IsCheckingUpdate = true; });

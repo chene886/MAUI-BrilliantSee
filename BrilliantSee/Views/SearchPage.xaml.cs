@@ -49,21 +49,6 @@ public partial class SearchPage : ContentPage
     }
 
     /// <summary>
-    /// 收起键盘
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
-    private void HideKeyboard(object sender, TappedEventArgs e)
-    {
-#if ANDROID
-        if (input.IsSoftKeyboardShowing())
-        {
-            _ = input.HideKeyboardAsync(CancellationToken.None);
-        }
-#endif
-    }
-
-    /// <summary>
     /// 监听滚动事件，实现返回顶部按钮的显示与隐藏以及到底触发加载更多
     /// </summary>
     /// <param name="sender"></param>
@@ -147,5 +132,70 @@ public partial class SearchPage : ContentPage
             CurrentButtonIndex = index;
             Button_Clicked(Buttons[CurrentButtonIndex], e);
         }
+    }
+
+    /// <summary>
+    /// 清空搜索记录
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    private async void CleanRecord(object sender, EventArgs e)
+    {
+        //提示是否清空
+        bool answer = await DisplayAlert("清空搜索记录", "是否删除全部搜索历史?", "全部删除", "取消");
+        if (answer)
+        {
+            _vm.IsShowRecord = false;
+            await _vm.ClearSearchRecordAsync();
+        }
+    }
+
+    /// <summary>
+    /// 收起键盘
+    /// </summary>
+    private void HideKeyboard()
+    {
+#if ANDROID
+        if (input.IsSoftKeyboardShowing())
+        {
+            _ = input.HideKeyboardAsync(CancellationToken.None);
+        }
+#endif
+    }
+
+    private void TapGestureRecognizer_Tapped_1(object sender, TappedEventArgs e)
+    {
+        HideKeyboard();
+    }
+
+    private void Button_Clicked_1(object sender, EventArgs e)
+    {
+        Button button = (Button)sender!;
+        input.Text = button.Text;
+        input.Unfocus();
+        HideKeyboard();
+    }
+
+    private void input_Focused(object sender, FocusEventArgs e)
+    {
+        _vm.IsShowSearchResult = false;
+        _vm.IsShowSearchMessage = true;
+    }
+
+    private void input_Completed(object sender, EventArgs e)
+    {
+        input.Unfocus();
+    }
+
+    protected override bool OnBackButtonPressed()
+    {
+        if (_vm.IsShowSearchResult)
+        {
+            input.Text = "";
+            _vm.IsShowSearchResult = false;
+            _vm.IsShowSearchMessage = true;
+            return true;
+        }
+        return base.OnBackButtonPressed();
     }
 }

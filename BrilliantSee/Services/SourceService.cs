@@ -44,19 +44,19 @@ namespace BrilliantSee.Services
             var baozi = new BaoziSource();
             var gufeng = new GufengSource();
             //var goda = new GodaSource();
-            var godaEn = new GodaEnSource();
+            //var godaEn = new GodaEnSource();
             var baoziComic = new BaoziComic() { Source = baozi };
             var gufengComic = new GufengComic() { Source = gufeng };
             //var godaComic = new GodaComic() { Source = goda };
-            var godaEnComic = new GodaEnComic() { Source = godaEn };
+            //var godaEnComic = new GodaEnComic() { Source = godaEn };
             _sources.Add(baozi.Name, baozi);
             _sources.Add(gufeng.Name, gufeng);
             //_sources.Add(goda.Name, goda);
-            _sources.Add(godaEn.Name, godaEn);
+            //_sources.Add(godaEn.Name, godaEn);
             _objs.Add(baozi.Name, baoziComic);
             _objs.Add(gufeng.Name, gufengComic);
             //_objs.Add(goda.Name, godaComic);
-            _objs.Add(godaEn.Name, godaEnComic);
+            //_objs.Add(godaEn.Name, godaEnComic);
 
             //动漫源
             var yhwang = new YHWangSource();
